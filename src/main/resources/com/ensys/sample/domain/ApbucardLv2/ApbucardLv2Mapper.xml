@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.ApbucardLv2.ApbucardLv2Mapper">
+
+    <update id="updateH" parameterType="Apbucard" statementType="CALLABLE">
+      { CALL UP_CZ_Q_BUCARDLV2_H_I(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ} ,#{JOB_TP}, #{BNFT_GB} ,#{COMMENTS} ,#{NM_NOTE} ,#{DT_ACCT} ,#{CD_DEPT} ,#{NO_EMP} ,#{CD_USERDEF1}) }
+    </update>
+
+    <update id="batchInsert" parameterType="Apbucard" statementType="CALLABLE">
+      { CALL UP_CZ_Q_BUCARD_H_I_BATCH(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ} ,#{JOB_TP}, #{BNFT_GB}
+       ,#{COMMENTS} ,#{NM_NOTE} ,#{DT_ACCT} ,#{CD_DEPT} ,#{NO_EMP} ,#{CD_USERDEF1} ,#{CD_ACCT},#{NM_ACCT} ,#{ACCTREMARK} ,#{CD_CC} ,#{NM_CC}
+       ,#{CR_CD_ACCT},#{CR_NM_ACCT} ,#{CD_BUDGET},#{NM_BUDGET} ,#{CD_BGACCT},#{NM_BGACCT} ,#{CD_BIZCAR},#{NM_BIZCAR}
+       )}
+    </update>
+
+    <update id="insertD" parameterType="hashmap" statementType="CALLABLE">
+     { CALL UP_CZ_Q_BUCARD_D_I(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ},#{CD_ACCT},#{NM_ACCT},#{CD_ACCT_CR},#{NM_ACCT_CR},#{CD_PARTNER},#{LN_PARTNER},#{S_IDNO},#{AMT},#{CD_BUDGET},#{NM_BUDGET},#{CD_BGACCT},#{TP_EVIDENCE},#{CD_CC},#{NM_CC},#{CD_BIZCAR},#{NM_BIZCAR},#{NO_EMP},#{DESTINATION}, #{NO_TAX} , #{NM_DESC} , #{TAX_GB} , #{NON_TAX} ,#{NM_USERDEF1}) }
+    </update>
+
+    <update id="updateD" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_CZ_Q_BUCARD_D_U( #{CD_ACCT},#{NM_ACCT},#{CD_ACCT_CR},#{NM_ACCT_CR},#{AMT},#{CD_BUDGET},#{NM_BUDGET},#{CD_BGACCT},#{CD_CC},#{NM_CC},#{DESTINATION},#{PURPOSE},#{CD_BIZCAR},#{NM_BIZCAR},#{NO_TAX},#{NM_DESC},#{TAX_GB},#{NON_TAX},#{CD_COMPANY},#{ACCT_NO},#{BANK_CODE},#{TRADE_DATE},#{TRADE_TIME},#{SEQ},#{NO_ACCTLINE} ,#{NM_USERDEF1}) }
+    </update>
+
+    <update id="insertDCMS" parameterType="hashmap" statementType="CALLABLE">
+     { CALL UP_CZ_Q_BUCARD_D_I(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ},#{CD_ACCT},#{NM_ACCT},#{CD_ACCT_CR},#{NM_ACCT_CR},#{CD_PARTNER},#{LN_PARTNER},#{S_IDNO},#{AMT},#{CD_BUDGET},#{NM_BUDGET},#{CD_BGACCT},#{TP_EVIDENCE},#{CD_CC},#{NM_CC},#{CD_BIZCAR},#{NM_BIZCAR},#{NO_EMP},#{DESTINATION}, #{NO_TAX} , #{NM_DESC} , #{TAX_GB} , #{NON_TAX} , #{NM_USERDEF1}) }
+    </update>
+
+    <update id="updateDCMS" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_CZ_Q_BUCARD_D_U( #{CD_ACCT},#{NM_ACCT},#{CD_ACCT_CR},#{NM_ACCT_CR},#{AMT},#{CD_BUDGET},#{NM_BUDGET},#{CD_BGACCT},#{CD_CC},#{NM_CC},#{DESTINATION},#{PURPOSE},#{CD_BIZCAR},#{NM_BIZCAR},#{NO_TAX},#{NM_DESC},#{TAX_GB},#{NON_TAX},#{CD_COMPANY},#{ACCT_NO},#{BANK_CODE},#{TRADE_DATE},#{TRADE_TIME},#{SEQ},#{NO_ACCTLINE}  , #{NM_USERDEF1}) }
+    </update>
+
+    <update id="deleteD" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_CZ_Q_BUCARD_D_D( #{CD_COMPANY},#{ACCT_NO},#{BANK_CODE},#{TRADE_DATE},#{TRADE_TIME},#{SEQ},#{NO_ACCTLINE}) }
+    </update>
+
+    <select id="amtCheck" resultType="hashmap"  parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_CZ_Q_BUCARDLV2_AMT_CHECK( #{CD_COMPANY},#{ACCT_NO},#{BANK_CODE},#{TRADE_DATE},#{TRADE_TIME},#{SEQ}) }
+    </select>
+
+    <select id="deptJobList" resultType="hashmap"  parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_CZ_Q_BUCARD_CMS_JOBTP( #{CD_COMPANY},#{NO_EMP},#{ID_USER}) }
+    </select>
+
+    <select id="acctLink"  resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        SELECT TOP 1 *
+        FROM   ACCT_LINK
+        WHERE  CD_COMPANY  = #{CD_COMPANY}
+        AND    ACCT_NO     = #{ACCT_NO}
+    </select>
+
+    <select id="getNoDraft"  resultType="hashmap" statementType="PREPARED">
+        { CALL UP_CZ_Q_DRAFT_SEQ( #{CD_COMPANY} ) }
+    </select>
+    <update id="applyInsert" parameterType="hashmap" statementType="CALLABLE" >
+        { CALL UP_CZ_Q_DRAFT_CMS_GW_DATA_I( #{CD_COMPANY} ,#{NO_DOCU}, #{GROUP_NUMBER} ,#{NO_DRAFT} ,#{NO_EMP} ,#{CD_PC} ,#{CD_DEPT}) }
+    </update>
+    <update id="applyUpdate" parameterType="hashmap" statementType="CALLABLE" >
+        { CALL UP_CZ_Q_DRAFT_CMS_GW_DATA_U( #{CD_COMPANY} ,#{NO_DRAFT}  ) }
+    </update>
+
+    <select id="apbuPartner"  resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        SELECT TOP 1 * FROM MA_PARTNER
+        WHERE CD_COMPANY = #{CD_COMPANY}
+        <if test = "CD_PARTNER != null">
+        AND  CD_PARTNER = #{CD_PARTNER}
+        </if>
+        <if test = "NO_COMPANY != null">
+        AND   NO_COMPANY = #{NO_COMPANY}
+        AND   #{NO_COMPANY} != '9999999999'
+        AND   #{NO_COMPANY} != '8888888888'
+        </if>
+        ORDER BY DTS_INSERT DESC
+
+    </select>
+    <select id="budgetCheck"  resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        SELECT
+          SUM(D.AMT) APPLY_AMT
+        , D.CD_ACCT
+        , D.CD_BUDGET
+        , D.CD_BGACCT
+        , D.CD_COMPANY
+        , #{DT_ACCT_T} DT_ACCT
+        FROM    CZ_Q_BUCARD_H H
+        JOIN    CZ_Q_BUCARD_D D
+        ON      H.CD_COMPANY    = D.CD_COMPANY
+        AND     H.ACCT_NO       = D.ACCT_NO
+        AND     H.BANK_CODE     = D.BANK_CODE
+        AND     H.TRADE_DATE    = D.TRADE_DATE
+        AND     H.TRADE_TIME    = D.TRADE_TIME
+        AND     H.SEQ           = D.SEQ
+        WHERE   1 = 1
+        AND     H.CD_COMPANY + H.ACCT_NO + H.BANK_CODE + H.TRADE_DATE + H.TRADE_TIME + H.SEQ IN
+        <foreach collection="param" item="map"  open="(" close=")" separator=",">
+            #{map.CD_COMPANY} + #{map.ACCT_NO} + #{map.BANK_CODE} + #{map.TRADE_DATE} + #{map.TRADE_TIME} + #{map.SEQ}
+        </foreach>
+        AND     ISNULL(D.CD_BUDGET,'') != ''
+        AND     ISNULL(D.CD_BGACCT,'') != ''
+        GROUP BY   D.CD_ACCT, D.CD_BUDGET, D.CD_BGACCT, D.CD_COMPANY
+    </select>
+
+    <select id="budgetControl" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BUDGET_CONTROL2(#{CD_COMPANY} ,#{CD_BUDGET} ,#{CD_BGACCT} ,#{DT_ACCT} ,#{APPLY_AMT}) }
+    </select>
+</mapper>
+
+

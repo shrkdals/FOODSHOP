@@ -1,0 +1,43 @@
+@charset "utf-8";
+html, body {height:100%;width:100%}
+.es_wrap{font-family:"돋움";position:absolute;top:0;bottom:0;left:0;right:0;}
+
+/*모니터링 201910*/
+.monitoring_wrap{position:absolute;background: #fff;top:0;left:0;right:0;bottom:0;min-width:1200px;min-height:720px}
+.monitoring{position:relative;width:100%;height:100%}
+.monitoring .section{content: '';display: block;clear: both;width:100%;}
+.monitoring .section h3{font-size:17px;background:url(../images/icon_tit.png) no-repeat 5px 37px;padding:30px 0 10px 25px;}
+.monitoring .section .area{border:1px solid #e1e1e1;border-radius: 3px;}
+.monitoring .section .area ul li{font-size: 32px;font-family: roboto,sans-serif;height: 84px;line-height: 84px;width:25%;border-left: 1px solid #e1e1e1;
+    padding-right: 20px;display: inline-block;}
+.monitoring .section .area ul li:first-child{border-left: 0;width:25%;}
+.monitoring .section .area ul li strong{font-size:12px;font-family: '돋움',Dotum,sans-serif;vertical-align: middle;padding-left: 85px;}
+.monitoring .section .area ul li span{float: right;}
+.monitoring .section .area ul li a{display: block;}
+.monitoring .section .area ul li.con1{background:url(../images/icon_mo1.png) no-repeat 15px 14px}
+.monitoring .section .area ul li.con2{background:url(../images/icon_mo2.png) no-repeat 15px 14px}
+.monitoring .section .area ul li.con3{background:url(../images/icon_mo3.png) no-repeat 15px 14px}
+.monitoring .section .area ul li.con4{background:url(../images/icon_mo4.png) no-repeat 15px 14px}
+.listcon_top {float:left;min-height:70px;height:70px;border-top : 1px solid #e1e1e1;border-bottom:1px solid #e1e1e1;font-size:12px;line-height:70px;padding-left: 10px;color:#666666}
+.listcon1 {float:left;width:25%;min-height:70px;height:70px;background:url(../images/icon_mo1.png) no-repeat 7px 6px;background-size: 55px 55px;border-left: 1px solid #e1e1e1;border-top : 1px solid #e1e1e1;border-bottom:1px solid #e1e1e1;font-size:12px;font-family: '돋움',Dotum,sans-serif;line-height:70px;padding-left: 85px;}
+.listcon2 {float:left;width:25%;min-height:70px;height:70px;background:url(../images/icon_mo2.png) no-repeat 7px 6px;background-size: 55px 55px;border-left: 1px solid #e1e1e1;border-top : 1px solid #e1e1e1;border-bottom:1px solid #e1e1e1;font-size:12px;font-family: '돋움',Dotum,sans-serif;line-height:70px;padding-left: 85px;}
+.listcon3 {float:left;width:25%;min-height:70px;height:70px;background:url(../images/icon_mo3.png) no-repeat 7px 6px;background-size: 55px 55px;border-left: 1px solid #e1e1e1;border-top : 1px solid #e1e1e1;border-bottom:1px solid #e1e1e1;font-size:12px;font-family: '돋움',Dotum,sans-serif;line-height:70px;padding-left: 85px;}
+.listcon4 {float:left;width:25%;min-height:70px;height:70px;background:url(../images/icon_mo4.png) no-repeat 7px 6px;background-size: 55px 55px;border: 1px solid #e1e1e1;font-size:12px;line-height:70px;padding-left: 85px;}
+.listcon_span { float:right; font-size: 30px;font-family: roboto,sans-serif;padding-right:20px;}
+.monitoring .section h4{font-size: 14px;height: 38px;line-height: 38px;background: #f9f9f9;padding-left: 10px;border-bottom:1px solid #e1e1e1;}
+.monitoring .section .area1{border:1px solid #e1e1e1;border-radius: 3px;width:37%;margin-top:10px;margin-right:10px;float: left}
+.monitoring .section .area1 div{padding:15px;height: 200px;width:100%;}
+.monitoring .section .area2{border:1px solid #e1e1e1;border-radius: 3px;width:calc(24% - 9px);margin: 10px auto 0;float: left}
+.monitoring .section .area2 div{padding:15px;height: 200px;width:100%;}
+.monitoring .section .area3{border:1px solid #e1e1e1;border-radius: 3px;width:38.2%;margin-top:10px;float: right}
+.monitoring .section .area3 div{padding:15px;height: 200px;width:100%;}
+.monitoring .section .table{width:49.4%;display: inline-block;}
+.monitoring .section .table table{width:100%;table-layout: fixed;word-break: break-all;font-family: '돋움';font-size: 12px;text-align: center;height: 30px;line-height: 30px;}
+.monitoring .section .table table thead th{padding:0 5px;border-bottom:1px solid #4b525a;color:#666;background: #f5f5f5;}
+.monitoring .section .table table tbody td{padding:0 5px;border-bottom: 1px solid #e9e9e9;}
+.monitoring .section .table table tbody .tit{text-align: left;padding-left: 10px;}
+.monitoring .section .table table tbody .price{text-align: right;}
+.monitoring .section .table table td a{display: block;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.monitoring .section .table_r{float: right} 
+.monitoring .section .area4{float:right;width:49.4%;}
+.monitoring .section .area4 span{height: 215px;width:100%;display: inline-block;margin-top:60px;background:url(../images/sample4.png) no-repeat center center;background-size: cover;}

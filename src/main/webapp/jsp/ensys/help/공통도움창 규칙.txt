@@ -1,0 +1,166 @@
+
+            최초 작성자   / 노강민
+            최초 작성일자 / 20190726
+
+            ####    도움창 존재 최신화      ####
+ acct               :   계정 선택 도움창                                      $.openCommonPopup('acct', "acctCallBack", 'HELP_ACCT');
+ approveBu          :   부서결재라인 도움창
+ approveFi          :   회계팀결재라인 도움창
+ authGroup          :   권한그룹 도움창
+ bank               :   금융기관 검색 도움창
+ bizarea            :   사업장 검색 도움창
+ budget             :   예산단위 검색 도움창
+ card               :   카드 검색 도움창
+ cc                 :   코스트센터 검색 도움창
+ codeDtl            :   공통코드 PARAMETER : CD_FIELD 필수인 도움창
+ deposit            :   예적금계좌 도움창
+ dept               :   부서 검색 도움창
+ disbDoc            :   전표 조회 도움창
+ etaxEmp            :   발행자 검색 도움창
+ partner            :   거래처 검색 도움창
+ paymentBillrec     :   지급어음 검색 도움창
+ pc                 :   회계단위 검색 도움창
+ prog               :   프로그램 도움창
+ project            :   프로젝트 선택 도움창
+ takeBillrec        :   받을어음 검색 도움창
+ tpdocu             :   지출유형 선택 도움창
+ user               :   사원 검색 도움창
+ vatPurchase        :   부가세 매입 도움창
+ varSales           :   부가세 매출 도움창
+ anticipation       :   환종 검색 도움창
+
+* 명명 규칙
+
+1) 페이지 명
+
+    1. 소문자로 시작합니다. 만약 이름이 2가지 단어와 혼합되어 있다면, 두 번째 단어는 대문자로 시작합니다.
+    또한 단어혼합은 최대 2개의 단어로 제한을 둡니다.
+    EX) ETAX_EMP -> etaxEmp (O)
+
+    2. CD_ 혹은 NM_ ...등과 같은 공통적인 단어는 페이지명에 넣지않습니다.
+    3. 언더바를 사용하지않습니다.
+
+
+
+2) FORM PANEL로 사용 할 경우  [   오픈팝업function과 CALLBACK을 따로 만들지않기 위해     ]
+
+    1.
+        id          : 소문자로 시작하고 2가지 단어 혼합 시 두 번째 단어는 대문자로 시작. id값은 다양하게 줘도 된다.
+        HELP_ACTION : 'HELP_' + id값 [ 언더바로 구분한 대문자 ] EX) HELP_ETAX_EMP
+        HELP_URL    : 페이지명과 동일.
+        BIND-CODE   : 도움창에서 콜백으로 받을 CODE값  [ 해당 도움창 jsp에 설정된 그리드 key값 ]
+        BIND-TEXT   : 도움창에서 콜백으로 받을 TEXT    [ 해당 도움창 jsp에 설정된 그리드 key값 ]
+        SESSION     : 로그인한 유저정보를 받겠다면 써줍니다. [ 안 받겠다면 안 써줘도 됩니다. ]
+        READONLY    : 비활성화 시킴
+    2.
+        CODE값 호출 : $('#id').attr('code')
+        TEXT값 호출 : $('#id').attr('text')  OR  $('#id').val()
+
+
+EX ) <codepicker id="cdEmp" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="NO_EMP" BIND-TEXT="NM_EMP" SESSION/>
+     <codepicker id="cdDept" HELP_ACTION="HELP_DEPT" HELP_URL="dept" BIND-CODE="CD_DEPT" BIND-TEXT="NM_DEPT"/>
+
+        return {
+            P_CD_EMP : $("#cdEmp").attr('code')
+        }
+
+￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣
+
+* 도움창 생성 시 템플릿 [ TEST 부분만 수정하시면 됩니다 ... ]
+
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ax" tagdir="/WEB-INF/tags" %>
+
+<ax:set key="title" value="TEST 검색 도움창"/>
+<ax:set key="page_desc" value="${PAGE_REMARK}"/>
+<ax:set key="page_auto_height" value="true"/>
+
+<ax:layout name="base">
+    <jsp:attribute name="script">
+        <script type="text/javascript" src="<c:url value='/assets/js/view/ensys/Helper_1.js' />"></script>
+        <script type="text/javascript">
+            fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+                initView: function () {
+                    var _this = this;
+
+                    this.target = axboot.gridBuilder({
+                        showRowSelector: false,
+                        frozenColumnIndex: 0,
+                        target: $('[data-ax5grid="grid-view-01"]'),
+                        columns: [
+                            {key: "CD_TEST",  label: "TEST코드", width: "*", align: "center",editor: false},
+                            {key: "NM_TEST",  label: "TEST명", width: "*", align: "center",editor: false},
+                        ],
+                        body: {
+                            onClick: function () {
+                                this.self.select(this.dindex);
+                            }
+                            ,    onDBLClick: function(){
+                                ACTIONS.dispatch(ACTIONS.ITEM_SELECT);
+                            }
+
+                        }
+                    });
+
+                },
+                getData: function (_type) {
+                    var list = [];
+                    var _list = this.target.getList(_type);
+
+                    if (_type == "modified" || _type == "deleted") {
+                        list = ax5.util.filter(_list, function () {
+                            delete this.deleted;
+                            return this.key;
+                        });
+                    } else {
+                        list = _list;
+                    }
+                    return list;
+                }
+            });
+        </script>
+    </jsp:attribute>
+    <jsp:body>
+
+        <div data-page-buttons="">
+            <div class="button-warp">
+                <button type="button" class="btn btn-popup-default"    data-page-btn="search"><i class="icon_search"></i><ax:lang id="ax.admin.sample.modal.button.search"/></button>
+                <button type="button" class="btn btn-popup-default" data-page-btn="select"><i class="icon_ok"></i>선택</button>
+                <button type="button" class="btn btn-popup-close" data-page-btn="close"><ax:lang id="ax.admin.sample.modal.button.close"/></button>
+            </div>
+        </div>
+        <div role="page-header">
+            <ax:form name="searchView0">
+                <ax:tbl clazz="ax-search-tbl" minWidth="500px">
+                    <ax:tr>
+                        <ax:td label='검색어' width="400px">
+                            <input type="text" class="form-control"   name="KEYWORD"  id="KEYWORD"/>
+                        </ax:td>
+                    </ax:tr>
+                </ax:tbl>
+            </ax:form>
+            <div class="H10"></div>
+        </div>
+
+        <ax:split-layout name="ax1" orientation="horizontal">
+            <ax:split-panel width="*" style="">
+
+                <!-- 목록 -->
+                <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                    <div class="left">
+                        <h2><i class="cqc-list"></i>
+                            TEST 리스트 </h2>
+                    </div>
+
+                </div>
+                <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+
+            </ax:split-panel>
+        </ax:split-layout>
+
+    </jsp:body>
+</ax:layout>
+
+
+￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣

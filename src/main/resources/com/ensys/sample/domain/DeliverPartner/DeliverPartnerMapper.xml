@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.DeliverPartner.DeliverPartnerMapper">
+
+    <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_DELIVER_PARTNER_M_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} ,#{ITEM_CD} ) }
+    </select>
+
+    <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ITEM_INOUT_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} , #{ITEM_CD} ) }
+    </select>
+
+    <update id="insertM" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_DELIVER_PARTNER_M_I(
+          #{COMPANY_CD}
+        , #{DISTRIB_PT_CD}
+        , #{ITEM_CD}
+        , #{BEGINING_IN_NUM}
+        , #{SAFE_STOCK_NUM}
+        , #{STOCK_NUM}
+        , #{ORDR_STAT}
+        , #{LOGIN_ID}
+        ) }
+    </update>
+
+    <update id="deleteM" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_DELIVER_PARTNER_M_D(
+          #{COMPANY_CD}
+        , #{DISTRIB_PT_CD}
+        , #{ITEM_CD}
+        ) }
+    </update>
+
+
+    <update id="insertD" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ITEM_INOUT_I(
+      #{COMPANY_CD}
+    , #{DISTRIB_PT_CD}
+    , #{ITEM_CD}
+    , #{INOUT_SEQ}
+    , #{INOUT_TP}
+    , #{INOUT_DTE}
+    , #{INOUT_NUM}
+    , #{CCL_PRIOD_ST_DTE}
+    , #{CCL_PRIOD_ED_DTE}
+    , #{MAKE_PT_CD}
+    , #{DISTRIB_VERIFY_YN}
+    , #{MAKE_VERIFY_YN}
+    , #{LOGIN_ID}
+    ) }
+    </update>
+
+    <update id="deleteD" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ITEM_INOUT_D(
+      #{COMPANY_CD}
+    , #{DISTRIB_PT_CD}
+    , #{ITEM_CD}
+    , #{INOUT_SEQ}
+    ) }
+    </update>
+
+</mapper>
+
+

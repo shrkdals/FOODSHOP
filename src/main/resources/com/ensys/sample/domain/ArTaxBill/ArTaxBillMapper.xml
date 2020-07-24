@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.ArTaxBill.ArTaxBillMapper">
+
+    <select id="select" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_TAX_INVOICE_S( #{CD_COMPANY} , #{DT_TRANS_F} , #{DT_TRANS_T} , #{NO_TAX} , #{FG_FINAL}, #{YN_ISS}, #{CD_PARTNER}, #{CD_EMP}, #{CD_DEPT} ) }
+    </select>
+
+    <insert id="insert" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_TAX_INVOICE_I( #{CD_COMPANY} , #{NO_TPDOCU} , #{CD_PARTNER} , #{DT_TRANS} , #{REMARK}, #{FG_TAX}, #{AMT}, #{VAT}, #{AMT_TOT}, #{CD_DEPT}, #{ID_WRITE}, #{DT_ACCT}, #{CD_BIZAREA}, #{ID_INSERT}, #{ID_UPDATE}) }
+    </insert>
+
+    <update id="update" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_TAX_INVOICE_U (#{CD_COMPANY} , #{NO_TPDOCU}, #{GUBUN} ) }
+    </update>
+
+    <update id="delete" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_TAX_INVOICE_D (#{CD_COMPANY} , #{NO_TPDOCU}, #{GROUP_NUMBER} ) }
+    </update>
+
+    <select id="search_param" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_TAX_INVOICE_PARAM_S (#{CD_COMPANY}, #{DT_TRANS}, #{CD_EMP}, #{CD_DEPT}, #{NO_TPDOCU})}
+    </select>
+
+    <select id="chk_NOTPDOCU" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_TAX_INVOICE_CHK (#{CD_COMPANY}, #{NO_TPDOCU})}
+    </select>
+
+    <select id="chk_NOTPDOCU_IMSI" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_TAX_INVOICE_IMSI_CHK (#{CD_COMPANY}, #{NO_TPDOCU})}
+    </select>
+
+    <select id="chk_NOTPDOCU2" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_TAX_INVOICE_CHK2 (#{CD_COMPANY}, #{NO_TPDOCU})}
+    </select>
+
+
+</mapper>

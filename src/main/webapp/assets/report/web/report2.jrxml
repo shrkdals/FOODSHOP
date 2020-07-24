@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="employee-rpt" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="68a42c32-02a6-4dc1-af6c-d9c6e5673c3b">
+	<property name="ireport.zoom" value="1.9487171000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="createdBy" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+   A.NO_SENARIO
+,  A.SEND_NMEMP
+,  A.NOTIFY_NMEMP
+,  A.TITLE
+,  A.CONTENT
+,  B.NM_SENARIO
+FROM CZ_B_NOTIFY_M A
+JOIN CZ_B_SENARIO_M B
+ON   A.CD_COMPANY = B.CD_COMPANY
+AND  A.NO_SENARIO = B.NO_SENARIO]]>
+	</queryString>
+	<field name="NO_SENARIO" class="java.lang.String"/>
+	<field name="SEND_NMEMP" class="java.lang.String"/>
+	<field name="NOTIFY_NMEMP" class="java.lang.String"/>
+	<field name="TITLE" class="java.lang.String"/>
+	<field name="CONTENT" class="java.lang.String"/>
+	<field name="NM_SENARIO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="37" y="0" width="481" height="42" uuid="552e0e5d-bfd4-467f-84a6-c70c6671d23f"/>
+				<textElement textAlignment="Center">
+					<font fontName="돋움" size="20" isBold="true" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[모니터링 추출현황]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="40" width="111" height="20" backcolor="#66CCFF" uuid="075c7922-001d-4ae2-b724-5e0af3e9db9d"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="돋움" size="12" isBold="true" isItalic="false" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[모니터링항목]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="111" y="40" width="111" height="20" backcolor="#66CCFF" uuid="f6c5e841-92b7-43c1-ae22-02facf0f0336"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="돋움" size="12" isBold="true" isItalic="false" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[통보자]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="222" y="40" width="111" height="20" backcolor="#66CCFF" uuid="2d5cf3a3-a09a-4554-a442-b886ef8eba16"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="돋움" size="12" isBold="true" isItalic="false" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[조치자]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="333" y="40" width="111" height="20" backcolor="#66CCFF" uuid="c07568b2-e70f-41b3-9621-19b22ec946f1"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="돋움" size="12" isBold="true" isItalic="false" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[제목]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="444" y="40" width="111" height="20" backcolor="#66CCFF" uuid="2dd32318-a620-4d0e-b6af-b8961ec6a2b1"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="돋움" size="12" isBold="true" isItalic="false" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[내용]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="456" y="21" width="99" height="20" uuid="4d4bbd56-4d6f-4232-9024-c4f22d407060"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="돋움" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{createdBy}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="398" y="21" width="58" height="20" uuid="729f4a8f-542e-4a1b-ae16-d37f19c63c51"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="돋움" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[조치자:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="111" height="20" uuid="49408b9c-35cf-4351-b4c4-ff26001f0539"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="돋움" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NM_SENARIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="0" width="111" height="20" uuid="2bd59a9e-1b3d-4506-a156-05cc0e8d374d"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="돋움" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SEND_NMEMP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="222" y="0" width="111" height="20" uuid="9d08179c-63f1-47f0-b6c3-30ad03416285"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="돋움" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOTIFY_NMEMP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="333" y="0" width="111" height="20" uuid="99f1dd13-4a2d-4dea-82dd-2d6a08e67bf0"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="돋움" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TITLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="444" y="0" width="111" height="20" uuid="e1961404-f051-404d-8ee1-6341b8aa6c7c"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="돋움" pdfFontName="HYGoThic-Medium" pdfEncoding="UniKS-UCS2-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONTENT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

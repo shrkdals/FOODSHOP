@@ -1,0 +1,91 @@
+@charset "utf-8";
+@font-face {
+    font-family: 'Nanum Square';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../font/NanumSquareR.eot);
+    src: local('Nanum Square Regular'),
+    local('NanumSquareR'),
+    url(../font/NanumSquareR.eot?#iefix) format('embedded-opentype'),
+    url(../font/NanumSquareR.woff2) format('woff2'),
+    url(../font/NanumSquareR.woff) format('woff'),
+    url(../font/NanumSquareR.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Nanum Square';
+    font-style: bold;
+    font-weight: 700;
+    src: url(../font/NanumSquareB.eot);
+    src: local('Nanum Square Bold'),
+    local('NanumSquareB'),
+    url(../font/NanumSquareB.eot?#iefix) format('embedded-opentype'),
+    url(../font/NanumSquareB.woff2) format('woff2'),
+    url(../font/NanumSquareB.woff) format('woff'),
+    url(../font/NanumSquareB.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'NanumSquareRoundR';
+    src: url(../font/NanumSquareRoundR.eot); /* IE 6 ~ 8, IE 호환성 보기 */
+    src: url(../font/NanumSquareRoundR.woff2) format('woff2'), /* IE Edge, WOFF2 지원 브라우저 */
+    url(../font/NanumSquareRoundR.woff) format('woff'), /* IE 9+, 모던 브라우저 */
+    url(../font/NanumSquareRoundR.ttf) format('truetype');
+}
+
+/* Common */
+body{font-family:'NanumSquareRoundR',Dotum,Verdana,'MalgunGothic', 'NanumSquareRoundR',Tahoma, sans-serif;}
+body,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,button,select{margin:0;padding:0}
+body,input,textarea,select,button,table{font-family:'NanumSquareRoundR',Dotum,AppleGothic,sans-serif;}
+h1,h2,h3,h4,h5,h6{font-family: 'Nanum Square', sans-serif;font-weight:400 !important;word-break:break-all;letter-spacing:-1px;color:#222;}
+img,fieldset,iframe{border:0 none}
+ul,ol{list-style:none}
+em,address{font-style:normal}
+label{cursor:default;font-family:'NanumSquareRoundR'}
+button{cursor:pointer}
+table{padding:0;border-collapse:collapse;border-spacing:0}
+article,aside,canvas,details,figcaption,figure,footer,header,hgroup,nav,menu,nav,section{display:block;padding:0px;margin:0px}
+legend,caption,hr{display:none}
+input,select,button{vertical-align:middle}
+button{overflow:visible;border:0;background-color:transparent;}
+button::-moz-focus-inner{padding:0;}
+button{-webkit-appearance:none;-moz-appearance:none;appearance:none}
+
+a{color:#666;}
+a:link,a:visited,a:active{text-decoration:none !important;}
+a:hover{color:#666;text-decoration:none !important;cursor:pointer}
+
+.clear{clear:both;}
+
+
+* {
+    -webkit-box-sizing:inherit;
+    -moz-box-sizing:inherit;
+    box-sizing:inherit;
+}
+*:before,
+*:after {
+    -webkit-box-sizing:inherit;
+    -moz-box-sizing:inherit;
+    box-sizing:inherit;
+}
+* {
+    box-sizing: border-box;
+}
+#fileDIcon{
+     background:url(/assets/css/images/FDicon.png);
+}
+
+#fileDIcon:hover{
+    color:#b4afafba;
+
+}
+#fileUIcon:hover{
+    color:#b4afafba
+}
+/*::-webkit-scrollbar {width: 8px; height: 8px; border: 3px solid #fff; }
+::-webkit-scrollbar-button:start:decrement, ::-webkit-scrollbar-button:end:increment {display: block; height: 10px; background: #efefef}
+::-webkit-scrollbar-track {background: #efefef; -webkit-border-radius: 10px; border-radius:10px; -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,.2)}
+::-webkit-scrollbar-thumb {height: 50px; width: 50px; background: rgba(0,0,0,.2); -webkit-border-radius: 8px; border-radius: 8px; -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,.1)}*/
+
+/*button { outline:none; selector-dummy : expression(this.hideFocus=true);}*/

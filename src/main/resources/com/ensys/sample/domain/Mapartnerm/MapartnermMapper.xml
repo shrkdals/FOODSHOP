@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Mapartnerm.MapartnermMapper">
+
+
+
+    <select id="select" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_FS_PARTNER_H_S(#{COMPANY_CD},#{PT_NM},#{SALES_PERSON_ID},#{CONTRACT_YN} , #{TEMP1} , #{TEMP2} , #{TEMP3})}
+    </select>
+
+    <select id="getPartnerCommitionList" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_FS_PARTNER_COMMITION_S(#{COMPANY_CD},#{PT_CD}, #{TEMP1} , #{TEMP2} , #{TEMP3})}
+    </select>
+
+    <update id="insert"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_H_I( #{USER_ID}, #{COMPANY_CD},#{PT_CD},#{PT_SP},#{PT_NM},#{BIZ_NO},#{OWNER_NM},#{SIGN_NM},#{PT_TYPE},#{PT_COND},#{TEL_NO},#{HP_NO},#{POST_NO},#{PT_ADDR},#{SYSDEF_ADDR},#{FAX_NO},#{CLOSING_TP},#{USE_YN},#{SALES_PERSON_ID},#{TAX_SP},#{BRD_VERIFY_YN},#{CONTRACT_YN},#{LAT_CD},#{LONG_CD} ,#{DELI_AMT} ,#{FREE_DELI_AMT} ) }
+    </update>
+
+    <update id="delete"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_H_D( #{COMPANY_CD},#{PT_CD} ) }
+    </update>
+
+    <update id="insertCONT"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_CONTRACT_I( #{COMPANY_CD},#{CONTRACT_NO},#{JOIN_PT_CD},#{MAIN_PT_CD},#{CONTRACT_SP},#{CONTRACT_ST_DTE},#{CONTRACT_ED_DTE},#{CONTRACT_STAT},#{PT_CONTRACT_PERSON},#{SALES_PERSON_ID},#{USER_ID} ) }
+    </update>
+
+    <update id="deleteCONT"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_CONTRACT_D( #{COMPANY_CD},#{CONTRACT_NO} ) }
+    </update>
+
+
+    <update id="insert2"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_COMMITION_I( #{COMPANY_CD},#{PT_CD},#{COMT_CD},#{ADJUST_DTE},#{ADJUST_PT_CD},#{USER_ID} ) }
+    </update>
+
+    <update id="delete2"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_COMMITION_D( #{COMPANY_CD},#{PT_CD},#{COMT_CD}) }
+    </update>
+
+    <select id="SAVE_USERMAPPING_S" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_FS_USER_PARTNER_S(#{COMPANY_CD},#{USER_ID},#{PT_CD})}
+    </select>
+
+    <update id="SAVE_USERMAPPING_I"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_USER_PARTNER_I( #{COMPANY_CD},#{USER_ID},#{PT_CD},#{USER_SP},#{USER_STAT},#{LOGIN_ID}) }
+    </update>
+
+    <update id="SAVE_USERMAPPING_D"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_USER_PARTNER_D( #{COMPANY_CD},#{USER_ID},#{PT_CD}) }
+    </update>
+
+
+
+
+
+
+
+<!--    <select id="NoCompanyChk" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">-->
+<!--        {CALL UP_CZ_Q_PARTNER_NOCOMPANY_CHK (#{CD_COMPANY}, #{NO_COMPANY}) }-->
+<!--    </select>-->
+<!--    <select id="delete" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">-->
+<!--        {CALL UP_CZ_Q_PARTNER_APP_D (#{CD_COMPANY},#{NO_SEQ}, #{BOARD_TYPE} )}-->
+<!--    </select>-->
+
+<!--    <select id="update" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">-->
+<!--        {CALL UP_CZ_Q_PARTNER_APP_U (#{CD_COMPANY},#{NO_SEQ},#{ST_STAT},#{DT_ACCT},#{CD_EMP},#{TP_ENTRY},#{CD_PARTNER},#{LN_PARTNER},#{CLS_PARTNER},#{FG_PARTNER},#{TP_PARTNER},#{NO_COMPANY},#{NO_RES},#{NM_CEO},#{TP_JOB},#{CLS_JOB},#{CD_BANK},#{NO_DEPOSIT},#{NM_DEPOSIT},#{NO_POST1},#{DC_ADS1_H},#{DC_ADS1_D},#{CD_EMP_PARTNER},#{NO_HPEMP_PARTNER},#{NO_TEL},#{E_MAIL},#{NM_PUMM},#{USE_YN},#{CD_PARTNER_BACK},#{NO_DEPOSIT_BACK},#{NO_TEL1},#{ID_UPDATE},#{SN_PARTNER},#{TP_NATION},#{YN_USE},#{CD_CON},#{DT_CLOSE},#{CD_PARTNER_GRP} )}-->
+<!--    </select>-->
+
+<!--    <select id="insert" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">-->
+<!--        { CALL UP_CZ_Q_PARTNER_APP_I(#{CD_COMPANY},#{NO_SEQ},#{ST_STAT},#{DT_ACCT},#{CD_EMP},#{TP_ENTRY},#{CD_PARTNER},#{LN_PARTNER},#{CLS_PARTNER},#{FG_PARTNER},#{TP_PARTNER},#{NO_COMPANY},#{NO_RES},#{NM_CEO},#{TP_JOB},#{CLS_JOB},#{CD_BANK},#{NO_DEPOSIT},#{NM_DEPOSIT},#{NO_POST1},#{DC_ADS1_H},#{DC_ADS1_D},#{CD_EMP_PARTNER},#{NO_HPEMP_PARTNER},#{NO_TEL},#{E_MAIL},#{NM_PUMM},#{USE_YN},#{CD_PARTNER_BACK},#{NO_DEPOSIT_BACK},#{NO_TEL1},#{CD_EMP},#{SN_PARTNER},#{TP_NATION},#{YN_USE},#{CD_CON},#{DT_CLOSE},#{CD_PARTNER_GRP})}-->
+<!--    </select>-->
+
+<!--    <select id="PartnerConfirm" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">-->
+<!--        {CALL UP_CZ_Q_PARTNER_APP_A(#{CD_COMPANY},#{NO_SEQ},#{ST_STAT},#{DT_ACCT},#{CD_EMP},#{TP_ENTRY},#{CD_PARTNER},#{LN_PARTNER},#{CLS_PARTNER}, #{FG_PARTNER}, #{TP_PARTNER}, #{NO_COMPANY},#{NO_RES},#{NM_CEO},#{TP_JOB},#{CLS_JOB},#{CD_BANK},#{NO_DEPOSIT},#{NM_DEPOSIT},#{NO_POST1},#{DC_ADS1_H},#{DC_ADS1_D},#{CD_EMP_PARTNER},#{NO_HPEMP_PARTNER},#{NO_TEL},#{E_MAIL},#{NM_PUMM}, #{USE_YN},#{NO_TEL1},#{ID_APP}, #{SN_PARTNER}, #{TP_NATION},#{YN_USE},#{CD_CON},#{DT_CLOSE}, #{CD_PARTNER_GRP}    )}-->
+<!--    </select>-->
+
+<!--    <select id="getOne_partner" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">-->
+<!--        {CALL UP_CZ_Q_GET_NAME_MA_PARTNER(#{CD_COMPANY},#{CD_PARTNER})}-->
+<!--    </select>-->
+
+</mapper>
+
+

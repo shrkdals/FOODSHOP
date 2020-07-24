@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Brandm.BrandmMapper">
+
+    <select id="getBrCode_service" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_BRAND_M_BRCODE(#{COMPANY_CD}) }
+    </select>
+
+    <select id="selectBrandM" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_BRAND_M_S(#{COMPANY_CD},#{CG_CD},#{ADM_PT_CD},#{RECOMM_YN},#{NEW_YN},#{VERIFY_STAT},#{BRD_NM}) }
+    </select>
+
+    <select id="selectBrandMenu" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_BRAND_MENU_S(#{COMPANY_CD},#{BRD_CD}) }
+    </select>
+
+    <select id="selectBrandPredicSaleM" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_BRAND_PREDIC_SALE_M_S(#{COMPANY_CD},#{BRD_CD}) }
+    </select>
+
+    <select id="selectBrandPredicSaleD" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_BRAND_PREDIC_SALE_D_S(#{COMPANY_CD},#{BRD_CD}, #{BRD_MENU_CD}) }
+    </select>
+
+    <select id="selectBrandBeginItem" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_BRAND_BEGIN_ITEM_S(#{COMPANY_CD},#{BRD_CD}) }
+    </select>
+
+    <select id="selectBrandItemCategory" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_BRAND_ITEM_CATEGORY_S(#{COMPANY_CD},#{BRD_CD}) }
+    </select>
+
+    <update id="insert"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_M_I
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{CG_CD},
+                #{BRD_NM},
+                #{ADM_PT_CD},
+                #{BRD_CMT},
+                #{VERIFY_STAT},
+                #{USE_YN},
+                #{RECOMM_YN},
+                #{NEW_YN},
+                #{RECOMM_ORD},
+                #{NEW_ORD},
+                #{CLICK_CNT},
+                #{BRD_NOTICE},
+                #{BRD_GOOD},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="update"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_M_U
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{CG_CD},
+                #{BRD_NM},
+                #{ADM_PT_CD},
+                #{BRD_CMT},
+                #{VERIFY_STAT},
+                #{USE_YN},
+                #{RECOMM_YN},
+                #{NEW_YN},
+                #{RECOMM_ORD},
+                #{NEW_ORD},
+                #{CLICK_CNT},
+                #{BRD_NOTICE},
+                #{BRD_GOOD},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="delete"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_M_D
+            (
+                #{COMPANY_CD},
+                #{BRD_CD}
+            )
+        }
+    </update>
+
+    <update id="insertMenu"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_MENU_I
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{BRD_MENU_CD},
+                #{BRD_MENU_NM},
+                #{SAMPLE_AMT},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="updateMenu"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_MENU_U
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{BRD_MENU_CD},
+                #{BRD_MENU_NM},
+                #{SAMPLE_AMT},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="deleteMenu"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_MENU_D
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{BRD_MENU_CD}
+            )
+        }
+    </update>
+
+    <update id="insertPredicSaleM"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_PREDIC_SALE_M_I
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{BRD_MENU_CD},
+                #{BRD_MENU_NM},
+                #{SALE_SUM},
+                #{PRICE_SUM},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="updatePredicSaleM"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_PREDIC_SALE_M_U
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{BRD_MENU_CD},
+                #{BRD_MENU_NM},
+                #{SALE_SUM},
+                #{PRICE_SUM},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="deletePredicSaleM"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_PREDIC_SALE_M_D
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{BRD_MENU_CD}
+            )
+        }
+    </update>
+
+    <update id="insertPredicSaleD"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_PREDIC_SALE_D_I
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{BRD_MENU_CD},
+                #{ITEM_CD},
+                #{ITEM_NM},
+                #{ITEM_COST},
+                #{SALE_COST},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="updatePredicSaleD"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_PREDIC_SALE_D_U
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{BRD_MENU_CD},
+                #{ITEM_CD},
+                #{ITEM_NM},
+                #{ITEM_COST},
+                #{SALE_COST},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="deletePredicSaleD"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_PREDIC_SALE_D_D
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{BRD_MENU_CD}
+            )
+        }
+    </update>
+
+    <update id="insertBeginItem" parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_BEGIN_ITEM_I
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{ITEM_CD},
+                #{ITEM_NUM},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="updateBeginItem" parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_BEGIN_ITEM_U
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{ITEM_CD},
+                #{ITEM_NUM},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="deleteBeginItem" parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_BEGIN_ITEM_D
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{ITEM_CD}
+            )
+        }
+    </update>
+
+    <update id="insertItemCategory" parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_ITEM_CATEGORY_I
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{ITEM_CD},
+                #{CG_CD},
+                #{DISC_RATE},
+                #{DISC_AMT},
+                #{CLICK_CNT},
+                #{DELI_AMT_YN},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="updateItemCategory" parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_ITEM_CATEGORY_U
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{ITEM_CD},
+                #{CG_CD},
+                #{DISC_RATE},
+                #{DISC_AMT},
+                #{CLICK_CNT},
+                #{DELI_AMT_YN},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="deleteItemCategory" parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BRAND_ITEM_CATEGORY_D
+            (
+                #{COMPANY_CD},
+                #{BRD_CD},
+                #{ITEM_CD}
+            )
+        }
+    </update>
+
+</mapper>
+
+

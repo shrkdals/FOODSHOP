@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.newMenu.newMenuMapper">
+
+
+    <select id="menuSelect" resultType="newMenu" parameterType="newMenu" statementType="CALLABLE">
+         { CALL UP_FS_MENU_S(#{cdCompany}, #{level},#{parentId}, '') }
+    </select>
+
+
+    <update id="menuInsert" parameterType="newMenu" statementType="CALLABLE">
+   { CALL UP_FS_MENU_I(#{cdCompany}, #{menuId},#{menuNm},#{parentId} ,#{level} ,  #{progCd}) }
+    </update>
+
+    <update id="menuUpdate" parameterType="newMenu" statementType="CALLABLE">
+   { CALL UP_FS_MENU_U(#{cdCompany}, #{menuId},#{menuNm},#{parentId} ,#{level} , #{progCd}) }
+    </update>
+
+
+    <update id="menuDelete" parameterType="newMenu" statementType="CALLABLE">
+   { CALL UP_FS_MENU_D(#{cdCompany}, #{menuId},#{level}) }
+    </update>
+
+
+    <select id="progSelect" resultType="newMenu" parameterType="newMenu" statementType="CALLABLE">
+         { CALL UP_FS_PROG_S(#{cdCompany}, #{progNm}) }
+    </select>
+
+    <update id="progInsert" parameterType="newMenu" statementType="CALLABLE">
+   { CALL UP_FS_PROG_I(#{cdCompany}, #{progCd},#{progNm}, #{progPh}) }
+    </update>
+
+
+    <update id="progUpdate" parameterType="newMenu" statementType="CALLABLE">
+   { CALL UP_FS_PROG_U(#{cdCompany}, #{progCd},#{progNm}, #{progPh}) }
+    </update>
+
+
+    <update id="progDelete" parameterType="newMenu" statementType="CALLABLE">
+   { CALL UP_FS_PROG_D(#{cdCompany}, #{progCd}) }
+    </update>
+
+
+</mapper>
+
+

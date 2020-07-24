@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Apbucard.ApbucardMapper">
+
+    <select id="select" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_CZ_Q_BUCARD_S(#{CD_COMPANY},#{tradeDateF} ,#{tradeDateT} ,#{CD_EMP} ,#{CD_DEPT} ,#{ST_DRAFT} ,#{JOB_TP} ,#{NO_DOCU_TP}) }
+    </select>
+
+    <update id="insertH" parameterType="Apbucard" statementType="CALLABLE">
+      { CALL UP_CZ_Q_BUCARD_H_I(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ} ,#{JOB_TP} ,#{BNFT_GB} ,#{COMMENTS} ,#{NM_NOTE} ,#{DT_ACCT} ,#{CD_DEPT} ,#{NO_EMP}  ,#{CD_USERDEF1}) }
+    </update>
+
+    <update id="updateH" parameterType="Apbucard" statementType="CALLABLE">
+      { CALL UP_CZ_Q_BUCARD_H_I(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ} ,#{JOB_TP}, #{BNFT_GB} ,#{COMMENTS} ,#{NM_NOTE} ,#{DT_ACCT} ,#{CD_DEPT} ,#{NO_EMP}  ,#{CD_USERDEF1}) }
+    </update>
+
+    <update id="deleteH" parameterType="Apbucard" statementType="CALLABLE">
+      { CALL UP_CZ_Q_FI_Z_BUCARD_H_D(#{CD_COMPANY} ,#{acctNo} ,#{bankCode} ,#{tradeDate} ,'',#{tradeTime} ,#{seq} ) }
+    </update>
+
+
+
+    <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_CZ_Q_BUCARD_D_S(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ}  ) }
+    </select>
+
+    <select id="selectD2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_CZ_Q_BUCARD_D_S2(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ}  ) }
+    </select>
+    <select id="selectD3" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_CZ_Q_BUCARD_D_S3(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ}  ) }
+    </select>
+    <select id="selectOneH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_CZ_Q_BUCARD_S2(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ}  ) }
+    </select>
+
+    <select id="selectCust" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_CZ_Q_BUCARD_CUST_S(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ}  ) }
+    </select>
+
+    <update id="insertD" parameterType="hashmap" statementType="CALLABLE">
+   { CALL UP_CZ_Q_BUCARD_D_I(#{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ},#{CD_ACCT},#{NM_ACCT},#{CD_ACCT_CR},#{NM_ACCT_CR},#{CD_PARTNER},#{LN_PARTNER},#{S_IDNO},#{AMT},#{CD_BUDGET},#{NM_BUDGET},#{CD_BGACCT},#{TP_EVIDENCE},#{CD_CC},#{NM_CC},#{CD_BIZCAR},#{NM_BIZCAR},#{NO_EMP},#{DESTINATION}, #{NO_TAX} , #{NM_DESC} , #{TAX_GB} , #{NON_TAX},#{NM_USERDEF1} ) }
+    </update>
+    <update id="updateD" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_CZ_Q_BUCARD_D_U( #{CD_ACCT},#{NM_ACCT},#{CD_ACCT_CR},#{NM_ACCT_CR},#{AMT},#{CD_BUDGET},#{NM_BUDGET},#{CD_BGACCT},#{CD_CC},#{NM_CC},#{DESTINATION},#{PURPOSE},#{CD_BIZCAR},#{NM_BIZCAR},#{NO_TAX},#{NM_DESC},#{TAX_GB},#{NON_TAX},#{CD_COMPANY},#{ACCT_NO},#{BANK_CODE},#{TRADE_DATE},#{TRADE_TIME},#{SEQ},#{NO_ACCTLINE} ,#{NM_USERDEF1}) }
+    </update>
+
+    <update id="deleteD" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_CZ_Q_BUCARD_D_D( #{CD_COMPANY},#{ACCT_NO},#{BANK_CODE},#{TRADE_DATE},#{TRADE_TIME},#{SEQ},#{NO_ACCTLINE}) }
+    </update>
+
+
+    <update id="insertD2" parameterType="Apbucard" statementType="CALLABLE">
+        {CALL UP_CZ_Q_BUCARD_CUST_I(
+          #{CD_COMPANY} , #{DT_START}   , #{ACCT_NO}
+        , #{BANK_CODE}  , #{TRADE_DATE} , #{TRADE_TIME} , #{SEQ} , #{GROUP_NUBER} , #{NO_TPDOCU} , #{TP_CUST_EMP} , #{CD_CUST_EMP} , #{NM_CUST}
+        , #{CONT_CUST}  , #{BNFT_SUP_TYPE} , #{AMT_USE} , #{CUST_SUMAMT}
+        ) }
+    </update>
+
+    <update id="updateD2" parameterType="hashmap" statementType="CALLABLE">
+    {CALL UP_CZ_Q_BUCARD_CUST_U(
+    #{CD_COMPANY}
+    ,#{BC_ACCT_NO}
+    ,#{BC_BANK_CODE}
+    ,#{BC_TRADE_DATE}
+    ,#{BC_TRADE_TIME}
+    ,#{BC_SEQ}
+    ,#{SEQ_BNFT}
+    ,#{TP_CUST_EMP}
+    ,#{CD_CUST_EMP}
+    ,#{NM_CUST}
+    ,#{CONT_CUST}
+    ,#{BNFT_SUP_TYPE}
+    ,#{AMT_USE}
+    ,#{CUST_SUMAMT}
+    ,#{GUBUN}
+    ) }
+    </update>
+
+    <update id="deleteD2" parameterType="Apbucard" statementType="CALLABLE">
+{CALL UP_CZ_Q_BUCARD_CUST_D( #{CD_COMPANY},#{BC_ACCT_NO},#{BC_BANK_CODE},#{BC_TRADE_DATE},#{BC_TRADE_TIME},#{BC_SEQ},#{SEQ_BNFT}) }
+    </update>
+
+    <select id="insertDocu" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+      { CALL UP_CZ_Q_BUCARD_DOCU_I( #{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ} ,#{ID_USER},#{NO_EMP},#{CD_DEPT},#{JOB_TP}  ) }
+    </select>
+
+    <update id="insertMultiDocu" parameterType="java.util.HashMap" statementType="CALLABLE">
+      { CALL UP_CZ_Q_BUCARD_DOCU_I_MULTI( #{CD_COMPANY},#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ} ,#{ID_USER} ,#{GROUP_NUMBER} ,#{NO_TPDOCU} ,#{REMARK} ,#{DT_ACCT_T},#{NO_EMP},#{CD_DEPT}  ) }
+    </update>
+
+    <select id="createNum" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+      { CALL UP_CZ_Q_BUCARD_DOCU_NUM( #{CD_COMPANY} ) }
+    </select>
+
+    <select id="createNum2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+      { CALL UP_CZ_Q_BUCARD_DOCU_NUM2( #{CD_COMPANY} ) }
+    </select>
+
+    <update id="insertAcctEnt" parameterType="java.util.HashMap" statementType="CALLABLE">
+      { CALL UP_CZ_Q_BUCARD_ACCTENT_I( #{CD_COMPANY} ,#{ACCT_NO} ,#{BANK_CODE} ,#{TRADE_DATE} ,#{TRADE_TIME} ,#{SEQ} ,#{NO_EMP} ,#{CD_PC} ,#{CD_DEPT} ,#{GROUP_NUMBER} ,#{NO_TPDOCU} ,#{ID_USER}  ) }
+    </update>
+
+    <select id="fiDocuMulti" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+      { CALL UP_CZ_Q_FI_DOCU_I( #{CD_COMPANY} ,#{CD_PC} ,#{EMP_NO} ,#{CD_DEPT} ,#{ID_USER} , #{GROUP_NUMBER} ,#{DT_ACCT} ,'1' ) }
+    </select>
+
+    <select id="acctAddRow" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BUCARD_ACCT_ADD_ROW( #{CD_COMPANY} ,#{JOB_TP} ) }
+    </select>
+
+    <select id="ccAddRow" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BUCARD_CC_ADD_ROW( #{CD_COMPANY} ,#{CD_DEPT} ) }
+    </select>
+
+    <select id="bgacctSetting" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BUCARD_BGACCT_SETTING( #{CD_COMPANY} ,#{CD_BUDGET} ,#{CD_ACCT} , #{KEYWORD}) }
+    </select>
+
+    <select id="acctBudgetAmt" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BUDGET_CONTROL(#{CD_COMPANY} ,#{CD_BUDGET} ,#{CD_BGACCT} ,#{DT_ACCT} ,#{APPLY_AMT}) }
+    </select>
+
+    <select id="acctBudgetAmt2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BUDGET_CONTROL2(#{CD_COMPANY} ,#{CD_BUDGET} ,#{CD_BGACCT} ,#{DT_ACCT} ,#{APPLY_AMT}) }
+    </select>
+
+    <update id="docuCancel" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BUCARD_DOCU_CANCEL( #{CD_COMPANY} , #{GROUP_NUMBER} , #{NO_DOCU} ) }
+    </update>
+
+    <select id="getBnftAmt" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BNFT_SUMAMT_S( #{CD_COMPANY} , #{CONT_CUST} , #{CD_CUST_EMP} , #{DT_ACCT} ) }
+    </select>
+
+    <update id="taxInsert" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BUCARD_TAX_I(
+                                    #{NO_TAX}
+                                    ,#{CD_COMPANY}
+                                    ,#{NO_TPDOCU}
+                                    ,#{CD_PC}
+                                    ,#{ST_DOCU}
+                                    ,#{CD_BIZAREA}
+                                    ,#{DT_ACCT}
+                                    ,#{CD_TRADE_PLACE}
+                                    ,#{ADMIN_AMT}
+                                    ,#{D_AMT}
+                                    ,#{TP_TAX}
+                                    ,#{CD_BANK}
+                                    ,#{NO_CARD}
+                                    ,#{ST_MUTUAL}
+                                    ,#{LEVEL}
+                                    ) }
+    </update>
+
+    <select id="getTax_no" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+        {
+            CALL UP_CZ_Q_TAX_NUMBER
+            (
+                #{CD_COMPANY}
+            )
+        }
+    </select>
+
+    <select id="acctLink"  resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        SELECT TOP 1 *
+        FROM   ACCT_LINK
+        WHERE  CD_COMPANY  = #{CD_COMPANY}
+        AND    ACCT_NO     = #{ACCT_NO}
+    </select>
+
+    <select id="apbuPartner"  resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        SELECT * FROM MA_PARTNER
+        WHERE CD_COMPANY = #{CD_COMPANY}
+        <if test = "CD_PARTNER != null">
+            AND  CD_PARTNER = #{CD_PARTNER}
+        </if>
+        <if test = "NO_COMPANY != null">
+            AND   NO_COMPANY = #{NO_COMPANY}
+            AND   #{NO_COMPANY} != '9999999999'
+            AND   #{NO_COMPANY} != '8888888888'
+        </if>
+
+    </select>
+<!--    <update id="docuBnftCancel" parameterType="java.util.HashMap" statementType="CALLABLE">-->
+<!--        DELETE FROM CZ_Q_BENEFIT_CUST-->
+<!--        WHERE 1 = 1-->
+<!--        AND   CD_COMPANY    = #{CD_COMPANY}-->
+<!--        AND   GUBUN         = '1'-->
+<!--        AND   DT_START      = #{DT_ACCT}-->
+<!--        AND   BC_ACCT_NO    = #{ACCT_NO}-->
+<!--        AND   CD_BANK_CODE  = #{BANK_CODE}-->
+<!--        AND   BC_TRADE_DATE = #{TRADE_DATE}-->
+<!--        AND   BC_TRADE_TIME = #{TRADE_TIME}-->
+<!--        AND   BC_SEQ        = #{SEQ}-->
+<!--    </update>-->
+<!--    <select id="bgacctSetting" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">-->
+<!--        SELECT	A.CD_BGACCT-->
+<!--        ,C.NM_BGACCT-->
+<!--        ,A.CD_BUDGET-->
+<!--        FROM    FI_BUDGETACCTJO A-->
+<!--        INNER   JOIN FI_BGACCTJO B-->
+<!--        ON      A.CD_BGACCT = B.CD_BGACCT-->
+<!--        AND     A.CD_COMPANY = B.CD_COMPANY-->
+<!--        LEFT JOIN FI_BGACCT AS C-->
+<!--        ON      A.CD_COMPANY = C.CD_COMPANY-->
+<!--        AND     A.CD_BGACCT = C.CD_BGACCT-->
+<!--        WHERE	A.CD_COMPANY = #{CD_COMPANY}-->
+<!--        AND		A.CD_BUDGET = #{CD_BUDGET}-->
+<!--        AND     B.CD_ACCT = #{CD_ACCT}-->
+<!--        <if test = "KEYWORD != null and KEYWORD != ''">-->
+<!--            AND     NM_BGACCT LIKE '%' + #{KEYWORD} + '%'-->
+<!--        </if>-->
+<!--    </select>-->
+<!--    <select id="ccAddRow" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">-->
+<!--        SELECT   A.CD_CC-->
+<!--                ,B.NM_CC-->
+<!--                ,C.CD_BUDGET-->
+<!--                ,D.NM_BUDGET-->
+<!--        FROM MA_DEPT A-->
+<!--        JOIN MA_CC B ON A.CD_COMPANY= B.CD_COMPANY AND A.CD_CC = B.CD_CC-->
+<!--        LEFT JOIN FI_BGDEPT C ON B.CD_COMPANY= C.CD_COMPANY AND A.CD_DEPT = C.CD_DEPT-->
+<!--        LEFT JOIN FI_BGCODE D ON C.CD_COMPANY= D.CD_COMPANY AND C.CD_BUDGET = D.CD_BUDGET-->
+<!--        WHERE 1 = 1-->
+<!--        AND   A.CD_COMPANY = #{CD_COMPANY}-->
+<!--        AND   A.CD_DEPT    = #{CD_DEPT}-->
+<!--    </select>-->
+<!--    <select id="acctAddRow" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">-->
+<!--        SELECT-->
+<!--							  b.NM_SYSDEF NM_SYSDEF-->
+<!--							, a.CD_ACCT	  CD_ACCT-->
+<!--							, a.NM_ACCT   NM_ACCT-->
+<!--							, a.YN_USE    YN_USE-->
+<!--							, a.YN_BASE   YN_BASE-->
+<!--							, a.JOB_TP    JOB_TP-->
+<!--							, a.TP_DRCR   TP_DRCR-->
+<!--		FROM   CZ_Q_BUACCT_M   a-->
+<!--		LEFT JOIN MA_CODEDTL   b-->
+<!--		ON     a.CD_COMPANY = b.CD_COMPANY-->
+<!--		AND    b.CD_FIELD   = 'CZ_Q0021'-->
+<!--		AND    B.CD_SYSDEF = A.JOB_TP-->
+<!--		WHERE  1=1-->
+<!--		AND    a.CD_COMPANY = #{CD_COMPANY}-->
+<!--		AND	   a.TP_DRCR    = '2'-->
+<!--		AND    a.JOB_TP    =  #{JOB_TP}-->
+<!--		AND    a.YN_BASE   = 'Y'-->
+<!--		ORDER BY b.CD_SYSDEF, a.CD_ACCT-->
+<!--    </select>-->
+<!--    <select id="selectOneH2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">-->
+<!--    SELECT *-->
+<!--    FROM CZ_Q_BUCARD_H-->
+<!--    WHERE CD_COMPANY = #{CD_COMPANY}-->
+<!--    AND   ACCT_NO    = #{ACCT_NO}-->
+<!--    AND   BANK_CODE  = #{BANK_CODE}-->
+<!--    AND   TRADE_DATE = #{TRADE_DATE}-->
+<!--    AND   TRADE_TIME = #{TRADE_TIME}-->
+<!--    AND   SEQ        = #{SEQ}-->
+<!--    </select>-->
+
+<!--    <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">-->
+<!--    SELECT-->
+<!--             BD.CD_COMPANY-->
+<!--            ,BD.CD_ACCT-->
+<!--            ,BD.NM_ACCT-->
+<!--            ,BD.CD_BUDGET-->
+<!--            ,BD.CD_BGACCT-->
+<!--            ,FB.NM_BGACCT-->
+<!--            ,SUM(AMT) AMT-->
+<!--    FROM   CZ_Q_BUCARD_D BD-->
+<!--    LEFT JOIN MA_EMP    ME-->
+<!--    ON     BD.CD_COMPANY  = ME.CD_COMPANY-->
+<!--    AND    BD.NO_EMP      = ME.NO_EMP-->
+<!--    LEFT JOIN FI_BGACCT  FB-->
+<!--    ON     BD.CD_COMPANY  = FB.CD_COMPANY-->
+<!--    AND    BD.CD_BGACCT   = FB.CD_BGACCT-->
+<!--    WHERE  BD.CD_COMPANY = #{CD_COMPANY}-->
+<!--       AND BD.ACCT_NO    = #{ACCT_NO}-->
+<!--       AND BD.BANK_CODE  = #{BANK_CODE}-->
+<!--       AND BD.TRADE_DATE = #{TRADE_DATE}-->
+<!--       AND BD.TRADE_TIME = #{TRADE_TIME}-->
+<!--       AND BD.SEQ        = #{SEQ}-->
+<!--       AND (CD_ACCT IS NOT NULL AND CD_ACCT != '')-->
+<!--       AND (BD.CD_BGACCT IS NOT NULL AND BD.CD_BGACCT != '')-->
+<!--       AND (CD_BUDGET IS NOT NULL AND CD_BUDGET != '')-->
+<!--    GROUP BY BD.CD_COMPANY,CD_ACCT,CD_BUDGET,BD.CD_BGACCT,FB.NM_BGACCT,BD.NM_ACCT-->
+<!--    </select>-->
+
+<!--    <update id="updateD" parameterType="hashmap" statementType="CALLABLE">-->
+<!--      UPDATE CZ_Q_BUCARD_D-->
+<!--        SET      CD_ACCT     =  #{CD_ACCT}-->
+<!--                ,NM_ACCT     =  #{NM_ACCT}-->
+<!--                ,CD_ACCT_CR  =  #{CD_ACCT_CR}-->
+<!--                ,NM_ACCT_CR  =  #{NM_ACCT_CR}-->
+<!--                ,AMT         =  #{AMT}-->
+<!--                ,CD_BUDGET   =  #{CD_BUDGET}-->
+<!--                ,NM_BUDGET   =  #{NM_BUDGET}-->
+<!--                ,CD_BGACCT   =  #{CD_BGACCT}-->
+<!--                ,CD_CC       =  #{CD_CC}-->
+<!--                ,NM_CC       =  #{NM_CC}-->
+<!--                ,DESTINATION =  #{DESTINATION}-->
+<!--                ,PURPOSE     =  #{PURPOSE}-->
+<!--                ,CD_BIZCAR   =  #{CD_BIZCAR}-->
+<!--                ,NM_BIZCAR   =  #{NM_BIZCAR}-->
+<!--                ,NO_TAX      =  #{NO_TAX}-->
+<!--                ,CD_USERDEF1 =  #{NM_DESC}-->
+<!--                ,CD_USERDEF2 =  #{TAX_GB}-->
+<!--                ,CD_USERDEF3 =  #{NON_TAX}-->
+<!--        WHERE  1 = 1-->
+<!--        AND    CD_COMPANY  =  #{CD_COMPANY}-->
+<!--        AND    ACCT_NO     =  #{ACCT_NO}-->
+<!--        AND    BANK_CODE   =  #{BANK_CODE}-->
+<!--        AND    TRADE_DATE  =  #{TRADE_DATE}-->
+<!--        AND    TRADE_TIME  =  #{TRADE_TIME}-->
+<!--        AND    SEQ         =  #{SEQ}-->
+<!--        AND    NO_ACCTLINE =  #{NO_ACCTLINE}-->
+<!--    </update>-->
+
+<!--    <update id="deleteD" parameterType="Apbucard" statementType="CALLABLE">-->
+<!--      DELETE-->
+<!--        FROM   CZ_Q_BUCARD_D-->
+<!--        WHERE  1 = 1-->
+<!--        AND    CD_COMPANY  =  #{CD_COMPANY}-->
+<!--        AND    ACCT_NO     =  #{ACCT_NO}-->
+<!--        AND    BANK_CODE   =  #{BANK_CODE}-->
+<!--        AND    TRADE_DATE  =  #{TRADE_DATE}-->
+<!--        AND    TRADE_TIME  =  #{TRADE_TIME}-->
+<!--        AND    SEQ         =  #{SEQ}-->
+<!--        AND    NO_ACCTLINE =  #{NO_ACCTLINE}-->
+<!--    </update>-->
+<!--    <update id="insertD2" parameterType="Apbucard" statementType="CALLABLE">-->
+<!--        INSERT INTO CZ_Q_BENEFIT_CUST(-->
+<!--         CD_COMPANY-->
+<!--        ,GUBUN-->
+<!--        ,DT_START-->
+<!--        ,SEQ_BNFT-->
+<!--        ,BC_ACCT_NO-->
+<!--        ,BC_BANK_CODE-->
+<!--        ,BC_TRADE_DATE-->
+<!--        ,BC_TRADE_TIME-->
+<!--        ,BC_SEQ-->
+<!--        ,AC_GROUP_NUMBER-->
+<!--        ,AC_NO_TPDOCU-->
+<!--        ,TP_CUST_EMP-->
+<!--        ,CD_CUST_EMP-->
+<!--        ,NM_CUST-->
+<!--        ,CONT_CUST-->
+<!--        ,BNFT_SUP_TYPE-->
+<!--        ,AMT_USE-->
+<!--        ,CUST_SUMAMT-->
+<!--        )-->
+<!--        VALUES( #{CD_COMPANY} , '1' , #{DT_START}-->
+<!--        , (-->
+<!--           SELECT ISNULL(MAX(SEQ_BNFT),0)+1 FROM CZ_Q_BENEFIT_CUST-->
+<!--            WHERE CD_COMPANY     =  #{CD_COMPANY}-->
+<!--              AND GUBUN          = '1'-->
+<!--              AND DT_START       = #{DT_START}-->
+<!--          )-->
+<!--        , #{ACCT_NO}-->
+<!--        , #{BANK_CODE} , #{TRADE_DATE} , #{TRADE_TIME} , #{SEQ} , #{GROUP_NUBER} , #{NO_TPDOCU} , #{TP_CUST_EMP} , #{CD_CUST_EMP} , #{NM_CUST}-->
+<!--        , #{CONT_CUST} , #{BNFT_SUP_TYPE} , #{AMT_USE} , #{CUST_SUMAMT})-->
+<!--    </update>-->
+<!--    <update id="updateD2" parameterType="hashmap" statementType="CALLABLE">-->
+<!--      UPDATE CZ_Q_BENEFIT_CUST-->
+<!--         SET   TP_CUST_EMP   =  #{TP_CUST_EMP}-->
+<!--              ,CD_CUST_EMP   =  #{CD_CUST_EMP}-->
+<!--              ,NM_CUST       =  #{NM_CUST}-->
+<!--              ,CONT_CUST     =  #{CONT_CUST}-->
+<!--              ,BNFT_SUP_TYPE =  #{BNFT_SUP_TYPE}-->
+<!--              ,AMT_USE       =  #{AMT_USE}-->
+<!--              ,CUST_SUMAMT   =  #{CUST_SUMAMT}-->
+<!--              ,GUBUN         =  #{GUBUN}-->
+<!--        WHERE  1 = 1-->
+<!--          AND  CD_COMPANY     =  #{CD_COMPANY}-->
+<!--          AND  BC_ACCT_NO     =  #{BC_ACCT_NO}-->
+<!--          AND  BC_BANK_CODE   =  #{BC_BANK_CODE}-->
+<!--          AND  BC_TRADE_DATE  =  #{BC_TRADE_DATE}-->
+<!--          AND  BC_TRADE_TIME  =  #{BC_TRADE_TIME}-->
+<!--          AND  BC_SEQ         =  #{BC_SEQ}-->
+<!--          AND  SEQ_BNFT       =  #{SEQ_BNFT}-->
+<!--    </update>-->
+<!--    <update id="deleteD2" parameterType="Apbucard" statementType="CALLABLE">-->
+
+<!--       DELETE-->
+<!--         FROM  CZ_Q_BENEFIT_CUST-->
+<!--        WHERE  CD_COMPANY     =  #{CD_COMPANY}-->
+<!--          AND  BC_ACCT_NO     =  #{BC_ACCT_NO}-->
+<!--          AND  BC_BANK_CODE   =  #{BC_BANK_CODE}-->
+<!--          AND  BC_TRADE_DATE  =  #{BC_TRADE_DATE}-->
+<!--          AND  BC_TRADE_TIME  =  #{BC_TRADE_TIME}-->
+<!--          AND  BC_SEQ         =  #{BC_SEQ}-->
+<!--          AND  SEQ_BNFT       =  #{SEQ_BNFT}-->
+<!--    </update>-->
+<!--    <update id="taxInsert" parameterType="java.util.HashMap" statementType="CALLABLE">-->
+<!--    INSERT INTO-->
+<!--	CZ_Q_FI_TAX(-->
+<!--	NO_TAX-->
+<!--	,CD_COMPANY-->
+<!--	,NO_TPDOCU-->
+<!--	,CD_PC-->
+<!--	,ST_DOCU   &#45;&#45;1-->
+<!--	,CD_BIZAREA-->
+<!--	,DT_START-->
+<!--	,CD_PARTNER-->
+<!--	,NO_COMPANY-->
+<!--	,AM_UNCLT   &#45;&#45;공급대가-->
+<!--	,AM_TAXSTD &#45;&#45; 공급가액-->
+<!--	,AM_ADDTAX &#45;&#45; 부가세-->
+<!--	,AM_TAX1   &#45;&#45; 부가세-->
+<!--	,TP_TAX    &#45;&#45; 세무구분-->
+<!--	,CD_BANK-->
+<!--	,NO_CARD-->
+<!--	,ST_MUTUAL  &#45;&#45;불공제구분-->
+<!--	,ID_UPDATE-->
+<!--	,YN_ISS-->
+<!--	)-->
+<!--	VALUES(-->
+<!--	 #{NO_TAX}-->
+<!--	,#{CD_COMPANY}-->
+<!--	,#{NO_TPDOCU}-->
+<!--	,#{CD_PC}-->
+<!--	,#{ST_DOCU}-->
+<!--	,#{CD_BIZAREA}-->
+<!--	,#{DT_ACCT}-->
+<!--	,(SELECT  TOP 1 CD_PARTNER FROM MA_PARTNER WHERE CD_COMPANY = #{CD_COMPANY} AND NO_COMPANY = #{CD_TRADE_PLACE} ORDER BY DTS_UPDATE DESC)-->
+<!--	,#{CD_TRADE_PLACE}-->
+<!--	,#{ADMIN_AMT}-->
+<!--	,ISNULL(#{ADMIN_AMT} - #{D_AMT},0)-->
+<!--	,#{D_AMT}-->
+<!--	,#{D_AMT}-->
+<!--	,#{TP_TAX}-->
+<!--	,#{CD_BANK}-->
+<!--	,#{NO_CARD}-->
+<!--	,#{ST_MUTUAL}-->
+<!--	,#{CD_TRADE_PLACE}-->
+<!--	,'2'-->
+<!--	)-->
+<!--    </update>-->
+</mapper>
+
+

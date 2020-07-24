@@ -1,0 +1,6 @@
+ACTION 명은 무조건 CUSTOM_HELP_* 를 써준다.
+
+
+
+1.계정도움창 차변 대변만 필터링해서 보고 싶을때 사용
+$.openCustomPopup('AcctCode', "Grid1CallBack", 'CUSTOM_HELP_ACCT', {TP_DRCR : 1});
