@@ -1707,6 +1707,7 @@
                 <div data-ax5grid="grid-view-01"
                      data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
                      id="left_grid"
+                     style="height: 300px;"
                      name="왼쪽그리드"
                 ></div>
 
