@@ -375,15 +375,15 @@
                                     fnObj.gridView01.target.setValue(idx, 'SALE_SUPPLY_COST', Number(data.SALE_COST) - data.SALE_SURTAX);
                                 }
                                 if (column == 'ITEM_COST'){
-                                    var supplyAmt = Math.floor(Number(data.ITEM_COST) * 10 / 11);
-                                    var vatAmt = Math.floor((Number(data.ITEM_COST) - supplyAmt));
+                                    var supplyAmt = Math.round(Number(data.ITEM_COST) * 10 / 11);
+                                    var vatAmt = Math.round((Number(data.ITEM_COST) - supplyAmt));
 
                                     fnObj.gridView01.target.setValue(idx, 'ITEM_SUPPLY_COST', supplyAmt);
                                     fnObj.gridView01.target.setValue(idx, 'ITEM_SURTAX', vatAmt);
                                 }
                                 if (column == 'SALE_COST'){
-                                    var supplyAmt = Math.floor(Number(data.SALE_COST) * 10 / 11);
-                                    var vatAmt = Math.floor((Number(data.SALE_COST) - supplyAmt));
+                                    var supplyAmt = Math.round(Number(data.SALE_COST) * 10 / 11);
+                                    var vatAmt = Math.round((Number(data.SALE_COST) - supplyAmt));
 
                                     fnObj.gridView01.target.setValue(idx, 'SALE_SUPPLY_COST', supplyAmt);
                                     fnObj.gridView01.target.setValue(idx, 'SALE_SURTAX', vatAmt);
