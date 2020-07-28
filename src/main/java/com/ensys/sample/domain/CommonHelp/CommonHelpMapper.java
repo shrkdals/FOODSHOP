@@ -9,7 +9,9 @@ import java.util.Map;
 
 @Repository
 public interface CommonHelpMapper extends MyBatisMapper {
-
+	
+	List<HashMap<String, Object>> HELP_USER_NOTICE(Map<String, Object> param);
+	
     List<HashMap<String, Object>> HELP_BRAND_ITEM(Map<String, Object> param);
 
     List<HashMap<String, Object>> HELP_BRAND_PARTNER(Map<String, Object> param);

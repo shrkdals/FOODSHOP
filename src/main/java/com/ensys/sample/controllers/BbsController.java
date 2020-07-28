@@ -20,94 +20,97 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 @Controller
 @RequestMapping(value = "/api/Bbs")
 public class BbsController extends BaseController {
-    @Inject
-    private BbsNoticeService service;
+	@Inject
+	private BbsNoticeService service;
 
-    @Inject
-    private fileService fileService;
+	@Inject
+	private fileService fileService;
 
+	@RequestMapping(value = "select", method = RequestMethod.POST, produces = APPLICATION_JSON)
+	@ResponseBody
+	public Responses.ListResponse selectM(@RequestBody HashMap<String, Object> param) {
+		List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
 
-    @RequestMapping(value = "selectList", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    @ResponseBody
-    public Responses.ListResponse selectM(RequestParams request) {
-        HashMap<String, Object> ParameterMap = null;
-        List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
-        try {
+		try {
+			result = service.select(param);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Responses.ListResponse.of(result);
+	}
 
-            SessionUser user = SessionUtils.getCurrentUser();
-            ParameterMap = new HashMap<String, Object>();
+	@RequestMapping(value = "save", method = { RequestMethod.PUT }, produces = APPLICATION_JSON)
+	public ApiResponse save(@RequestBody HashMap<String, Object> param) throws Exception {
+		service.save(param);
+		return ok();
+	}
 
-            ParameterMap.put("CD_COMPANY", user.getCdCompany());
-            ParameterMap.put("BOARD_TYPE", request.getString("P_BOARD_TYPE", ""));
-            ParameterMap.put("KEYWORD", request.getString("P_KEYWORD", ""));
-            ParameterMap.put("CONDITION", request.getString("P_CONDITION", ""));
-            ParameterMap.put("NOWPAGE", request.getString("P_NOWPAGE", ""));
-            ParameterMap.put("PAGING_SIZE", request.getString("P_PAGING_SIZE", ""));
-            ParameterMap.put("OPT", request.getString("P_OPT", ""));
-            ParameterMap.put("SEQ", request.getString("P_SEQ", ""));
-
-            result = service.selectList(ParameterMap);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Responses.ListResponse.of(result);
-    }
-
-    @RequestMapping(value = "selectDetail", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    @ResponseBody
-    public Responses.ListResponse selectDetail(RequestParams request) {
-        HashMap<String, Object> ParameterMap = null;
-        List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
-        try {
-
-            SessionUser user = SessionUtils.getCurrentUser();
-            ParameterMap = new HashMap<String, Object>();
-
-            ParameterMap.put("CD_COMPANY", user.getCdCompany());
-            ParameterMap.put("BOARD_TYPE", request.getString("P_BOARD_TYPE", ""));
-            ParameterMap.put("SEQ", request.getString("P_SEQ", ""));
-            ParameterMap.put("OPT", request.getString("P_OPT", ""));
-
-            result = service.selectDetail(ParameterMap);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Responses.ListResponse.of(result);
-    }
-
-    @RequestMapping(value = "write", method = {RequestMethod.POST}, produces = APPLICATION_JSON)
-    @ResponseBody
-    public Responses.MapResponse write(@RequestBody HashMap<String, Object> param) {
-
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        try {
-
-            result = service.write(param);
-        } catch (Exception e) {
-            result.put("chkVal", "Y");
-            result.put("MSG", e);
-            e.printStackTrace();
-            return Responses.MapResponse.of(result);
-        }
-        return Responses.MapResponse.of(result);
-    }
-
-    @RequestMapping(value = "deleteWrite", method = {RequestMethod.PUT}, produces = APPLICATION_JSON)
-    @ResponseBody
-    public Responses.MapResponse deleteWrite(@RequestBody HashMap<String, Object> param) {
-        HashMap<String, Object> returnMap = new HashMap<String, Object>();
-
-        try {
-            returnMap = service.deleteWrite(param);
-        } catch (Exception e) {
-            returnMap.put("MSG", "삭제 중 오류가 발생하였습니다.. \n " + e);
-            returnMap.put("chkVal", "Y");
-            e.printStackTrace();
-        }
-        return Responses.MapResponse.of(returnMap);
-    }
+	/*
+	 * @RequestMapping(value = "selectList", method = RequestMethod.GET, produces =
+	 * APPLICATION_JSON)
+	 * 
+	 * @ResponseBody public Responses.ListResponse selectM(RequestParams request) {
+	 * HashMap<String, Object> ParameterMap = null; List<HashMap<String, Object>>
+	 * result = new ArrayList<HashMap<String, Object>>(); try {
+	 * 
+	 * SessionUser user = SessionUtils.getCurrentUser(); ParameterMap = new
+	 * HashMap<String, Object>();
+	 * 
+	 * ParameterMap.put("CD_COMPANY", user.getCdCompany());
+	 * ParameterMap.put("BOARD_TYPE", request.getString("P_BOARD_TYPE", ""));
+	 * ParameterMap.put("KEYWORD", request.getString("P_KEYWORD", ""));
+	 * ParameterMap.put("CONDITION", request.getString("P_CONDITION", ""));
+	 * ParameterMap.put("NOWPAGE", request.getString("P_NOWPAGE", ""));
+	 * ParameterMap.put("PAGING_SIZE", request.getString("P_PAGING_SIZE", ""));
+	 * ParameterMap.put("OPT", request.getString("P_OPT", ""));
+	 * ParameterMap.put("SEQ", request.getString("P_SEQ", ""));
+	 * 
+	 * result = service.selectList(ParameterMap); } catch (Exception e) {
+	 * e.printStackTrace(); } return Responses.ListResponse.of(result); }
+	 * 
+	 * @RequestMapping(value = "selectDetail", method = RequestMethod.GET, produces
+	 * = APPLICATION_JSON)
+	 * 
+	 * @ResponseBody public Responses.ListResponse selectDetail(RequestParams
+	 * request) { HashMap<String, Object> ParameterMap = null; List<HashMap<String,
+	 * Object>> result = new ArrayList<HashMap<String, Object>>(); try {
+	 * 
+	 * SessionUser user = SessionUtils.getCurrentUser(); ParameterMap = new
+	 * HashMap<String, Object>();
+	 * 
+	 * ParameterMap.put("CD_COMPANY", user.getCdCompany());
+	 * ParameterMap.put("BOARD_TYPE", request.getString("P_BOARD_TYPE", ""));
+	 * ParameterMap.put("SEQ", request.getString("P_SEQ", ""));
+	 * ParameterMap.put("OPT", request.getString("P_OPT", ""));
+	 * 
+	 * result = service.selectDetail(ParameterMap); } catch (Exception e) {
+	 * e.printStackTrace(); } return Responses.ListResponse.of(result); }
+	 * 
+	 * @RequestMapping(value = "write", method = {RequestMethod.POST}, produces =
+	 * APPLICATION_JSON)
+	 * 
+	 * @ResponseBody public Responses.MapResponse write(@RequestBody HashMap<String,
+	 * Object> param) {
+	 * 
+	 * HashMap<String, Object> result = new HashMap<String, Object>(); try {
+	 * 
+	 * result = service.write(param); } catch (Exception e) { result.put("chkVal",
+	 * "Y"); result.put("MSG", e); e.printStackTrace(); return
+	 * Responses.MapResponse.of(result); } return Responses.MapResponse.of(result);
+	 * }
+	 * 
+	 * @RequestMapping(value = "deleteWrite", method = {RequestMethod.PUT}, produces
+	 * = APPLICATION_JSON)
+	 * 
+	 * @ResponseBody public Responses.MapResponse deleteWrite(@RequestBody
+	 * HashMap<String, Object> param) { HashMap<String, Object> returnMap = new
+	 * HashMap<String, Object>();
+	 * 
+	 * try { returnMap = service.deleteWrite(param); } catch (Exception e) {
+	 * returnMap.put("MSG", "삭제 중 오류가 발생하였습니다.. \n " + e); returnMap.put("chkVal",
+	 * "Y"); e.printStackTrace(); } return Responses.MapResponse.of(returnMap); }
+	 */
 }

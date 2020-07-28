@@ -19,6 +19,7 @@
             var initData = parent.modal.modalConfig.sendData;
             var modal = new ax5.ui.modal();
             var BOARD_TYPE = nvl(initData["P_BOARD_TYPE"], '') != '' ? true : false;
+            var BOARD_SP = nvl(initData["P_BOARD_SP"], '') != '' ? true : false;
             var SEQ = nvl(initData["P_SEQ"], '') != '' ? true : false;
             var CONTENTS = nvl(initData["P_CONTENTS"], '') != '' ? true : false;
             var TITLE = nvl(initData["P_TITLE"], '') != '' ? true : false;
@@ -70,6 +71,10 @@
                 if (TITLE) {
                     $("#TITLE").val(initData["P_TITLE"])
                 }
+            
+                if (BOARD_SP) {
+                    $('input:radio[name="chk"][value="' + initData["P_BOARD_SP"] + '"]').prop('checked', true);
+                }
             };
 
 
@@ -99,9 +104,10 @@
             }
             for (var i = 0 ; i < dl_BOARD_SP.length; i++){
                 $("#BORAD_SP").append(
-                    "<input type='radio' style='margin-left:10px;' name='chk"+ i +"' id='chk"+ i +"' value='"+ dl_BOARD_SP[i].CODE +"'>" +
+                    "<input type='radio' style='margin-left:10px;' name='chk' id='chk"+ i +"' value='"+ dl_BOARD_SP[i].CODE +"'>" +
                     "<label for='chk"+ i +"' style='margin-top: 10px;'>"+ dl_BOARD_SP[i].TEXT +"</label>"
                 )
+                $("#chk0").attr('checked', 'true');
             }
         </script>
     </jsp:attribute>

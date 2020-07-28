@@ -30,7 +30,19 @@ public class CommonHelpController extends BaseController {
     @Inject
     private CommonHelpService service;
 
+    
 
+    @RequestMapping(value = "HELP_USER_NOTICE", method = RequestMethod.POST, produces = APPLICATION_JSON)       //  상품도움창
+    public Responses.ListResponse HELP_USER_NOTICE(@RequestBody HashMap<String, Object> param) {
+        SessionUser sessionUser = SessionUtils.getCurrentUser();
+
+        param.put("COMPANY_CD", sessionUser.getCdCompany());
+        param.put("PT_SP", param.get("PT_SP"));
+        param.put("KEYWORD", param.get("P_KEYWORD"));
+        List<HashMap<String, Object>> list = service.HELP_USER_NOTICE(param);
+        return Responses.ListResponse.of(list);
+    }
+    
     @RequestMapping(value = "HELP_BRAND_ITEM", method = RequestMethod.POST, produces = APPLICATION_JSON)       //  상품도움창
     public Responses.ListResponse HELP_BRAND_ITEM(@RequestBody HashMap<String, Object> param) {
         SessionUser sessionUser = SessionUtils.getCurrentUser();

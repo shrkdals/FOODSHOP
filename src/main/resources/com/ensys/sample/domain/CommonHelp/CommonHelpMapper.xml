@@ -4,6 +4,12 @@
 
 <mapper namespace="com.ensys.sample.domain.CommonHelp.CommonHelpMapper">
 
+
+
+	<select id="HELP_USER_NOTICE" parameterType="hashmap" resultType="hashmap" statementType="PREPARED">
+        { CALL UP_FS_HELP_USER_NOTICE_S(#{COMPANY_CD},#{PT_SP},#{KEYWORD}) }
+    </select>
+    
     <select id="HELP_BRAND_ITEM" parameterType="hashmap" resultType="hashmap" statementType="PREPARED">
         { CALL UP_FS_HELP_BRAND_ITEM_S(#{COMPANY_CD},#{PT_CD},#{ITEM_SP},#{KEYWORD}) }
     </select>

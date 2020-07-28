@@ -153,8 +153,9 @@
                 },
                 ITEM_UPDATE: function (caller, act, data) {
                     modal.open({
-                        width: 1000,
-                        height: 600,
+                    	width: 1000,
+                        height: 700,
+                        top: _pop_top,
                         iframe: {
                             method: "get",
                             url: '../bbs/p_cz_q_bbs_write_m.jsp',
@@ -164,7 +165,8 @@
                             P_BOARD_TYPE: InitData.BOARD_TYPE,
                             P_SEQ: InitData.seq,
                             P_CONTENTS: document.getElementById('CONTENTS').innerHTML,
-                            P_TITLE: $("#TITLE").val()
+                            P_TITLE: $("#TITLE").val(),
+                            P_BOARD_SP : InitData
                         },
                         onStateChanged: function () {
                             // mask
@@ -230,15 +232,6 @@
                 $.openCommonUtils(callBack, map, 'calender');
             }
 
-            /*function openFileModal(callBack, viewName, initData) {
-                var map = new Map();
-                map.set("modal", FileBrowserModal);
-                map.set("modalText", "FileBrowserModal");
-                map.set("viewName", viewName);
-                map.set("initData", initData);
-
-                $.openCommonUtils(callBack, map, 'fileBrowser');
-            }*/
 
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
@@ -277,6 +270,39 @@
                 var winHeight = $(window).height();
                 $("#scrollBody").attr("style", "overflow-y :auto;height:" + (winHeight - 100) + "px;");
             });
+
+            var _pop_top = 0;
+            var _pop_top450 = 0;
+            var _pop_height = 0;
+            var _pop_width1000 = 0;
+            $(document).ready(function () {
+                changesize();
+            });
+            $(window).resize(function () {
+                changesize();
+            });
+
+            function changesize() {
+                //전체영역높이
+                var totheight = $("#ax-base-root").height();
+                if (totheight > 700) {
+                    _pop_height = 600;
+                    _pop_top = parseInt((totheight - _pop_height) / 2);
+                    _pop_top450 = parseInt((totheight - 450) / 2);
+                    _pop_width1000 = 1000;
+                } else {
+                    _pop_height = totheight / 10 * 8;
+                    _pop_top = parseInt((totheight - _pop_height) / 2);
+                    _pop_top450 = parseInt((totheight - 450) / 2);
+                    _pop_width1000 = 900;
+                }
+
+                /*
+                alert($("#ax-base-root").height()); // 컨텐츠영역높이
+                ax-base-title //타이틀부분높이(class)
+                ax-base-content //검색조건높이(class)
+                 */
+            }
 
         </script>
     </jsp:attribute>

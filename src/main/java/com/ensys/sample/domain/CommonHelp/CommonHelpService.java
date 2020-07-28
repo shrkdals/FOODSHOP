@@ -16,7 +16,13 @@ public class CommonHelpService extends BaseService {
 
     @Inject
     public CommonHelpMapper mapper;
-
+    
+    
+    public List<HashMap<String, Object>> HELP_USER_NOTICE(HashMap<String, Object> param) {
+        SessionUser sessionUser = SessionUtils.getCurrentUser();
+        param.put("CD_COMPANY", sessionUser.getCdCompany());
+        return mapper.HELP_USER_NOTICE(param);
+    }
     public List<HashMap<String, Object>> HELP_BRAND_ITEM(HashMap<String, Object> param) {
         SessionUser sessionUser = SessionUtils.getCurrentUser();
         param.put("CD_COMPANY", sessionUser.getCdCompany());

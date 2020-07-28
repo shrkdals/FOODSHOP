@@ -8,34 +8,23 @@
 <ax:set key="page_auto_height" value="true"/>
 
 
+
 <ax:layout name="base">
     <jsp:attribute name="script">
-
-
         <ax:script-lang key="ax.script"/>
+        <style>
+            .red {
+                background: #ffe0cf !important;
+            }
+        </style>
+
 
         <script type="text/javascript">
-            var modal = new ax5.ui.modal();
-            var menuParam = this.parent.fnObj.tabView.urlGetData();
-            var FileBrowserModal = new ax5.ui.modal();
-            var loca = document.location.search;
-            console.log("loca", loca);
-            var InitData = {};
-            if (nvl(loca, '') != '') {
-                var search = document.location.search.split('?')[1].split('&');
-
-                for (var i = 0; i < search.length; i++) {
-                    var key = search[i].split('=')[0];
-                    var value = search[i].split('=')[1];
-                    eval("InitData." + key + "= value");
-                }
-            }
-            var page = 1;               //  페이지 기초값 : 1
-            var BOARD_TYPE = "notice";  //  종류
-            var paging_size;            //  화면에 보여줄 데이터 수
-            var condition;              //  조회조건
-            var keyword;                //  조회조건 검색어
-
+            var userCallBack;
+            var afterIndex = 0;
+            var today = new Date();
+            
+            var dl_BOARD_SP = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00028');
             var CONDITION = [
                 {value: "COM", text: "제목+내용"},
                 {value: "SUB", text: "제목"},
@@ -43,345 +32,352 @@
                 {value: "AUT", text: "작성자"}
             ];
 
-            $('#CONDITION').ax5select({
-                options: CONDITION
-            });
+            $("#BOARD_SP").ax5select({options: dl_BOARD_SP});
+            $('#CONDITION').ax5select({options: CONDITION});
 
-            var EACHPG = [
-                {value: "10", text: "10개씩보기"},
-                {value: "15", text: "15개씩보기"},
-                {value: "20", text: "20개씩보기"}
-                /* {value: "50", text: "50개씩보기"},
-                 {value: "100", text: "100개씩보기"}*/
-            ];
+            var picker = new ax5.ui.picker();
+            picker.bind({
+                target: $('[data-ax5picker="basic"]'),
+                direction: "auto",
+                content: {
+                    width: 270,
+                    margin: 10,
+                    type: 'date',
+                    config: {
+                        control: {
+                            left: '<i class="cqc-chevron-left"></i>',
+                            yearTmpl: '%s',
+                            monthTmpl: '%s',
+                            right: '<i class="cqc-chevron-right"></i>'
+                        },
+                        lang: {
+                            yearTmpl: "%s년",
+                            months: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+                            dayTmpl: "%s"
+                        }
+                    }
+                },
+                onStateChanged: function () {
+                },
+                btns: {
+                    today: {
+                        label: "오늘", onClick: function () {
 
-            $('#EACHPG').ax5select({
-                options: EACHPG
-            });
-
-            goPaging_notice_m = function (index) {
-                page = index;
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            };
-
-            goPage = function (url) {
-                window.location.href = url;
-            };
-
-
-            Paging = function (totalCnt, dataSize, pageSize, pageNo, token) {
-                totalCnt = parseInt(totalCnt);// 전체레코드수
-                dataSize = parseInt(dataSize); // 페이지당 보여줄 데이타수
-                pageSize = parseInt(pageSize); // 페이지 그룹 범위 1 2 3 5 6 7 8 9 10
-                pageNo = parseInt(pageNo); // 현재페이지
-                var html = [];
-                if (totalCnt == 0) {
-                    return "";
-                } // 페이지 카운트
-                var pageCnt = totalCnt % dataSize;
-                if (pageCnt == 0) {
-                    pageCnt = parseInt(totalCnt / dataSize);
-                } else {
-                    pageCnt = parseInt(totalCnt / dataSize) + 1;
+                            $("#EVENT_ST_DTE").val(dtNow);
+                            $("#EVENT_ED_DTE").val(dtNow);
+                            this.self.close();
+                        }
+                    },
+                    thisMonth: {
+                        label: "이번달", onClick: function () {
+                            $("#EVENT_ED_DTE").val(dtT);
+                            $("#EVENT_ST_DTE").val(dtF);
+                            this.self.close();
+                        }
+                    },
+                    ok: {label: "확인", theme: "default"}
                 }
-                var pRCnt = parseInt(pageNo / pageSize);
-                if (pageNo % pageSize == 0) {
-                    pRCnt = parseInt(pageNo / pageSize) - 1;
-                } //이전 화살표
-                if (pageNo > pageSize) {
-                    console.log("이전 gopaging");
-                    var s2;
-                    if (pageNo % pageSize == 0) {
-                        s2 = pageNo - pageSize;
-                    } else {
-                        s2 = pageNo - pageNo % pageSize;
-                    }
-                    html.push('<span>');
-                    html.push('<a href=javascript:goPaging_' + token + '("');
-                    html.push(s2);
-                    html.push('"); class="nav prev">');
-                    html.push("</a>");
-                    html.push('</span>');
-                } else {
-                    console.log("이전 #");
-                    html.push('<span>');
-                    html.push('<a href="#" class="nav prev">');
-                    html.push('</a>');
-                    html.push('</span>');
-                } //paging Bar
-                for (var index = pRCnt * pageSize + 1; index < (pRCnt + 1) * pageSize + 1; index++) {
-                    if (index == pageNo) {
-                        html.push('<span>');
-                        html.push('<a class="on">');
-                        html.push(index);
-                        html.push('</a>');
-                        html.push('</span>');
-                    } else {
-                        html.push('<span>');
-                        html.push('<a href=javascript:goPaging_' + token + '("');
-                        html.push(index);
-                        html.push('");>');
-                        html.push(index);
-                        html.push('</a>');
-                        html.push('</span>');
-                    }
-                    if (index == pageCnt) {
-                        break;
-                    }
-                } //다음 화살표
-                if (pageCnt > (pRCnt + 1) * pageSize) {
-                    html.push('<a class="nav next" href=javascript:goPaging_' + token + '("');
-                    html.push((pRCnt + 1) * pageSize + 1);
-                    html.push('");>');
-                    html.push('</a>');
-                } else {
-                    html.push('<a href="#" class="nav next">');
-                    html.push('</a>');
-                }
-                return html.join("");
-            };
-
-
-            var writeCallBack = function (e) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                modal.close();
-                qray.alert('성공적으로 저장되었습니다.');
-            };
-
+            });
             var fnObj = {}, CODE = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
+                //조회버튼
                 PAGE_SEARCH: function (caller, act, data) {
-
-                    condition = $('[data-ax5select="CONDITION"]').ax5select("getValue")[0].value;
-                    keyword = $("#KEYWORD").val();
-                    paging_size = $('[data-ax5select="EACHPG"]').ax5select("getValue")[0].value;
-                    var totalPageCount = 0;
-                    var totalDataCount = 0;
-
                     axboot.ajax({
-                        type: "GET",
-                        url: ["Bbs", "selectList"],
-                        async: false,
-                        data: {
-                            "P_NOWPAGE": page,
-                            "P_PAGING_SIZE": 0,
-                            "P_BOARD_TYPE": BOARD_TYPE,
-                            "P_KEYWORD": keyword,
-                            "P_CONDITION": condition,
-                            "P_OPT": "TOT",
-                            "P_SEQ": 0
-                        },
+                        type: "POST",
+                        url: ["Bbs", "select"],
+                        data: JSON.stringify({
+                            BOARD_TYPE: 'notice',
+                            BOARD_SP: $('[data-ax5select="BOARD_SP"]').ax5select("getValue")[0].value,
+                            CONDITION: $('[data-ax5select="CONDITION"]').ax5select("getValue")[0].value,
+                            KEYWORD: $("#KEYWORD").val()
+                        }),
                         callback: function (res) {
+                            caller.gridView01.clear();
                             if (res.list.length > 0) {
-                                console.log(res.list[0]);
-                                totalDataCount = res.list[0].TOT_PAGE;
-                                totalPageCount = Math.ceil(res.list[0].TOT_PAGE / paging_size);
+                                caller.gridView01.setData(res);
+                                caller.gridView01.target.select(0);
                             }
-                        }
-                    });
-
-                    axboot.ajax({
-                        type: "GET",
-                        url: ["Bbs", "selectList"],
-                        async: false,
-                        data: {
-                            "P_BOARD_TYPE": BOARD_TYPE,
-                            "P_KEYWORD": keyword,
-                            "P_CONDITION": condition,
-                            "P_NOWPAGE": page,
-                            "P_PAGING_SIZE": paging_size,
-                            "P_OPT": 0,
-                            "P_SEQ": 0
-                        },
-                        callback: function (res) {
-
-                            $(".noData").remove();
-                            $(".selectTR").remove();
-                            var html = "";
-
-                            if (res.list.length == 0) {     //  조회데이터가 없다.
-                                html = "";
-                                html += "</tr class='noData'>";
-                                html += "<td colspan='5' height='500px' align='center'>데이터가 없습니다.";
-                                html += "</tr>";
-
-                                $("#body").append(html);
-                            }
-
-                            var searchQuery = "";
-                            if ($("#keyword").val()) {
-                                searchQuery = '&condition=' + condition + '&keyword=' + keyword;
-                            }
-                            var pagingQuery = "";
-                            if (paging_size) {
-                                pagingQuery = "&paging_size=" + paging_size;
-                            }
-
-                            var listNum = totalDataCount - (page - 1) * paging_size;
-                            for (var i = 0; i < res.list.length; i++) {
-                                var result = res.list[i];
-
-                                var detailPath = "p_cz_q_bbs_detail_m.jsp?page=" + page + "&BOARD_TYPE=" + BOARD_TYPE +
-                                    "&seq=" + result.SEQ + searchQuery + pagingQuery;
-                                html = "";
-                                html += "<tr class='selectTR' onclick=\"goPage('../bbs/" + detailPath + "')\" style=\"cursor:hand\">";
-                                html += "<td>" + result.SEQ + "</td>";
-                                html += "<td class=\"tit\">" + result.TITLE + "</td>";
-                                html += "<td>" + $.changeDataFormat(result.DTS_INSERT, "yyyyMMddhhmmss") + "</td>";
-                                html += "<td>" + result.NM_KOR + "</td>";
-                                html += "<td>" + result.HIT + "</td>";
-                                html += "</tr>";
-
-                                $("#body").append(html);
-                            }
-                            var page_viewList = Paging(totalDataCount, paging_size, 5, page, "notice_m"); //Paging(전체데이타수,페이지당 보여줄 데이타수,페이지 그룹 범위,현재페이지 번호,token명)
-                            $("#pager1").empty().html(page_viewList);
                         }
                     });
                 },
-                ITEM_WRITE: function (caller, act, data) {
-                    modal.open({
-                        width: 1000,
-                        height: 700,
-                        top: _pop_top,
-                        iframe: {
-                            method: "get",
-                            url: '../bbs/p_cz_q_bbs_write_m.jsp',
-                            param: "callBack=writeCallBack"
-                        },
-                        sendData: {
-                            P_BOARD_TYPE: BOARD_TYPE,
-                            FileBrowserModal: FileBrowserModal
-                        },
-                        onStateChanged: function () {
-                            // mask
-                            if (this.state === "open") {
-                                mask.open({
-                                    content: '<h1><i class="fa fa-spinner fa-spin"></i> Loading</h1>'
-                                });
-                            } else if (this.state === "close") {
-                                mask.close();
-                            }
-                        }
+                //저장버튼
+                PAGE_SAVE: function (caller, act, data) {
+                    var saveData = [].concat(caller.gridView01.getData("modified"));
+                    saveData = saveData.concat(caller.gridView01.getData("deleted"));
+                    qray.confirm({
+                        msg: "저장하시겠습니까?"
                     }, function () {
-
+                        if (this.key == "ok") {
+                            
+                            axboot.ajax({
+                                type: "PUT",
+                                url: ["Bbs", "save"],
+                                data: JSON.stringify({
+                                    saveData: saveData,
+                                }),
+                                callback: function (res) {
+                                    qray.alert("저장 되었습니다.").then(function(){
+                                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                                    });
+                                }
+                            });
+                        }
                     });
+                },
+                //상단추가버튼
+                ITEM_ADD1: function (caller, act, data) {
+                    caller.gridView01.addRow();
+                    var lastIdx = nvl(caller.gridView01.target.list.length, caller.gridView01.lastRow());
+                    caller.gridView01.target.select(lastIdx - 1);
+                    caller.gridView01.target.focus(lastIdx - 1);
+                    afterIndex  = lastIdx - 1;
+
+                    caller.gridView01.target.setValue(lastIdx - 1,'BOARD_TYPE', 'notice');
+                    caller.gridView01.target.setValue(lastIdx - 1,'HIT', 0);
+
+                },
+                ITEM_DEL1: function (caller, act, data) {
+                    qray.confirm({
+                        msg: "삭제 하시겠습니까?<br>삭제할 데이터가 많으면, 느려질 수 있습니다."
+                    }, function () {
+                        if (this.key == "ok") {
+
+                        }
+                    });
+                    var beforeIdx = fnObj.gridView01.target.selectedDataIndexs[0];
+                    var dataLen = fnObj.gridView01.target.getList().length;
+
+                    if ((beforeIdx + 1) == dataLen) {
+                        beforeIdx = beforeIdx - 1;
+                    }
+
+                    var count = 0 ;
+                    var grid = caller.gridView01.target.list;
+                    var i = grid.length;
+                    while (i--) {
+                        var data = caller.gridView01.target.list[i];
+                        if (data.CHK == 'Y') {
+                            fnObj.gridView01.delRow(i);
+                            count++;
+                        }
+                    }
+                    i = null;
+
+                    if (count == 0) {
+                        qray.alert("삭제할 데이터가 없습니다.");
+                        return false;
+                    }
+
+                    if (beforeIdx > 0 || beforeIdx == 0) {
+                        fnObj.gridView01.target.select(beforeIdx);
+                    }
                 }
             });
-
-
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
                 this.pageButtonView.initView();
-                this.searchView.initView();
-
-
-                page = nvl(InitData["page"], '') != '' ? InitData["page"] : page;
-                BOARD_TYPE = nvl(InitData["BOARD_TYPE"], '') != '' ? InitData["BOARD_TYPE"] : BOARD_TYPE;
-                paging_size = nvl(InitData["paging_size"], '') != '' ? InitData["paging_size"] : paging_size;
-                condition = nvl(InitData["condition"], '') != '' ? InitData["condition"] : condition;
-                keyword = nvl(InitData["keyword"], '') != '' ? InitData["keyword"] : keyword;
-
-                $("#CONDITION").ax5select("setValue", nvl(condition, "COM"), true);
-                $("#EACHPG").ax5select("setValue", nvl(paging_size, "10"), true);
+                this.gridView01.initView();
 
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
 
-
-            fnObj.pageResize = function () {
-
-            };
 
             fnObj.pageButtonView = axboot.viewExtend({
                 initView: function () {
                     axboot.buttonClick(this, "data-page-btn", {
                         "search": function () {
-                            page = '1';
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                         },
-                        "write": function () {
-                            ACTIONS.dispatch(ACTIONS.ITEM_WRITE);
+                        "save": function () {
+                            ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                         },
                     });
                 }
             });
-
-            function openCalenderModal(callBack, viewName, initData) {
-                var map = new Map();
-                map.set("modal", calenderModal);
-                map.set("modalText", "calenderModal");
-                map.set("viewName", viewName);
-                map.set("initData", initData);
-
-                $.openCommonUtils(callBack, map, 'calender', 340, 450, _pop_top450);
-            }
-
-            function openFileModal(callBack, viewName, initData) {
-                var map = new Map();
-                map.set("modal", FileBrowserModal);
-                map.set("modalText", "FileBrowserModal");
-                map.set("viewName", viewName);
-                map.set("initData", initData);
-
-                $.openCommonUtils(callBack, map, 'fileBrowser', _pop_width1000, _pop_height, _pop_top);
-            }
-
-            //== view 시작
-            fnObj.searchView = axboot.viewExtend(axboot.searchView, {
-                initView: function () {
-                    this.target = $(document["searchView0"]);
-                    this.target.attr("onsubmit", "return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);");
-                    this.lnPartner = $("#lnPartner");
-                    this.noCompany = $("#noCompany");
+            /**
+             * gridView01
+             */
+            fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+                page: {
+                    pageNumber: 0,
+                    pageSize: 10
                 },
-                getData: function () {
-                    return {
-                        P_NOWPAGE: page,
-                        P_BOARD_TYPE: BOARD_TYPE,
-                        P_KEYWORD: keyword,
-                        P_CONDITION: condition,
-                        P_PAGING_SIZE: paging_size,
-                        P_OPT: 0,
-                        P_SEQ: 0
+                initView: function () {
+                    var _this = this;
+
+                    this.target = axboot.gridBuilder({
+                        showRowSelector: true,
+                        target: $('[data-ax5grid="grid-view-01"]'),
+                        // parentFlag:true,
+                        // parentGrid: $(fnObj.gridView02),
+                        // childrenGrid: [$(fnObj.gridView02),$(fnObj.gridView03)],
+                        showRowSelector: true,
+                        columns: [
+                            {
+                                key: "CHK", width: 40, align: "center", dirty:false,
+                                label: '<div id="headerBox" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>',
+                                editor: {
+                                    type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'}
+                                }
+                            },
+                            {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "center" ,hidden:true},
+                            {key: "BOARD_TYPE", label: "게시판타입", width: 100 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
+                            {key: "SEQ", label: "채번", width: 150 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
+                            {key: "BOARD_SP", label: "게시판유형", width: 100 , align: "center" , sortable: true,
+                                formatter: function () {
+                                    return $.changeTextValue(dl_BOARD_SP, this.value)
+                                },
+                                editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_BOARD_SP},}
+                            },
+                            {key: "TITLE", label: "제목", width: 220, align: "left" ,sortable: true, editor: {type:"textarea"}},
+                            {key: "CONTENTS", label: "내용", width: "*" , align: "left" ,sortable: true, editor: {type:"textarea"}},
+                            {key: "ID_USER", label: "알림대상자", width: 120 , align: "left" ,sortable: true,
+                            	picker: {
+                                    top: _pop_top,
+                                    width: 600,
+                                    height: _pop_height,
+                                    url: "multiUserNotice",
+                                    action: ["commonHelp", "HELP_USER_NOTICE"],
+                                  	param: function () {
+                                      	return {
+                                      		PT_SP : '06'
+                                        }
+                                  	},
+                                  	disabled: function () {
+										if (this.item.BOARD_SP == '01'){
+											qray.alert('게시판유형이 알림인 데이터만<br>알림대상자를 넣을 수 있습니다.');
+											return true;
+										}else{
+											return false;
+										}
+                                  	},
+                                    callback: function (e) {
+                                        if (e.length > 0){
+											if (e.length  == 1){
+												fnObj.gridView01.target.setValue(this.dindex, 'ID_USER', e[0].ID_USER);
+											}else{
+												fnObj.gridView01.target.setValue(this.dindex, 'ID_USER', e[0].ID_USER + " 외 " + e.length - 1);
+											}
+                                        }
+                                    }
+                            	}
+                            },
+                            {key: "USER_NM", label: "처리자", width: 120 , align: "left" ,sortable: true, hidden:true},
+                            {key: "INSERT_ID", label: "처리자아이디", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
+                            {key: "INSERT_DT", label: "처리일자", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
+                            {key: "UPDATE_ID", label: "변경자아이디", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
+                            {key: "UPDATE_DT", label: "변경일자", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
+                        ],
+                        body: {
+                            onDataChanged: function () {
+
+                            },
+                            //444
+                            onClick: function () {
+                                var index = this.dindex;
+                                if(afterIndex == index) {
+                                    return false;
+                                }
+
+                                afterIndex = index;
+                                this.self.select(this.dindex);
+                            },
+                        },
+                        onPageChange: function (pageNumber) {
+                            _this.setPageData({pageNumber: pageNumber});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        },
+                        page: {
+                            display: false,
+                            statusDisplay: false
+                        }
+                    });
+                    axboot.buttonClick(this, "data-grid-view-01-btn", {
+                        "delete": function () {
+                            ACTIONS.dispatch(ACTIONS.ITEM_DEL1);
+                        },
+                        "add": function () {
+                            ACTIONS.dispatch(ACTIONS.ITEM_ADD1);
+                        }
+                    });
+                },
+                getData: function (_type) {
+                    var list = [];
+                    var _list = this.target.getList(_type);
+                    list = _list;
+                    return list;
+                },
+                getCheckData: function () {
+                    var list = [];
+                    $(this.target.getList()).each(function () {
+                        if (this.s == "Y") {
+                            list.push(this);
+                        }
+                    });
+                    return list;
+                },
+                addRow: function () {
+                    this.target.addRow({__created__: true}, "last");
+                },
+                lastRow: function () {
+                    return ($("div [data-ax5grid='grid-view-01']").find("div [data-ax5grid-panel='body'] table tr").length)
+                }
+                , sort: function () {
+                }
+
+            });
+
+            function isChecked(data) {
+                var array = [];
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].CHK == 'Y') {
+                        array.push(data[i])
                     }
                 }
-            });
+                return array;
+            }
 
-            $(document).on("change", "#EACHPG", function () {
-                paging_size = $('[data-ax5select="EACHPG"]').ax5select("getValue")[0].value;
-                page = 1;
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                var winHeight = $(window).height();
-                //$("#scrollBody").attr("style", "overflow-y :auto;height:" + (winHeight - 100) + "px;");
-                //$("#jb-container").attr("style", "height:" + (winHeight - 100) + "px;");
-            });
+            var cnt = 0;
+            $(document).on('click', '#headerBox', function(e) {
+                if(cnt == 0){
+                    $("div [data-ax5grid='grid-view-01']").find("div #headerBox").attr("data-ax5grid-checked",true);
+                    cnt++;
+                    var gridList = fnObj.gridView01.getData();
+                    gridList.forEach(function(e, i){
+                        fnObj.gridView01.target.setValue(i,"CHK",'Y');
+                    });
+                    $("div [data-ax5grid-editor='checkbox']").attr("data-ax5grid-checked",true)
+                }else{
+                    $("div [data-ax5grid='grid-view-01']").find("div #headerBox").attr("data-ax5grid-checked",false);
+                    cnt = 0;
+                    var gridList = fnObj.gridView01.getData();
+                    gridList.forEach(function(e, i){
+                        fnObj.gridView01.target.setValue(i,"CHK",'N');
+                    });
+                    $("div [data-ax5grid-editor='checkbox']").attr("data-ax5grid-checked",false)
+                }
 
-            $(window).resize(function () {
-                var winHeight = $(window).height();
-                //$("#scrollBody").attr("style", "overflow-y :auto;height:" + (winHeight - 100) + "px;");
-                //$("#jb-container").attr("style", "height:" + (winHeight - 100) + "px;");
-
-                // $('#table01').css('height', $(window).height() - 50);
-            });
-            $(document).ready(function () {
-                var winHeight = $(window).height();
-                //$("#scrollBody").attr("style", "overflow-y :auto;height:" + (winHeight - 100) + "px;");
-                //$("#jb-container").attr("style", "height:" + (winHeight - 100) + "px;");
             });
 
             //////////////////////////////////////
             //크기자동조정
             var _pop_top = 0;
-            var _pop_top450 = 0;
             var _pop_height = 0;
-            var _pop_width1000 = 0;
+            var _pop_height800 = 0;
+            var _pop_top800 = 0;
             $(document).ready(function () {
                 changesize();
+
             });
             $(window).resize(function () {
                 changesize();
             });
+
+            function numberWithCommas(x , id) {
+                x = x.replace(/[^0-9]/g,'');   // 입력값이 숫자가 아니면 공백
+                x = x.replace(/,/g,'');          // ,값 공백처리
+                $('#'+id).val(x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")); // 정규식을 이용해서 3자리 마다 , 추가
+            }
 
             function changesize() {
                 //전체영역높이
@@ -389,180 +385,118 @@
                 if (totheight > 700) {
                     _pop_height = 600;
                     _pop_top = parseInt((totheight - _pop_height) / 2);
-                    _pop_top450 = parseInt((totheight - 450) / 2);
-                    _pop_width1000 = 1000;
-                } else {
+                    _pop_height800 = 800;
+                    _pop_top800 = parseInt((totheight - 800) / 2);
+                }
+                else{
+                    _pop_height800 = totheight / 10 * 9;
+                    _pop_top800 = parseInt((totheight - _pop_height800) / 2);
                     _pop_height = totheight / 10 * 8;
                     _pop_top = parseInt((totheight - _pop_height) / 2);
-                    _pop_top450 = parseInt((totheight - 450) / 2);
-                    _pop_width1000 = 900;
                 }
 
-                var totheight = $("#ax-base-root").height();
-
                 //데이터가 들어갈 실제높이
-                var datarealheight = $("#ax-base-root").height() - $(".ax-base-title").height() - $("#pageheader").height();
+                var datarealheight = $("#ax-base-root").height() - $(".ax-base-title").height() - $("#pageheader").height() - $("#tab_button_area").height() - $("#tab_area").height() - 20;
                 //타이틀을 뺀 상하단 그리드 합친높이
-                var tempgridheight = datarealheight - $("#title").height();
+                var tempgridheight = datarealheight - $("#left_title").height();
 
-                $("#scrollBody").css("height", tempgridheight / 100 * 99);
-
+                $("#left_grid").css("height" ,(tempgridheight / 100 * 99));
+                $("#tab1_grid").css("height" ,$("#tab_area").height() - 40);
+                $("#tab2_grid").css("height" ,$("#tab_area").height() - 40);
+                $("#right_content").css("height" ,(datarealheight / 100 * 99));
+                //$("#right_grid").css("height", tempgridheight / 100 * 99);
+                //console.log($("#QRAY_FORM").height(), 'qray', (tempgridheight / 100 * 99), '(tempgridheight / 100 * 99)' ,$('#binder-form').height(), '$(\'#binder-form\').height()')
+                //$("#right_grid").css("height", (tempgridheight / 100 * 99) - $('#binder-form').height() - $('.ax-button-group').height());
                 /*
                 alert($("#ax-base-root").height()); // 컨텐츠영역높이
                 ax-base-title //타이틀부분높이(class)
                 ax-base-content //검색조건높이(class)
                  */
             }
+
         </script>
     </jsp:attribute>
     <jsp:body>
         <style>
 
-            /* CSS 입력 */
-
-            tr.selectTR:hover {
-                background-color: lightyellow;
-                cursor: hand;
+            .form-control_02[readonly] {
+                background-color: #eeeeee;
+                opacity: 1
             }
 
-            * {
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-            }
-
-            html, body {
+            input[type="number"]::-webkit-outer-spin-button,
+            input[type="number"]::-webkit-inner-spin-button {
+                -webkit-appearance: none;
                 margin: 0;
-                padding: 0;
-                width: 100%;
-                height: 100%;
-                font-size: 12px;
-                overflow: auto;
-            }
-
-            .wrapperDiv {
-                width: 100%;
-                height: 100%;
-            }
-
-            .leftDiv {
-                background-color: #fcf8e3;
-                position: absolute;
-                width: auto;
-                height: auto;
-                top: 0px;
-                right: 0px;
-                bottom: 0px;
-                left: 0px;
-                margin-top: 100px;
-
-            }
-
-            .rightDiv {
-                background-color: #dff0d8;
-                position: absolute;
-                top: 0;
-                right: 0;
-                width: 100%;
-                height: 100px;
-            }
-
-            .table-area {
-                position: relative;
-                z-index: 0;
-            }
-
-            table.responsive-table {
-                width: 100%;
-            }
-
-            table.responsive-table th {
-                background: #eee;
-            }
-
-            table.responsive-table td {
-                line-height: 2em;
-            }
-
-            td {
-                border-top: 1px solid #ddd;
-                border-bottom: 1px solid #ddd;
             }
 
         </style>
         <div data-page-buttons="">
             <div class="button-warp">
-                <button type="button" class="btn btn-reload" data-page-btn="reload"
-                        onclick="window.location.reload();" style="width:80px;">
+                <button type="button" class="btn btn-reload" data-page-btn="reload" style="width: 80px;"
+                        onclick="window.location.reload();">
                     <i class="icon_reload"></i></button>
-                <button type="button" class="btn btn-info" data-page-btn="write" style="width:80px;"><i
-                        class="icon_add"></i>
-                    쓰기
-                </button>
-                <button type="button" class="btn btn-info" data-page-btn="search" style="width:80px;"><i
-                        class="icon_search"></i> <ax:lang
+                <button type="button" class="btn btn-info" data-page-btn="search" style="width: 80px;"><i
+                        class="icon_search"></i><ax:lang
                         id="ax.admin.sample.modal.button.search"/></button>
+                <button type="button" class="btn btn-info" data-page-btn="save" id="save_btn" style="width: 80px;"><i
+                        class="icon_save"></i>저장
+                </button>
 
             </div>
         </div>
+        <%-- 상단조회조건 --%>
         <div role="page-header" id="pageheader">
             <ax:form name="searchView0">
                 <ax:tbl clazz="ax-search-tb1" minWidth="500px">
                     <ax:tr>
-                        <ax:td label='조회조건' width="300px">
+                        <ax:td label='게시판유형' width="350px">
+                            <div id="BOARD_SP" name="BOARD_SP" data-ax5select="BOARD_SP"
+                                 data-ax5select-config='{edit:false}'></div>
+                        </ax:td>
+                        <ax:td label='조회조건' width="350px">
                             <div id="CONDITION" name="CONDITION" data-ax5select="CONDITION"
                                  data-ax5select-config='{edit:false}'></div>
                         </ax:td>
-                        <ax:td label='검색내용' width="300px">
-                            <input type="text" class="form-control" id="KEYWORD">
+                        <ax:td label='검색어' width="350px">
+                            <div class="input-group" style="width:100%">
+                                <input type="text" class="form-control" name="KEYWORD" id="KEYWORD"
+                                       style="width:100%"/>
+                            </div>
                         </ax:td>
                     </ax:tr>
                 </ax:tbl>
             </ax:form>
-            <div class="H10"></div>
         </div>
-        <div class="ax-button-group" data-fit-height-aside="grid-view-01" id="title">
-            <div class="left">
-                <h2>
-                    <i class="icon_list"></i> 목록
-                </h2>
-            </div>
-        </div>
-        <div id="scrollBody" style="overflow-y :auto;">
-            <div style="width:100%;" id="scrollBodyin">
-                <div class="board">
-                    <div class="bbsList">
-                        <table>
-                            <colgroup>
-                                <col style="width:40px">
-                                <col>
-                                <col style="width:170px">
-                                <col style="width:120px">
-                                <col style="width:100px">
-                            </colgroup>
-                            <thead>
-                            <tr>
-                                <th scope="col" style="text-align: center">번호</th>
-                                <th scope="col" style="text-align: left">제목</th>
-                                <th scope="col" style="text-align: center">등록일자</th>
-                                <th scope="col" style="text-align: center">작성자</th>
-                                <th scope="col" style="text-align: center">조회수</th>
-                            </tr>
-                            </thead>
-                            <tbody id="body">
-                            </tbody>
-                        </table>
+
+        <%-- 그리드 영역 시작 --%>
+        <div style="width:100%;overflow:hidden;">
+            <div style="width:100%;overflow:hidden;">
+                <div class="ax-button-group" data-fit-height-aside="grid-view-01" id="left_title" name="왼쪽그리드타이틀">
+                    <div class="left">
+                        <h2>
+                        </h2>
                     </div>
-                    <div class="page">
-                        <div class="view">
-                            <div id="EACHPG" name="EACHPG" data-ax5select="EACHPG"
-                                 data-ax5select-config='{edit:false}' style="width: 100px;"></div>
-                        </div>
-
-                        <div id="pager1"></div>
-
+                    <div class="right">
+                        <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
+                                class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
+                        <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">
+                            <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
                     </div>
                 </div>
+
+
+
+                <div data-ax5grid="grid-view-01"
+                     data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
+                     id = "left_grid"
+                     name="왼쪽그리드"
+                ></div>
+
             </div>
+
         </div>
+
+
     </jsp:body>
 </ax:layout>
