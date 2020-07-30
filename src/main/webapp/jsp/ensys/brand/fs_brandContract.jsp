@@ -96,10 +96,8 @@
                     if(list.length == 0){
                         qray.alert('체크된 데이터가 없습니다.')
                         return false;
-                    }else if(list.length > 10){
-                        qray.alert('10개 이상의 계약은 동시에 진행하실수 없습니다.')
-                        return false;
                     }
+
 
                     var Mcnt = 0
                     for(var i = 0 ; i < list.length; i++){
@@ -849,7 +847,7 @@
                             <div id="S_2" name="S_2" data-ax5select="S_2"
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
                         </ax:td>
-                        <ax:td label='관할구역' width="350px">
+                        <ax:td label='시군구' width="350px">
                             <multipicker id="S_3" HELP_ACTION="HELP_AREA2" HELP_URL="multiArea" BIND-CODE="AREA_CD"
                                          BIND-TEXT="AREA_NM"/>
                         </ax:td>

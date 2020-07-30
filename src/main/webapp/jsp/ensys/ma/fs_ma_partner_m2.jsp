@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ax" tagdir="/WEB-INF/tags" %>
 
-<ax:set key="title" value="거래처계약관리"/>
+<ax:set key="title" value="거래처등록"/>
 <ax:set key="page_desc" value="${pageRemark}"/>
 <ax:set key="page_auto_height" value="true"/>
 
@@ -30,14 +30,16 @@
             var COMT_SP       = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00003');
             var CONTRACT_SP   = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00012');
             var CONTRACT_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00013');
+            var USER_SP       = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00007');
+            var USER_STAT     = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00006');
 
             var YN_OP = [{value:'' , text:''},{value:'Y' , text:'Y'},{value:'N' , text:'N'}];
 
-            var S_1 = $.DATA_SEARCH("BrandContract", 'S_1',{}).list;
-            $("#S_1").ax5select({ options: [{value:'' , text:''}].concat(S_1) });
-
             $("#CONTRACT_SP").ax5select({
                 options: CONTRACT_SP
+            });
+            $("#CONTRACT_STAT").ax5select({
+                options: CONTRACT_STAT
             });
             $("#PT_SP").ax5select({
                 options: PT_SP
@@ -61,26 +63,12 @@
             });
 
             $("#S_CONTRACT").ax5select({
-                options: CONTRACT_STAT
+                options: YN_OP
             });
             $("#CONTRACT_YN").ax5select({
                 options: YN_OP
             });
 
-            $('#CONTRACT_STAT').ax5select({
-                options: CONTRACT_STAT,
-                onStateChanged: function (e) {
-                    if (e.state == "changeValue") {
-                        if(e.value[0].value == '01' && SCRIPT_SESSION.cdGroup != 'WEB01'){
-                            qray.alert('계약상태는 본사만 선택가능합니다. <br>[가계약 유형으로 대체됩니다.]')
-                            $('[data-ax5select="CONTRACT_STAT"]').ax5select("setValue", '02');
-                        }
-
-                    }
-                }
-            });
-
-            var CallBack1;
             var fnObj = {}, CODE = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_SEARCH: function (caller, act, data) {
@@ -90,9 +78,8 @@
                         , PT_NM : $('#S_PT_NM').val()
                         , TEMP1 : $('select[name="S_PT_SP"]').val()
                         , TEMP2 : SCRIPT_SESSION.idUser
-                        , TEMP3 : $('select[name="S_1"]').val()
                     };
-                    var list = $.DATA_SEARCH('mapartnerm','getPartnerList',param).list;
+                    var list = $.DATA_SEARCH('mapartnerm','getPartnerList2',param).list;
                     fnObj.gridView01.target.setData(list);
                     if(list.length < afterIndex ){
                         afterIndex = 0
@@ -108,40 +95,10 @@
 
                     var itemH = [].concat(caller.gridView01.getData("modified"));
                     itemH = itemH.concat(caller.gridView01.getData("deleted"));
-
-                    for(var i = 0; i < itemH.length; i++){
-                        if(nvl(itemH[i].CONTRACT_NO) != ''){
-                            if(nvl(itemH[i].CONTRACT_SP) == ''){
-                                qray.alert('계약유형은 필수입니다.')
-                                return
-                            }
-                            if(nvl(itemH[i].CONTRACT_ST_DTE) == ''){
-                                qray.alert('계약시작일은 필수입니다.')
-                                return
-                            }
-                            if(nvl(itemH[i].CONTRACT_ED_DTE) == ''){
-                                qray.alert('계약종료일은 필수입니다.')
-                                return
-                            }
-                            if(nvl(itemH[i].CONTRACT_STAT) == ''){
-                                qray.alert('계약상태는 필수입니다.')
-                                return
-                            }
-                            if(nvl(itemH[i].PT_CONTRACT_PERSON) == ''){
-                                qray.alert('거래처 계약담당자는 필수입니다.')
-                                return
-                            }
-                            // if(nvl() == ''){
-                            //     qray.alert('')
-                            //     return
-                            // }
-
-                        }
-                    }
-
                     itemH = itemH.concat(caller.gridView02.getData("modified"));
                     itemH = itemH.concat(caller.gridView02.getData("deleted"));
-
+                    itemH = itemH.concat(caller.gridView03.getData("modified"));
+                    itemH = itemH.concat(caller.gridView03.getData("deleted"));
                     if(itemH.length == 0){
                         qray.alert('변경된 정보가 없습니다.');
                         return;
@@ -152,32 +109,32 @@
                         ,insert : caller.gridView01.getData("modified")
                         ,delete2 : caller.gridView02.getData("deleted")
                         ,insert2 : caller.gridView02.getData("modified")
+                        ,delete3 : caller.gridView03.getData("deleted")
+                        ,insert3 : caller.gridView03.getData("modified").concat(caller.gridView03.getData("created"))
                     };
 
                     axboot.ajax({
                         type: "PUT",
-                        url: ["mapartnerm", "save"],
+                        url: ["mapartnerm", "save2"],
                         data: JSON.stringify(data),
                         callback: function (res) {
                             qray.alert("저장 되었습니다.");
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                             caller.gridView01.target.select(afterIndex);
                             caller.gridView01.target.focus(afterIndex);
-
                         }
                     });
                 },
                 ITEM_CLICK: function (caller, act, data) {
                     var selected = caller.gridView01.getData('selected')[0];
-                    if(SCRIPT_SESSION.cdGroup == 'WEB01'){
-                        $('#MAIN_PT_CD').removeAttr('HELP_DISABLED')
-                    }
                     // if(selected){
                     //     $('.QRAY_FORM').setFormData(selected);
                     // }
                     $('.QRAY_FORM').setFormData(selected);
                     var list = $.DATA_SEARCH('mapartnerm','getPartnerCommitionList',nvl(selected,{}));
                     fnObj.gridView02.target.setData(list);
+                    var list2 = $.DATA_SEARCH('mapartnerm','SAVE_USERMAPPING_S',nvl(selected,{}));
+                    fnObj.gridView03.target.setData(list2);
                     if(nvl($('#CONTRACT_NO').val()) == ''){
                         Disabled()
                     }else{
@@ -186,52 +143,13 @@
                     return false;
                 },
                 ITEM_ADD1: function (caller, act, data) {
-                    var s1 = $('select[name="S_1"]').val()
-                    // if(nvl(s1) == ''){
-                    //     qray.alert('총판 선택이 선행되어야합니다.')
-                    //     return;
-                    // }
-                    CallBack1 = function (e) {
-                        var chkArr = [];
-                        for (var i = 0; i < fnObj.gridView01.target.list.length; i++) {
-                            chkArr.push(fnObj.gridView01.target.list[i].PT_CD);
-                        }
-                        chkArr = chkArr.join('|');
 
-                        if (e.length > 0) {
-                            for (var i = 0; i < e.length; i++) {
-                                var item = e[i]
-                                if (chkArr.indexOf(item.PT_CD) > -1) continue;
-                                fnObj.gridView01.addRow();
-                                var index = nvl(fnObj.gridView01.target.list.length, fnObj.gridView01.lastRow()) - 1;
-                                caller.gridView01.target.select(index);
-                                caller.gridView01.target.focus(index);
-                                afterIndex = index
-                                // for(var j = 0 ; j < Object.keys(item).length; j++){
-                                //     var key = Object.keys(item)[j];
-                                //     caller.gridView01.target.setValue(index, key, item[key]);
-                                // }
-                                var col = fnObj.gridView01.target.columns
-
-                                col.forEach(function(data , i){
-                                    var key = data.key
-
-                                    if(nvl(item[key]) != ''){
-                                        caller.gridView01.target.setValue(index, key, item[key]);
-                                    }else{
-                                        caller.gridView01.target.setValue(index, key, '');
-                                    }
-                                })
-
-                                // fnObj.gridView02.target.setValue(item.__index, "SALES_PERSON_ID", SCRIPT_SESSION.idUser);
-                                // fnObj.gridView02.target.setValue(item.__index, "SALES_PERSON_NM", SCRIPT_SESSION.nmUser);
-                            }
-
-                        }
-                        modal.close();
-                        ACTIONS.dispatch(ACTIONS.ITEM_CLICK,caller);
-                    };
-                    $.openCommonPopup("multiPartner2", "CallBack1", 'HELP_PARTNER3', '', {PT_CD : s1 }, 600, _pop_height, _pop_top);
+                    caller.gridView01.addRow();
+                    var lastIdx = nvl(caller.gridView01.target.list.length, caller.gridView01.lastRow());
+                    caller.gridView01.target.select(lastIdx - 1);
+                    caller.gridView01.target.focus(lastIdx - 1);
+                    afterIndex  = lastIdx - 1;
+                    caller.gridView01.target.setValue(lastIdx - 1, "PT_CD", GET_NO('MA','01'));
 
 
                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
@@ -253,15 +171,34 @@
 
 
 
-                },
-                ITEM_DEL1: function (caller, act, data) {
+                }
+                ,
+                ITEM_ADD3: function (caller, act, data) {
+                    if (caller.gridView01.getData('selected').length == 0) {
+                        qray.alert("선택된 거래처가 없습니다.");
+                        return;
+                    }
+                    caller.gridView03.addRow();
+                    var itemH = caller.gridView01.getData('selected')[0];
+                    var lastIdx = nvl(caller.gridView03.target.list.length, caller.gridView03.lastRow());
+                    caller.gridView03.target.select(lastIdx - 1);
+                    caller.gridView03.target.focus(lastIdx - 1);
+                    caller.gridView03.target.setValue(lastIdx - 1, "PT_CD", itemH.PT_CD);
+                    caller.gridView03.target.setValue(lastIdx - 1, "PT_SP", itemH.PT_CD);
 
+                }
+                ,
+                ITEM_DEL1: function (caller, act, data) {
                     fnObj.gridView01.delRow("selected");
 
                 }
                 ,
                 ITEM_DEL2: function (caller, act, data) {
                     caller.gridView02.delRow("selected");
+                }
+                ,
+                ITEM_DEL3: function (caller, act, data) {
+                    caller.gridView03.delRow("selected");
                 }
             });
             // fnObj 기본 함수 스타트와 리사이즈
@@ -270,11 +207,7 @@
                 this.searchView.initView();
                 this.gridView01.initView();
                 this.gridView02.initView();
-
-                if(SCRIPT_SESSION.cdGroup != 'WEB01'){
-                    $('#add2').css('display','none')
-                    $('#del2').css('display','none')
-                }
+                this.gridView03.initView();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
 
@@ -379,7 +312,7 @@
                                         return true;
 
                                     }
-                                }
+                                },hidden:true
                             }
                             ,{key: "PT_NM", label: "거래처 명", width: 150, align: "center", editor: false}
                             ,{key: "BIZ_NO", label: "사업자번호", width: 150, align: "center", editor: false
@@ -427,15 +360,21 @@
 
                         body: {
                             onDataChanged: function () {
-
+                                console.log(this)
+                                if(this.key == 'PT_SP'){
+                                    var list = fnObj.gridView03.getData()
+                                    list.forEach(function(item, index){
+                                        fnObj.gridView03.target.setValue(item.__index, 'PT_SP', this.value)
+                                    })
+                                }
                             },
                             //444
                             onClick: function () {
                                 var index = this.dindex;
                                 if(afterIndex == index){return false;}
 
-                                var data = [].concat(fnObj.gridView02.getData("modified"));
-                                data = data.concat(fnObj.gridView02.getData("deleted"));
+                                var data = [].concat(fnObj.gridView01.getData("modified"));
+
                                 if(data.length > 0){
                                     qray.confirm({
                                         msg: "작업중인 데이터를 먼저 저장해주십시오."
@@ -661,6 +600,128 @@
                 }
             });
 
+            /**
+             * gridView03
+             */
+            fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
+                page: {
+                    pageNumber: 0,
+                    pageSize: 10
+                },
+                initView: function () {
+                    var _this = this;
+
+                    this.target = axboot.gridBuilder({
+                        showRowSelector: true,
+                        frozenColumnIndex: 0,
+                        target: $('[data-ax5grid="grid-view-03"]'),
+                        columns: [
+                             {key: "COMPANY_CD", label: "", width: 150, align: "left", editor: {type: "text"} ,hidden:true}
+                            ,{key: "PT_CD", label: "거래처코드", width: 150, align: "center", hidden:false}
+                            ,{key: "PT_SP", label: "거래처유형", width: 150, align: "center", hidden:true}
+                            ,{key: "USER_ID", label: "사용자아이디", width: 150, align: "center", hidden:false
+                                , editor: {
+                                    type: "text"
+                                    , disabled: function () {
+                                        if(!nvl(this.item.__created__,false)){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                            ,{key: "USER_NM", label: "사용자명", width: 150, align: "center", hidden:false , editor: {type: "text"}}
+                            ,{key: "PASS_WORD", label: "비밀번호", width: 150, align: "center", hidden:false , editor: {type: "text"}}
+                            ,{
+                                key: "USER_SP", label: "사용자유형", width: 150, align: "center",required:true,hidden:true
+                                , formatter: function () {
+                                    return $.changeTextValue(USER_SP, this.value)
+                                }
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: USER_SP
+                                    }, disabled: function () {
+                                    }
+                                }
+                            }
+                            ,{
+                                key: "USER_STAT", label: "사용자상태", width: 150, align: "center",required:true
+                                , formatter: function () {
+                                    return $.changeTextValue(USER_STAT, this.value)
+                                }
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: USER_STAT
+                                    }, disabled: function () {
+                                    }
+                                }
+                            }
+                        ],
+                        body: {
+                            onClick: function () {
+                                var data = this.item;           //  선택한 ROW의 ITEM들
+                                var column = this.column.key;   //  컬럼 KEY명
+                                var idx = this.dindex;          //  선택한 ROW의 INDEX
+
+                                selectRow2 = idx;
+                                this.self.select(selectRow2);
+                            }
+                        },
+                        onPageChange: function (pageNumber) {
+                            _this.setPageData({pageNumber: pageNumber});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        },
+                        page: {
+                            display: false,
+                            statusDisplay: false
+                        }
+                    });
+
+                    axboot.buttonClick(this, "data-grid-view-03-btn", {
+                        "add": function () {
+                            ACTIONS.dispatch(ACTIONS.ITEM_ADD3);
+                        },
+                        "delete": function () {
+
+                            var beforeIdx = this.target.selectedDataIndexs[0];
+                            var dataLen = this.target.getList().length;
+
+                            if ((beforeIdx + 1) == dataLen) {
+                                beforeIdx = beforeIdx - 1;
+                            }
+
+                            var item = fnObj.gridView03.getData('selected')[0]
+
+                            ACTIONS.dispatch(ACTIONS.ITEM_DEL3);
+                            if (beforeIdx > 0 || beforeIdx == 0) {
+                                this.target.select(beforeIdx);
+                                selectRow2 = beforeIdx;
+                            }
+
+                        }
+
+                    });
+                },
+                getData: function (_type) {
+                    var list = [];
+                    var _list = this.target.getList(_type);
+                    list = _list;
+
+                    return list;
+                },
+                addRow: function () {
+                    this.target.addRow({__created__: true}, "last");
+                },
+                lastRow: function () {
+                    return ($("div [data-ax5grid='grid-view-03']").find("div [data-ax5grid-panel='body'] table tr").length)
+                }
+            });
+
             $(".QRAY_FORM").find("[data-ax5select]").change(function () {
                 var itemH = fnObj.gridView01.getData('selected')[0];
                 fnObj.gridView01.target.setValue(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
@@ -743,8 +804,6 @@
                     $('#CONTRACT_NO').val(GET_NO('MA','03'))
                     var itemH = fnObj.gridView01.getData('selected')[0]
                     fnObj.gridView01.target.setValue(itemH.__index , 'CONTRACT_NO',$('#CONTRACT_NO').val())
-                    fnObj.gridView01.target.setValue(itemH.__index , 'CONTRACT_ST_DTE',ax5.util.date(today, {"return": "yyyy-MM-dd"}))
-                    fnObj.gridView01.target.setValue(itemH.__index , 'CONTRACT_ED_DTE','9999-12-31')
                     Activation()
                 }else{
                     // Disabled()
@@ -770,7 +829,7 @@
                 $("#CONTRACT_SP a").removeAttr("disabled");
                 $("#CONTRACT_STAT select").removeAttr("disabled");
                 $("#CONTRACT_STAT a").removeAttr("disabled");
-                // $('#JOIN_PT_CD').removeAttr('HELP_DISABLED')
+                $('#JOIN_PT_CD').removeAttr('HELP_DISABLED')
                 $('#MAIN_PT_CD').removeAttr('HELP_DISABLED')
                 $('#PT_CONTRACT_PERSON').removeAttr('HELP_DISABLED')
                 $('#CONTRACT_ST_DTE').removeAttr('readonly')
@@ -797,12 +856,15 @@
                 }
 
                 //데이터가 들어갈 실제높이
-                var datarealheight = $("#ax-base-root").height() - $(".ax-base-title").height() - $("#pageheader").height();
+                var datarealheight = $("#ax-base-root").height() - $(".ax-base-title").height() - $("#pageheader").height() - $("#tab_area").height() - 20;
                 //타이틀을 뺀 상하단 그리드 합친높이
-                var tempgridheight = datarealheight - $("#left_title").height() - $("#bottom_left_title").height() - $("#bottom_left_amt").height();
+                var tempgridheight = datarealheight - $("#left_title").height();
 
-                $("#left_grid").css("height" ,(tempgridheight / 100 * 99));
-                // $("#left_grid").css("height" ,(tempgridheight / 100 * 99) / 2);
+
+                $("#left_grid").css("height", (tempgridheight / 100 * 99));
+                $("#tab1_grid").css("height", $("#tab_area").height() - $("#tab1_button").height() - 80 );
+                $("#tab2_grid").css("height", $("#tab_area").height() - $("#tab2_button").height() - 80 );
+
                 // $("#left_grid2").css("height",(tempgridheight / 100 * 99) / 2);
                 //$("#right_grid").css("height", tempgridheight / 100 * 99);
                 console.log($("#QRAY_FORM").height(), 'qray', (tempgridheight / 100 * 99), '(tempgridheight / 100 * 99)' ,$('#binder-form').height(), '$(\'#binder-form\').height()')
@@ -863,10 +925,7 @@
             <ax:form name="searchView0">
                 <ax:tbl clazz="ax-search-tb1" minWidth="500px">
                     <ax:tr>
-                        <ax:td label='총판' width="300px">
-                            <div id="S_1" name="S_1" data-ax5select="S_1"
-                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                        </ax:td>
+
                         <ax:td label='거래처유형' width="350px">
                             <div id="S_PT_SP" name="S_PT_SP" data-ax5select="S_PT_SP"
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
@@ -882,7 +941,7 @@
                                          BIND-TEXT="NM_EMP"/>
                         </ax:td>
 
-                        <ax:td label='계약상태' width="200px">
+                        <ax:td label='계약여부' width="200px">
                             <div id="S_CONTRACT" name="S_CONTRACT" data-ax5select="S_CONTRACT"
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
                         </ax:td>
@@ -901,13 +960,10 @@
                         </h2>
                     </div>
                     <div class="right">
-
-                        <div style="float: right">
                         <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
                                 class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
                         <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">
                             <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
-                        </div>
                     </div>
                 </div>
 
@@ -919,26 +975,51 @@
                      name="왼쪽그리드"
                 ></div>
 
-<%--                <div class="ax-button-group">--%>
-<%--                    <div class="left">--%>
-<%--                        <h2>--%>
-<%--                            <i class="icon_list"></i> 수수료 정보--%>
-<%--                        </h2>--%>
-<%--                    </div>--%>
-<%--                    <div class="right">--%>
-<%--                        <button type="button" id="add2" class="btn btn-small" data-grid-view-02-btn="add" style="width:80px;"><i--%>
-<%--                                class="icon_add"></i>--%>
-<%--                            <ax:lang id="ax.admin.add"/></button>--%>
-<%--                        <button type="button" id="del2" class="btn btn-small" data-grid-view-02-btn="delete" style="width:80px;">--%>
-<%--                            <i--%>
-<%--                                    class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <div data-ax5grid="grid-view-02"--%>
-<%--                     data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"--%>
-<%--                     id = "left_grid2"--%>
-<%--                     name="왼쪽그리드"--%>
-<%--                ></div>--%>
+
+                <div class="H10"></div>
+                <div class="H10"></div>
+                <div id="tab_area" data-ax5layout="ax1" data-config="{layout:'tab-panel'}" style="height:300px;" name="하단탭영역">
+                    <div data-tab-panel="{label: '수수료 정보', active: 'true'}" id="tabGrid1">
+                        <div class="ax-button-group" data-fit-height-aside="grid-view-03" id="tab1_button">
+                            <div class="left">
+                            </div>
+                            <div class="right">
+                                <button type="button" class="btn btn-small" data-grid-view-02-btn="add" style="width:80px;"><i
+                                        class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
+                                <button type="button" class="btn btn-small" data-grid-view-02-btn="delete"
+                                        style="width:80px;">
+                                    <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
+                            </div>
+                        </div>
+                        <div data-ax5grid="grid-view-02"
+                             data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
+                             id="tab1_grid"
+                             name="탭1그리드"
+                        ></div>
+                    </div>
+
+                    <div data-tab-panel="{label: '사용자 조회/등록', active: 'true'}" id="tabGrid2">
+                        <div class="ax-button-group" data-fit-height-aside="grid-view-03" id="tab2_button">
+                            <div class="left">
+
+                            </div>
+                            <div class="right">
+                                <button type="button" class="btn btn-small" data-grid-view-03-btn="add" style="width:80px;"><i
+                                        class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
+                                <button type="button" class="btn btn-small" data-grid-view-03-btn="delete"
+                                        style="width:80px;">
+                                    <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
+                            </div>
+                        </div>
+                        <div data-ax5grid="grid-view-03"
+                             data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
+                             id="tab2_grid"
+                             name="탭2그리드"
+                        ></div>
+                    </div>
+
+                </div>
+
             </div>
             <div style="width:50%;float:right;overflow:hidden;">
                 <div class="ax-button-group" id="right_title" name="오른쪽부분타이틀">
@@ -947,14 +1028,6 @@
                             <i class="icon_list"></i> 상세정보
                         </h2>
                     </div>
-<%--                    <div class="right">--%>
-<%--                        <button type="button" class="btn btn-info" data-page-btn="newAdd" style="width: 80px;">--%>
-<%--                            신규--%>
-<%--                        </button>--%>
-<%--                        <button type="button" class="btn btn-info" data-page-btn="delete" id="delete_btn"--%>
-<%--                                style="width: 80px;">삭제--%>
-<%--                        </button>--%>
-<%--                    </div>--%>
                 </div>
                 <div id="right_content" style="overflow-y:auto;" name="오른쪽부분내용">
                     <div class="QRAY_FORM">
@@ -1069,10 +1142,10 @@
                                     <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"
                                          data-ax5select-config='{}' form-bind-type="selectBox"></div>
                                 </ax:td>
-<%--                                <ax:td label='계약여부' width="300px">--%>
-<%--                                    <div id="CONTRACT_YN" name="CONTRACT_YN" data-ax5select="CONTRACT_YN"--%>
-<%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
-<%--                                </ax:td>--%>
+                                <ax:td label='계약여부' width="300px">
+                                    <div id="CONTRACT_YN" name="CONTRACT_YN" data-ax5select="CONTRACT_YN"
+                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                </ax:td>
                             </ax:tr>
                             <div class="ax-button-group">
                                 <div class="left">
@@ -1092,14 +1165,14 @@
                                 </ax:td>
                                 <ax:td label='가맹 거래처코드' width="300px">
                                     <codepicker id="JOIN_PT_CD" HELP_ACTION="HELP_PARTNER" HELP_URL="partner" BIND-CODE="PT_CD"
-                                                BIND-TEXT="PT_NM" HELP_DISABLED="true" READONLY
+                                                BIND-TEXT="PT_NM" READONLY
                                                 form-bind-type="codepicker" form-bind-text="JOIN_PT_NM" form-bind-code="JOIN_PT_CD"/>
                                 </ax:td>
                             </ax:tr>
                             <ax:tr>
                                 <ax:td label='주체 거래처코드' width="300px">
                                     <codepicker id="MAIN_PT_CD" HELP_ACTION="HELP_PARTNER" HELP_URL="partner" BIND-CODE="PT_CD"
-                                                BIND-TEXT="PT_NM" HELP_DISABLED="true" READONLY
+                                                BIND-TEXT="PT_NM" READONLY
                                                 form-bind-type="codepicker" form-bind-text="MAIN_PT_NM" form-bind-code="MAIN_PT_CD"/>
                                 </ax:td>
                                 <ax:td label='계약유형' width="300px">

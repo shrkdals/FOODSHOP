@@ -32,16 +32,17 @@
 
 
                 <%-- <script type="text/javascript" src="<c:url value='/assets/js/common/jquery.form.min.js'/>"></script>--%>
-
+            <script type="text/javascript" src='/assets/js/common/html2canvas.min.js?v=<%=System.currentTimeMillis()%>'></script>
+            <script type="text/javascript" src='/assets/js/common/jspdf.min.js?v=<%=System.currentTimeMillis()%>'></script>
                 <script type="text/javascript" src='/assets/js/plugins.js?v=<%=System.currentTimeMillis()%>'></script>
                 <script type="text/javascript" src='/assets/js/axboot/dist/axboot.js?v=<%=System.currentTimeMillis()%>'></script>
                 <script type="text/javascript" src='/axboot.config.js?v=<%=System.currentTimeMillis()%>'></script>
                 <script type="text/javascript" src='/assets/js/common/common.js?v=<%=System.currentTimeMillis()%>'></script>
                 <%--            <script type="text/javascript" src='/axboot.config.js?v=<%=new SimpleDateFormat("yyyyMMddHH").format(System.currentTimeMillis())%>'></script>--%>
                 <%--        <script type="text/javascript" src='/assets/js/common/common.js?v=<%=new SimpleDateFormat("yyyyMMddHH").format(System.currentTimeMillis())%>'></script>--%>
-                <script type="text/javascript" src='/assets/js/common/attrchange.js?v=<%=new SimpleDateFormat("yyyyMMddHH").format(System.currentTimeMillis())%>'></script>
+                <script type="text/javascript" src='/assets/js/common/attrchange.js'></script>
 
-                <script type="text/javascript" src='/assets/js/common/bluebird.js?v=<%=new SimpleDateFormat("yyyyMMddHH").format(System.currentTimeMillis())%>'></script>
+                <script type="text/javascript" src='/assets/js/common/bluebird.js'></script>
                 <script>
             // if ($(window.top.document.getElementById('LoginUserId')).text() != SCRIPT_SESSION.idUser)
             //     window.top.document.location.href = '/api/logout'

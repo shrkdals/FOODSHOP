@@ -25,15 +25,15 @@ public class SysmenuController extends BaseController {
     @Inject
     private SysmenuService menuService;
 
-    @RequestMapping(value = "menuList", method = RequestMethod.GET, produces = APPLICATION_JSON)
-    public Responses.ListResponse menuList(RequestParams requestParams) {
+    @RequestMapping(value = "menuList", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse menuList(@RequestBody HashMap<String, Object>  requestParams) {
         SessionUser user = SessionUtils.getCurrentUser();
 
         HashMap<String, Object> param = new HashMap<>();
 
         param.put("CD_COMPANY", user.getCdCompany());
-        param.put("LEVEL", requestParams.getString("LEVEL", ""));
-        param.put("PARENT_ID", requestParams.getString("PARENT_ID", ""));
+        param.put("LEVEL", requestParams.get("LEVEL"));
+        param.put("PARENT_ID", requestParams.get("PARENT_ID"));
 
         List<HashMap<String, Object>> list = menuService.menuSelect(param);
 

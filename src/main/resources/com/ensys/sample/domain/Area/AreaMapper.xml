@@ -13,7 +13,7 @@
     </update>
 
     <update id="FS_AREA_D_CRUD" parameterType="hashmap" statementType="CALLABLE">
-      { CALL UP_FS_AREA_D_CRUD(#{COMPANY_CD},#{CONTROL_AREA_CD} ,#{AREA_SEQ} ,#{1LV_AREA_CD} ,#{1LV_AREA_NM} ,#{2LV_AREA_CD} ,#{2LV_AREA_NM} ,#{DISTRIB_PT_CD} ,#{DELI_PRIOD} ,#{LOGIN_ID} ,#{CRUD_TYPE}) }
+      { CALL UP_FS_AREA_D_CRUD(#{COMPANY_CD},#{CONTROL_AREA_CD} ,#{AREA_SEQ} ,#{LV1_AREA_CD} ,#{LV1_AREA_NM} ,#{LV2_AREA_CD} ,#{LV2_AREA_NM} ,#{DISTRIB_PT_CD} ,#{DELI_PRIOD} ,#{LOGIN_ID} ,#{CRUD_TYPE}) }
     </update>
 
     <update id="FS_AREA_SALES_PERSON_CRUD" parameterType="hashmap" statementType="CALLABLE">

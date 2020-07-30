@@ -21,7 +21,28 @@ time, mark, audio, video {
 }
 body {color:#404040;position:relative;margin:0 auto;background:#f4f6f8;}
 
-/*메인*/
-.content_main{position:absolute;background:url(/assets/css/images/main_bg.png) no-repeat 50% 50%;top:0;left:0;right:0;bottom:0;min-width:700px;min-height:720px;background-size:cover}
-.content_main .main_wrap{position:relative;width:100%;height:100%}
-.content_main .main_wrap .top{position:absolute;background:url(/assets/css/images/main_img0.png) no-repeat 0 0;width:805px;height:436px;bottom:0;right:100px;}
+/*!*메인*!*/
+/*.content_main{position:absolute;background:url(/assets/css/images/main_bg.jpg) no-repeat 50% 50%;top:0;left:0;right:0;bottom:0;min-width:700px;min-height:720px;background-size:cover}*/
+/*.content_main .main_wrap{position:relative;width:100%;height:100%}*/
+/*.content_main .main_wrap .top{position:absolute;width:805px;height:436px;bottom:0;right:100px;}*/
+
+.content_main{
+  position: relative;
+}
+
+.content_main .main_wrap{
+  position: fixed;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.content_main .main_wrap .top{
+  display: block;
+  width: 700px;
+  height: 500px;
+  margin: 0 auto;
+  background: url(/assets/css/images/main_bg.jpg) no-repeat 50% 50%;
+  background-size: 700px auto;
+}

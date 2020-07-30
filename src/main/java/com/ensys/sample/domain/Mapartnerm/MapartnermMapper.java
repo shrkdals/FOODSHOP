@@ -24,4 +24,12 @@ public interface MapartnermMapper extends MyBatisMapper {
     void SAVE_USERMAPPING_D(HashMap<String, Object> item);
 
     List<HashMap<String, Object>> SAVE_USERMAPPING_S(HashMap<String, Object> param);
+
+    List<HashMap<String, Object>> SAVE_USERMAPPING_H_S(HashMap<String, Object> param);
+
+    List<HashMap<String, Object>> select2(HashMap<String, Object> param);
+
+    void MEMBER_JOIN_D(HashMap<String, Object> item);
+
+    void MEMBER_JOIN_I(HashMap<String, Object> item);
 }

@@ -20,6 +20,7 @@
             "commonfile": "/api/file",
             "itemM" : "/api/itemM",
             "event" : "/api/event",
+            "FcOrder" : "/api/FcOrder",
             // 노강민추가 //
 
             "sysprogram": "/api/v1/Sysprogram",         // 프로그램목록

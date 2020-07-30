@@ -37,4 +37,15 @@ public class OrderController extends BaseController {
     public Responses.ListResponse selectD(@RequestBody HashMap<String, Object> param) {
         return Responses.ListResponse.of(service.selectD(param));
     }
+
+    @RequestMapping(value = "excel", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse excel(@RequestBody HashMap<String, Object> param) {
+        return Responses.ListResponse.of(service.excel(param));
+    }
+
+    @RequestMapping(value = "success", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public ApiResponse success(@RequestBody HashMap<String, Object> param) {
+        service.success(param);
+        return ok();
+    }
 }

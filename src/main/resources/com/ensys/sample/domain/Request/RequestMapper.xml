@@ -5,7 +5,7 @@
 <mapper namespace="com.ensys.sample.domain.Request.RequestMapper">
 
     <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_BRAND_REQUEST_H_S(#{COMPANY_CD} ,#{KEYWORD} ,#{TEMP1} ,#{TEMP2}) }
+    { CALL UP_FS_BRAND_REQUEST_H_S(#{COMPANY_CD} ,#{KEYWORD} ,#{LOGIN_ID} ,#{DT_START} ,#{DT_END} ,#{TEMP1} ,#{TEMP2}) }
     </select>
 
     <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">

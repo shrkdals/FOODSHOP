@@ -1,0 +1,283 @@
+@charset "euc-kr";
+/* CSS Document */
+
+/* 기본 */
+
+.popup_con {display:block;margin:0 auto;padding:0;}
+.popup_middle .popup_m_in{background:#fff;margin:0 7px;padding:10px 0;}
+.popup_middle .popup_m_in p{padding:10px 0;}
+.popup_title {width:100%;height:34px;}
+.popup_middle .popup_middle_in {background:#fff;margin:0 7px;padding:10px 0;}
+
+/* [팝업] 마일리지 경품 상세정보 */
+
+.p_mevent {width:725px;margin:0 auto;padding:0}
+.mevent_n{border-top:4px solid #dfdfdf;border-bottom:4px solid #dfdfdf;width:670px;margin:auto;}
+.mevent_n td{padding:10px 20px;background:#f2f2f2;font-weight:bold;}
+.mevent_img{border:1px solid #ccc;width:500px;margin:auto;margin-top:15px;vertical-align:center;text-align:center;padding:20px;}
+
+/* [팝업] 입금계좌안내 */
+
+.p_bank {width:320px;height:34px;margin:0 auto;padding:0;}
+.b_list {border-collapse:collapse;border-top:2px solid #999;border-bottom:2px solid #999;margin:auto;}
+.b_list td {padding:3px;border-bottom:1px dotted #999;}
+
+/* [팝업] 예치금사용안내 */
+
+.p_ye {width:514px;margin:0 auto;padding:0;}
+
+/* [팝업] 마일리지 사용안내 */
+
+.p_mileage {width:720px;margin:0 auto;padding:0;}
+.popup_mileage_detail {width:500px;margin:0 auto;padding:0;}
+.info_tbl_03 {border-collapse:collapse;border:1px solid #ccc;margin:0 auto;font-size:12px;}
+.info_tbl_03 th{border:1px solid #ccc;background:#f2f2f2;width:90px;padding:2px 3px;font-weight:bold;text-align:right;}
+.info_tbl_03 td{border:1px solid #ccc;background:#fff;padding:2px 3px;}
+.text_right {text-align:right;}
+.t_b {color:#0a5aeb;}
+
+/* [팝업] 마일리지 적립내역 */
+
+.popup_mileage_keep {width:500px;margin:0 auto;padding:0;}
+.info_tbl_04 {border-collapse:collapse;border:1px solid #ccc;margin:0 auto;font-size:12px;}
+.info_tbl_04 th{border:1px solid #ccc;background:#f2f2f2;width:90px;padding:2px 3px;font-weight:bold;text-align:center;}
+.info_tbl_04 td{border:1px solid #ccc;padding:2px 3px;}
+.total_bg {background-color:#f3f3f3;text-align:center;font-weight:bold;}
+.t_o {color:#ff6600;}
+
+/* [팝업] 공급업체 메세지 보내기 */
+
+.popup_msg {width:720px;margin:0 auto;padding:0;}
+.popup_msg_rap1 {width:670px;background:#f2f2f2;margin:auto;padding:5px;margin-top:10px;font-size:12px;}
+.popup_msg_rap2 {background:#fff;border:1px solid #d1d1d1;text-align:left;padding:10px;}
+.popup_sup_name {font-weight:bold;color:#ff6600;vertical-align:top;margin-left:10px;font-size:14px;}
+.popup_msg_bg {background:url(http://img.pharmsnet.com/images/contents/popup/msg_img02.gif) 13px 35px no-repeat;text-align:right;}
+
+/* [팝업] 장바구니 가격변동 품목 */
+
+.popup_price {width:720px;margin:0 auto;padding:0;}.
+                                                   .popup_my_list01{border-collapse:collapse;border-top:3px solid #666;border-bottom:2px solid #999;margin:auto;}
+.popup_my_list01 th{border-bottom:1px solid #666;background:#f2f2f2;font-weight:bold;padding:3px 1px;text-align:center;vertical-align:middle;}
+.popup_my_list01 td{border-bottom:1px solid #ccc;	border-right:1px solid #ccc;padding:3px 1px;text-align:center;vertical-align:middle;}
+.popup_my_list01 .end{border-right:none;}
+.popup_my_list01 span{font-weight:bold;	color:#ff6600;}
+
+/* [팝업] 선택상품 상세내역(상품 detail) */
+
+.popup_select_prod {width:450px;margin:0 auto;padding:0;}
+.popup_info {display:block;border:1px solid #3ea4cf;background:#f2f2f2;margin:10px auto;height:165px;width:400px;}
+.popup_info p {border-top:3px solid #3ea4cf; border-bottom:1px solid #3ea4cf; text-align:center; padding:5px 3px;}
+.popup_info ul {float:left; margin:10px 0 10px 22px;}
+.popup_detail {padding:5px 0 0 30px;}
+.popup_detail li {background:url(http://img.pharmsnet.com/images/contents/mall/icon04.gif) left center no-repeat;padding-left:10px;margin-left:-20px;}
+.popup_supply_list {width:400px; margin:5px auto; border-bottom:5px solid #fff6da;}
+.popup_supply_list th{background:#fff6da; padding:3px; text-align:center;}
+.popup_supply_list td{padding:3px; text-align:center; border-bottom:1px solid #ccc;}
+.popup_choice {border:1px solid #cdcdcd; width:400px; margin:7px auto; color:#4c4d4c; border-collapse:collapse;}
+.popup_choice th {padding:5px 3px; font-weight:bold; background:#f9f9f9; text-align:center; border-right:1px solid #d5d5d5; border-bottom:1px solid #d5d5d5; vertical-align:middle; width:100px;}
+.popup_choice td {padding:5px 3px; font-weight:bold; background:#f9f9f9; text-align:center; border-bottom:1px solid #d5d5d5;}
+.popup_choice .price{color:#ff5200;}
+.popup_choice .inven{color:#0680f1;}
+.popup_choice button {vertical-align:middle;}
+.popup_pro_price li {float:left; margin-right:10px;}
+.popup_pro_inp, .popup_pro_btn {text-align:left; margin-right:5px;}
+.popup_pro_inp button {margin-left:5px;}
+
+/* [팝업] 세금계산서 */
+
+.popup_print_tbl {border-collapse:collapse;margin:auto;}
+.popup_print_tbl th {border:1px solid #999;font-weight:bold;text-align:center;padding:4px 3px;vertical-align:middle;}
+.popup_print_tbl td {border:1px solid #999;text-align:center;padding:4px 3px;vertical-align:middle;}
+.popup_print_tbl .t_top {font-size:15px;font-weight:bold;padding:10px 3px;letter-spacing:10px;}
+.popup_print_tbl .t_top span {font-size:12px;font-weight:normal;letter-spacing:normal;}
+
+/* [팝업] 전자세금계산서및계산서내역 */
+
+/* .popup_print_tbl2 {border-collapse:collapse;margin:auto;font-size:11px;} */
+/* .popup_print_tbl2 th {border:1px solid #999;font-weight:bold;text-align:center;padding:2px;vertical-align:middle;} */
+/* .popup_print_tbl2 td {border:1px solid #999;text-align:center;padding:2px;vertical-align:middle;} */
+
+/*
+ .popup_print_tbl2 {border-collapse:collapse;font-size:11px;}
+ .popup_print_tbl2 tr th {border:1px solid #999;font-weight:bold;text-align:center;vertical-align:middle;padding:0px;height:25px}
+ .popup_print_tbl2 tr td {border:1px solid #999;text-align:center;vertical-align:middle;padding:0px;}
+*/
+
+.popup_print_tbl2 {border-top:1px solid #ccc;font-size:11px;}
+.popup_print_tbl2 tr{border-left:1px solid #ccc;border-bottom:1px solid #ccc;}
+.popup_print_tbl2 tr td{border-right:1px solid #ccc;background:#fff;padding:3px 5px;}
+.popup_print_tbl2 tr th{border-right:1px solid #ccc;background:#f2f2f2;width:120px;padding:3px 5px;}
+
+
+
+.popup_print_tbl2_head {height:30px}
+.popup_print_tbl2_foot {height:30px}
+
+.print_tbl2_bg {height:30px;background:#f2f2f2;font-size:11px;}
+.print_tbl2_p {height:30px;font-size:11px;}
+
+/* [팝업] 관심품목등록 */
+
+.popup_wish_list {width:429px;margin:0 auto;padding:0;}
+.popup_name {color:#ef520d; font-weight:bold;}
+.popup_wish_list p {text-align:center;}
+
+/* [팝업] 현금주문품목 */
+
+.p_cop {width:530px;margin:0 auto;padding:0;}
+.b_list2 {border-collapse:collapse;border-top:2px solid #999;border-bottom:1px solid #999;margin:auto;}
+.b_list2 td {padding:3px;border:1px solid #ccc;text-align:center;}
+
+/* [팝업] 상품검색 */
+
+.popup_p_serch {width:500px;margin:0 auto;padding:0;}
+
+/* [팝업] 쪽지보기 */
+
+.popup_memo {width:500px;margin:0 auto;padding:0;}
+.message_name {height:30px;margin:0 20px;overflow:hidden;padding-top:5px;color:#3d3d3d;}
+.message_name li {display:inline-block;float:left;}
+.btn_reply {width:51px;height:21px;background:url(http://img.pharmsnet.com/images/contents/mypage/mypage_button.png) -790px -650px no-repeat;vertical-align:middle;}
+.btn1_del01 {width:33px;height:20px;background:url(http://img.pharmsnet.com/images/contents/mypage/mypage_button.png) -170px -230px no-repeat;vertical-align:middle;}
+.message {text-align:center;}
+.btn_send01 {width:72px;height:27px;background:url(http://img.pharmsnet.com/images/contents/mypage/mypage_button.png) -230px -160px no-repeat;vertical-align:middle;}
+
+/* [팝업] 마이페이지/주문내역/거래명세서 인쇄 */
+
+.popup_order_list {width:700px;margin:0;padding:0;}
+.popup_order_list table {margin:0 auto;}
+.popup_print_tbl2 {border-collapse:collapse;margin:auto;}
+.popup_print_tbl2 th {border:1px solid #999;font-weight:bold;text-align:center;padding:4px 3px;vertical-align:middle;}
+.popup_print_tbl2 td {border:1px solid #999;text-align:left;padding:4px 3px;vertical-align:middle;}
+.popup_print_tbl3 {border-collapse:collapse;margin:auto;background-color:#f5f5f5;}
+.popup_print_tbl3 td {border:1px solid #333;text-align:center;padding:4px 3px;vertical-align:middle;}
+
+/* [팝업] 카드번호입력 */
+
+.popup_card_number {width:444px;margin:0 auto;padding:0;}
+.btn_ok02 {width:48px;height:22px;background:url(http://img.pharmsnet.com/images/contents/mypage/mypage_button.png) -260px -90px no-repeat;vertical-align:middle;}   /*btn_ok02.gif*/
+
+/* [팝업] 우편번호찾기 */
+
+.popup_post {width:444px;margin:0 auto;padding:0;position:relative;top:0px;left:0px;}
+.post_type {width:100%;height:30px;margin:15px 0 0 17px;display:block;font-family:굴림,gulim,arial;font-size:12px;color:#333333;}
+.post_type input {vertical-align:middle;}
+.post_type li {width:123px;display:inline-block;float:left;}
+.post_type li:hover {font-weight:bold;}
+.post_box {width:365px;height:200px;display:block;background:#f2f2f2;font-famliy:돋움,dotum,arial;font-size:11px;color:#7b7b7b;line-height:14px;padding:5px 15px;border:1px solid #cccccc;margin:0 auto;}
+.post_address {width:365px;height:75px;display:block;margin:0 auto;}
+.post_address li {float:left;padding:10px 15px 0 0;}
+.post_address select, .post_address input { font-family:돋움,dotum,arial;font-size:12px;color:#434343;}
+.search1 {border:1px solid #d3d3d3;padding:2px;background:#f7f7f7;font-size:12px;}
+.search_btn {width:58px;height:21px;background:url(http://img.pharmsnet.com/images/contents/popup/search_btn.gif) no-repeat;}
+.address_list {width:355px;display:block;background:#ffffff;border:1px solid #cccccc;padding:5px;}
+.address_list li {border-bottom:1px solid #f2f2f2;padding:3px 5px;}
+.address_list button {display:inline;float:right;position:relative;top:-8px;}
+.check_btn {width:37px;height:18px;background:url(http://img.pharmsnet.com/images/contents/popup/check_btn.gif) no-repeat;vertical-align:middle;}
+
+/* [팝업] 회원정보변경/결제입력정보 */
+
+.popup_card_detail {width:700px;margin:0 auto;padding:0;}
+.info_t02 {font-size:14px;font-weight:bold;background:url(http://img.pharmsnet.com/images/contents/mypage/a_icon_dot02.gif) 10px 14px no-repeat;margin:0;}
+.info_t02 span {margin-left:20px;}
+.info_tbl_02 {border-collapse:collapse;border:1px solid #ccc;margin:0 auto;}
+.info_tbl_02 th{border:1px solid #ccc;background:#f2f2f2;width:90px;padding:3px 5px;vertical-align:middle;}
+.info_tbl_02 td{border:1px solid #ccc;background:#fff;padding:3px 5px;}
+.info_tbl_02 input {vertical-align:middle;}
+.info_box {border:1px solid #d3d3d3;padding:2px;background:#f7f7f7;font-size:12px;}
+.btn_card01 {width:98px;height:22px;background:url(http://img.pharmsnet.com/images/contents/mypage/mypage_button.png) -100px 0 no-repeat;vertical-align:middle;margin:0 220px;}   /*btn_card01.gif*/
+
+/* [팝업] 회원정보변경/카드정보 등록 */
+
+.popup_card_re {width:600px;margin:0 auto;padding:0;}
+.tbl_select {font-family:굴림,gulim,돋움,dotum,arial;font-size:12px;vertical-align:middle;border:1px solid #d3d3d3;color:#333333;}
+.tbl_notice {font-family:돋움,dotum,굴림,gulim,arital;font-size:11px;line-height:16px;margin:10px 45px 0 45px;color:#7b7b7b;}
+.text_textarea {font-family:돋움,dotum,굴림,gulim,arial;font-size:11px;vertical-align:middle;border:1px solid #d3d3d3;color:#7b7b7b;margin:0 50px;padding:0;}
+
+/* [레이어] 회원탈퇴/비밀번호 입력하기 */
+
+.layer_password {width:280px;height:150px;background:#ffffff url(http://img.pharmsnet.com/images/contents/popup/p_password_bg.png) 15px 22px no-repeat;border:3px solid #2970f0;margin:0 auto;text-align:center;padding:10px 0;}
+.layer_password_title {font-family:굴림,gulim,arial;font-size:12px;line-height:18px;font-weight:bold;margin:15px 10px 20px 100px;text-align:left;}
+.btn_ok02 {width:48px;height:22px;background:url(http://img.pharmsnet.com/images/contents/mypage/mypage_button.png) -260px -90px no-repeat;vertical-align:middle;}   /*btn_ok02.gif*/
+.btn_cancel02 {width:35px;height:22px;background:url(http://img.pharmsnet.com/images/contents/popup/btn_cancel02.gif) 0 0 no-repeat;vertical-align:middle;}
+.btn_re {width:35px;height:22px;background:url(http://img.pharmsnet.com/images/contents/popup/btn_re.gif) 0 0 no-repeat;vertical-align:middle;}
+
+/* [레이어] 회원가입/인증번호입력 */
+
+.layer_sms {width:300px;height:175px;background:#ffffff;border:3px solid #2970f0;margin:0 auto;text-align:center;color:#333333;}
+.sms_input {margin:15px 0;}
+.btn5_request {width:90px;height:20px;background:url(http://img.pharmsnet.com/images/contents/member/member_button.png) -260px 0 no-repeat;vertical-align:middle;margin-left:5px;}
+.btn5_insert {width:35px;height:22px;background:url(http://img.pharmsnet.com/images/contents/member/member_button.png) -210px -210px no-repeat;vertical-align:middle;}
+.btn3_close {width:35px;height:22px;background:url(http://img.pharmsnet.com/images/contents/member/member_button.png) -220px -60px no-repeat;vertical-align:middle;}
+
+/* [팝업] 선택상품과 관련된 동일상품 유사상품 */
+
+.popup_alike_wrap {width:650px;margin:0;padding:0;display:block;color:#333;}
+.popup_alike_list {width:610px;border-collapse:collapse;border-top:3px solid #999;border-bottom:1px solid #999;margin:auto;}
+.popup_alike_list th {border:1px solid #ccc;padding:5px 3px;font-weight:bold;background:#f2f2f2;text-align:center;}
+.popup_alike_list td {border:1px solid #ccc;padding:3px;text-align:center;vertical-align:middle;}
+.popup_alike_list .alike_result {padding:10px;font-weight:bold;background:#fffddc;}
+.popup_alike_list .alike_count {color:#ff3300;}
+.popup_alike_btn {margin-top:5px;text-align:center;}
+.btn_product_buy {width:72px;height:28px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/shopinshop_button.png) 0 0 no-repeat;margin-right:5px;}   /*btn_buy02.gif*/
+.btn_product_close {width:72px;height:28px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/shopinshop_button.png) -80px 0 no-repeat;}   /*btn_close.gif*/
+
+/* [팝업] 샵인샵 동영상 보기 */
+
+.popup_play_wrap {width:418px;margin:0 auto;padding:0;display:block;position:relative;top:0;left:0;}
+.popup_play_in {width:418px;height:351px;margin-top:20px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/play_bg01.gif) no-repeat;padding-top:23px;}
+.control_wrap {margin-top:30px;position:relative;}
+.btn_play_stop {width:25px;height:25px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/play_btn01.gif) no-repeat;}
+.btn_play_stop2 {width:25px;height:25px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/play_btn02.gif) no-repeat;}
+.popup_play_sub {width:366px;height:266px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/play_bg02.gif) no-repeat;padding-top:20px;margin:0 auto;}
+.shop_play_bar {width:252px;height:15px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/play_bar_bg01.gif) no-repeat;overflow:hidden;position:relative;top:-30px;left:70px;}
+.shop_play_bar li {float:left;}
+.shop_play_bar li img {display:block;}
+.btn_play_full {width:25px;height:13px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/play_full.gif) no-repeat;position:relative;top:-45px;right:10px;float:right;}
+.btn_play_bolume {width:11px;height:10px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/play_bolume.gif) no-repeat;position:relative;top:-45px;left:245px;}
+.shop_play_time {position:relative;top:-22px;left:150px;}
+.bolume_bar {width:91px;height:6px;background:url(http://img.pharmsnet.com/images/contents/shopinshop/play_bar_bg02.gif) no-repeat center;overflow:hidden;}
+.bolume_bar li {float:left;margin-right:10px;}
+.bolume_bar li img {display:block;}
+.popup_play_in2 {width:418px;height:228px;margin:auto;margin-top:10px;background:url(http://img.pharmsnet.com/images/renewal/sins/play_bg03.gif) no-repeat;padding-top:23px;}
+.popup_play_note {width:350px;height:200px;margin:auto;overflow-y:scroll;}
+.play_upgrade {width:418px;margin:auto;text-align:center;margin-top:5px;}
+
+/* [레이어] 상품몰 - 최근구매이력 보기 */
+
+.p_buylist {width:506px;display:inline-block;margin:0 auto;padding:0;font-family:굴림,gulim,arial;font-size:12px;}
+.mall_buylist_top {width:506px;height:37px;background:url(http://img.pharmsnet.com/images/contents/mall/mall_buylist_top.gif) no-repeat;}
+.p_buylist_wrap {width:506px;display:block;background:url(http://img.pharmsnet.com/images/contents/mall/p_groupbuy_bg.gif) repeat-y;}
+.p_buylist_in {width:450px;margin:0 auto;padding:15px 0;}
+.p_buylist_in input {vertical-align:middle;}
+.p_buylist_tbl {border-collapse:collapse;border-top:1px solid #999;border-bottom:1px solid #999;margin-top:5px;}
+.p_buylist_tbl th {background:#f2f2f2;border-bottom:1px dotted #999;text-align:center;padding:5px;vertical-align:middle;font-weight:bold;}
+.p_buylist_tbl td {border-bottom:1px dotted #999;padding:5px;text-align:center;}
+.p_buylist_bottom {width:506px;height:9px;background:url(http://img.pharmsnet.com/images/contents/mall/p_groupbuy_btm.gif) no-repeat;}
+.p_buylist_name {margin:5px 0 10px 0;font-weight:bold;}
+.btn_buylist {width:135px;height:22px;background:url(http://img.pharmsnet.com/images/contents/popup/btn_buylist.gif) no-repeat;margin:20px 160px 0 160px;}
+.p_buylist_notice {font-size:12px;line-height:18px;text-align:left;color:#565656;}
+
+/* [팝업] 팜스넷 특가 */
+
+.popup_special_price_wrap {width:650px;margin:0 auto;padding:0;}
+.popup_middle_in .supplier_term {width:622px;height:14px;background:#f2f2f2;border-top:3px solid #dfdfdf;margin:0 auto;text-align:center;vertical-align:middle;font-weight:bold;}
+.select2type {margin-right:4px;float:left;margin:18px 177px;}
+.special_price_search_box {width:150px;height:19px;border:1px solid #CCC;margin-bottom:-1px;text-align:start;float:left;margin:18px -173px;vertical-align:middle;}
+.btn_special_price_search {width:58px;height:21px;background:url(http://img.pharmsnet.com/images/contents/popup/search_btn.gif) no-repeat;display:block;float:right;margin-right:173px;margin-top:-39px;}
+.tbl_special_price {margin:0 auto;}
+
+.tbl_special_price .end {border-right:none;}
+.tbl_special_price th {height:23px;background:#f2f2f2;border-right:1px solid #b2b2b2;border-top:1px solid #b2b2b2;border-bottom:1px solid #b2b2b2;text-align:center;vertical-align:middle;padding-top:2px;}
+.tbl_special_price td {border-right:1px solid #CCC;border-bottom:1px solid #CCC;padding:3px;text-align:left;vertical-align:middle;padding:3px;}
+.tbl_special_price a {color:#ff6600;}
+.tbl_special_price a:hover {text-decoration:underline;color:#f32301;}
+.tbl_special_price .product_image {width:43px;height:32px;}
+
+/* [팝업] 배송안내 */
+
+.popup_delivery {width:680px;margin:0 auto;padding:0;}
+.popup_delivery_tbl {border-collapse:collapse;border:1px solid #ccc;margin:0 auto;font-size:12px;}
+.popup_delivery_tbl th {border:1px solid #ccc;background:#f2f2f2;width:90px;padding:2px 3px;font-weight:bold;text-align:center;vertical-align:middle;}
+.popup_delivery_tbl td {border:1px solid #ccc;background:#fff;padding:2px 3px;vertical-align:middle;}
+.popup_middle_in_dul table {display:block;float:left;margin:10px;}

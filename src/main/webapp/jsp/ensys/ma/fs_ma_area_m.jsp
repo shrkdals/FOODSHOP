@@ -126,6 +126,8 @@
                     fnObj.gridView03.target.setData(list3);
 
                 }
+
+
                 , ITEM_ADD2: function (caller, act, data) {
 
                     if (caller.gridView01.getData('selected').length == 0) {
@@ -140,6 +142,9 @@
                     caller.gridView02.target.focus(lastIdx - 1);
                     caller.gridView02.target.setValue(lastIdx - 1, "CONTROL_AREA_CD", itemH.CONTROL_AREA_CD);
                     caller.gridView02.target.setValue(lastIdx - 1, "CONTROL_AREA_NM", itemH.CONTROL_AREA_NM);
+                    caller.gridView02.target.setValue(lastIdx - 1, "DISTRIB_PT_CD", itemH.DISTRIB_PT_CD);
+                    caller.gridView02.target.setValue(lastIdx - 1, "DISTRIB_PT_NM", itemH.DISTRIB_PT_NM);
+
 
                 }
                 , ITEM_ADD3: function (caller, act, data) {
@@ -248,6 +253,33 @@
                                     return "red";
                                 }
                             }
+                            , {key: "DISTRIB_PT_CD"   , label: "물류거래처코드"  , width: 150, align: "center", hidden:true}
+                            , {
+                                key: "DISTRIB_PT_NM", label: "물류거래처명", width: 150, align: "center", hidden: false
+                                , picker: {
+                                    top: _pop_top,
+                                    width: 600,
+                                    height: _pop_height,
+                                    url: "partner",
+                                    action: ["commonHelp", "HELP_PARTNER"],
+                                    param: function () {
+                                        return {PT_SP: '04'}
+                                    },
+                                    callback: function (e) {
+                                        fnObj.gridView01.target.setValue(this.dindex, "DISTRIB_PT_CD", e[0].PT_CD);
+                                        fnObj.gridView01.target.setValue(this.dindex, "DISTRIB_PT_NM", e[0].PT_NM);
+
+                                        var list = fnObj.gridView02.getData()
+
+                                        list.forEach(function(item, index){
+                                            fnObj.gridView02.target.setValue(item.__index, "DISTRIB_PT_CD", e[0].PT_CD);
+                                            fnObj.gridView02.target.setValue(item.__index, "DISTRIB_PT_NM", e[0].PT_NM);
+                                        })
+
+                                    }
+                                }
+                            }
+
 
                         ],
 
@@ -342,8 +374,8 @@
                             , {key: "CONTROL_AREA_CD" , label: "관할구역코드"    , width: 150, align: "center", hidden:true}
                             , {key: "CONTROL_AREA_NM" , label: "관할구역명"      , width: 150, align: "center", hidden:false}
                             , {key: "AREA_SEQ"        , label: "구역순번"        , width: 150, align: "center", hidden:true}
-                            , {key: "1LV_AREA_CD"     , label: "1레벨 구역코드"  , width: 150, align: "center", hidden:true}
-                            , {key: "1LV_AREA_NM"     , label: "1레벨 구역명"    , width: 150, align: "center", hidden:false
+                            , {key: "LV1_AREA_CD"     , label: "1레벨 구역코드"  , width: 150, align: "center", hidden:true}
+                            , {key: "LV1_AREA_NM"     , label: "1레벨 구역명"    , width: 150, align: "center", hidden:false
                                 ,picker: {
                                     top: _pop_top,
                                     width: 600,
@@ -354,8 +386,8 @@
                                         return {LEVEL : '1'}
                                     },
                                     callback: function (e) {
-                                        fnObj.gridView02.target.setValue(this.dindex, "1LV_AREA_CD", e[0].AREA_CD);
-                                        fnObj.gridView02.target.setValue(this.dindex, "1LV_AREA_NM", e[0].AREA_NM);
+                                        fnObj.gridView02.target.setValue(this.dindex, "LV1_AREA_CD", e[0].AREA_CD);
+                                        fnObj.gridView02.target.setValue(this.dindex, "LV1_AREA_NM", e[0].AREA_NM);
                                         //fnObj.gridView02.target.setValue(index, "USER_SP", e[0].USER_SP);
                                     }
                                 }
@@ -364,8 +396,8 @@
                                 }
                                 , required:true
                             }
-                            , {key: "2LV_AREA_CD"     , label: "2레벨 구역코드"  , width: 150, align: "center", hidden:true}
-                            , {key: "2LV_AREA_NM"     , label: "2레벨 구역명"    , width: 150, align: "center", hidden:false
+                            , {key: "LV2_AREA_CD"     , label: "2레벨 구역코드"  , width: 150, align: "center", hidden:true}
+                            , {key: "LV2_AREA_NM"     , label: "2레벨 구역명"    , width: 150, align: "center", hidden:false
                                 ,picker: {
                                     top: _pop_top,
                                     width: 600,
@@ -373,11 +405,11 @@
                                     url: "area",
                                     action: ["commonHelp", "HELP_AREA"],
                                     param: function () {
-                                        return {LEVEL : '2'}
+                                        return { LEVEL : '2' , LV1_AREA_CD : this.item.LV1_AREA_CD }
                                     },
                                     callback: function (e) {
-                                        fnObj.gridView02.target.setValue(this.dindex, "2LV_AREA_CD", e[0].AREA_CD);
-                                        fnObj.gridView02.target.setValue(this.dindex, "2LV_AREA_NM", e[0].AREA_NM);
+                                        fnObj.gridView02.target.setValue(this.dindex, "LV2_AREA_CD", e[0].AREA_CD);
+                                        fnObj.gridView02.target.setValue(this.dindex, "LV2_AREA_NM", e[0].AREA_NM);
                                         //fnObj.gridView02.target.setValue(index, "USER_SP", e[0].USER_SP);
                                     }
                                 }
@@ -400,6 +432,9 @@
                                         fnObj.gridView02.target.setValue(this.dindex, "DISTRIB_PT_CD", e[0].PT_CD);
                                         fnObj.gridView02.target.setValue(this.dindex, "DISTRIB_PT_NM", e[0].PT_NM);
                                         //fnObj.gridView02.target.setValue(index, "USER_SP", e[0].USER_SP);
+                                    }
+                                    ,disabled:function(){
+                                        return true;
                                     }
                                 }
                             }
@@ -708,7 +743,7 @@
                                          BIND-CODE="PT_CD"
                                          BIND-TEXT="PT_NM"/>
                         </ax:td>
-                        <ax:td label="관할구역명 검색" width="350px">
+                        <ax:td label="시군구 검색" width="350px">
                             <div class="input-group" style="width:100%">
                                 <input type="text" class="form-control" name="s_cd_partner" id="KEYWORD" style="width:100%"/>
                             </div>
@@ -724,7 +759,7 @@
                 <div class="ax-button-group" data-fit-height-aside="grid-view-01" id="left_title" name="왼쪽그리드타이틀">
                     <div class="left">
                         <h2>
-                            <i class="icon_list"></i> 거래처리스트
+                            <i class="icon_list"></i> 관할구역리스트
                         </h2>
                     </div>
                 </div>

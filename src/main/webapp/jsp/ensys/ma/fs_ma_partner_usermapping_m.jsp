@@ -32,9 +32,11 @@
             var CONTRACT_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00013');
             var USER_SP       = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00007');
             var USER_STAT     = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00006');
-
+            var CONTRACT_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00013');
             var YN_OP = [{value:'' , text:''},{value:'Y' , text:'Y'},{value:'N' , text:'N'}];
 
+            var S_1 = $.DATA_SEARCH("BrandContract", 'S_1',{}).list;
+            $("#S_1").ax5select({ options: [{value:'' , text:''}].concat(S_1) });
 
             $("#CONTRACT_STAT").ax5select({
                 options: CONTRACT_STAT
@@ -45,7 +47,7 @@
             });
 
             $("#S_CONTRACT").ax5select({
-                options: YN_OP
+                options: CONTRACT_STAT
             });
             var UserCallBack
             var modal = new ax5.ui.modal();
@@ -59,8 +61,11 @@
                         , CONTRACT_YN : $('select[name="S_CONTRACT"]').val()
                         , PT_NM : $('#S_PT_NM').val()
                         , TEMP1 : $('select[name="S_PT_SP"]').val()
+                        , TEMP2 : SCRIPT_SESSION.idUser
+                        , TEMP3 : $('select[name="S_1"]').val()
+                        , COMPANY_CD : SCRIPT_SESSION.cdCompany
                     };
-                    var list = $.DATA_SEARCH('mapartnerm','getPartnerList',param).list;
+                    var list = $.DATA_SEARCH('mapartnerm','SAVE_USERMAPPING_H_S',param).list;
                     fnObj.gridView01.target.setData(list);
                     if(list.length < afterIndex ){
                         afterIndex = 0
@@ -567,7 +572,10 @@
             <ax:form name="searchView0">
                 <ax:tbl clazz="ax-search-tb1" minWidth="500px">
                     <ax:tr>
-
+                        <ax:td label='총판' width="300px">
+                            <div id="S_1" name="S_1" data-ax5select="S_1"
+                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                        </ax:td>
                         <ax:td label='거래처유형' width="350px">
                             <div id="S_PT_SP" name="S_PT_SP" data-ax5select="S_PT_SP"
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
@@ -583,7 +591,7 @@
                                          BIND-TEXT="NM_EMP"/>
                         </ax:td>
 
-                        <ax:td label='계약여부' width="200px">
+                        <ax:td label='계약상태' width="200px">
                             <div id="S_CONTRACT" name="S_CONTRACT" data-ax5select="S_CONTRACT"
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
                         </ax:td>

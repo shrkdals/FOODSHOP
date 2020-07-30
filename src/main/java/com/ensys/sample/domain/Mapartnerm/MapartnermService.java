@@ -26,6 +26,11 @@ public class MapartnermService extends BaseService {
         param.put("COMPANY_CD",user.getCdCompany());
         return mapper.select(param);
     }
+    public List<HashMap<String, Object>> select2(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD",user.getCdCompany());
+        return mapper.select2(param);
+    }
 
     @Transactional
     public void saveAll(HashMap<String, Object> param) throws Exception {
@@ -59,6 +64,8 @@ public class MapartnermService extends BaseService {
         // #### 거래처 연결 수수료 ####
 
 
+
+
     }
 
     public List<HashMap<String, Object>> getPartnerCommitionList(HashMap<String, Object> param) {
@@ -84,6 +91,57 @@ public class MapartnermService extends BaseService {
 
     public List<HashMap<String, Object>> SAVE_USERMAPPING_S(HashMap<String, Object> param) {
         return mapper.SAVE_USERMAPPING_S(param);
+    }
+
+    public List<HashMap<String, Object>> SAVE_USERMAPPING_H_S(HashMap<String, Object> param) {
+        return mapper.SAVE_USERMAPPING_H_S(param);
+    }
+
+    @Transactional
+    public void saveAll2(HashMap<String, Object> param) {
+
+
+        SessionUser user = SessionUtils.getCurrentUser();
+        // #### 거래처 마스터 ####
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("delete")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("USER_ID",user.getIdUser());
+            mapper.delete(item);
+            mapper.deleteCONT(item);
+        }
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("insert")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("USER_ID",user.getIdUser());
+            mapper.insert(item);
+            mapper.insertCONT(item);
+        }
+        // #### 거래처 마스터 ####
+
+        // #### 거래처 연결 수수료 ####
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("delete2")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("USER_ID",user.getIdUser());
+            mapper.delete2(item);
+        }
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("insert2")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("USER_ID",user.getIdUser());
+            mapper.insert2(item);
+        }
+        // #### 거래처 연결 수수료 ####
+
+        // #### 거래처 등록하면에서 거래처사용자 매핑 ####
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("delete3")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("LOGIN_ID",user.getIdUser());
+            mapper.MEMBER_JOIN_D(item);
+        }
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("insert3")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("LOGIN_ID",user.getIdUser());
+            mapper.MEMBER_JOIN_I(item);
+        }
+        // #### 거래처 등록하면에서 거래처사용자 매핑 ####
     }
 }
 

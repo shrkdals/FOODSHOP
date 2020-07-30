@@ -119,7 +119,20 @@ html, body {height:100%;width:100%}
 .layer_alert .layer_btn .ok:hover{ color: #fff; background-color: #2d6dbb; border-color: #8c8c8c;}
 
 
-
+.datepicker{
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 3px 6px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555555;
+    text-align: center;
+    background-color: #eeeeee;
+    border: 1px solid #ccc;
+    display: table-cell;
+}
 
 
 /*
