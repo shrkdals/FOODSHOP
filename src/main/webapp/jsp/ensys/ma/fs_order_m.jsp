@@ -26,6 +26,7 @@
             var selectRow3 = 0;
             var beforeIdx = 0;
 
+            var dl_ITEM_UNIT   = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00008');   // 상품단위
             var ITEM_SP     = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00011');
             var DELI_STAT   = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00017');
             var ORDER_STAT  = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00023');
@@ -265,45 +266,46 @@
                                 }, dirty : false
                             }
                             ,{key: "JOIN_PT_CD"         , label: "가맹점거래처코드"           , width: 150     , align: "center"   , editor: false  ,sortable:true , hidden:true}
-                            ,{key: "JOIN_PT_NM"         , label: "가맹점거래처명"             , width: 150     , align: "center"   , editor: false  ,sortable:true}
+                            ,{key: "JOIN_PT_NM"         , label: "가맹점거래처명"             , width: 150     , align: "left"   , editor: false  ,sortable:true}
+                            ,{key: "SIGN_NM"         , label: "간판명"             			  , width: 150     , align: "left"   , editor: false  ,sortable:true}
                             ,{key: "ORDER_CD"           , label: "주문코드"                   , width: 150     , align: "center"   , editor: false  ,sortable:true , hidden:true}
                             ,{key: "ORDER_DTE"          , label: "주문일자"                   , width: 150     , align: "center"   , editor: false  ,sortable:true}
-                            ,{key: "ORDER_AMT"          , label: "주문금액"                   , width: 150     , align: "center"   , editor: false  ,sortable:true
+                            ,{key: "ORDER_AMT"          , label: "주문금액"                   , width: 120     , align: "right"   , editor: false  ,sortable:true
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'money')
                                 }
                             }
-                            ,{key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "center"   , editor: false  ,sortable:true
+                            ,{key: "DISC_AMT"           , label: "할인금액"                   , width: 120     , align: "right"   , editor: false  ,sortable:true
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'money')
                                 }
                             }
-                            ,{key: "DELI_AMT"           , label: "배송금액"                   , width: 150     , align: "center"   , editor: false  ,sortable:true
+                            ,{key: "DELI_AMT"           , label: "배송금액"                   , width: 120     , align: "right"   , editor: false  ,sortable:true
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'money')
                                 }
                             }
-                            ,{key: "PAYM_AMT"           , label: "결제금액"                   , width: 150     , align: "center"   , editor: false  ,sortable:true
+                            ,{key: "PAYM_AMT"           , label: "결제금액"                   , width: 120     , align: "right"   , editor: false  ,sortable:true
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'money')
                                 }
                             }
-                            ,{key: "BUYER_NM"           , label: "구매자명"                   , width: 150     , align: "center"   , editor: false  ,sortable:true}
-                            ,{key: "BUYER_HP"           , label: "구매자 휴대폰"              , width: 150     , align: "center"   , editor: false  ,sortable:true
+                            ,{key: "BUYER_NM"           , label: "구매자명"                   , width: 120     , align: "left"   , editor: false  ,sortable:true}
+                            ,{key: "BUYER_HP"           , label: "구매자 휴대폰"              , width: 120     , align: "center"   , editor: false  ,sortable:true
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'tel')
                                 }
                             }
-                            ,{key: "BUYER_POST_NO"      , label: "구매자 우편번호"            , width: 150     , align: "center"   , editor: false  ,sortable:true}
-                            ,{key: "BUYER_ADDR"         , label: "구매자 주소"                , width: 150     , align: "center"   , editor: false  ,sortable:true}
-                            ,{key: "BUYER_SYSDEF_ADDR"  , label: "구매자 상세주소"            , width: 150     , align: "center"   , editor: false  ,sortable:true}
-                            ,{key: "DELI_REQ"           , label: "배송요청"                   , width: 150     , align: "center"   , editor: false  ,sortable:true}
-                            ,{key: "PAYM_METHOD"        , label: "결제방법"                   , width: 150     , align: "center"   , editor: false  ,sortable:true
+                            ,{key: "BUYER_POST_NO"      , label: "구매자 우편번호"            , width: 100     , align: "center"   , editor: false  ,sortable:true}
+                            ,{key: "BUYER_ADDR"         , label: "구매자 주소"                , width: 150     , align: "left"   , editor: false  ,sortable:true}
+                            ,{key: "BUYER_SYSDEF_ADDR"  , label: "구매자 상세주소"            , width: 150     , align: "left"   , editor: false  ,sortable:true}
+                            ,{key: "DELI_REQ"           , label: "배송요청"                   , width: 150     , align: "left"   , editor: false  ,sortable:true}
+                            ,{key: "PAYM_METHOD"        , label: "결제방법"                   , width: 120     , align: "center"   , editor: false  ,sortable:true
                                 ,formatter: function () {
                                     return $.changeTextValue(PAYM_METHOD, this.value)
                                 }
                             }
-                            ,{key: "ORDER_STAT"         , label: "주문상태"                   , width: 150     , align: "center"    ,sortable:true
+                            ,{key: "ORDER_STAT"         , label: "주문상태"                   , width: 100     , align: "center"    ,sortable:true
                                 , editor: {
                                     type: "select", config: {
                                         columnKeys: {
@@ -322,7 +324,7 @@
                                     return $.changeTextValue(ORDER_STAT, this.value)
                                 }
                             }
-                            ,{key: "TERMS_AGREE_YN"     , label: "약관동의여부"               , width: 150     , align: "center"   , editor: false  ,sortable:true}
+                            ,{key: "TERMS_AGREE_YN"     , label: "약관동의여부"               , width: 80     , align: "center"   , editor: false  ,sortable:true}
                         ],
 
                         body: {
@@ -424,21 +426,28 @@
                             , {key: "JOIN_PT_CD"         , label: "가맹점거래처코드"           , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
                             , {key: "JOIN_PT_NM"         , label: "가맹점거래처명"             , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
                             , {key: "ORDER_CD"           , label: "주문코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
-                            , {key: "ORDER_SEQ"          , label: "주문일자"                   , width: 150     , align: "center"   , sortable: true  , editor: false}
+                            , {key: "ORDER_SEQ"          , label: "주문일자"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
                             , {key: "ITEM_SP"            , label: "상품유형"                   , width: 150     , align: "center"   , sortable: true  , editor: false
                                 ,formatter: function () {
                                     return $.changeTextValue(ITEM_SP, this.value)
                                 }
                             }
                             , {key: "ITEM_CD"            , label: "상품코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
-                            , {key: "ITEM_NM"            , label: "상품명"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "SELECT_NUM"         , label: "상품수량"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "center"   , sortable: true  , editor: false
+                            , {key: "ITEM_NM"            , label: "상품명"                   , width: 150     , align: "left"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "ITEM_WT"         	 , label: "상품중량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "BOX_NUM"         	 , label: "박스수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "ITEM_UNIT"          , label: "상품단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false,
+                            	formatter: function () {
+                                    return $.changeTextValue(dl_ITEM_UNIT, this.value)
+                                },
+                              }
+                            , {key: "SELECT_NUM"         , label: "상품수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "right"   , sortable: true  , editor: false
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'money')
                                 }
                             }
-                            , {key: "PAYM_AMT"           , label: "결제금액"                   , width: 150     , align: "center"   , sortable: true  , editor: false
+                            , {key: "PAYM_AMT"           , label: "결제금액"                   , width: 150     , align: "right"   , sortable: true  , editor: false
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'money')
                                 }
@@ -462,7 +471,7 @@
                                     return $.changeTextValue(DELI_STAT, this.value)
                                 }
                             }
-                            , {key: "AREA_NM"           , label: "관할구역"                   , width: 150     , align: "center"   , sortable: true  , editor: false}
+                            , {key: "AREA_NM"           , label: "관할구역"                   , width: 150     , align: "left"   , sortable: true  , editor: false}
                         ],
                         body: {
                             onClick: function () {

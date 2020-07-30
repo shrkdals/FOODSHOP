@@ -42,7 +42,8 @@
         <script type="text/javascript" src='/assets/js/common/bluebird.js?v=<%=new SimpleDateFormat("yyyyMMddHH").format(System.currentTimeMillis())%>'></script>
         <script type="text/javascript" src='/assets/js/view/ensys/Helper_1.js?v=<%=new SimpleDateFormat("yyyyMMddHH").format(System.currentTimeMillis())%>'></script>
             <script type="text/javascript" src='/assets/js/common/attrchange.js?v=<%=new SimpleDateFormat("yyyyMMddHH").format(System.currentTimeMillis())%>'></script>
-
+		<script src="/assets/js/common/html2canvas.min.js"></script>
+        <script src="/assets/js/common/jspdf.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
         <%--    <link rel="stylesheet" href="https://cdn.rawgit.com/ax5ui/ax5ui-calendar/dist/ax5calendar.css">--%>
         <%--    <link rel="stylesheet" href="https://cdn.rawgit.com/ax5ui/ax5ui-picker/dist/ax5picker.css">--%>

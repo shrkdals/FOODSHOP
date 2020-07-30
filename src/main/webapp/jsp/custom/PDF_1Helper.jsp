@@ -8,8 +8,6 @@
 <ax:layout name="modal">
     <jsp:attribute name="script">
         <link href="/assets/css/PDF_1.css" rel="stylesheet" type="text/css"/>
-        \<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.4/jspdf.plugin.autotable.min.js"></script>
         <script type="text/javascript">
             console.log(parent.modal.modalConfig.sendData().initData)
             var listLen = 0
@@ -28,7 +26,7 @@
                     var  ORDER_CD = ''
                         ,ORDER_DT = ''
                         ,PT_NM  = '' ,BIZ_NO  = '' ,OWNER_NM  = '' ,TEL_NO  = '' ,FAX_NO  = '' ,ADDR  = ''        // 공급자 필드
-                        ,PT_NM2 = '' ,BIZ_NO2 = '' ,OWNER_NM2 = '' ,TEL_NO2 = '' ,FAX_NO2 = '' ,ADDR2 = ''  // 공급받는자 필드
+                        ,PT_NM2 = '' ,BIZ_NO2 = '' ,OWNER_NM2 = '' ,TEL_NO2 = '' ,FAX_NO2 = '' ,ADDR2 = '', NM_SIGN2 = ''  // 공급받는자 필드
                         ,ORDER_ITEM = ''
                         ,SUM_SELECT_NUM = 0
                         ,SUM_SALE_COST = 0
@@ -39,7 +37,7 @@
                           PT_NM  = list[0].PT_NM   , BIZ_NO  = list[0].BIZ_NO   , OWNER_NM  = list[0].OWNER_NM
                         , TEL_NO  = list[0].TEL_NO , FAX_NO  = list[0].FAX_NO   , ADDR      = list[0].ADDR
 
-                        , PT_NM2   = list[0].PT_NM2  , BIZ_NO2  = list[0].BIZ_NO2 , OWNER_NM2  = list[0].OWNER_NM2
+                        , PT_NM2   = list[0].PT_NM2  , BIZ_NO2  = list[0].BIZ_NO2 , OWNER_NM2  = list[0].OWNER_NM2, NM_SIGN2
                         , TEL_NO2  = list[0].TEL_NO2 , FAX_NO2  = list[0].FAX_NO2 , ADDR2      = list[0].ADDR2
 
                         , ORDER_CD = list[0].ORDER_CD
@@ -58,7 +56,7 @@
                         +'<caption class="hidden">거래명세서 상세내역</caption>'
                         +'<tbody>'
                         +'<tr>'
-                        +'<td colspan="10">'
+                        +'<td colspan="12">'
                         +'<div style="margin:7px 10px 7px 30px;"><span style="font-size:18px;font-weight:bold;">거래명세서</span>'
                         +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
                         +'<span id="T1"> 발행일 :'+ dtNow +'&nbsp;&nbsp;</span>'
@@ -75,7 +73,7 @@
                         +'</td>'
                         +'<th rowspan="4" width="20px">공<br>급<br>받<br>는<br>자</th>'
                         +'<td width="40px" style="text-align:center;">사업자<br>번호</td>'
-                        +'<td colspan="3" width="265px">'
+                        +'<td colspan="5" width="265px">'
                         +'<span id="T3" style="font-weight:bold;" > ' + $.changeDataFormat(BIZ_NO2,'company') + ' </span>'
                         +'<span id="T4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;☎ ' + TEL_NO2 + '</span>'
                         +'</td>'
@@ -87,6 +85,8 @@
                         +'<td><input type="text" style="width:100%; border:none" value= "' + OWNER_NM + '"/></td>'
                         +'<td style="text-align:center;">상호</td>'
                         +'<td width="100px" style="font-weight:bold;" id="T7"><input type="text" style="width:100%; border:none" value= "' + PT_NM2 + '"/></td>'
+                        +'<td style="text-align:center;">간판명</td>'
+                        +'<td><input type="text" style="width:100%; border:none" value= "' + NM_SIGN2 + '"/></td>'
                         +'<td width="40px" style="text-align:center;" id="T8">대표</td>'
                         +'<td><input type="text" style="width:100%; border:none" value= "' + OWNER_NM2 + '"/></td>'
                         +'</tr>'
@@ -94,7 +94,7 @@
                         +'<td style="text-align:center;">주소</td>'
                         +'<td colspan="3" id="T11"> <input type="text" style="width:100%; border:none" value= "' + ADDR + '"/>  </td>'
                         +'<td style="text-align:center;">주소</td>'
-                        +'<td colspan="3" id="T12"><input type="text" style="width:100%; border:none" value= "' + ADDR2 + '"/></td>'
+                        +'<td colspan="5" id="T12"><input type="text" style="width:100%; border:none" value= "' + ADDR2 + '"/></td>'
                         +'</tr>'
                         +'<tr>'
                         +'<td style="text-align:center;">종목</td>'
@@ -102,9 +102,9 @@
                         +'<td width="40px" style="text-align:center;">업태</td>'
                         +'<td id="T14"> <input type="text" style="width:100%; border:none"/> </td>'
                         +'<td style="text-align:center;">종목</td>'
-                        +'<td id="T15"> <input type="text" style="width:100%; border:none"/> </td>'
+                        +'<td id="T15" colspan="2"> <input type="text" style="width:100%; border:none"/> </td>'
                         +'<td width="40px" style="text-align:center;">업태</td>'
-                        +'<td id="T16"> <input type="text" style="width:100%; border:none"/> </td>'
+                        +'<td id="T16" colspan="2"> <input type="text" style="width:100%; border:none"/> </td>'
                         +'</tr>'
                         +'</tbody>'
                         +'</table>'
@@ -136,28 +136,26 @@
                         +'</tr>'
                         +'</thead>'
                         +'<tbody>';
-
                     var MiddleHtml = ''
-                    for(var i = 0; i < 10; i++){
-                        list.forEach(function(item, index){
-                            MiddleHtml +='<tr>'
-                                +'<td style="text-align:center">' + (Number(index) + 1) + '</td>'
-                                +'<td>' + item.PT_NM2 + '</td>'
-                                +'<td>' + item.ORDER_ITEM + '</td>'
-                                +'<td style="text-align:center">' + comma(item.SELECT_NUM) + '</td>'
-                                +'<td style="text-align:right">' + comma(item.SALE_COST) + '</td>'
-                                +'<td style="text-align:right">' + comma(item.ORDER_AMT) + '</td>'
-                                +'<td style="text-align:right">' + comma(item.OREDER_SPPLUY) + '</td>'
-                                +'<td style="text-align:right">' + comma(item.ORDER_VAT) + '</td>'
-                                +'</tr>'
+                       list.forEach(function(item, index){
+                           MiddleHtml +='<tr>'
+                               +'<td style="text-align:center">' + (Number(index) + 1) + '</td>'
+                               +'<td>' + item.PT_NM2 + '</td>'
+                               +'<td>' + item.ORDER_ITEM + '</td>'
+                               +'<td style="text-align:center">' + comma(item.SELECT_NUM) + '</td>'
+                               +'<td style="text-align:right">' + comma(item.SALE_COST) + '</td>'
+                               +'<td style="text-align:right">' + comma(item.ORDER_AMT) + '</td>'
+                               +'<td style="text-align:right">' + comma(item.OREDER_SPPLUY) + '</td>'
+                               +'<td style="text-align:right">' + comma(item.ORDER_VAT) + '</td>'
+                               +'</tr>'
 
-                                ,SUM_SELECT_NUM += Number(item.SELECT_NUM)
-                                ,SUM_SALE_COST += Number(item.SALE_COST)
-                                ,SUM_ORDER_AMT += Number(item.ORDER_AMT)
-                                ,SUM_ORDER_VAT += Number(item.ORDER_VAT)
-                                ,SUM_OREDER_SPPLUY += Number(item.OREDER_SPPLUY)
-                        })
-                    }
+                               ,SUM_SELECT_NUM += Number(item.SELECT_NUM)
+                               ,SUM_SALE_COST += Number(item.SALE_COST)
+                               ,SUM_ORDER_AMT += Number(item.ORDER_AMT)
+                               ,SUM_ORDER_VAT += Number(item.ORDER_VAT)
+                               ,SUM_OREDER_SPPLUY += Number(item.OREDER_SPPLUY)
+                       })
+                    
 
                     MiddleHtml
                         +='<td style="text-align:center; background:#ffe0cf"  colspan="3" > 합계 </td>'
@@ -200,10 +198,10 @@
                         +'</table>'
 
                      */
-                        $('#TBODY1').append(HeaderHtml+MiddleHtml)
+                        $('#TBODY1').append(HeaderHtml+ "<div style='padding:2px;'></div>" + MiddleHtml)
                 }
                 , PDF_PRINT : function (caller, act, data) {
-                    html2canvasHeight = $(".ax-base-title").height() + $("#TBODY1").height() + (5 * listLen) + 10000;
+                    html2canvasHeight = $(".ax-base-title").height() + $("#TBODY1").height() + (5 * listLen);
                     html2canvasWidth = 1450;
                     var doc = new jsPDF('p', 'mm', 'a4');
                     var myOffscreenEl = document.body;
@@ -265,6 +263,7 @@
         </script>
     </jsp:attribute>
     <jsp:body>
+    <div id="myOffscreenEl">
         <div data-page-buttons="">
             <div class="button-warp">
                 <button type="button" class="btn btn-reload" data-page-btn="reload" style="width: 50px;"
@@ -287,6 +286,6 @@
 
 <%--        <div id="TBODY2">--%>
 
-        </div>
+     </div>
     </jsp:body>
 </ax:layout>

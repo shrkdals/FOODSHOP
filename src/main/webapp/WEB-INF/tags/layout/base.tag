@@ -43,6 +43,8 @@
                 <script type="text/javascript" src='/assets/js/common/attrchange.js'></script>
 
                 <script type="text/javascript" src='/assets/js/common/bluebird.js'></script>
+                <<script src="/assets/js/common/html2canvas.min.js"></script>
+        		<script src="/assets/js/common/jspdf.min.js"></script>
                 <script>
             // if ($(window.top.document.getElementById('LoginUserId')).text() != SCRIPT_SESSION.idUser)
             //     window.top.document.location.href = '/api/logout'
