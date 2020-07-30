@@ -488,6 +488,15 @@
                                 editor: {type: "text"},
                                 hidden: true
                             }
+                            , {
+                                key: "IMG_DOWNLOAD_TXT",
+                                label: "이미지다운로드문구",
+                                width: 150,
+                                align: "center",
+                                editor: {type: "text"},
+                                hidden: true
+                            }
+                            
                         ],
 
                         body: {
@@ -1642,7 +1651,8 @@
                 $("#tab6_area").css("height", $("#tab_area").height() - 40);
                 $("#right_content").css("height", (datarealheight / 100 * 99));
             }
-
+            
+            
             var userCallBack;
             $(".openFile").click(function () {
                 var selected = fnObj.gridView01.getData('selected')[0];
@@ -1805,12 +1815,12 @@
                         <ax:form name="binder-form">
                             <ax:tbl clazz="ax-search-tb2" minWidth="600px" style="border-top:0px;border-bottom:0px">
                                 <ax:tr>
-                                    <%--<ax:td label='브랜드코드' width="300px">
+                                    <ax:td label='브랜드코드' width="300px">
                                         <input type="text" class="form-control" data-ax-path="BRD_CD"
                                                style="background: #ffe0cf;"
                                                name="BRD_CD" id="BRD_CD" form-bind-text='BRD_CD' form-bind-type='text'
                                                readonly/>
-                                    </ax:td>--%>
+                                    </ax:td>
                                     <ax:td label='브랜드명' width="300px">
                                         <input type="hidden" class="form-control" data-ax-path="BRD_CD"
                                                style="background: #ffe0cf;"
@@ -1820,16 +1830,11 @@
                                                style="background: #ffe0cf;"
                                                name="BRD_NM" id="BRD_NM" form-bind-text='BRD_NM' form-bind-type='text'/>
                                     </ax:td>
-                                    <ax:td label='분류코드' width="300px">
-                                        <div id="CG_CD" name="CG_CD" data-ax5select="CG_CD"
-                                             data-ax5select-config='{}' form-bind-text='CG_CD'
-                                             form-bind-type="selectBox"></div>
-                                    </ax:td>
                                 </ax:tr>
                                 <ax:tr>
-                                    <ax:td label='검증상태' width="300px">
-                                        <div id="VERIFY_STAT" name="VERIFY_STAT" data-ax5select="VERIFY_STAT"
-                                             data-ax5select-config='{}' form-bind-text="VERIFY_STAT"
+                                	<ax:td label='분류코드' width="300px">
+                                        <div id="CG_CD" name="CG_CD" data-ax5select="CG_CD"
+                                             data-ax5select-config='{}' form-bind-text='CG_CD'
                                              form-bind-type="selectBox"></div>
                                     </ax:td>
                                     <ax:td label='관리거래처' width="300px">
@@ -1840,10 +1845,9 @@
                                     </ax:td>
                                 </ax:tr>
                                 <ax:tr>
-
-                                    <ax:td label='추천여부' width="300px">
-                                        <div id="RECOMM_YN" name="RECOMM_YN" data-ax5select="RECOMM_YN"
-                                             data-ax5select-config='{}' form-bind-text="RECOMM_YN"
+									<ax:td label='검증상태' width="300px">
+                                        <div id="VERIFY_STAT" name="VERIFY_STAT" data-ax5select="VERIFY_STAT"
+                                             data-ax5select-config='{}' form-bind-text="VERIFY_STAT"
                                              form-bind-type="selectBox"></div>
                                     </ax:td>
                                     <ax:td label='사용여부' width="300px">
@@ -1855,8 +1859,10 @@
 
                                 <ax:tr>
 
-                                    <ax:td label='추천순서' width="300px">
-                                        <input type="number" class="form-control" data-ax-path="RECOMM_ORD" name="RECOMM_ORD" id="RECOMM_ORD" form-bind-text='RECOMM_ORD' form-bind-type='text' onkeyup="onlyNumber(this);"/>
+                                    <ax:td label='추천여부' width="300px">
+                                        <div id="RECOMM_YN" name="RECOMM_YN" data-ax5select="RECOMM_YN"
+                                             data-ax5select-config='{}' form-bind-text="RECOMM_YN"
+                                             form-bind-type="selectBox"></div>
                                     </ax:td>
                                     <ax:td label='신규여부' width="300px">
                                         <div id="NEW_YN" name="NEW_YN" data-ax5select="NEW_YN"
@@ -1865,7 +1871,18 @@
                                     </ax:td>
                                 </ax:tr>
                                 <ax:tr>
-                                    <ax:td label='로고이미지' width="300px">
+                                	<ax:td label='추천순서' width="300px">
+                                        <input type="number" class="form-control" data-ax-path="RECOMM_ORD" name="RECOMM_ORD" id="RECOMM_ORD" form-bind-text='RECOMM_ORD' form-bind-type='text' onkeyup="onlyNumber(this);"/>
+                                    </ax:td>
+                                    <ax:td label='신규순서' width="300px">
+                                        <input type="number" class="form-control" data-ax-path="NEW_ORD" name="NEW_ORD" id="NEW_ORD" form-bind-text='NEW_ORD' form-bind-type='text' onkeyup="onlyNumber(this);"/>
+                                    </ax:td>
+                                </ax:tr>
+                                <ax:tr>
+                                	<ax:td label='이미지다운로드문구' width="300px">
+                                        <input type="text" class="form-control" data-ax-path="IMG_DOWNLOAD_TXT" name="IMG_DOWNLOAD_TXT" id="IMG_DOWNLOAD_TXT" form-bind-text='IMG_DOWNLOAD_TXT' form-bind-type='text'/>
+                                    </ax:td>
+                                	<ax:td label='로고이미지' width="300px">
                                         <div class="input-group" id="filemodal">
                                             <input type="text" class="form-control" id="LOGO_FILE_NM"
                                                    TB_ID="FS_BRAND_M"
@@ -1875,9 +1892,6 @@
                                             <span class="input-group-addon openFile" style="cursor: pointer"><i
                                                     class="cqc-magnifier"></i></span>
                                         </div>
-                                    </ax:td>
-                                    <ax:td label='신규순서' width="300px">
-                                        <input type="number" class="form-control" data-ax-path="NEW_ORD" name="NEW_ORD" id="NEW_ORD" form-bind-text='NEW_ORD' form-bind-type='text' onkeyup="onlyNumber(this);"/>
                                     </ax:td>
                                 </ax:tr>
                                 <ax:tr>
@@ -1924,7 +1938,7 @@
             </div>
         </div>--%>
         <div class="H10"></div>
-        <div id="tab_area" data-ax5layout="ax1" data-config="{layout:'tab-panel'}" style="height:420px;" name="하단탭영역">
+        <div id="tab_area" data-ax5layout="ax1" data-config="{layout:'tab-panel'}" style="height:380px;" name="하단탭영역">
             <div data-tab-panel="{label: '브랜드메뉴', active: 'true'}" id="tabGrid1">
                 <div class="ax-button-group" data-fit-height-aside="grid-view-03" id="tab1_button">
                     <div class="left">

@@ -710,8 +710,13 @@
                             fnObj.gridView01.target.setValue(selectIdx, 'POST_NO', data.zipcode);
                             fnObj.gridView01.target.setValue(selectIdx, 'PT_ADDR', data.roadAddress);
                             fnObj.gridView01.target.setValue(selectIdx, 'CD_AREA', data.zipcodeData.sigunguCode);
-                            var geocoder = new kakao.maps.services.Geocoder();
-                            geocoder.addressSearch(data.roadAddress,kakaoCallback)
+                            var geocoder;
+                            try{
+                            	geocoder = new kakao.maps.services.Geocoder();
+                                geocoder.addressSearch(data.roadAddress,kakaoCallback)
+                            }catch(e){
+                            	this.close();
+                            }
                         }
                         this.close();
                     }
@@ -934,11 +939,11 @@
 <%--                                    class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>--%>
 <%--                    </div>--%>
 <%--                </div>--%>
-<%--                <div data-ax5grid="grid-view-02"--%>
-<%--                     data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"--%>
-<%--                     id = "left_grid2"--%>
-<%--                     name="왼쪽그리드"--%>
-<%--                ></div>--%>
+                <div data-ax5grid="grid-view-02" style="display:none;"
+                    data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
+                     id = "left_grid2"
+                     name="왼쪽그리드"
+                ></div>
             </div>
             <div style="width:50%;float:right;overflow:hidden;">
                 <div class="ax-button-group" id="right_title" name="오른쪽부분타이틀">

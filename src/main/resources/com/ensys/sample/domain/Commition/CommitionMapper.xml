@@ -13,7 +13,7 @@
     </select>
 
     <update id="insertH"  parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_COMMITION_H_I(#{COMPANY_CD},#{USER_ID},#{COMT_CD} ,#{COMT_SP} ,#{COMT_NM} ,#{SECT_YN}  ) }
+    { CALL UP_FS_COMMITION_H_I(#{COMPANY_CD},#{USER_ID},#{COMT_CD} ,#{COMT_SP} ,#{COMT_NM} ,#{SECT_YN}, #{COMT_GB}  ) }
     </update>
 
     <update id="deleteH"  parameterType="java.util.HashMap" statementType="CALLABLE">
@@ -21,7 +21,7 @@
     </update>
 
     <update id="insertD"  parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_COMMITION_D_I(#{COMPANY_CD},#{USER_ID} ,#{COMT_SP} ,#{COMT_CD} ,#{COMT_SEQ} ,#{SECT_ST_AMT} ,#{SECT_ED_AMT} ,#{COMT_RATE}) }
+    { CALL UP_FS_COMMITION_D_I(#{COMPANY_CD},#{USER_ID} ,#{COMT_SP} ,#{COMT_CD} ,#{COMT_SEQ} ,#{SECT_ST_AMT} ,#{SECT_ED_AMT} ,#{COMT_RATE}, #{COMT_AMT}) }
     </update>
 
     <update id="deleteD"  parameterType="java.util.HashMap" statementType="CALLABLE">

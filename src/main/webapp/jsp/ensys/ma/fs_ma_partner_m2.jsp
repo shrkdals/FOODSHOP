@@ -771,8 +771,13 @@
                             fnObj.gridView01.target.setValue(selectIdx, 'POST_NO', data.zipcode);
                             fnObj.gridView01.target.setValue(selectIdx, 'PT_ADDR', data.roadAddress);
                             fnObj.gridView01.target.setValue(selectIdx, 'CD_AREA', data.zipcodeData.sigunguCode);
-                            var geocoder = new kakao.maps.services.Geocoder();
-                            geocoder.addressSearch(data.roadAddress,kakaoCallback)
+                            var geocoder;
+                            try{
+                            	geocoder = new kakao.maps.services.Geocoder();
+                                geocoder.addressSearch(data.roadAddress,kakaoCallback)
+                            }catch(e){
+                            	this.close();
+                            }
                         }
                         this.close();
                     }

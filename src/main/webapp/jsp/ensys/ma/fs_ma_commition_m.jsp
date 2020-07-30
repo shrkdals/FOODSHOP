@@ -17,6 +17,7 @@
             var afterIndex = 0;
             var selectRow2 = 0;
             var COMT_SP = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00003');
+            var dl_COMT_GB = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00030');
 
             var fnObj = {}, CODE = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
@@ -80,6 +81,8 @@
                     caller.gridView01.target.focus(lastIdx - 1);
                     afterIndex  = lastIdx - 1;
                     caller.gridView01.target.setValue(lastIdx - 1, "COMT_CD", GET_NO('MA','02'));
+                    caller.gridView01.target.setValue(lastIdx - 1, "COMT_GB", '01');
+                    
                     caller.gridView02.clear();
                 },
 
@@ -175,9 +178,9 @@
                         showRowSelector: true,
                         columns: [
                             {key: "COMPANY_CD", label: "회사코드", width: 150, align: "left", editor: {type: "text"},hidden:true}
-                            ,{key: "COMT_CD", label: "수수료코드", width: 150, align: "center", editor: false}
+                            ,{key: "COMT_CD", label: "수수료코드", width: 120, align: "center", editor: false}
                             ,{
-                                key: "COMT_SP", label: "수수료유형", width: 120, align: "center",
+                                key: "COMT_SP", label: "수수료유형", width: 100, align: "left",
                                 formatter: function () {
                                     return $.changeTextValue(COMT_SP, this.value)
                                 }
@@ -191,7 +194,21 @@
                                     }
                                 }
                             }
-                            ,{key: "COMT_NM", label: "수수료명", width: 150, align: "left", editor: {type: "text"}}
+                            ,{key: "COMT_NM", label: "수수료명", width: "*", align: "left", editor: {type: "text"}}
+                            ,{key: "COMT_GB", label: "수수료구분", width: 100, align: "center", 
+                            	formatter: function () {
+                                    return $.changeTextValue(dl_COMT_GB, this.value)
+                                }
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: dl_COMT_GB
+                                    }, disabled: function () {
+                                    }
+                                }
+                             }
                             ,{
                                 key: "SECT_YN", label: "구간여부", width: 70, align: "center"
                                 , editor: {
@@ -202,15 +219,27 @@
 
                         body: {
                             onDataChanged: function () {
+                            	var data = this.item;
+                                var idx = this.dindex;
+                                var column = this.key;
 
+                                if (column == 'COMT_GB'){
+									if (data.COMT_GB == '01'){
+										for (var i = 0 ; i < fnObj.gridView02.target.list.length ; i++){
+											fnObj.gridView02.target.setValue(i, 'COMT_AMT', 0);
+										}
+									}
+									if (data.COMT_GB == '02'){
+										for (var i = 0 ; i < fnObj.gridView02.target.list.length ; i++){
+											fnObj.gridView02.target.setValue(i, 'COMT_RATE', 0);
+										}
+									}
+                                }
                             },
-                            //444
                             onClick: function () {
                                 var index = this.dindex;
                                 if(afterIndex == index){return false;}
-                                var data = [].concat(fnObj.gridView01.getData("modified"));
-                                data = data.concat(fnObj.gridView01.getData("deleted"));
-                                data = data.concat(fnObj.gridView02.getData("modified"));
+                                var data = [].concat(fnObj.gridView02.getData("modified"));
                                 data = data.concat(fnObj.gridView02.getData("deleted"));
 
                                 if(data.length > 0){
@@ -335,15 +364,40 @@
                             }
                             ,{key: "SECT_ED_AMT", label: "구간종료금액", width: 150, align: "right", editor: {type: "number"}
                                 ,formatter : function(){
+                                	if (nvl(this.item.SECT_ED_AMT) == '') {
+                                        this.item.SECT_ED_AMT = 0;
+                                    }
                                     return Number(nvl(this.value,0)).toFixed(2)
                                 }
                             }
-                            ,{key: "COMT_RATE", label: "수수료율", width: 150, align: "right", editor: {type: "number"}
+                            ,{key: "COMT_RATE", label: "수수료율", width: 150, align: "right", 
+                                editor: {type: "number",
+                                    disabled:function(){
+    									var selected = fnObj.gridView01.getData('selected')[0];
+    									if (selected.COMT_GB == '02'){
+    										return true;
+    									}else{
+    										return false;
+    									}
+                                    }
+                                }
                                 ,formatter : function(){
-                                    //Number(this.value).toFixed(2)
-                                    return Number(nvl(this.value,0)).toFixed(2) + '%'
+                                    return Number(nvl(this.value,0)) + '%'
                                 }
                             }
+                            ,{key: "COMT_AMT", label: "수수료금액", width: 150, align: "right", 
+                                editor: {type: "number",
+	                            	disabled:function(){
+										var selected = fnObj.gridView01.getData('selected')[0];
+										if (selected.COMT_GB == '01'){
+											return true;
+										}else{
+											return false;
+										}
+	                                }
+                                },
+                                formatter : "money",
+                        	}
                         ],
                         body: {
                             onClick: function () {
@@ -430,9 +484,9 @@
                 }
 
                 //데이터가 들어갈 실제높이
-                var datarealheight = $("#ax-base-root").height() - $(".ax-base-title").height() - $("#pageheader").height();
+                var datarealheight = $("#ax-base-root").height() - $(".ax-base-title").height() - $("#pageheader").height() - 10;
                 //타이틀을 뺀 상하단 그리드 합친높이
-                var tempgridheight = datarealheight - $("#left_title").height() - $("#bottom_left_title").height() - $("#bottom_left_amt").height();
+                var tempgridheight = datarealheight - $("#left_title").height();
 
                 $("#left_grid").css("height", tempgridheight / 100 * 99);
                 $("#right_grid").css("height", tempgridheight / 100 * 99);
@@ -443,23 +497,20 @@
                 ax-base-content //검색조건높이(class)
                  */
             }
-
         </script>
     </jsp:attribute>
     <jsp:body>
-
         <div data-page-buttons="">
             <div class="button-warp">
-
                 <button type="button" class="btn btn-reload" data-page-btn="reload"
                         onclick="window.location.reload();" style="width:80px;">
-
-                    <i class="icon_reload"></i></button>
-                <button type="button" class="btn btn-info" data-page-btn="search" style="width:80px;"><i
-                        class="icon_search"></i><ax:lang
-                        id="ax.admin.sample.modal.button.search"/></button>
-                <button type="button" class="btn btn-info" data-page-btn="save" style="width:80px;"><i
-                        class="icon_save"></i>저장
+                    <i class="icon_reload"></i>
+                </button>
+                <button type="button" class="btn btn-info" data-page-btn="search" style="width:80px;">
+                	<i class="icon_search"></i><ax:lang id="ax.admin.sample.modal.button.search"/>
+                </button>
+                <button type="button" class="btn btn-info" data-page-btn="save" style="width:80px;">
+                	<i class="icon_save"></i>저장
                 </button>
             </div>
         </div>
