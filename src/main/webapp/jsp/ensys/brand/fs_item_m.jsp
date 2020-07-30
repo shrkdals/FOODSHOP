@@ -12,7 +12,14 @@
 <ax:layout name="base">
     <jsp:attribute name="script">
         <ax:script-lang key="ax.script"/>
-
+        <style>
+        	.red {
+        		color: red;
+        	}
+        	.black {
+        		color: black;
+        	}
+        </style>
         <script type="text/javascript">
 
             var selectIndex = 0;
@@ -46,6 +53,14 @@
                     for (var i = 0 ; i < saveData.length ; i ++){
                         if (nvl(saveData[i].ITEM_NM) == ''){
                             qray.alert('상품명을 입력해주십시오.');
+                            return ;
+                        }
+                        if (saveData[i].SALE_SUPPLY_COST + saveData[i].SALE_SURTAX != saveData[i].SALE_COST){
+                        	qray.alert((i + 1) + '번째 줄<br>판매공급단가, 판매부가세의 합이 <br>판매단가와 다릅니다.');
+                            return ;
+                        }
+                        if (saveData[i].ITEM_SUPPLY_COST + saveData[i].ITEM_SURTAX != saveData[i].ITEM_COST){
+                        	qray.alert((i + 1) + '번째 줄<br>상품공급단가, 상품부가세의 합이 <br>상품단가와 다릅니다.');
                             return ;
                         }
                     }
@@ -190,6 +205,12 @@
                                 editor: {type: "number",}
                             }
                             , {key: "ITEM_WT" , label: "상품중량"	, width: 100     , align: "right", editor: {type: "text",}, sortable:true}
+                            , {key: "TAX_TP" , label: "과세구분"	, width: 80     , align: "center", sortable:true,
+                                formatter: function () {
+                                    return $.changeTextValue(dl_TAX_TP, this.value)
+                                }, 
+                                editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_TAX_TP}}
+                            }
                             , {key: "ITEM_SUPPLY_COST" , label: "상품공급단가"	, width: 120     , align: "right", sortable:true,
                                 editor: {type: "number",},
                                 formatter: function() {
@@ -198,7 +219,12 @@
                                     }
                                     this.item.ITEM_SUPPLY_COST = Number(this.item.ITEM_SUPPLY_COST);
                                     return comma(this.item.ITEM_SUPPLY_COST);
-                                }
+                                },
+                                styleClass: function () {
+                                    if (this.item.ITEM_SUPPLY_COST + this.item.ITEM_SURTAX != this.item.ITEM_COST){
+                                    	return "red";
+                                    }
+                                },
                             }
                             , {key: "ITEM_SURTAX" , label: "상품부가세"	, width: 120     , align: "right", sortable:true,
                                 editor: {type: "number",},
@@ -208,7 +234,12 @@
                                     }
                                     this.item.ITEM_SURTAX = Number(this.item.ITEM_SURTAX);
                                     return comma(this.item.ITEM_SURTAX);
-                                }
+                                },
+                                styleClass: function () {
+                                    if (this.item.ITEM_SUPPLY_COST + this.item.ITEM_SURTAX != this.item.ITEM_COST){
+                                    	return "red";
+                                    }
+                                },
                             }
                             , {key: "ITEM_COST" , label: "상품단가"	, width: 120, align: "right", sortable:true,
                                 editor: {type: "number",},
@@ -218,7 +249,12 @@
                                     }
                                     this.item.ITEM_COST = Number(this.item.ITEM_COST);
                                     return comma(this.item.ITEM_COST);
-                                }
+                                },
+                                styleClass: function () {
+                                    if (this.item.ITEM_SUPPLY_COST + this.item.ITEM_SURTAX != this.item.ITEM_COST){
+                                    	return "red";
+                                    }
+                                },
                             }
 
                             , {key: "SALE_SUPPLY_COST" , label: "판매공급단가"	, width: 120     , align: "right", sortable:true,
@@ -229,7 +265,12 @@
                                     }
                                     this.item.SALE_SUPPLY_COST = Number(this.item.SALE_SUPPLY_COST);
                                     return comma(this.item.SALE_SUPPLY_COST);
-                                }
+                                },
+                                styleClass: function () {
+                                    if (this.item.SALE_SUPPLY_COST + this.item.SALE_SURTAX != this.item.SALE_COST){
+                                    	return "red";
+                                    }
+                                },
                             }
                             , {key: "SALE_SURTAX" , label: "판매부가세"	, width: 120     , align: "right", sortable:true,
                                 editor: {type: "number",},
@@ -239,7 +280,12 @@
                                     }
                                     this.item.SALE_SURTAX = Number(this.item.SALE_SURTAX);
                                     return comma(this.item.SALE_SURTAX);
-                                }
+                                },
+                                styleClass: function () {
+                                    if (this.item.SALE_SUPPLY_COST + this.item.SALE_SURTAX != this.item.SALE_COST){
+                                    	return "red";
+                                    }
+                                },
                             }
                             , {key: "SALE_COST" , label: "판매단가"	, width: 120     , align: "right", sortable:true,
                                 editor: {type: "number",},
@@ -249,13 +295,13 @@
                                     }
                                     this.item.SALE_COST = Number(this.item.SALE_COST);
                                     return comma(this.item.SALE_COST);
-                                }
-                            }
-                            , {key: "TAX_TP" , label: "과세구분"	, width: 80     , align: "center", sortable:true,
-                                formatter: function () {
-                                    return $.changeTextValue(dl_TAX_TP, this.value)
-                                }, editor:false
-                                //editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_TAX_TP}}
+                                },
+                                styleClass: function () {
+                                    if (this.item.SALE_SUPPLY_COST + this.item.SALE_SURTAX != this.item.SALE_COST){
+                                    	return "red";
+                                    }
+                                },
+                                
                             }
                             , {key: "SURTAX_YN" , label: "부가세여부"	, width: 80     , align: "center", sortable:true, hidden:true,
                                 editor: {
@@ -338,16 +384,17 @@
                                 var data = this.item;
                                 var idx = this.dindex;
 
-                                /*if (column == 'SALE_SUPPLY_COST'){
-                                    var amt = Number(nvl(data.SALE_SUPPLY_COST, 0));
-                                    var vat = Number(nvl(data.SALE_SURTAX, 0));
-                                    fnObj.gridView01.target.setValue(idx, 'SALE_COST', amt + vat);
-                                }
+                                /*
                                 if (column == 'SALE_SURTAX'){
                                     var amt = Number(nvl(data.SALE_SUPPLY_COST, 0));
                                     var vat = Number(nvl(data.SALE_SURTAX, 0));
                                     fnObj.gridView01.target.setValue(idx, 'SALE_COST', amt + vat);
                                 }
+                                if (column == 'SALE_SUPPLY_COST'){
+                                var amt = Number(nvl(data.SALE_SUPPLY_COST, 0));
+                                var vat = Number(nvl(data.SALE_SURTAX, 0));
+                                fnObj.gridView01.target.setValue(idx, 'SALE_COST', amt + vat);
+                           		}
                                 if (column == 'ITEM_SUPPLY_COST'){
                                     var amt = Number(nvl(data.ITEM_SUPPLY_COST, 0));
                                     var vat = Number(nvl(data.ITEM_SURTAX, 0));
@@ -366,25 +413,111 @@
                                     }
                                     fnObj.gridView01.target.setValue(idx, 'ITEM_SUPPLY_COST', Number(data.ITEM_COST) - data.ITEM_SURTAX);
                                 }*/
-                                if (column == 'SALE_SURTAX'){
+                                /* if (column == 'SALE_SURTAX'){
                                     if (data.SALE_SURTAX != 0){
                                         fnObj.gridView01.target.setValue(idx, 'TAX_TP', '01');
                                     }else{
                                         fnObj.gridView01.target.setValue(idx, 'TAX_TP', '02');
                                     }
                                     fnObj.gridView01.target.setValue(idx, 'SALE_SUPPLY_COST', Number(data.SALE_COST) - data.SALE_SURTAX);
+                                } */
+                                
+                                
+                                if (column == 'SALE_SURTAX'){
+                                	var colindex_SALE_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="SALE_COST"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_SALE_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_SALE_COST + '"][data-ax5grid-data-index="' + idx + '"]');
+                                    var colindex_SALE_SUPPLY_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="SALE_SUPPLY_COST"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_SALE_SUPPLY_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_SALE_SUPPLY_COST + '"][data-ax5grid-data-index="' + idx + '"]');
+                                    var colindex_SALE_SURTAX = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="SALE_SURTAX"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_SALE_SURTAX = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_SALE_SURTAX + '"][data-ax5grid-data-index="' + idx + '"]');
+
+                                    if (this.item.SALE_SUPPLY_COST + this.item.SALE_SURTAX != this.item.SALE_COST){
+                                    	hasBorder_SALE_COST.addClass('red');
+                                    	hasBorder_SALE_SUPPLY_COST.addClass('red');
+                                    	hasBorder_SALE_SURTAX.addClass('red');
+                                    }else{
+                                    	hasBorder_SALE_COST.addClass('black');
+                                    	hasBorder_SALE_SUPPLY_COST.addClass('black');
+                                    	hasBorder_SALE_SURTAX.addClass('black');
+                                    }
+                                }
+                                if (column == 'SALE_SUPPLY_COST'){
+                                	var colindex_SALE_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="SALE_COST"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_SALE_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_SALE_COST + '"][data-ax5grid-data-index="' + idx + '"]');
+                                    var colindex_SALE_SUPPLY_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="SALE_SUPPLY_COST"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_SALE_SUPPLY_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_SALE_SUPPLY_COST + '"][data-ax5grid-data-index="' + idx + '"]');
+                                    var colindex_SALE_SURTAX = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="SALE_SURTAX"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_SALE_SURTAX = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_SALE_SURTAX + '"][data-ax5grid-data-index="' + idx + '"]');
+
+                                    if (this.item.SALE_SUPPLY_COST + this.item.SALE_SURTAX != this.item.SALE_COST){
+                                    	hasBorder_SALE_COST.addClass('red');
+                                    	hasBorder_SALE_SUPPLY_COST.addClass('red');
+                                    	hasBorder_SALE_SURTAX.addClass('red');
+                                    }else{
+                                    	hasBorder_SALE_COST.addClass('black');
+                                    	hasBorder_SALE_SUPPLY_COST.addClass('black');
+                                    	hasBorder_SALE_SURTAX.addClass('black');
+                                    }
+                                }
+                                if (column == 'ITEM_SUPPLY_COST'){
+                                	var colindex_ITEM_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="ITEM_COST"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_ITEM_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_ITEM_COST + '"][data-ax5grid-data-index="' + idx + '"]');
+                                    var colindex_ITEM_SUPPLY_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="ITEM_SUPPLY_COST"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_ITEM_SUPPLY_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_ITEM_SUPPLY_COST + '"][data-ax5grid-data-index="' + idx + '"]');
+                                    var colindex_ITEM_SURTAX = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="ITEM_SURTAX"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_ITEM_SURTAX = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_ITEM_SURTAX + '"][data-ax5grid-data-index="' + idx + '"]');
+
+                                    if (this.item.ITEM_SUPPLY_COST + this.item.ITEM_SURTAX != this.item.ITEM_COST){
+                                    	hasBorder_ITEM_COST.addClass('red');
+                                    	hasBorder_ITEM_SUPPLY_COST.addClass('red');
+                                    	hasBorder_ITEM_SURTAX.addClass('red');
+                                    }else{
+                                    	hasBorder_ITEM_COST.addClass('black');
+                                    	hasBorder_ITEM_SUPPLY_COST.addClass('black');
+                                    	hasBorder_ITEM_SURTAX.addClass('black');
+                                    }
+                                }
+                                if (column == 'ITEM_SURTAX'){
+                                	var colindex_ITEM_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="ITEM_COST"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_ITEM_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_ITEM_COST + '"][data-ax5grid-data-index="' + idx + '"]');
+                                    var colindex_ITEM_SUPPLY_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="ITEM_SUPPLY_COST"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_ITEM_SUPPLY_COST = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_ITEM_SUPPLY_COST + '"][data-ax5grid-data-index="' + idx + '"]');
+                                    var colindex_ITEM_SURTAX = fnObj.gridView01.target.$target.find('[data-ax5grid-column-key="ITEM_SURTAX"]').attr('data-ax5grid-column-col');
+                                    var hasBorder_ITEM_SURTAX = fnObj.gridView01.target.$target.find('[data-ax5grid-column-col="' + colindex_ITEM_SURTAX + '"][data-ax5grid-data-index="' + idx + '"]');
+
+                                    if (this.item.ITEM_SUPPLY_COST + this.item.ITEM_SURTAX != this.item.ITEM_COST){
+                                    	hasBorder_ITEM_COST.addClass('red');
+                                    	hasBorder_ITEM_SUPPLY_COST.addClass('red');
+                                    	hasBorder_ITEM_SURTAX.addClass('red');
+                                    }else{
+                                    	hasBorder_ITEM_COST.addClass('black');
+                                    	hasBorder_ITEM_SUPPLY_COST.addClass('black');
+                                    	hasBorder_ITEM_SURTAX.addClass('black');
+                                    }
                                 }
                                 if (column == 'ITEM_COST'){
-                                    var supplyAmt = Math.round(Number(data.ITEM_COST) * 10 / 11);
-                                    var vatAmt = Math.round((Number(data.ITEM_COST) - supplyAmt));
-
+                                	var supplyAmt = 0, vatAmt = 0;
+                                	
+                                    if (data.TAX_TP == '01'){	//	과세
+                                    	supplyAmt = Math.round(Number(data.ITEM_COST) * 10 / 11);
+                                        vatAmt = Math.round((Number(data.ITEM_COST) - supplyAmt));
+                                    } else{
+                                    	supplyAmt = data.ITEM_COST;
+                                    	vatAmt = 0;
+                                    }	
                                     fnObj.gridView01.target.setValue(idx, 'ITEM_SUPPLY_COST', supplyAmt);
                                     fnObj.gridView01.target.setValue(idx, 'ITEM_SURTAX', vatAmt);
                                 }
                                 if (column == 'SALE_COST'){
-                                    var supplyAmt = Math.round(Number(data.SALE_COST) * 10 / 11);
-                                    var vatAmt = Math.round((Number(data.SALE_COST) - supplyAmt));
-
+                                	var supplyAmt = 0, vatAmt = 0;
+                                	
+                                    if (data.TAX_TP == '01'){	//	과세
+                                    	supplyAmt = Math.round(Number(data.SALE_COST) * 10 / 11);
+                                        vatAmt = Math.round((Number(data.SALE_COST) - supplyAmt));
+                                    } else{
+                                    	supplyAmt = data.SALE_COST;
+                                    	vatAmt = 0;
+                                    }	
                                     fnObj.gridView01.target.setValue(idx, 'SALE_SUPPLY_COST', supplyAmt);
                                     fnObj.gridView01.target.setValue(idx, 'SALE_SURTAX', vatAmt);
                                 }

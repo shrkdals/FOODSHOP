@@ -79,7 +79,7 @@
 
                     $("#BRD_NOTICE").val(nvl(selected.BRD_NOTICE, '').replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
                     $("#BRD_GOOD").val(nvl(selected.BRD_GOOD, '').replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
-                    //fnObj.gridView02.target.setData($.DATA_SEARCH('Brandm', 'selectBrandMenu', nvl(selected, {})));
+                    fnObj.gridView02.target.setData($.DATA_SEARCH('Brandm', 'selectBrandMenu', nvl(selected, {})));
                     fnObj.gridView04.target.setData($.DATA_SEARCH('Brandm', 'selectBrandBeginItem', nvl(selected, {})));
                     fnObj.gridView05.target.setData($.DATA_SEARCH('Brandm', 'selectBrandItemCategory', nvl(selected, {})));
 
@@ -150,10 +150,37 @@
                         }
                     }
 
+                    if (caller.gridView04.getData("modified").length > 0){
+                    	for (var i = 0 ; i < caller.gridView04.target.list.length ; i++){
+                        	for (var i2 = 0 ; i2 < caller.gridView04.target.list.length ; i2++){
+    							if (i==i2) continue;
+    							var grid = caller.gridView04.target.list;
+    							if (grid[i].ITEM_CD == grid[i2].ITEM_CD){
+    								qray.alert('초도물품 데이터 입력 중<br>중복되는 상품을 입력하셨습니다.<br> <' + grid[i].ITEM_NM + '>');
+    								return;
+    							}
+                        	}
+                        }
+                    }
+                    
+
+                    if (caller.gridView05.getData("modified").length > 0){
+	                    for (var i = 0 ; i < caller.gridView05.target.list.length ; i++){
+	                    	for (var i2 = 0 ; i2 < caller.gridView05.target.list.length ; i2++){
+								if (i==i2) continue;
+								var grid = caller.gridView05.target.list;
+								if (grid[i].ITEM_CD == grid[i2].ITEM_CD){
+									qray.alert('브랜드상품 데이터 입력 중<br>중복되는 상품을 입력하셨습니다.<br> <' + grid[i].ITEM_NM + '>');
+									return;
+								}
+	                    	}
+	                    }
+                    }
+
                     var itemH = [].concat(caller.gridView01.getData("modified"));
                     itemH = itemH.concat(caller.gridView01.getData("deleted"));
-                    //itemH = itemH.concat(caller.gridView02.getData("modified"));
-                    //itemH = itemH.concat(caller.gridView02.getData("deleted"));
+                    itemH = itemH.concat(caller.gridView02.getData("modified"));
+                    itemH = itemH.concat(caller.gridView02.getData("deleted"));
                     itemH = itemH.concat(caller.gridView03M.getData("modified"));
                     itemH = itemH.concat(caller.gridView03M.getData("deleted"));
                     itemH = itemH.concat(caller.gridView03D.getData("modified"));
@@ -177,7 +204,7 @@
                                 url: ["Brandm", "save"],
                                 data: JSON.stringify({
                                     brand_m: [].concat(caller.gridView01.getData("modified")).concat(caller.gridView01.getData("deleted")),
-                                    //brand_menu: [].concat(caller.gridView02.getData("modified")).concat(caller.gridView02.getData("deleted")),
+                                    brand_menu: [].concat(caller.gridView02.getData("modified")).concat(caller.gridView02.getData("deleted")),
                                     brand_predic_sale_m: [].concat(caller.gridView03M.getData("modified")).concat(caller.gridView03M.getData("deleted")),
                                     brand_predic_sale_d: [].concat(caller.gridView03D.getData("modified")).concat(caller.gridView03D.getData("deleted")),
                                     brand_begin_item: [].concat(caller.gridView04.getData("modified")).concat(caller.gridView04.getData("deleted")),
@@ -249,7 +276,7 @@
             fnObj.pageStart = function () {
                 this.pageButtonView.initView();
                 this.gridView01.initView();
-                //this.gridView02.initView();
+                this.gridView02.initView();
                 this.gridView03M.initView();
                 this.gridView03D.initView();
                 this.gridView04.initView();
@@ -477,8 +504,8 @@
                                 var data = [];
                                 //data = [].concat(fnObj.gridView01.getData("modified"));
                                 //data = data.concat(fnObj.gridView01.getData("deleted"));
-                                //data = data.concat(fnObj.gridView02.getData("modified"));
-                                //data = data.concat(fnObj.gridView02.getData("deleted"));
+                                data = data.concat(fnObj.gridView02.getData("modified"));
+                                data = data.concat(fnObj.gridView02.getData("deleted"));
                                 data = data.concat(fnObj.gridView03M.getData("modified"));
                                 data = data.concat(fnObj.gridView03M.getData("deleted"));
                                 data = data.concat(fnObj.gridView03D.getData("modified"));
@@ -622,7 +649,9 @@
                                     return comma(this.item.SAMPLE_AMT);
                                 }
                             },
-                            {key: "MENU_IMG", label: "메뉴이미지", width: 150, align: "center", hidden: true}
+                            {key: "MENU_IMG", label: "메뉴이미지", width: 150 , align: "center" , editor: false, sortable: true,},
+                            {key: "MENU_FILE", label: "메뉴이미지", width: 150, align: "center", hidden:true},
+                            
                         ],
                         body: {
                             onClick: function () {
@@ -632,6 +661,56 @@
 
                                 selectRow2 = idx;
                                 this.self.select(selectRow2);
+                            },
+                            onDBLClick: function () {
+                                var column = this.column.key;
+                                if (column == 'MENU_IMG'){
+                                    var selected = fnObj.gridView02.getData('selected')[0];
+
+                                    userCallBack = function (e) {
+                                        e['TB_ID'] = 'FS_BRAND_M';
+                                        e['CG_CD'] = 'BMENU00001';
+                                        e['TB_KEY'] = selected.BRD_MENU_CD;
+
+                                        fnObj.gridView02.target.setValue(selected.__index, 'MENU_IMG', e.ORGN_FILE_NAME);
+                                        fnObj.gridView02.target.list[selected.__index]['MENU_FILE'] = e;
+                                    };
+
+                                    var data = {
+                                        TB_ID: 'FS_BRAND_M',
+                                        CG_CD: 'BMENU00001',
+                                        TB_KEY: selected['BRD_MENU_CD'],
+                                        FILE_PATH: 'brand/MENU',
+                                        CALL_BACK: selected['FILE']
+                                    }
+
+                                    modal.open({
+                                        width: 1100,
+                                        height: _pop_height800,
+                                        top: _pop_top800,
+                                        iframe: {
+                                            method: "get",
+                                            url: "../../common/FileCanvas.jsp",
+                                            param: "callBack=userCallBack"
+                                        },
+                                        sendData: function () {
+                                            return {
+                                                initData: data
+                                            }
+                                        },
+                                        onStateChanged: function () {
+                                            if (this.state === "open") {
+                                                mask.open({
+                                                    content: '<h1><i class="fa fa-spinner fa-spin"></i> Loading</h1>'
+                                                });
+                                            } else if (this.state === "close") {
+                                                mask.close();
+                                            }
+                                        }
+                                    }, function () {
+
+                                    });
+                                }
                             }
                         },
                         onPageChange: function (pageNumber) {
@@ -1554,7 +1633,7 @@
                 var tempgridheight = datarealheight - $("#left_title").height();
 
                 $("#left_grid").css("height", (tempgridheight / 100 * 99));
-                //$("#tab1_grid").css("height", $("#tab_area").height() - $("#tab1_button").height() - 40);
+                $("#tab1_grid").css("height", $("#tab_area").height() - $("#tab1_button").height() - 40);
                 $("#tab2_grid_M").css("height", $("#tab_area").height() - $("#tab2_button_M").height() - 40);
                 $("#tab2_grid_D").css("height", $("#tab_area").height() - $("#tab2_button_M").height() - 40);
                 $("#tab3_grid").css("height", $("#tab_area").height() - $("#tab3_button").height() - 40);
@@ -1846,7 +1925,7 @@
         </div>--%>
         <div class="H10"></div>
         <div id="tab_area" data-ax5layout="ax1" data-config="{layout:'tab-panel'}" style="height:420px;" name="하단탭영역">
-            <%--<div data-tab-panel="{label: '브랜드메뉴', active: 'true'}" id="tabGrid1">
+            <div data-tab-panel="{label: '브랜드메뉴', active: 'true'}" id="tabGrid1">
                 <div class="ax-button-group" data-fit-height-aside="grid-view-03" id="tab1_button">
                     <div class="left">
 
@@ -1864,7 +1943,7 @@
                      id="tab1_grid"
                      name="탭1그리드"
                 ></div>
-            </div>--%>
+            </div>
             <div data-tab-panel="{label: '수익률', active: 'false'}" id="tabGrid2">
                 <div style="width:100%;overflow:hidden;">
                     <div style="width:49%;float:left;overflow:hidden;">

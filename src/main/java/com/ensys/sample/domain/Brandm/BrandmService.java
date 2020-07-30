@@ -95,10 +95,20 @@ public class BrandmService extends BaseService {
                 } else if (item.get("__created__") != null) {
                     if ((boolean) item.get("__created__")) {
                         mapper.insertMenu(item);
+                        
+                        if (item.get("MENU_FILE") != null){
+                            HashMap<String, Object> file = (HashMap<String, Object>) item.get("MENU_FILE");
+                            fileservice.insertFsFile(file);
+                        }
                     }
                 } else if (item.get("__modified__") != null && item.get("__created__") == null) {
                     if ((boolean) item.get("__modified__")) {
                         mapper.updateMenu(item);
+                        
+                        if (item.get("MENU_FILE") != null){
+                            HashMap<String, Object> file = (HashMap<String, Object>) item.get("MENU_FILE");
+                            fileservice.insertFsFile(file);
+                        }
                     }
                 }
             }
