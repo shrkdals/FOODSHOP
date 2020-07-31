@@ -673,6 +673,12 @@
             $(document).ready(function () {
                 changesize();
 
+                $("#ITEM_NM").focus();
+                $("#ITEM_NM").keydown(function (e) {
+                    if (e.keyCode == '13') {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    }
+                });
             });
             $(window).resize(function () {
                 changesize();

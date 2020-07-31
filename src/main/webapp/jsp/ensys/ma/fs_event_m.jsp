@@ -375,6 +375,13 @@
             $(document).ready(function () {
                 changesize();
 
+                $("#EVENT_NM").focus();
+                $("#EVENT_NM").keydown(function (e) {
+                    if (e.keyCode == '13') {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    }
+                });
+                
             });
             $(window).resize(function () {
                 changesize();

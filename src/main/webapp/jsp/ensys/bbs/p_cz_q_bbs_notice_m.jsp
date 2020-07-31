@@ -368,6 +368,13 @@
             $(document).ready(function () {
                 changesize();
 
+                $("#KEYWORD").focus();
+                $("#KEYWORD").keydown(function (e) {
+                    if (e.keyCode == '13') {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    }
+                });
+
             });
             $(window).resize(function () {
                 changesize();

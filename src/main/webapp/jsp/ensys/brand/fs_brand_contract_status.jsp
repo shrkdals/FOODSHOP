@@ -246,6 +246,13 @@
             $(document).ready(function () {
                 changesize();
 
+                $("#JOIN_PT_CD").focus();
+                $("#JOIN_PT_CD").keydown(function (e) {
+                    if (e.keyCode == '13') {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    }
+                });
+
             });
             $(window).resize(function () {
                 changesize();
@@ -300,7 +307,7 @@
                         </ax:td>
                         <ax:td label='가맹점' width="350px">
                             <div class="input-group" style="width:100%">
-                                <input type="text" class="form-control" name="S_2" id="S_2"
+                                <input type="text" class="form-control" name="JOIN_PT_CD" id="JOIN_PT_CD"
                                        style="width:100%"/>
                             </div>
                         </ax:td>

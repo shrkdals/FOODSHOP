@@ -1524,6 +1524,13 @@
 
             $(document).ready(function () {
 
+            	$("#S_BRANDNAME").focus();
+                $("#S_BRANDNAME").keydown(function (e) {
+                    if (e.keyCode == '13') {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    }
+                });
+
                 $("#ADM_PT_CD").on('dataBind', function (e) {
                     var itemH = fnObj.gridView01.getData('selected')[0];
                     fnObj.gridView01.target.setValue(itemH.__index, 'ADM_PT_CD', e.detail.PT_CD);
@@ -1644,6 +1651,15 @@
             $(window).resize(function () {
                 changesize();
             });
+            $(document).ready(function(){
+            	
+            	$("#BRD_NM").focus();
+                $("#BRD_NM").keydown(function (e) {
+                    if (e.keyCode == '13') {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    }
+                });
+            })
 
             $("#BRD_NOTICE").change(function () {
                 console.log(this.value.replace(/(\n|\r\n)/g, '<br>'));
