@@ -113,15 +113,21 @@
                         ,insert3 : caller.gridView03.getData("modified").concat(caller.gridView03.getData("created"))
                     };
 
-                    axboot.ajax({
-                        type: "PUT",
-                        url: ["mapartnerm", "save2"],
-                        data: JSON.stringify(data),
-                        callback: function (res) {
-                            qray.alert("저장 되었습니다.");
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                            caller.gridView01.target.select(afterIndex);
-                            caller.gridView01.target.focus(afterIndex);
+                    qray.confirm({
+                        msg: "저장하시겠습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+		                    axboot.ajax({
+		                        type: "PUT",
+		                        url: ["mapartnerm", "save2"],
+		                        data: JSON.stringify(data),
+		                        callback: function (res) {
+		                            qray.alert("저장 되었습니다.");
+		                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+		                            caller.gridView01.target.select(afterIndex);
+		                            caller.gridView01.target.focus(afterIndex);
+		                        }
+		                    });
                         }
                     });
                 },
@@ -513,9 +519,21 @@
                                 }
                             }
                             ,{key: "COMT_CD", label: "수수료코드", width: 150, align: "center", editor: false , hidden:true}
-                            ,{key: "ADJUST_DTE", label: "정산일자", width: 150, align: "center", editor: {type: "date"}
+                            ,{key: "ADJUST_DTE", label: "정산일자", width: 150, align: "center", editor: {type: "number"}
                                 ,formatter : function(){
-                                    return $.changeDataFormat(this.value)
+                                    var value = this.item.ADJUST_DTE + "";
+                                    
+                                    if (value.indexOf('.') > -1){
+                                    	value = value.split['.'][0];
+                                    	this.item.ADJUST_DTE = value.split['.'][0];
+                                    }
+                                    if (nvl(value) == ''){
+                                        return null;
+                                    }
+                                    if (value > 31){
+                                    	value = 31;
+                                    }
+                                    return value + "일";
                                 }
                             }
                             ,{key: "ADJUST_PT_NM", label: "정산 거래처", width: 150, align: "center"
@@ -722,19 +740,21 @@
                 }
             });
 
-            $(".QRAY_FORM").find("[data-ax5select]").change(function () {
-                var itemH = fnObj.gridView01.getData('selected')[0];
-                fnObj.gridView01.target.setValue(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
-            });
-
-            $(".QRAY_FORM").find("input").change(function () {
-                var itemH = fnObj.gridView01.getData('selected')[0];
-                fnObj.gridView01.target.setValue(itemH.__index , this.id, $('#'+this.id).val() )
-                // var itemH = fnObj.gridView01.getData('selected')[0]
-                // fnObj.gridView01.setData(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
-            });
-
+            
             $(document).ready(function(){
+
+            	$(".QRAY_FORM").find("[data-ax5select]").change(function () {
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
+                });
+
+                $(".QRAY_FORM").find("input").change(function () {
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__index , this.id, $('#'+this.id).val() )
+                    // var itemH = fnObj.gridView01.getData('selected')[0]
+                    // fnObj.gridView01.setData(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
+                });
+                
                 $("#SALES_PERSON_ID").on('dataBind', function (e) {
                     var itemH = fnObj.gridView01.getData('selected')[0];
                     fnObj.gridView01.target.setValue(itemH.__index , 'SALES_PERSON_ID', e.detail.ID_USER )
@@ -1083,11 +1103,11 @@
                             <ax:tr>
                                 <ax:td label='전화번호' width="300px">
                                     <input type="text" class="form-control" data-ax-path="TEL_NO"
-                                           name="TEL_NO" id="TEL_NO" form-bind-text = 'TEL_NO' form-bind-type ='text' formatter="tel" maxlength="13"/>
+                                           name="TEL_NO" id="TEL_NO" form-bind-text = 'TEL_NO' form-bind-type ='text' maxlength="13"/>
                                 </ax:td>
                                 <ax:td label='휴대폰번호' width="300px">
                                     <input type="text" class="form-control" data-ax-path="HP_NO"
-                                           name="HP_NO" id="HP_NO" form-bind-text = 'HP_NO' form-bind-type ='text' formatter="tel" maxlength="13"/>
+                                           name="HP_NO" id="HP_NO" form-bind-text = 'HP_NO' form-bind-type ='text' formatter="tel"  maxlength="13"/>
                                 </ax:td>
                             </ax:tr>
                             <ax:tr>

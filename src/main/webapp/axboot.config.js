@@ -16,6 +16,7 @@
 
         axboot.def["API"] = {
             // 노강민추가 //
+            "brandContractStatus" : "/api/brandContractStatus",
             "defaultQna": "/api/defaultQna",
             "commonfile": "/api/file",
             "itemM" : "/api/itemM",

@@ -1144,6 +1144,7 @@
                                             var index = itemH.__index;
                                             fnObj.gridView04.target.setValue(index, "ITEM_CD", e[0].ITEM_CD);
                                             fnObj.gridView04.target.setValue(index, "ITEM_NM", e[0].ITEM_NM);
+                                            fnObj.gridView04.target.setValue(index, "SALE_COST", e[0].SALE_COST);
                                         },
                                     }
                                 }
@@ -1162,17 +1163,48 @@
                                 label: "상품수량",
                                 width: 150,
                                 sortable: true,
-                                align: "center",
+                                align: "right",
                                 hidden: false,
                                 editor: {type: "number"},
                                 formatter: function () {
                                     if (nvl(this.item.ITEM_NUM) == '') {
                                         this.item.ITEM_NUM = 0;
                                     }
-                                    this.item.ITEM_NUM = Number(this.item.ITEM_NUM);
-                                    return this.item.ITEM_NUM;
+                                    var value = this.item.ITEM_NUM + "";
+                                    if (value.indexOf('.') > -1){
+                                    	value = value.split['.'][0];
+                                    	this.item.ITEM_NUM = value.split['.'][0];
+                                    }
+                                    this.item.ITEM_NUM = Number(value);
+                                    return value;
                                 }
                             }
+                            , {
+                                key: "SALE_COST",
+                                label: "판매가",
+                                width: 150,
+                                sortable: true,
+                                align: "right",
+                                hidden: false,
+                                editor: false
+                            }
+                            , {
+                                key: "AMT_TOT",
+                                label: "합계금액",
+                                width: 150,
+                                sortable: true,
+                                align: "right",
+                                hidden: false,
+                                editor: false
+                            }
+                        ],
+                        footSum: [
+                            [
+                                {label: "", colspan: 2, align: "center"},
+                                {key: "ITEM_NUM", collector: "sum", align: "right"},
+                                {key: "SALE_COST", collector: "sum", formatter: "money", align: "right"},
+                                {key: "AMT_TOT", collector: "sum", formatter: "money", align: "right"}
+                            ]
                         ],
                         body: {
                             onClick: function () {
@@ -1182,6 +1214,14 @@
 
                                 selectRow4 = idx;
                                 this.self.select(selectRow4);
+                            },
+                            onDataChanged: function () {
+                                var data = this.item;
+                                var idx = this.dindex;
+                                if (this.key == 'ITEM_NUM' || this.key == 'SALE_COST') {
+									var amt_tot = nvl(data.ITEM_NUM, 0) * nvl(data.SALE_COST, 0);
+									fnObj.gridView04.target.setValue(idx, 'AMT_TOT', amt_tot);
+                                }
                             }
                         },
                         onPageChange: function (pageNumber) {
@@ -1298,11 +1338,11 @@
                                             fnObj.gridView05.target.setValue(index, "ITEM_CD", e[0].ITEM_CD);
                                             fnObj.gridView05.target.setValue(index, "ITEM_NM", e[0].ITEM_NM);
                                             fnObj.gridView05.target.setValue(index, "SALE_COST", e[0].SALE_COST);
-                                            if (e[0].PT_SP == '05') {    //  협력사
+                                            /* if (e[0].PT_SP == '05') {    //  협력사
                                                 fnObj.gridView05.target.setValue(index, "DELI_AMT_YN", 'Y');
                                             } else {
                                                 fnObj.gridView05.target.setValue(index, "DELI_AMT_YN", 'N');
-                                            }
+                                            } */
                                         },
                                     }
                                 }
@@ -1349,14 +1389,17 @@
                             },
                             {
                                 key: "DELI_AMT_YN", label: "배송금액여부", width: 120, align: "center", sortable: true,
-                                formatter: function () {
+                                editor: {
+                                    type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'}
+                                }
+                                /* formatter: function () {
                                     var CHK = this.item.DELI_AMT_YN;
                                     if (nvl(CHK, 'N') == 'N') {
                                         return '<div class="columnBox" id="columnBox' + this.dindex + '" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>';
                                     } else {
                                         return '<div class="columnBox" id="columnBox' + this.dindex + '" data-ax5grid-editor="checkbox" data-ax5grid-checked="true" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>';
                                     }
-                                }
+                                } */
                             },
                             {
                                 key: "INSERT_ID",

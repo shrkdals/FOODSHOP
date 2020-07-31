@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.BrandContractStatus.BrandContractStatusMapper">
+
+    <select id="select" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_CONTRACT_STATUS_H_S(#{COMPANY_CD} ,#{PT_CD1} ,#{PT_CD2} ,#{LOGIN_ID} ) }
+    </select>
+
+    <select id="selectDtl" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_CONTRACT_STATUS_D_S(#{COMPANY_CD} ,#{S_1} ,#{S_2} ,#{S_3}) }
+    </select>
+
+    <select id="S_1" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_CONTRACT_HELP_S1(#{COMPANY_CD} ,#{LOGIN_ID}) }
+    </select>
+
+    <select id="S_2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_CONTRACT_HELP_S2(#{COMPANY_CD} ,#{PT_CD} ) }
+    </select>
+
+    <select id="S_3" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_CONTRACT_HELP_S3(#{COMPANY_CD} ,#{PT_CD} ,#{AREA_CD}) }
+    </select>
+
+
+
+</mapper>
+
+

@@ -154,16 +154,22 @@
                         ,insert2 : caller.gridView02.getData("modified")
                     };
 
-                    axboot.ajax({
-                        type: "PUT",
-                        url: ["mapartnerm", "save"],
-                        data: JSON.stringify(data),
-                        callback: function (res) {
-                            qray.alert("저장 되었습니다.");
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                            caller.gridView01.target.select(afterIndex);
-                            caller.gridView01.target.focus(afterIndex);
-
+                    qray.confirm({
+                        msg: "저장하시겠습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+		                    axboot.ajax({
+		                        type: "PUT",
+		                        url: ["mapartnerm", "save"],
+		                        data: JSON.stringify(data),
+		                        callback: function (res) {
+		                            qray.alert("저장 되었습니다.");
+		                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+		                            caller.gridView01.target.select(afterIndex);
+		                            caller.gridView01.target.focus(afterIndex);
+		
+		                        }
+		                    });
                         }
                     });
                 },
@@ -422,7 +428,7 @@
                             ,{key: 'SALES_PERSON_ID2'    , label: '영업 담당자 아이디' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'SALES_PERSON_NM2'    , label: '영업 담당자 아이디' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'CD_AREA'    , label: '법정동코드' , width: 0 , align: "center" , editor: false  ,hidden:true}
-
+                            
                         ],
 
                         body: {
@@ -661,19 +667,22 @@
                 }
             });
 
-            $(".QRAY_FORM").find("[data-ax5select]").change(function () {
-                var itemH = fnObj.gridView01.getData('selected')[0];
-                fnObj.gridView01.target.setValue(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
-            });
-
-            $(".QRAY_FORM").find("input").change(function () {
-                var itemH = fnObj.gridView01.getData('selected')[0];
-                fnObj.gridView01.target.setValue(itemH.__index , this.id, $('#'+this.id).val() )
-                // var itemH = fnObj.gridView01.getData('selected')[0]
-                // fnObj.gridView01.setData(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
-            });
-
+            
             $(document).ready(function(){
+            	$(".QRAY_FORM").find("[data-ax5select]").change(function () {
+                	console.log("data-ax5select 변경", this);
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
+                });
+
+                $(".QRAY_FORM").find("input").change(function () {
+                    console.log("input 변경", this);
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__index , this.id, $('#'+this.id).val() )
+                    // var itemH = fnObj.gridView01.getData('selected')[0]
+                    // fnObj.gridView01.setData(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
+                });
+                
                 $("#SALES_PERSON_ID").on('dataBind', function (e) {
                     var itemH = fnObj.gridView01.getData('selected')[0];
                     fnObj.gridView01.target.setValue(itemH.__index , 'SALES_PERSON_ID', e.detail.ID_USER )
@@ -988,7 +997,7 @@
                             </ax:tr>
                             <ax:tr>
                                 <ax:td label='대표자명' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="OWNER_NM"
+                                    <input type="text" class="form-control" data-ax-path="OWNER_NM" autocomplete="nope"
                                            name="OWNER_NM" id="OWNER_NM" form-bind-text = 'OWNER_NM' form-bind-type ='text'/>
                                 </ax:td>
                                 <ax:td label='사업자번호' width="300px">
@@ -1010,7 +1019,7 @@
                             <ax:tr>
                                 <ax:td label='전화번호' width="300px">
                                     <input type="text" class="form-control" data-ax-path="TEL_NO"
-                                           name="TEL_NO" id="TEL_NO" form-bind-text = 'TEL_NO' form-bind-type ='text' formatter="tel" maxlength="13"/>
+                                           name="TEL_NO" id="TEL_NO" form-bind-text = 'TEL_NO' form-bind-type ='text' maxlength="13"/>
                                 </ax:td>
                                 <ax:td label='휴대폰번호' width="300px">
                                     <input type="text" class="form-control" data-ax-path="HP_NO"

@@ -144,6 +144,7 @@ axboot.pageStart = function () {
         var inputs = $("input");
         if (inputs.length > 0) {
             for (var i = 0; i < inputs.length; i++) {
+            	inputs[i].setAttribute('autocomplete', "off");
 
                 if (nvl(inputs[i].getAttribute('code')) != '') {
                     var target = $(inputs[i]);
@@ -403,7 +404,8 @@ axboot.pageStart = function () {
                                         tel += number.substr(7);
                                     }
                                 }
-                                target.val(tel)
+                                target[0].value = tel;
+                                target.trigger("change");
                             }
 
                             if (mode == 'money') {
@@ -449,6 +451,7 @@ axboot.pageStart = function () {
                                     number = sign + number;
 
                                 target.val(number);
+                                target.trigger("change");
 
                             }
                             if (mode == 'YYYYMMDD') {
@@ -471,6 +474,7 @@ axboot.pageStart = function () {
                                     value = value.substring(0, 10);
                                 }
                                 target.val(value);
+                                target.trigger("change");
                             }
                             if ((key > 57 && key < 96) || key > 105 || e.shiftKey) {
                                 e.preventDefault ? e.preventDefault() : e.returnValue = false;
