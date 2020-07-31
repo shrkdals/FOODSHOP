@@ -5,11 +5,11 @@
 <mapper namespace="com.ensys.sample.domain.BrandContractStatus.BrandContractStatusMapper">
 
     <select id="select" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_BRAND_CONTRACT_STATUS_H_S(#{COMPANY_CD} ,#{PT_CD1} ,#{PT_CD2} ,#{LOGIN_ID} ) }
+    { CALL UP_FS_BRAND_CONTRACT_STATUS_H_S(#{COMPANY_CD} ,#{MAIN_PT_CD} ,#{JOIN_PT_CD} ,#{LOGIN_ID} ) }
     </select>
 
     <select id="selectDtl" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_BRAND_CONTRACT_STATUS_D_S(#{COMPANY_CD} ,#{S_1} ,#{S_2} ,#{S_3}) }
+    { CALL UP_FS_BRAND_CONTRACT_STATUS_D_S(#{COMPANY_CD} ,#{JOIN_PT_CD}) }
     </select>
 
     <select id="S_1" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">

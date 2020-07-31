@@ -22,11 +22,11 @@
         <script type="text/javascript">
             var afterIndex = 0;
             var selectRow2 = 0;
-            alert('z');
-            var S_1 = $.DATA_SEARCH("BrandContract", 'S_1',{}).list;
+            
+            var MAIN_PT_CD = $.DATA_SEARCH("BrandContract", 'S_1',{}).list;
 
-            $('#S_1').ax5select({
-                options: [{value:'' , text:''}].concat(S_1),
+            $('#MAIN_PT_CD').ax5select({
+                options: [{value:'' , text:''}].concat(MAIN_PT_CD),
                 onStateChanged: function (e) {
                     if (e.state == "changeValue") {
                         $('#ALL_PT').attr('HELP_PARAM', JSON.stringify({PT_CD : $('select[name="S_1"]').val()}))
@@ -42,7 +42,8 @@
                          type: "POST",
                          url: ["brandContractStatus", "select"],
                          data: JSON.stringify({
-                         	
+                        	 MAIN_PT_CD : $('select[name="MAIN_PT_CD"]').val(),
+                        	 JOIN_PT_CD : $("#JOIN_PT_CD").val()
                          }),
                          callback: function (res) {
                          	selectRow = 0;
@@ -61,7 +62,7 @@
                         type: "POST",
                         url: ["brandContractStatus", "selectDtl"],
                         data: JSON.stringify({
-                        	COMPANY_CD : selected.COMPANY_CD
+                        	JOIN_PT_CD : selected.JOIN_PT_CD
                         }),
                         callback: function (res) {
                             caller.gridView02.setData(res);
@@ -104,26 +105,28 @@
                 },
                 initView: function () {
                     var _this = this;
-
                     this.target = axboot.gridBuilder({
                         showRowSelector: true,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         showRowSelector: true,
                         columns: [
-                        	{key: "BRD_CD", label: "총판코드", width: 150   , align: "center" , editor: false, hidden:true},
-                        	{key: "BRD_CD", label: "총판명", width: 150   , align: "center" , editor: false},
-                        	{key: "BRD_CD", label: "가맹점명", width: 150   , align: "center" , editor: false},
-                        	{key: "BRD_CD", label: "사업자번호", width: 150   , align: "center" , editor: false},
-                        	{key: "BRD_CD", label: "전화번호", width: 150   , align: "center" , editor: false},
-                        	{key: "BRD_CD", label: "대표자", width: 150   , align: "center" , editor: false},
-                        	{key: "BRD_CD", label: "간판명", width: 150   , align: "center" , editor: false},
+                        	{key: "MAIN_PT_CD", label: "총판코드", width: 150   , align: "center" , editor: false, hidden:true},
+                        	{key: "MAIN_PT_NM", label: "총판명", width: 100   , align: "left" , editor: false, sortable: true},
+                        	{key: "JOIN_PT_CD", label: "가맹점코드", width: 150   , align: "center" , editor: false, hidden:true},
+                        	{key: "JOIN_PT_NM", label: "가맹점명", width: 120   , align: "left" , editor: false, sortable: true},
+                        	{key: "BIZ_NO", label: "사업자번호", width: 95   , align: "center" , editor: false, sortable: true,
+                        		formatter: function () {
+                                    return $.changeDataFormat( this.value , 'company')
+                                }
+                            },
+                        	{key: "TEL_NO", label: "전화번호", width: 100   , align: "left" , editor: false, sortable: true},
+                        	{key: "OWNER_NM", label: "대표자", width: 90   , align: "left" , editor: false, sortable: true},
+                        	{key: "SIGN_NM", label: "간판명", width: 120   , align: "left" , editor: false, sortable: true},
                         ],
-
                         body: {
                             onDataChanged: function () {
-
+                                console.log("z");
                             },
-                            //444
                             onClick: function () {
                                 var index = this.dindex;
                                 if(afterIndex == index){return false;}
@@ -187,10 +190,15 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-02"]'),
                         columns: [
-                        	{key: "BRD_CD", label: "브랜드코드", width: 150   , align: "center" , editor: false},
-                        	{key: "BRD_CD", label: "브랜드명", width: 150   , align: "center" , editor: false},
-                        	{key: "BRD_CD", label: "가입일자", width: 150   , align: "center" , editor: false},
-                        	{key: "BRD_CD", label: "계약담당자", width: 150   , align: "center" , editor: false}
+                        	{key: "BRD_CD", label: "브랜드코드", width: 150   , align: "center" , editor: false, sortable: true},
+                        	{key: "BRD_NM", label: "브랜드명", width: 150   , align: "left" , editor: false, sortable: true},
+                        	{key: "CONTRACT_ST_DTE", label: "계약시작일자", width: 150   , align: "center" , editor: false, sortable: true,
+                        		formatter: function () {
+                                    return $.changeDataFormat(this.value)
+                                }
+                            },
+                        	{key: "SALES_PERSON_ID", label: "계약담당자아이디", width: 150   , align: "center" , editor: false, sortable: true},
+                        	{key: "SALES_PERSON_NM", label: "계약담당자", width: 150   , align: "left" , editor: false, sortable: true}
                         ],
                         body: {
                             onClick: function () {
@@ -287,7 +295,7 @@
                 <ax:tbl clazz="ax-search-tb1" minWidth="500px">
                     <ax:tr>
                         <ax:td label='총판' width="350px">
-                            <div id="S_1" name="S_1" data-ax5select="S_1"
+                            <div id="MAIN_PT_CD" name="MAIN_PT_CD" data-ax5select="MAIN_PT_CD"
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
                         </ax:td>
                         <ax:td label='가맹점' width="350px">
@@ -303,7 +311,7 @@
 
         <%-- 그리드 영역 시작 --%>
         <div style="width:100%;overflow:hidden">
-            <div style="width:27%;overflow:hidden;float:left;">
+            <div style="width:40%;overflow:hidden;float:left;">
                 <div class="ax-button-group" data-fit-height-aside="grid-view-01" id="left_title" name="왼쪽그리드타이틀">
                     <div class="left">
                         <h2>
@@ -319,7 +327,7 @@
 
             </div>
 
-            <div style="width:72%;overflow:hidden;float:right;">
+            <div style="width:59%;overflow:hidden;float:right;">
                 <div class="ax-button-group" data-fit-height-aside="grid-view-02" id="left_title2" name="왼쪽그리드타이틀">
                     <div class="left">
                         <h2>
