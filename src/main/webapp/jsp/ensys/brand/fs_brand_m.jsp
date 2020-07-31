@@ -1186,7 +1186,8 @@
                                 sortable: true,
                                 align: "right",
                                 hidden: false,
-                                editor: false
+                                editor: false,
+                                formatter: "money"
                             }
                             , {
                                 key: "AMT_TOT",
@@ -1195,7 +1196,8 @@
                                 sortable: true,
                                 align: "right",
                                 hidden: false,
-                                editor: false
+                                editor: false,
+                                formatter: "money"
                             }
                         ],
                         footSum: [
