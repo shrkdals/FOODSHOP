@@ -168,7 +168,6 @@
                                ,SUM_OREDER_SPPLUY += Number(item.OREDER_SPPLUY)
                        })
                         
-
                     MiddleHtml
                         +='<td style="text-align:center; background:#ffe0cf"  colspan="7" > 합계 </td>'
                         +'<td style="text-align:center">' + comma(SUM_SELECT_NUM) + '</td>'
