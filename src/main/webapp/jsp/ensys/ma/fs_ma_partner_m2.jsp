@@ -365,7 +365,14 @@
                             ,{key: 'SALES_PERSON_ID2'    , label: '영업 담당자 아이디' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'SALES_PERSON_NM2'    , label: '영업 담당자 아이디' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'CD_AREA'    , label: '법정동코드' , width: 0 , align: "center" , editor: false  ,hidden:true}
-
+                            ,{key: 'LV1_AREA_CD'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'LV2_AREA_CD'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'LV3_AREA_CD'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'LV4_AREA_CD'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'NO_EMAIL'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'NO_DEPOSIT'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'CD_BANK'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'NM_BANK'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
                         ],
 
                         body: {
@@ -852,6 +859,9 @@
                             fnObj.gridView01.target.setValue(selectIdx, 'POST_NO', data.zipcode);
                             fnObj.gridView01.target.setValue(selectIdx, 'PT_ADDR', data.roadAddress);
                             fnObj.gridView01.target.setValue(selectIdx, 'CD_AREA', data.zipcodeData.sigunguCode);
+                            fnObj.gridView01.target.setValue(selectIdx, 'LV1_AREA_CD', data.zipcodeData.sigunguCode.substr(0,2));
+                            fnObj.gridView01.target.setValue(selectIdx, 'LV1_AREA_CD', data.zipcodeData.sigunguCode.substr(2,3));
+
                             var geocoder;
                             try{
                             	geocoder = new kakao.maps.services.Geocoder();
@@ -1190,6 +1200,17 @@
                                 <ax:td label='팩스번호' width="300px">
                                     <input type="text" class="form-control" data-ax-path="FAX_NO"
                                            name="FAX_NO" id="FAX_NO" form-bind-text = 'FAX_NO' form-bind-type ='text'/>
+                                </ax:td>
+                            </ax:tr>
+                            <ax:tr>
+                                <ax:td label='계좌번호' width="300px">
+                                    <input type="text" class="form-control" data-ax-path="NO_DEPOSIT"
+                                           name="NO_DEPOSIT" id="NO_DEPOSIT" form-bind-text = 'NO_DEPOSIT' form-bind-type ='text'/>
+                                </ax:td>
+                                <ax:td label='계좌은행' width="300px">
+                                    <codepicker id="CD_BANK" HELP_ACTION="HELP_BANK" HELP_URL="bank" BIND-CODE="CD_BANK"
+                                                BIND-TEXT="NM_BANK" READONLY
+                                                form-bind-type="codepicker" form-bind-text="NM_BANK" form-bind-code="CD_BANK"/>
                                 </ax:td>
                             </ax:tr>
                             <ax:tr>
