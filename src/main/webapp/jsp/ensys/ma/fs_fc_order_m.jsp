@@ -26,6 +26,7 @@
             var selectRow3 = 0;
             var beforeIdx = 0;
 
+            var dl_ITEM_UNIT   = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00008');   // 출고단위
             var ITEM_SP = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00011');
             var DELI_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00017');
             var ORDER_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00023');
@@ -90,7 +91,7 @@
                         	//screen.width  : 현재 운영체제의 너비
                         	//screen.height : 현재 운영체제의 높이
                         	var w = 470;    //팝업창의 너비
-                        	var h = 820;    //팝업창의 높이
+                        	var h = 600;    //팝업창의 높이
 
                         	//중앙위치 구해오기
                         	var LeftPosition=(screen.width-w)/2;
@@ -102,7 +103,8 @@
 
                             appPop.action = url;
                             appPop.target = 'popUpView';
-                            appPop.id_user = SCRIPT_SESSION.idUser; // POST 형식으로 하자고한다면,
+                            appPop.webFlag.value = 'web';
+                            appPop.id.value = SCRIPT_SESSION.idUser; // POST 형식으로 하자고한다면,
                             appPop.submit();
                         	/* modal.open({
                                 width: 1100,
@@ -325,12 +327,12 @@
                                     '<div id="headerBox2" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>',
                                 editor: {
                                     type: "checkbox", config: {height: 17, trueValue: true, falseValue: false}
-                                }, dirty : false
+                                }, dirty : false, hidden:true
                             }
                             , {key: "JOIN_PT_CD"         , label: "가맹점거래처코드"           , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
                             , {key: "JOIN_PT_NM"         , label: "가맹점거래처명"             , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
                             , {key: "ORDER_CD"           , label: "주문코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
-                            , {key: "ORDER_SEQ"          , label: "주문일자"                   , width: 150     , align: "center"   , sortable: true  , editor: false}
+                            , {key: "ORDER_SEQ"          , label: "주문번호"                   , width: 80     , align: "center"   , sortable: true  , editor: false , hidden:true}
                             , {key: "ITEM_SP"            , label: "상품유형"                   , width: 150     , align: "center"   , sortable: true  , editor: false
                                 ,formatter: function () {
                                     return $.changeTextValue(ITEM_SP, this.value)
@@ -338,6 +340,14 @@
                             }
                             , {key: "ITEM_CD"            , label: "상품코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
                             , {key: "ITEM_NM"            , label: "상품명"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "ITEM_WT"         	 , label: "상품중량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "BOX_NUM"         	 , label: "박스수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "ITEM_UNIT"          , label: "출고단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false,
+                            	formatter: function () {
+                                    return $.changeTextValue(dl_ITEM_UNIT, this.value)
+                                },
+                              }
+                            , {key: "ORIGIN_NM"          , label: "원산지"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "SELECT_NUM"         , label: "상품수량"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:false}
                             , {key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "center"   , sortable: true  , editor: false
                                 ,formatter: function () {
@@ -583,7 +593,8 @@
             </ax:form>
         </div>
         <form name="appPop">
-        	<input type="hidden" name="id_user">
+        	<input type="hidden" name="id">
+        	<input type="hidden" name="webFlag">
         </form>
 
         <%-- 그리드 영역 시작 --%>

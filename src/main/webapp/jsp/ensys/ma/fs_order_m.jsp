@@ -26,7 +26,7 @@
             var selectRow3 = 0;
             var beforeIdx = 0;
 
-            var dl_ITEM_UNIT   = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00008');   // 상품단위
+            var dl_ITEM_UNIT   = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00008');   // 출고단위
             var ITEM_SP     = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00011');
             var DELI_STAT   = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00017');
             var ORDER_STAT  = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00023');
@@ -175,6 +175,16 @@
                     var itemH = fnObj.gridView01.getData('selected')[0]
                     $.openCustomPopup("PDF_1",'UserCallBack', '', { ORDER_CD : itemH.ORDER_CD }, '', 1400, 700,50);
                 }
+                ,
+                PDF_2 : function (caller, act, data) {
+                    // var cklist = isChecked(fnObj.gridView01.getData())
+                    // var ORDER_CD = []
+                    // cklist.forEach(function(item, index){
+                    //     ORDER_CD.push(item.ORDER_CD)
+                    // })
+                    var itemH = fnObj.gridView01.getData('selected')[0]
+                    $.openCustomPopup("PDF_2",'UserCallBack', '', { ORDER_CD : itemH.ORDER_CD }, '', 1400, 700,50);
+                }
             });
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
@@ -234,6 +244,9 @@
                         }
                         , "pdf1": function () {
                             ACTIONS.dispatch(ACTIONS.PDF_1);
+                        }
+                        , "pdf2": function () {
+                            ACTIONS.dispatch(ACTIONS.PDF_2);
                         }
                         , "SUCCESS" : function(){
                             ACTIONS.dispatch(ACTIONS.SUCCESS);
@@ -448,11 +461,12 @@
                             , {key: "ITEM_NM"            , label: "상품명"                   , width: 150     , align: "left"   , sortable: true  , editor: false , hidden:false}
                             , {key: "ITEM_WT"         	 , label: "상품중량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "BOX_NUM"         	 , label: "박스수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "ITEM_UNIT"          , label: "상품단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false,
+                            , {key: "ITEM_UNIT"          , label: "출고단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false,
                             	formatter: function () {
                                     return $.changeTextValue(dl_ITEM_UNIT, this.value)
                                 },
                               }
+                            , {key: "ORIGIN_NM"          , label: "원산지"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "SELECT_NUM"         , label: "상품수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "right"   , sortable: true  , editor: false
                                 ,formatter: function () {
@@ -583,11 +597,8 @@
                             ,{key: "ORDER_ITEM"       , label: "품명 및 규격", width: 150, align: "left", editor: false ,hidden:false}
                             , {key: "ITEM_WT"         	 , label: "상품중량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "BOX_NUM"         	 , label: "박스수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "ITEM_UNIT"          , label: "상품단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false,
-                            	formatter: function () {
-                                    return $.changeTextValue(dl_ITEM_UNIT, this.value)
-                                },
-                              }
+                            , {key: "ITEM_UNIT"          , label: "출고단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                            ,{key: "ORIGIN_NM"       , label: "원산지", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "SELECT_NUM"       , label: "상품수량", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "SALE_COST"       , label: "단가", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "ORDER_AMT"       , label: "금액", width: 150, align: "left", editor: false ,hidden:false}
@@ -762,8 +773,12 @@
                         class="icon_save"></i>[물류사용]엑셀다운로드
                 </button>
                 <button type="button" class="btn btn-info" data-page-btn="pdf1" id="pdf1" style="width: 150px;"><i
-                        class="icon_save"></i>거래명세서
+                        class="icon_save"></i>[본사용]거래명세서
                 </button>
+                <button type="button" class="btn btn-info" data-page-btn="pdf2" id="pdf2" style="width: 150px;"><i
+                        class="icon_save"></i>[물류사용]거래명세서
+                </button>
+                
             </div>
         </div>
 
