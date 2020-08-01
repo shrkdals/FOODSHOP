@@ -60,6 +60,20 @@ public class DeliverPartnerService extends BaseService {
         }
         // #### 디테일 ####
     }
+
+    public List<HashMap<String, Object>> MkselectH(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD",user.getCdCompany());
+        param.put("LOGIN_ID",user.getIdUser());
+        return mapper.MkselectH(param);
+    }
+
+    public List<HashMap<String, Object>> MkselectD(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD",user.getCdCompany());
+        param.put("LOGIN_ID",user.getIdUser());
+        return mapper.MkselectD(param);
+    }
 }
 
 
