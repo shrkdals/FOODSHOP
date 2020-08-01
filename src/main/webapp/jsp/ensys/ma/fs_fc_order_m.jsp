@@ -170,11 +170,30 @@
                                     '<div id="headerBox" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>',
                                 editor: {
                                     type: "checkbox", config: {height: 17, trueValue: true, falseValue: false}
-                                }, dirty : false
+                                }, dirty : false, hidden:true
                             }
                             ,{key: "JOIN_PT_CD"         , label: "가맹점거래처코드"           , width: 150     , align: "center"   , editor: false  ,sortable:true , hidden:true}
                             ,{key: "JOIN_PT_NM"         , label: "가맹점거래처명"             , width: 150     , align: "center"   , editor: false  ,sortable:true}
                             ,{key: "ORDER_CD"           , label: "주문코드"                   , width: 150     , align: "center"   , editor: false  ,sortable:true , hidden:true}
+                            ,{key: "ORDER_STAT"         , label: "주문상태"                   , width: 150     , align: "center"    ,sortable:true
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: ORDER_STAT
+                                    }, disabled: function () {
+                                        if(SCRIPT_SESSION.cdGroup == 'WEB01' || SCRIPT_SESSION.cdGroup == 'WEB02'){
+                                        return false;
+                                        }else{
+                                            return true;
+                                        }
+                                    }
+                                }
+                                , formatter: function () {
+                                    return $.changeTextValue(ORDER_STAT, this.value)
+                                }
+                            }
                             ,{key: "ORDER_DTE"          , label: "주문일자"                   , width: 150     , align: "center"   , editor: false  ,sortable:true}
                             ,{key: "ORDER_AMT"          , label: "주문금액"                   , width: 150     , align: "center"   , editor: false  ,sortable:true
                                 ,formatter: function () {
@@ -209,25 +228,6 @@
                             ,{key: "PAYM_METHOD"        , label: "결제방법"                   , width: 150     , align: "center"   , editor: false  ,sortable:true
                                 ,formatter: function () {
                                     return $.changeTextValue(PAYM_METHOD, this.value)
-                                }
-                            }
-                            ,{key: "ORDER_STAT"         , label: "주문상태"                   , width: 150     , align: "center"    ,sortable:true
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: ORDER_STAT
-                                    }, disabled: function () {
-                                        if(SCRIPT_SESSION.cdGroup == 'WEB01' || SCRIPT_SESSION.cdGroup == 'WEB02'){
-                                        return false;
-                                        }else{
-                                            return true;
-                                        }
-                                    }
-                                }
-                                , formatter: function () {
-                                    return $.changeTextValue(ORDER_STAT, this.value)
                                 }
                             }
                             ,{key: "TERMS_AGREE_YN"     , label: "약관동의여부"               , width: 150     , align: "center"   , editor: false  ,sortable:true}

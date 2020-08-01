@@ -213,7 +213,12 @@
                             ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                         },
                         "excel": function () {
-                            var cklist = isChecked(fnObj.gridView01.getData())
+                            var item = fnObj.gridView01.getData('selected')[0];
+                        	var list = $.DATA_SEARCH("order", "excel",{TYPE:'01' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : item.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser })
+                            fnObj.gridView03.setData(list)
+                            fnObj.gridView03.target.exportExcel('[본사용]주문내역'+$('#S_DT').getStartDate()+'_'+$('#tradeDateT').getEndDate()+'.xls')
+                        
+                            /* var cklist = isChecked(fnObj.gridView01.getData())
                             if (cklist != null){
                                 if (cklist.length == 0){
                                     qray.alert('체크된 데이터가 없습니다.');
@@ -225,22 +230,16 @@
 	                                fnObj.gridView03.setData(list)
 	                                fnObj.gridView03.target.exportExcel('[본사용]주문내역'+$('#S_DT').getStartDate()+'_'+$('#tradeDateT').getEndDate()+'.xls')
 	                            })
-                            }
+                            } */
                         }
                         , "excel2": function () {
-                            var cklist = isChecked(fnObj.gridView01.getData())
-                            if (cklist != null){
-                                if (cklist.length == 0){
-                                    qray.alert('체크된 데이터가 없습니다.');
-                                    return;
-                                }
-	                            cklist.forEach(function(item, index){
-	                                var list = $.DATA_SEARCH("order", "excel",{TYPE:'04' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : item.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser})
-	                                fnObj.gridView03.setData(list)
-	                                fnObj.gridView03.target.exportExcel('[물류샤용]주문내역'+$('#S_DT').getStartDate()+'_'+$('#tradeDateT').getEndDate()+'.xls')
-	                            })
-                            }
-
+                            
+                           var item = fnObj.gridView01.getData('selected')[0];
+                           var list = $.DATA_SEARCH("order", "excel",{TYPE:'04' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : item.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser})
+                           fnObj.gridView03.setData(list)
+                           fnObj.gridView03.target.exportExcel('[물류샤용]주문내역'+$('#S_DT').getStartDate()+'_'+$('#tradeDateT').getEndDate()+'.xls')
+	                         
+                            
                         }
                         , "pdf1": function () {
                             ACTIONS.dispatch(ACTIONS.PDF_1);
@@ -294,6 +293,25 @@
                             ,{key: "JOIN_PT_NM"         , label: "가맹점거래처명"             , width: 150     , align: "left"   , editor: false  ,sortable:true}
                             ,{key: "SIGN_NM"         , label: "간판명"             			  , width: 150     , align: "left"   , editor: false  ,sortable:true}
                             ,{key: "ORDER_CD"           , label: "주문코드"                   , width: 150     , align: "center"   , editor: false  ,sortable:true , hidden:true}
+                            ,{key: "ORDER_STAT"         , label: "주문상태"                   , width: 100     , align: "center"    ,sortable:true
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: ORDER_STAT
+                                    }, disabled: function () {
+                                        if(SCRIPT_SESSION.cdGroup == 'WEB01' || SCRIPT_SESSION.cdGroup == 'WEB02'){
+                                        return false;
+                                        }else{
+                                            return true;
+                                        }
+                                    }
+                                }
+                                , formatter: function () {
+                                    return $.changeTextValue(ORDER_STAT, this.value)
+                                }
+                            }
                             ,{key: "ORDER_DTE"          , label: "주문일자"                   , width: 150     , align: "center"   , editor: false  ,sortable:true}
                             ,{key: "ORDER_AMT"          , label: "주문금액"                   , width: 120     , align: "right"   , editor: false  ,sortable:true
                                 ,formatter: function () {
@@ -328,25 +346,6 @@
                             ,{key: "PAYM_METHOD"        , label: "결제방법"                   , width: 120     , align: "center"   , editor: false  ,sortable:true
                                 ,formatter: function () {
                                     return $.changeTextValue(PAYM_METHOD, this.value)
-                                }
-                            }
-                            ,{key: "ORDER_STAT"         , label: "주문상태"                   , width: 100     , align: "center"    ,sortable:true
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: ORDER_STAT
-                                    }, disabled: function () {
-                                        if(SCRIPT_SESSION.cdGroup == 'WEB01' || SCRIPT_SESSION.cdGroup == 'WEB02'){
-                                        return false;
-                                        }else{
-                                            return true;
-                                        }
-                                    }
-                                }
-                                , formatter: function () {
-                                    return $.changeTextValue(ORDER_STAT, this.value)
                                 }
                             }
                             ,{key: "TERMS_AGREE_YN"     , label: "약관동의여부"               , width: 80     , align: "center"   , editor: false  ,sortable:true}
