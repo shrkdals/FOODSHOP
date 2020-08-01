@@ -36,11 +36,11 @@
 
 
     <update id="insert2"  parameterType="java.util.HashMap" statementType="CALLABLE">
-        { CALL UP_FS_PARTNER_COMMITION_I( #{COMPANY_CD},#{PT_CD},#{COMT_CD},#{ADJUST_DTE},#{ADJUST_PT_CD},#{USER_ID} ) }
+        { CALL UP_FS_PARTNER_COMMITION_I( #{COMPANY_CD},#{PT_CD},#{COMT_CD},#{PT_COMT_CD},#{ADJUST_DTE},#{ADJUST_PT_CD},#{ADJUST_STD},#{ADJUST_DAY},#{USER_ID} ) }
     </update>
 
     <update id="delete2"  parameterType="java.util.HashMap" statementType="CALLABLE">
-        { CALL UP_FS_PARTNER_COMMITION_D( #{COMPANY_CD},#{PT_CD},#{COMT_CD}) }
+        { CALL UP_FS_PARTNER_COMMITION_D( #{COMPANY_CD},#{PT_CD},#{COMT_CD},#{PT_COMT_CD}) }
     </update>
 
     <select id="SAVE_USERMAPPING_S" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">

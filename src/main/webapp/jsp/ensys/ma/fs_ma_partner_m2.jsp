@@ -32,6 +32,8 @@
             var CONTRACT_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00013');
             var USER_SP       = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00007');
             var USER_STAT     = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00006');
+            var dl_ADJUST_STD = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00033'); // 정산기준
+            var dl_ADJUST_DAY = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00034'); // 정산요일
 
             var YN_OP = [{value:'' , text:''},{value:'Y' , text:'Y'},{value:'N' , text:'N'}];
 
@@ -174,6 +176,8 @@
                     caller.gridView02.target.select(lastIdx - 1);
                     caller.gridView02.target.focus(lastIdx - 1);
                     caller.gridView02.target.setValue(lastIdx - 1, "PT_CD", PT_CD);
+                    caller.gridView02.target.setValue(lastIdx - 1, "PT_COMT_CD", GET_NO('MA', '06'));
+                    
 
 
 
@@ -318,7 +322,7 @@
                                         return true;
 
                                     }
-                                },hidden:true
+                                }
                             }
                             ,{key: "PT_NM", label: "거래처 명", width: 150, align: "center", editor: false}
                             ,{key: "BIZ_NO", label: "사업자번호", width: 150, align: "center", editor: false
@@ -380,7 +384,9 @@
                                 if(afterIndex == index){return false;}
 
                                 var data = [].concat(fnObj.gridView01.getData("modified"));
-
+                                data = data.concat(fnObj.gridView02.getData("modified"));
+                                data = data.concat(fnObj.gridView02.getData("deleted"));
+                                
                                 if(data.length > 0){
                                     qray.confirm({
                                         msg: "작업중인 데이터를 먼저 저장해주십시오."
@@ -429,6 +435,18 @@
                                     chekVal = true;
                                 }
                                 if (e.__created__) {
+                                    chekVal = true;
+                                }
+                            });
+
+                            $(fnObj.gridView02.target.list).each(function (i, e) {
+                                if (e.__modified__) {
+                                    chekVal = true;
+                                }
+                                if (e.__created__) {
+                                    chekVal = true;
+                                }
+                                if (e.__deleted__) {
                                     chekVal = true;
                                 }
                             });
@@ -486,13 +504,7 @@
                         target: $('[data-ax5grid="grid-view-02"]'),
                         columns: [
                             {key: "COMPANY_CD", label: "", width: 150, align: "left", editor: {type: "text"} ,hidden:true}
-                            ,{key: "PT_CD", label: "거래처코드", width: 150, align: "center", hidden:false}
-                            ,{
-                                key: "COMT_SP", label: "수수료유형", width: 120, align: "center",
-                                formatter: function () {
-                                    return $.changeTextValue(COMT_SP, this.value)
-                                }
-                            }
+                            ,{key: "PT_CD", label: "거래처코드", width: 150, align: "center", hidden:true}
                             ,{key: "COMT_NM", label: "수수료명", width: 130, align: "center", editor: false
                                 ,picker: {
                                     top: _pop_top,
@@ -518,9 +530,30 @@
                                     return "red";
                                 }
                             }
+                            ,{
+                                key: "COMT_SP", label: "수수료유형", width: 120, align: "center",
+                                formatter: function () {
+                                    return $.changeTextValue(COMT_SP, this.value)
+                                }
+                            }
                             ,{key: "COMT_CD", label: "수수료코드", width: 150, align: "center", editor: false , hidden:true}
-                            ,{key: "ADJUST_DTE", label: "정산일자", width: 150, align: "center", editor: {type: "number"}
-                                ,formatter : function(){
+                            ,{key: "ADJUST_STD", label: "정산기준", width: 150, align: "center",
+                                editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_ADJUST_STD}},
+                            	formatter: function () {
+                                    return $.changeTextValue(dl_ADJUST_STD, this.value)
+                                }
+                             }
+                            ,{key: "ADJUST_DTE", label: "정산일자", width: 150, align: "center", 
+                                editor: {type: "number",
+                                	disabled: function(){
+										if (this.item.ADJUST_STD == '01'){	//	주 차
+											return true;
+										}else{
+											return false;
+										}
+									}
+                                },
+                                formatter : function(){
                                     var value = this.item.ADJUST_DTE + "";
                                     
                                     if (value.indexOf('.') > -1){
@@ -533,10 +566,26 @@
                                     if (value > 31){
                                     	value = 31;
                                     }
+                                    this.item.ADJUST_DTE = value;
                                     return value + "일";
                                 }
                             }
-                            ,{key: "ADJUST_PT_NM", label: "정산 거래처", width: 150, align: "center"
+                            ,{key: "ADJUST_DAY", label: "정산요일", width: 150, align: "center",
+                                editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_ADJUST_DAY},
+									disabled: function(){
+										if (this.item.ADJUST_STD == '01'){	//	주 차
+											return false;
+										}else{
+											return true;
+										}
+									}
+                                },
+                            	formatter: function () {
+                                    return $.changeTextValue(dl_ADJUST_DAY, this.value)
+                                }
+                             }
+                            
+                            ,{key: "ADJUST_PT_NM", label: "정산 거래처", width: 150, align: "center", hidden:true
                                 ,picker: {
                                     top: _pop_top,
                                     width: 600,
@@ -566,7 +615,19 @@
 
                                 selectRow2 = idx;
                                 this.self.select(selectRow2);
-                            }
+                            },
+                            onDataChanged: function () {
+                            	var data = this.item;
+                                var idx = this.dindex;
+                                
+                                if(this.key == 'ADJUST_STD'){
+                                    if (data.ADJUST_STD == '01'){
+                                    	fnObj.gridView02.target.setValue(idx, 'ADJUST_DTE', '');
+                                    }else{
+                                    	fnObj.gridView02.target.setValue(idx, 'ADJUST_DAY', '');
+                                    }
+                                }
+                            },
                         },
                         onPageChange: function (pageNumber) {
                             _this.setPageData({pageNumber: pageNumber});
