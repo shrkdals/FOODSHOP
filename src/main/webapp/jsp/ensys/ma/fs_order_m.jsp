@@ -147,7 +147,10 @@
                         return false;
                     }
                     for(var i = 0; i < list.length; i++) {
-                        if (list[i].ORDER_STAT == '03') {
+                        if (list[i].DELI_STAT  == '02') {
+                            qray.alert('입금 완료되지 않은 주문건이 존재합니다')
+                            return;
+                        }else if (list[i].DELI_STAT  == '03') {
                             qray.alert('배송완료된 주문건이 존재합니다')
                             return;
                         }
