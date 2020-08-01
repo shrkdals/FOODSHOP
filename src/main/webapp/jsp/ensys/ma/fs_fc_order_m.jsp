@@ -97,7 +97,7 @@
                         	var TopPosition=(screen.height-h)/2;
 
                             var appPop = document.appPop;
-                            var url = "http://rahan2002.cafe24.com/index.do?id_user=" + SCRIPT_SESSION.idUser;
+                            var url = "http://rahan2002.cafe24.com/uat/uia/actionLogin.do?id=" + SCRIPT_SESSION.idUser + "&webFlag=web";
                             window.open('', 'popUpView', "width="+w+",height="+h+",top="+TopPosition+",left="+LeftPosition+", toolbar=no, resizable=no, menubar=no");
 
                             appPop.action = url;

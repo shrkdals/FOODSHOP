@@ -128,10 +128,10 @@
                             qray.alert("브랜드코드는 필수입니다.");
                             return false;
                         }
-                        if (nvl(grid[i].CG_CD) == '') {
+                        /* if (nvl(grid[i].CG_CD) == '') {
                             qray.alert("분류코드는 필수입니다.");
                             return false;
-                        }
+                        } */
                         if (nvl(grid[i].BRD_NM) == '') {
                             qray.alert("브랜드명 필수입니다.");
                             return false;
@@ -236,7 +236,8 @@
 
                     afterIndex = lastIdx - 1;
                     caller.gridView01.target.setValue(lastIdx - 1, "BRD_CD", GET_NO('BRD', '01'));
-
+                    caller.gridView01.target.setValue(lastIdx - 1, "CG_CD", 'CT00002');
+                    
                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
                 },
                 FILE_CLICK: function (caller, act, data) {

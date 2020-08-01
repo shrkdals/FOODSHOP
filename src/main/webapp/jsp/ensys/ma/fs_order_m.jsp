@@ -204,20 +204,32 @@
                         },
                         "excel": function () {
                             var cklist = isChecked(fnObj.gridView01.getData())
-                            cklist.forEach(function(item, index){
-                                var list = $.DATA_SEARCH("order", "excel",{TYPE:'01' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : item.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser })
-                                fnObj.gridView03.setData(list)
-                                fnObj.gridView03.target.exportExcel('[본사용]주문내역'+$('#S_DT').getStartDate()+'_'+$('#tradeDateT').getEndDate()+'.xls')
-                            })
-
+                            if (cklist != null){
+                                if (cklist.length == 0){
+                                    qray.alert('체크된 데이터가 없습니다.');
+                                    return;
+                                }
+                            
+	                            cklist.forEach(function(item, index){
+	                                var list = $.DATA_SEARCH("order", "excel",{TYPE:'01' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : item.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser })
+	                                fnObj.gridView03.setData(list)
+	                                fnObj.gridView03.target.exportExcel('[본사용]주문내역'+$('#S_DT').getStartDate()+'_'+$('#tradeDateT').getEndDate()+'.xls')
+	                            })
+                            }
                         }
                         , "excel2": function () {
                             var cklist = isChecked(fnObj.gridView01.getData())
-                            cklist.forEach(function(item, index){
-                                var list = $.DATA_SEARCH("order", "excel",{TYPE:'04' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : item.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser})
-                                fnObj.gridView03.setData(list)
-                                fnObj.gridView03.target.exportExcel('[물류샤용]주문내역'+$('#S_DT').getStartDate()+'_'+$('#tradeDateT').getEndDate()+'.xls')
-                            })
+                            if (cklist != null){
+                                if (cklist.length == 0){
+                                    qray.alert('체크된 데이터가 없습니다.');
+                                    return;
+                                }
+	                            cklist.forEach(function(item, index){
+	                                var list = $.DATA_SEARCH("order", "excel",{TYPE:'04' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : item.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser})
+	                                fnObj.gridView03.setData(list)
+	                                fnObj.gridView03.target.exportExcel('[물류샤용]주문내역'+$('#S_DT').getStartDate()+'_'+$('#tradeDateT').getEndDate()+'.xls')
+	                            })
+                            }
 
                         }
                         , "pdf1": function () {
@@ -569,7 +581,14 @@
                             ,{key: "FAX_NO2"       , label: "공급받는자 팩스", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "ADDR2"       , label: "공급받는자 주소", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "ORDER_ITEM"       , label: "품명 및 규격", width: 150, align: "left", editor: false ,hidden:false}
-                            ,{key: "SELECT_NUM"       , label: "수량", width: 150, align: "left", editor: false ,hidden:false}
+                            , {key: "ITEM_WT"         	 , label: "상품중량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "BOX_NUM"         	 , label: "박스수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "ITEM_UNIT"          , label: "상품단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false,
+                            	formatter: function () {
+                                    return $.changeTextValue(dl_ITEM_UNIT, this.value)
+                                },
+                              }
+                            ,{key: "SELECT_NUM"       , label: "상품수량", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "SALE_COST"       , label: "단가", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "ORDER_AMT"       , label: "금액", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "ORDER_VAT"       , label: "세액", width: 150, align: "left", editor: false ,hidden:false}

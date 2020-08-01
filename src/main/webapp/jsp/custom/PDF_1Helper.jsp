@@ -26,7 +26,7 @@
                     var  ORDER_CD = ''
                         ,ORDER_DT = ''
                         ,PT_NM  = '' ,BIZ_NO  = '' ,OWNER_NM  = '' ,TEL_NO  = '' ,FAX_NO  = '' ,ADDR  = ''        // 공급자 필드
-                        ,PT_NM2 = '' ,BIZ_NO2 = '' ,OWNER_NM2 = '' ,TEL_NO2 = '' ,FAX_NO2 = '' ,ADDR2 = '', NM_SIGN2 = ''  // 공급받는자 필드
+                        ,PT_NM2 = '' ,BIZ_NO2 = '' ,OWNER_NM2 = '' ,TEL_NO2 = '' ,FAX_NO2 = '' ,ADDR2 = '', SIGN_NM2 = ''  // 공급받는자 필드
                         ,ORDER_ITEM = ''
                         ,SUM_SELECT_NUM = 0
                         ,SUM_SALE_COST = 0
@@ -37,7 +37,7 @@
                           PT_NM  = list[0].PT_NM   , BIZ_NO  = list[0].BIZ_NO   , OWNER_NM  = list[0].OWNER_NM
                         , TEL_NO  = list[0].TEL_NO , FAX_NO  = list[0].FAX_NO   , ADDR      = list[0].ADDR
 
-                        , PT_NM2   = list[0].PT_NM2  , BIZ_NO2  = list[0].BIZ_NO2 , OWNER_NM2  = list[0].OWNER_NM2, NM_SIGN2
+                        , PT_NM2   = list[0].PT_NM2  , BIZ_NO2  = list[0].BIZ_NO2 , OWNER_NM2  = list[0].OWNER_NM2, SIGN_NM2 = list[0].SIGN_NM2
                         , TEL_NO2  = list[0].TEL_NO2 , FAX_NO2  = list[0].FAX_NO2 , ADDR2      = list[0].ADDR2
 
                         , ORDER_CD = list[0].ORDER_CD
@@ -45,7 +45,6 @@
                         $('#TBODY1').append('<span> 데이터를 불러오는 과정에 오류가 발생하였습니다. </span>')
                         return;
                     }
-
                     var HeaderHtml = ''
                     HeaderHtml += '<table cellpadding="0" cellspacing="0" width="650px" summary="거래명세서 내역" style="width : 100%;">'
                         + '<caption class="hidden">거래명세서 내역</caption>'
@@ -85,8 +84,8 @@
                         +'<td><input type="text" style="width:100%; border:none" value= "' + OWNER_NM + '"/></td>'
                         +'<td style="text-align:center;">상호</td>'
                         +'<td width="100px" style="font-weight:bold;" id="T7"><input type="text" style="width:100%; border:none" value= "' + PT_NM2 + '"/></td>'
-                        +'<td style="text-align:center;">간판명</td>'
-                        +'<td><input type="text" style="width:100%; border:none" value= "' + NM_SIGN2 + '"/></td>'
+                        +'<td width="60px" style="text-align:center;">간판명</td>'
+                        +'<td width="150px"><input type="text" style="width:100%; border:none" value= "' + SIGN_NM2 + '"/></td>'
                         +'<td width="40px" style="text-align:center;" id="T8">대표</td>'
                         +'<td><input type="text" style="width:100%; border:none" value= "' + OWNER_NM2 + '"/></td>'
                         +'</tr>'
@@ -115,24 +114,31 @@
                         +'<table width="100%" border="0" cellspacing="1" cellpadding="0" class="popup_print_tbl2" summary="거래명세서 상세내역">'
                         +'<caption class="hidden">거래명세서 상세내역</caption>'
                         +'<colgroup>'
-                        +'<col width="27px">'
-                        +'<col width="100px">'
+                        +'<col width="10px">'
+                        +'<col width="80px">'
                         +'<col>'
+                        +'<col width="60px">'
+                        +'<col width="50px">'
+                        +'<col width="50px">'
                         +'<col width="80px">'
                         +'<col width="50px">'
                         +'<col width="60px">'
                         +'<col width="70px">'
+                        +'<col width="70px">'
                         +'</colgroup>'
                         +'<thead>'
                         +'<tr>'
-                        +'<th>No</th>'
-                        +'<th>제조사</th>'
+                        +'<th style="width:10px;">No</th>'
+                        +'<th style="width:100px;">제조사</th>'
                         +'<th>품명</th>'
-                        +'<th>수량</th>'
-                        +'<th>단가</th>'
-                        +'<th>금액</th>'
-                        +'<th>공급가액</th>'
-                        +'<th>세액</th>'
+                        +'<th style="width:50px;">상품중량</th>'
+                        +'<th style="width:50px;">박스수량</th>'
+                        +'<th style="width:50px;">상품단위</th>'
+                        +'<th style="width:50px;">상품수량</th>'
+                        +'<th style="width:80px;">단가</th>'
+                        +'<th style="width:80px;">금액</th>'
+                        +'<th style="width:80px;">공급가액</th>'
+                        +'<th style="width:80px;">세액</th>'
                         +'</tr>'
                         +'</thead>'
                         +'<tbody>';
@@ -142,7 +148,10 @@
                                +'<td style="text-align:center">' + (Number(index) + 1) + '</td>'
                                +'<td>' + item.PT_NM2 + '</td>'
                                +'<td>' + item.ORDER_ITEM + '</td>'
-                               +'<td style="text-align:center">' + comma(item.SELECT_NUM) + '</td>'
+                               +'<td style="text-align:left">' + item.ITEM_WT + '</td>'
+                               +'<td style="text-align:right">' + item.BOX_NUM + '</td>'
+                               +'<td style="text-align:left">' + item.ITEM_UNIT + '</td>'
+                               +'<td style="text-align:right">' + item.SELECT_NUM + '</td>'
                                +'<td style="text-align:right">' + comma(item.SALE_COST) + '</td>'
                                +'<td style="text-align:right">' + comma(item.ORDER_AMT) + '</td>'
                                +'<td style="text-align:right">' + comma(item.OREDER_SPPLUY) + '</td>'
@@ -158,7 +167,7 @@
                     
 
                     MiddleHtml
-                        +='<td style="text-align:center; background:#ffe0cf"  colspan="3" > 합계 </td>'
+                        +='<td style="text-align:center; background:#ffe0cf"  colspan="6" > 합계 </td>'
                         +'<td style="text-align:center">' + comma(SUM_SELECT_NUM) + '</td>'
                         +'<td style="text-align:right">' + comma(SUM_SALE_COST) + '</td>'
                         +'<td style="text-align:right">' + comma(SUM_ORDER_AMT) + '</td>'
@@ -202,7 +211,7 @@
                 }
                 , PDF_PRINT : function (caller, act, data) {
                     html2canvasHeight = $(".ax-base-title").height() + $("#TBODY1").height() + (5 * listLen);
-                    html2canvasWidth = 1450;
+                    html2canvasWidth = 1000;
                     var doc = new jsPDF('p', 'mm', 'a4');
                     var myOffscreenEl = document.body;
                     $('.button-warp').css('display','none')

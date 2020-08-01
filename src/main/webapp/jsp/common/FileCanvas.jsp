@@ -215,25 +215,88 @@
                              ImageWidth = document.uploadForm.sizeCheck.width;
                              ImageHeight = document.uploadForm.sizeCheck.height;
 
-                             if(ImageWidth != wwd){
-                                 qray.alert('첨부한 이미지의 가로사이즈는 '+ ImageWidth +'px 입니다.<br>이미지의 해상도를 1500x1500 으로 맞춰주세요.');
-                                 orgnFile = null;
-                                 return false;
-                             }
+                             if(ImageWidth <= wwd || ImageHeight <= hhd){
+                            	 qray.confirm({
+                                     msg: "첨부한 이미지의 가로사이즈는 "+ ImageWidth +"px 입니다."+
+                                     	 "<br>이미지의 세로사이즈는  "+ ImageHeight +"px 입니다."+
+                                         "<br>이미지의 픽셀이 1500px 이상이 아닙니다."+
+                                         "<br>그래도 진행하시겠습니까?"
+                                 }, function () {
+                                     if (this.key == "ok") {
+                                    	 if ($(".img-responsive").length > 0) {
+                                             qray.confirm({
+                                                 msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
+                                             }, function () {
+                                                 if (this.key == "ok") {
+                                                     $(".img-responsive").remove();
+                                                     $("#canvas_crop").remove();
+                                                     returnValue.FILE_NAME = uuid_file_name;
+                                                     returnValue.ORGN_FILE_NAME = orgnFile.name;
+                                                     returnValue.FILE_EXT = file_ext;
+                                                     returnValue.FILE_SIZE = orgnFile.size;
+                                                     returnValue.FILE_PATH = img.target.result;
+                                                     returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+                                                     $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+                                                     $("#FILE_EXT").val(returnValue.FILE_EXT);
+                                                     $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+                                                     $("#FILE_SIZE").val(returnValue.FILE_SIZE);
 
-                             //이미지세로사이즈가지정한사이즈보다클때메세지와함께폼전송을중지합니다.
-                             if(ImageHeight != hhd) {
-                                 qray.alert('첨부한 이미지의 세로사이즈는 '+ ImageHeight +'px 입니다.<br>이미지의 해상도를 1500x1500 으로 맞춰주세요.');
-                                 orgnFile = null;
-                                 return false;
-                             }
-                         }
-                         if ($(".img-responsive").length > 0) {
-                             qray.confirm({
-                                 msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
-                             }, function () {
-                                 if (this.key == "ok") {
-                                     $(".img-responsive").remove();
+                                                     $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+                                                     $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+                                                     $("#inputImage").val('');
+                                                     changesize();
+                                                 }
+                                             });
+                                         }else{
+                                             $("#canvas_crop").remove();
+                                             returnValue.FILE_NAME = uuid_file_name;
+                                             returnValue.ORGN_FILE_NAME = orgnFile.name;
+                                             returnValue.FILE_EXT = file_ext;
+                                             returnValue.FILE_SIZE = orgnFile.size;
+                                             returnValue.FILE_PATH = img.target.result;
+                                             returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+                                             $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+                                             $("#FILE_EXT").val(returnValue.FILE_EXT);
+                                             $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+                                             $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+
+                                             $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+                                             $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+                                             $("#inputImage").val('');
+                                             changesize();
+                                         }
+                                     }else{
+                                    	 orgnFile = null;
+                                         return false;
+                                     }
+                                 })
+                                 
+                             }else{
+                            	 if ($(".img-responsive").length > 0) {
+                                     qray.confirm({
+                                         msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
+                                     }, function () {
+                                         if (this.key == "ok") {
+                                             $(".img-responsive").remove();
+                                             $("#canvas_crop").remove();
+                                             returnValue.FILE_NAME = uuid_file_name;
+                                             returnValue.ORGN_FILE_NAME = orgnFile.name;
+                                             returnValue.FILE_EXT = file_ext;
+                                             returnValue.FILE_SIZE = orgnFile.size;
+                                             returnValue.FILE_PATH = img.target.result;
+                                             returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+                                             $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+                                             $("#FILE_EXT").val(returnValue.FILE_EXT);
+                                             $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+                                             $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+
+                                             $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+                                             $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+                                             $("#inputImage").val('');
+                                             changesize();
+                                         }
+                                     });
+                                 }else{
                                      $("#canvas_crop").remove();
                                      returnValue.FILE_NAME = uuid_file_name;
                                      returnValue.ORGN_FILE_NAME = orgnFile.name;
@@ -251,25 +314,53 @@
                                      $("#inputImage").val('');
                                      changesize();
                                  }
-                             });
+                             }
                          }else{
-                             $("#canvas_crop").remove();
-                             returnValue.FILE_NAME = uuid_file_name;
-                             returnValue.ORGN_FILE_NAME = orgnFile.name;
-                             returnValue.FILE_EXT = file_ext;
-                             returnValue.FILE_SIZE = orgnFile.size;
-                             returnValue.FILE_PATH = img.target.result;
-                             returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
-                             $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
-                             $("#FILE_EXT").val(returnValue.FILE_EXT);
-                             $("#FILE_BYTE").val(returnValue.FILE_BYTE);
-                             $("#FILE_SIZE").val(returnValue.FILE_SIZE);
 
-                             $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
-                             $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
-                             $("#inputImage").val('');
-                             changesize();
+                        	 if ($(".img-responsive").length > 0) {
+                                 qray.confirm({
+                                     msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
+                                 }, function () {
+                                     if (this.key == "ok") {
+                                         $(".img-responsive").remove();
+                                         $("#canvas_crop").remove();
+                                         returnValue.FILE_NAME = uuid_file_name;
+                                         returnValue.ORGN_FILE_NAME = orgnFile.name;
+                                         returnValue.FILE_EXT = file_ext;
+                                         returnValue.FILE_SIZE = orgnFile.size;
+                                         returnValue.FILE_PATH = img.target.result;
+                                         returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+                                         $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+                                         $("#FILE_EXT").val(returnValue.FILE_EXT);
+                                         $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+                                         $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+
+                                         $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+                                         $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+                                         $("#inputImage").val('');
+                                         changesize();
+                                     }
+                                 });
+                             }else{
+                                 $("#canvas_crop").remove();
+                                 returnValue.FILE_NAME = uuid_file_name;
+                                 returnValue.ORGN_FILE_NAME = orgnFile.name;
+                                 returnValue.FILE_EXT = file_ext;
+                                 returnValue.FILE_SIZE = orgnFile.size;
+                                 returnValue.FILE_PATH = img.target.result;
+                                 returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+                                 $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+                                 $("#FILE_EXT").val(returnValue.FILE_EXT);
+                                 $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+                                 $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+
+                                 $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+                                 $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+                                 $("#inputImage").val('');
+                                 changesize();
+                             }
                          }
+                         
                      }, 300);
                  };
                  reader.readAsDataURL(orgnFile);

@@ -28,7 +28,7 @@
                     axboot.ajax({
                         type: "POST",
                         url: ["sysmenu", "menuList"],
-                        data: JSON.stringify({'MENU_LEVEL': '0', 'PARENT_ID': ''}),
+                        data: JSON.stringify({'LEVEL': '0', 'PARENT_ID': ''}),
                         callback: function (res) {
                             caller.gridView01.setData(res.list);
                             if (res.list.length > 0) {
@@ -191,7 +191,7 @@
                         type: "POST",
                         url: ["sysmenu", "menuList"],
                         data: JSON.stringify({
-                            'MENU_LEVEL': '1',
+                            'LEVEL': '1',
                             'PARENT_ID': caller.gridView01.getData('selected')[0].MENU_ID
                         }),
                         callback: function (res) {
