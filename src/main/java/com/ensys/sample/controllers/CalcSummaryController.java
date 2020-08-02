@@ -4,7 +4,6 @@ import com.chequer.axboot.core.api.response.ApiResponse;
 import com.chequer.axboot.core.api.response.Responses;
 import com.chequer.axboot.core.controllers.BaseController;
 import com.ensys.sample.domain.CalcSummary.CalcSummaryService;
-import com.ensys.sample.domain.DeliverPartner.DeliverPartnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

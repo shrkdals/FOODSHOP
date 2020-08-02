@@ -53,19 +53,11 @@ public interface CommonHelpMapper extends MyBatisMapper {
 
     List<HashMap<String, Object>> HELP_AUTHGROUP(Map<String, Object> param);
 
-    List<HashMap<String, Object>> HELP_PROJECT(Map<String, Object> param);
-
-    List<HashMap<String, Object>> HELP_TPDOCU(Map<String, Object> param);
-
     List<HashMap<String, Object>> HELP_DEPOSIT(Map<String, Object> param);
 
     List<HashMap<String, Object>> HELP_PC(Map<String, Object> param);
 
     List<HashMap<String, Object>> HELP_CODEDTL(Map<String, Object> param);
-
-    List<HashMap<String, Object>> HELP_BILLREC(Map<String, Object> param);
-
-    List<HashMap<String, Object>> HELP_PAYMENT_BILLREC(Map<String, Object> param);
 
     List<HashMap<String, Object>> HELP_BGACCT(Map<String, Object> param);
 
@@ -73,15 +65,7 @@ public interface CommonHelpMapper extends MyBatisMapper {
 
     List<HashMap<String, Object>> HELP_ASSET_PROCGB(Map<String, Object> param);
 
-    List<HashMap<String, Object>> HELP_ASSET_MNGDNO(Map<String, Object> param);
-
     List<HashMap<String, Object>> HELP_PARTNER_DEPOSIT(Map<String, Object> param);
-
-    List<HashMap<String, Object>> HELP_BAN_HELP(Map<String, Object> param);
-
-    List<HashMap<String, Object>> HELP_BGACCT_REPORT(HashMap<String, Object> param);
-
-    List<HashMap<String, Object>> HELP_PAYMENT_SUB(Map<String, Object> param);
 
     List<HashMap<String, Object>> HELP_BUDGET_REPORT(HashMap<String, Object> param);
 
@@ -96,4 +80,6 @@ public interface CommonHelpMapper extends MyBatisMapper {
     List<HashMap<String, Object>> HELP_PARTNER3(HashMap<String, Object> param);
 
     List<HashMap<String, Object>> HELP_AREA2(Map<String, Object> param);
+
+    List<HashMap<String, Object>> HELP_DISTRIP_PARTNER(HashMap<String, Object> param);
 }

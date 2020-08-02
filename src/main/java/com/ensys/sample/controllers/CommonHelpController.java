@@ -66,6 +66,17 @@ public class CommonHelpController extends BaseController {
         return Responses.ListResponse.of(list);
     }
 
+    @RequestMapping(value = "HELP_DISTRIP_PARTNER", method = RequestMethod.POST, produces = APPLICATION_JSON)       //  거래처도움창
+    public Responses.ListResponse HELP_DISTRIP_PARTNER(@RequestBody HashMap<String, Object> param) {
+        SessionUser sessionUser = SessionUtils.getCurrentUser();
+
+        param.put("COMPANY_CD", sessionUser.getCdCompany());
+        param.put("KEYWORD", param.get("P_KEYWORD"));
+        param.put("LOGIN_ID", sessionUser.getIdUser());
+        List<HashMap<String, Object>> list = service.HELP_DISTRIP_PARTNER(param);
+        return Responses.ListResponse.of(list);
+    }
+
     @RequestMapping(value = "HELP_PARTNER", method = RequestMethod.POST, produces = APPLICATION_JSON)       //  거래처도움창
     public Responses.ListResponse HELP_PARTNER(@RequestBody HashMap<String, Object> param) {
         SessionUser sessionUser = SessionUtils.getCurrentUser();

@@ -23,4 +23,6 @@ public interface DeliverPartnerMapper extends MyBatisMapper {
 
     List<HashMap<String, Object>> MkselectH(HashMap<String, Object> param);
     List<HashMap<String, Object>> MkselectD(HashMap<String, Object> param);
+
+    void APPLY_INOUT(HashMap<String, Object> param);
 }

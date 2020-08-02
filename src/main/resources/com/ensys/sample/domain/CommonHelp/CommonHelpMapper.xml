@@ -6,6 +6,10 @@
 
 
 
+    <select id="HELP_DISTRIP_PARTNER" parameterType="hashmap" resultType="hashmap" statementType="PREPARED">
+        { CALL UP_FS_HELP_DISTRIP_PARTNER_S(#{COMPANY_CD},#{KEYWORD} ,#{LOGIN_ID}) }
+    </select>
+
 	<select id="HELP_USER_NOTICE" parameterType="hashmap" resultType="hashmap" statementType="PREPARED">
         { CALL UP_FS_HELP_USER_NOTICE_S(#{COMPANY_CD},#{PT_SP},#{KEYWORD}) }
     </select>

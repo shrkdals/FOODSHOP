@@ -92,7 +92,15 @@
                     return false;
                 },
                 ITEM_ADD1: function (caller, act, data) {
-
+                    fnObj.gridView01.addRow();
+                    var lastIdx = nvl(fnObj.gridView01.target.list.length, fnObj.gridView01.lastRow());
+                    afterIndex = lastIdx
+                    fnObj.gridView01.target.select(lastIdx - 1);
+                    fnObj.gridView01.target.setValue(lastIdx - 1, "BEGINING_IN_NUM", 0);
+                    fnObj.gridView01.target.setValue(lastIdx - 1, "SAFE_STOCK_NUM", 0);
+                    fnObj.gridView01.target.setValue(lastIdx - 1, "STOCK_NUM", 0);
+                    fnObj.gridView01.target.setValue(lastIdx - 1, "ORDR_STAT", '02');
+                    /*
                     CallBack1 = function (e) {
                         var chkArr = [];
                         for (var i = 0; i < fnObj.gridView01.target.list.length; i++) {
@@ -116,7 +124,7 @@
                         modal.close();
                     };
                     $.openCommonPopup("multiPartner", "CallBack1", 'HELP_PARTNER', '', {PT_SP : '03'}, 600, _pop_height, _pop_top);
-
+                    */
                 },
 
                 ITEM_ADD2: function (caller, act, data) {
@@ -151,10 +159,12 @@
                     caller.gridView02.delRow("selected");
                 }
                 ,APPLY_WEB01: function (caller, act, data) {
+                    var param = fnObj.gridView03.getData('selected')[0]
+                    param.GROUP = 'WEB01'
                     axboot.ajax({
                         type: "POST",
-                        url: ["DeliverPartner", "save"],
-                        data: JSON.stringify(data),
+                        url: ["DeliverPartner", "APPLY_INOUT"],
+                        data: JSON.stringify(),
                         callback: function (res) {
                             qray.alert("저장 되었습니다.");
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -165,9 +175,11 @@
                     });
                 }
                 ,APPLY_WEB04: function (caller, act, data) {
+                    var param = fnObj.gridView03.getData('selected')[0]
+                    param.GROUP = 'WEB04'
                     axboot.ajax({
                         type: "POST",
-                        url: ["DeliverPartner", "save"],
+                        url: ["DeliverPartner", "APPLY_INOUT"],
                         data: JSON.stringify(data),
                         callback: function (res) {
                             qray.alert("저장 되었습니다.");
@@ -244,7 +256,28 @@
                                     return "readonly";
                                 }
                              }
-                            ,{key: "DISTRIB_PT_NM"    , label: "<span style=\"color:red;\"> * </span> 물류거래처명"   , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "DISTRIB_PT_NM"    , label: "<span style=\"color:red;\"> * </span> 물류거래처명"   , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false
+                                ,picker: {
+                                    top: _pop_top,
+                                    width: 600,
+                                    height: _pop_height,
+                                    url: "distrib_partner",
+                                    action: ["commonHelp", "HELP_DISTRIP_PARTNER"],
+                                    param: function () {
+                                    },
+                                    callback: function (e) {
+                                        fnObj.gridView01.target.setValue(this.dindex, "DISTRIB_PT_CD", e[0].PT_CD);
+                                        fnObj.gridView01.target.setValue(this.dindex, "DISTRIB_PT_NM", e[0].PT_NM);
+                                    },
+                                    disabled: function () {
+                                        if(nvl(this.__created__,false)){
+                                            return true;
+                                        }else{
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
                             ,{key: "ITEM_CD"          , label: "<span style=\"color:red;\"> * </span> 상품코드"	    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false
                                 , styleClass: function () {
                                     return "readonly";

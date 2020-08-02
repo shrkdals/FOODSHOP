@@ -74,6 +74,14 @@ public class DeliverPartnerService extends BaseService {
         param.put("LOGIN_ID",user.getIdUser());
         return mapper.MkselectD(param);
     }
+
+    @Transactional
+    public void APPLY_INOUT(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD",user.getCdCompany());
+        param.put("LOGIN_ID",user.getIdUser());
+        mapper.APPLY_INOUT(param);
+    }
 }
 
 

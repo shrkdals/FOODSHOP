@@ -36,6 +36,11 @@ public class DeliverPartnerController extends BaseController {
         return ok();
     }
 
+    @RequestMapping(value = "APPLY_INOUT", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public ApiResponse APPLY_INOUT(@RequestBody HashMap<String, Object> param) {
+        service.APPLY_INOUT(param);
+        return ok();
+    }
 
 
     // ## 제조사관리 제조사용 ##

@@ -33,6 +33,15 @@
         ) }
     </update>
 
+    <update id="APPLY_INOUT" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_DELIVER_APPLY_INOUT(
+          #{COMPANY_CD}
+        , #{DISTRIB_PT_CD}
+        , #{ITEM_CD}
+        , #{INOUT_SEQ}
+        , #{GROUP}
+        ) }
+    </update>
 
     <update id="insertD" parameterType="java.util.HashMap" statementType="CALLABLE">
     { CALL UP_FS_ITEM_INOUT_I(

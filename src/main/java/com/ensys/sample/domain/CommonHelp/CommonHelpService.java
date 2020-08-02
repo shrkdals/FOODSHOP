@@ -214,4 +214,8 @@ public class CommonHelpService extends BaseService {
     public List<HashMap<String, Object>> HELP_PARTNER_CONTRACT(HashMap<String, Object> param) {
         return mapper.HELP_PARTNER_CONTRACT(param);
     }
+
+    public List<HashMap<String, Object>> HELP_DISTRIP_PARTNER(HashMap<String, Object> param) {
+        return mapper.HELP_DISTRIP_PARTNER(param);
+    }
 }
