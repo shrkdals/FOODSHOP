@@ -113,7 +113,7 @@
                                 },
                              }
                             ,{key: "ADJUST_AMT"      , label: "정산금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ADJUST_AMT"      , label: "정산누적금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "ADJUST_ACCUM_AMT"  , label: "정산누적금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "CP_YN"           , label: "승인여부"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "TRANS_YN"        , label: "이체여부"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "TRANS_DT"        , label: "이체일시"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
