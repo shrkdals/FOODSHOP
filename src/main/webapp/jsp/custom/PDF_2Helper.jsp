@@ -24,8 +24,8 @@
                     listLen = list.length
                     var  ORDER_CD = ''
                         ,ORDER_DT = ''
-                        ,PT_NM  = '' ,BIZ_NO  = '' ,OWNER_NM  = '' ,TEL_NO  = '' ,FAX_NO  = '' ,ADDR  = ''        // 공급자 필드
-                        ,PT_NM2 = '' ,BIZ_NO2 = '' ,OWNER_NM2 = '' ,TEL_NO2 = '' ,FAX_NO2 = '' ,ADDR2 = '', SIGN_NM2 = ''  // 공급받는자 필드
+                        ,PT_NM  = '' ,BIZ_NO  = '' ,OWNER_NM  = '' ,TEL_NO  = '' ,FAX_NO  = '' ,ADDR  = '', PT_TYPE = '', PT_COND = ''       // 공급자 필드
+                        ,PT_NM2 = '' ,BIZ_NO2 = '' ,OWNER_NM2 = '' ,TEL_NO2 = '' ,FAX_NO2 = '' ,ADDR2 = '', SIGN_NM2 = '', PT_TYPE2 = '', PT_COND2 = ''  // 공급받는자 필드
                         ,ORDER_ITEM = ''
                         ,SUM_SELECT_NUM = 0
                         ,SUM_SALE_COST = 0
@@ -33,13 +33,13 @@
                         ,SUM_ORDER_VAT = 0
                         ,SUM_OREDER_SPPLUY = 0
                     if(list.length > 0){
-                          PT_NM  = list[0].PT_NM   , BIZ_NO  = list[0].BIZ_NO   , OWNER_NM  = list[0].OWNER_NM
-                        , TEL_NO  = list[0].TEL_NO , FAX_NO  = list[0].FAX_NO   , ADDR      = list[0].ADDR
+                          PT_NM  = nvl(list[0].PT_NM)   , BIZ_NO  = nvl(list[0].BIZ_NO)   , OWNER_NM  = nvl(list[0].OWNER_NM)
+                        , TEL_NO  = nvl(list[0].TEL_NO) , FAX_NO  = nvl(list[0].FAX_NO)   , ADDR      = nvl(list[0].ADDR), PT_TYPE = nvl(list[0].PT_TYPE), PT_COND = nvl(list[0].PT_COND)
 
-                        , PT_NM2   = list[0].PT_NM2  , BIZ_NO2  = list[0].BIZ_NO2 , OWNER_NM2  = list[0].OWNER_NM2, SIGN_NM2 = list[0].SIGN_NM2
-                        , TEL_NO2  = list[0].TEL_NO2 , FAX_NO2  = list[0].FAX_NO2 , ADDR2      = list[0].ADDR2
+                        , PT_NM2   = nvl(list[0].PT_NM2)  , BIZ_NO2  = nvl(list[0].BIZ_NO2) , OWNER_NM2  = nvl(list[0].OWNER_NM2), SIGN_NM2 = nvl(list[0].SIGN_NM2)
+                        , TEL_NO2  = nvl(list[0].TEL_NO2) , FAX_NO2  = nvl(list[0].FAX_NO2) , ADDR2      = nvl(list[0].ADDR2), PT_TYPE2 = nvl(list[0].PT_TYPE2), PT_COND2 = nvl(list[0].PT_COND2)
 
-                        , ORDER_CD = list[0].ORDER_CD
+                        , ORDER_CD = nvl(list[0].ORDER_CD)
                     }else{
                         $('#TBODY1').append('<span> 데이터를 불러오는 과정에 오류가 발생하였습니다. </span>')
                         return;
@@ -96,13 +96,13 @@
                         +'</tr>'
                         +'<tr>'
                         +'<td style="text-align:center;">종목</td>'
-                        +'<td id="T13"> <input type="text" style="width:100%; border:none"/> </td>'
+                        +'<td id="T13"> <input type="text" style="width:100%; border:none" value= "' + PT_TYPE + '"/> </td>'
                         +'<td width="40px" style="text-align:center;">업태</td>'
-                        +'<td id="T14"> <input type="text" style="width:100%; border:none"/> </td>'
+                        +'<td id="T14"> <input type="text" style="width:100%; border:none" value= "' + PT_COND + '"/> </td>'
                         +'<td style="text-align:center;">종목</td>'
-                        +'<td id="T15" colspan="2"> <input type="text" style="width:100%; border:none"/> </td>'
+                        +'<td id="T15" colspan="2"> <input type="text" style="width:100%; border:none" value= "' + PT_TYPE2 + '"/> </td>'
                         +'<td width="40px" style="text-align:center;">업태</td>'
-                        +'<td id="T16" colspan="2"> <input type="text" style="width:100%; border:none"/> </td>'
+                        +'<td id="T16" colspan="2"> <input type="text" style="width:100%; border:none" value= "' + PT_COND2 + '"/> </td>'
                         +'</tr>'
                         +'</tbody>'
                         +'</table>'
