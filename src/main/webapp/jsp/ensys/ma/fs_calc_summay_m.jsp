@@ -112,8 +112,8 @@
                                     return $.changeTextValue(dl_ADJUST_SP, this.value)
                                 },
                              }
-                            ,{key: "ADJUST_AMT"      , label: "정산금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ADJUST_ACCUM_AMT"  , label: "정산누적금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "ADJUST_AMT"      , label: "정산금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false, formatter: "money" }
+                            ,{key: "ADJUST_ACCUM_AMT"  , label: "정산누적금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false, formatter: "money",  }
                             ,{key: "CP_YN"           , label: "승인여부"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "TRANS_YN"        , label: "이체여부"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "TRANS_DT"        , label: "이체일시"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
@@ -138,8 +138,42 @@
                             //444
                             onClick: function () {
                                 var index = this.dindex;
-                                //if(afterIndex == index){return false;}
+                                var data = this.item;
                                 
+                                //if(afterIndex == index){return false;}
+
+                                if (this.column.key == 'VIEW_ORDERLIST'){
+                                	modal.open({
+                                        width: 1100,
+                                        height: _pop_height,
+                                        top: _pop_top,
+                                        iframe: {
+                                            method: "get",
+                                            url: "../help/calcItemHelper.jsp",
+                                            param: "callBack=userCallBack"
+                                        },
+                                        sendData: function () {
+                                            return {
+                                                initData: {
+                                                	ADJUST_DT: data.ADJUST_DT,
+                                                	ADJUST_NO: data.ADJUST_NO,
+                                                	JOIN_PT_CD: data.ADJUST_PT_CD,
+                                                }
+                                            }
+                                        },
+                                        onStateChanged: function () {
+                                            if (this.state === "open") {
+                                                mask.open({
+                                                    content: '<h1><i class="fa fa-spinner fa-spin"></i> Loading</h1>'
+                                                });
+                                            } else if (this.state === "close") {
+                                                mask.close();
+                                            }
+                                        }
+                                    }, function () {
+
+                                    });
+                                }
 
                             }
                         },

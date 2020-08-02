@@ -7,6 +7,10 @@
     <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
     { CALL UP_FS_CALC_SUMMARY_S(#{COMPANY_CD} ,#{ADJUST_DT_ST} ,#{ADJUST_DT_ED} ,#{PT_NM}, #{TRANS_YN}) }
     </select>
+    
+    <select id="selectPop" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_CALC_ITEM_S(#{COMPANY_CD} ,#{ADJUST_NO} ,#{ADJUST_DT} ,#{JOIN_PT_CD}) }
+    </select>
 
 
 </mapper>
