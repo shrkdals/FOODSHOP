@@ -67,7 +67,7 @@
     </select>
 
     <select id="MkselectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_ITEM_INOUT_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} , #{ITEM_CD} ) }
+    { CALL UP_FS_ITEM_INOUT_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} , #{ITEM_CD} , #{INOUT_TP} ) }
     </select>
 
 </mapper>

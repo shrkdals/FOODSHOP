@@ -150,6 +150,34 @@
                 ITEM_DEL2: function (caller, act, data) {
                     caller.gridView02.delRow("selected");
                 }
+                ,APPLY_WEB01: function (caller, act, data) {
+                    axboot.ajax({
+                        type: "POST",
+                        url: ["DeliverPartner", "save"],
+                        data: JSON.stringify(data),
+                        callback: function (res) {
+                            qray.alert("저장 되었습니다.");
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                            caller.gridView01.target.select(afterIndex);
+                            caller.gridView01.target.focus(afterIndex);
+
+                        }
+                    });
+                }
+                ,APPLY_WEB04: function (caller, act, data) {
+                    axboot.ajax({
+                        type: "POST",
+                        url: ["DeliverPartner", "save"],
+                        data: JSON.stringify(data),
+                        callback: function (res) {
+                            qray.alert("저장 되었습니다.");
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                            caller.gridView01.target.select(afterIndex);
+                            caller.gridView01.target.focus(afterIndex);
+
+                        }
+                    });
+                }
             });
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
@@ -468,6 +496,24 @@
                                     }
                                 }
                              }
+                            ,{key: "MAKE_VERIFY_YN"   , label:	"<span style=\"color:red;\"> * </span>본사입고확인"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: YN_OP
+                                    }
+                                    ,disabled: function () {
+                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                                ,formatter: function () {
+                                    return $.changeTextValue(YN_OP, this.value)
+                                }
+                            }
                             ,{key: "DISTRIB_VERIFY_YN", label:	"<span style=\"color:red;\"> * </span>물류사입고확인"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
                                 , editor: {
                                     type: "select", config: {
@@ -486,24 +532,7 @@
                                     return $.changeTextValue(YN_OP, this.value)
                                 }
                              }
-                            ,{key: "MAKE_VERIFY_YN"   , label:	"<span style=\"color:red;\"> * </span>제조사확인"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: YN_OP
-                                    }
-                                    ,disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
-                                            return true;
-                                        }
-                                    }
-                                }
-                                ,formatter: function () {
-                                    return $.changeTextValue(YN_OP, this.value)
-                                }
-                             }
+
                         ],
                         body: {
                             onClick: function () {
@@ -670,6 +699,24 @@
                                     }
                                 }
                             }
+                            ,{key: "MAKE_VERIFY_YN"   , label:	"<span style=\"color:red;\"> * </span>본사입고확인"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: YN_OP
+                                    }
+                                    ,disabled: function () {
+                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                                ,formatter: function () {
+                                    return $.changeTextValue(YN_OP, this.value)
+                                }
+                            }
                             ,{key: "DISTRIB_VERIFY_YN", label:	"<span style=\"color:red;\"> * </span>물류사입고확인"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
                                 , editor: {
                                     type: "select", config: {
@@ -688,24 +735,7 @@
                                     return $.changeTextValue(YN_OP, this.value)
                                 }
                             }
-                            ,{key: "MAKE_VERIFY_YN"   , label:	"<span style=\"color:red;\"> * </span>제조사확인"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: YN_OP
-                                    }
-                                    ,disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
-                                            return true;
-                                        }
-                                    }
-                                }
-                                ,formatter: function () {
-                                    return $.changeTextValue(YN_OP, this.value)
-                                }
-                            }
+
                         ],
                         body: {
                             onClick: function () {
@@ -727,24 +757,13 @@
                         }
                     });
 
-                    axboot.buttonClick(this, "data-grid-view-02-btn", {
-                        "add": function () {
-                            ACTIONS.dispatch(ACTIONS.ITEM_ADD2);
+                    axboot.buttonClick(this, "data-grid-view-03-btn", {
+                        "applyWEB01": function () {
+                            ACTIONS.dispatch(ACTIONS.APPLY_WEB01);
                         },
-                        "delete": function () {
+                        "applyWEB04": function () {
 
-                            var beforeIdx = this.target.selectedDataIndexs[0];
-                            var dataLen = this.target.getList().length;
-
-                            if ((beforeIdx + 1) == dataLen) {
-                                beforeIdx = beforeIdx - 1;
-                            }
-
-                            ACTIONS.dispatch(ACTIONS.ITEM_DEL2);
-                            if (beforeIdx > 0 || beforeIdx == 0) {
-                                this.target.select(beforeIdx);
-                                selectRow2 = beforeIdx;
-                            }
+                            ACTIONS.dispatch(ACTIONS.APPLY_WEB04);
 
                         }
 
@@ -795,8 +814,8 @@
                 $("#left_grid").css("height" ,(tempgridheight / 100 * 99 - $('.ax-button-group').height() ) / 2 );
                 $("#tab_area").css("height", (tempgridheight / 100 * 99 - $('.ax-button-group').height()) / 2 );
 
-                $("#tab1_grid").css("height", $("#tab_area").height() - 50 );
-                $("#tab2_grid").css("height", $("#tab_area").height() - 50 );
+                $("#tab1_grid").css("height", $("#tab_area").height() - 50 - $("#tab1_button").height() );
+                $("#tab2_grid").css("height", $("#tab_area").height() - 50 - $("#tab2_button").height() );
                 /*
                 alert($("#ax-base-root").height()); // 컨텐츠영역높이
                 ax-base-title //타이틀부분높이(class)
@@ -857,17 +876,6 @@
                      id = "left_grid"
                      name="왼쪽그리드"
                 ></div>
-
-<%--                <div class="ax-button-group" data-fit-height-aside="grid-view-02" id="left_title2" name="왼쪽그리드타이틀">--%>
-<%--                    <div class="right">--%>
-<%--                        <button type="button" class="btn btn-small" data-grid-view-02-btn="add" style="width:80px;"><i--%>
-<%--                                class="icon_add"></i>--%>
-<%--                            <ax:lang id="ax.admin.add"/></button>--%>
-<%--                        <button type="button" class="btn btn-small" data-grid-view-02-btn="delete" style="width:80px;">--%>
-<%--                            <i--%>
-<%--                                    class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
                 <div class="H10"></div>
                 <div class="H10"></div>
         <div id="tab_area" data-ax5layout="ax1" data-config="{layout:'tab-panel'}" style="height:300px;" name="하단탭영역">
@@ -879,6 +887,14 @@
                 </div>
             </div>
             <div data-tab-panel="{label: '출고 정보', active: 'true'}" id="tabGrid2">
+                <div class="ax-button-group" data-fit-height-aside="grid-view-03" id="tab3_button" name="왼쪽그리드타이틀">
+                    <div class="right">
+                        <button type="button" class="btn btn-small" data-grid-view-03-btn="applyWEB01" style="width:80px;">
+                            <i class="icon_add"></i>본사승인</button>
+                        <button type="button" class="btn btn-small" data-grid-view-03-btn="applyWEB04" style="width:80px;">
+                            <i class="icon_add"></i> 물류사승인</button>
+                    </div>
+                </div>
                 <div data-ax5grid="grid-view-03"
                      data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
                      id = "tab2_grid"
