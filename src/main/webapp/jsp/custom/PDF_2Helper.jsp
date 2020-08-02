@@ -13,6 +13,7 @@
             var listLen = 0
             var html2canvasHeight = 0;
             var html2canvasWidth = 0;
+            var doc;
 
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_SEARCH: function (caller, act, data) {
@@ -211,48 +212,46 @@
                         $('#TBODY1').append(HeaderHtml+ "<div style='padding:2px;'></div>" + MiddleHtml)
                 }
                 , PDF_PRINT : function (caller, act, data) {
-                    html2canvasHeight = $(".ax-base-title").height() + $("#TBODY1").height() + (5 * listLen) + 200;
-                    html2canvasWidth = 900;
-                    var doc = new jsPDF('p', 'mm', 'a4');
-                    var myOffscreenEl = document.body;
-                    $('.button-warp').css('display','none')
-                    html2canvas(myOffscreenEl,{}).then(function(canvas) {
-
-                        var imgData = canvas.toDataURL('image/png');
-
-                        var imgWidth = 210;
-                        var pageHeight = imgWidth * 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
-                        var imgHeight = canvas.height * imgWidth / canvas.width;
-                        var heightLeft = imgHeight;
-                        var position = 0;
-
-                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                        heightLeft -= pageHeight;
-
-                        while (heightLeft >= 0) {
-                            position = heightLeft - imgHeight;
-                            doc.addPage();
-                            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                            heightLeft -= pageHeight;
-                        }
-
-
-                        if (window.navigator.msSaveBlob) { // IE
-                            doc.save(fileName);
-                        } else { // Chrome
-                            window.open(doc.output('bloburl'));
-                        }
-
-                        $('.button-warp').css('display','')
-
-                    })
+                	if (window.navigator.msSaveBlob) { // IE
+                        doc.save(fileName);
+                    } else { // Chrome
+                        window.open(doc.output('bloburl'));
+                    }
                 }
             })
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
+            	$('.button-warp').css('display','none');
                 this.pageButtonView.initView();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-
+                setTimeout(function () {
+	                html2canvasHeight = $(".ax-base-title").height() + $("#TBODY1").height() + (5 * listLen);
+	                html2canvasWidth = $(document).width();
+	                doc = new jsPDF('l', 'mm', [297, 210]);
+	                var myOffscreenEl = document.body;
+	                
+	                html2canvas(myOffscreenEl,{}).then(function(canvas) {
+	
+	                    var imgData = canvas.toDataURL('image/png');
+	
+	                    var imgWidth = 297;
+	                    var pageHeight = imgWidth / 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
+	                    var imgHeight = canvas.height * imgWidth / canvas.width;
+	                    var heightLeft = imgHeight;
+	                    var position = 0;
+	
+	                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+	                    heightLeft -= pageHeight;
+	
+	                    while (heightLeft >= 0) {
+	                        position = heightLeft - imgHeight;
+	                        doc.addPage();
+	                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+	                        heightLeft -= pageHeight;
+	                    }
+	                    $('.button-warp').css('display','')
+	                })
+                }, 1000);
             };
             fnObj.pageResize = function () {
 
