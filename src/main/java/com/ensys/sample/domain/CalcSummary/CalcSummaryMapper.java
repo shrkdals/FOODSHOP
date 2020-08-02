@@ -11,4 +11,5 @@ public interface CalcSummaryMapper extends MyBatisMapper {
     
     List<HashMap<String, Object>> selectPop(HashMap<String, Object> param);
     
+    int approve(HashMap<String, Object> param);
 }

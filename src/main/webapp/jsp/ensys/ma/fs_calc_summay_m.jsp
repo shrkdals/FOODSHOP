@@ -52,6 +52,45 @@
                         }
                     });
                 },
+                ITEM_OK: function (caller, act, data){
+                    var checked = 
+                	qray.confirm({
+                        msg: "승인하시겠습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+                        	var count = 0 ;
+                        	var ADJUST_NO_ARR = [];
+                            var grid = caller.gridView01.target.list;
+                            var i = grid.length;
+                            while (i--) {
+                                var data = caller.gridView01.target.list[i];
+                                if (data.CHK == 'Y') {
+                                    count++;
+                                    ADJUST_NO_ARR.push(data.ADJUST_NO);
+                                }
+                            }
+                            i = null;
+
+                            if (count == 0) {
+                                qray.alert("체크한 데이터가 없습니다.");
+                                return false;
+                            }
+
+                            axboot.ajax({
+                                type: "POST",
+                                url: ["calcSummary", "approve"],
+                                data: JSON.stringify({
+                                	ADJUST_NO: ADJUST_NO_ARR.join('|')
+                                }),
+                                callback: function (res) {
+                                    qray.alert('승인되었습니다.').then(function(){
+                                    	ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                                    })
+                                }
+                            });
+                        }
+                    });
+                }
             });
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
@@ -59,7 +98,10 @@
                 this.searchView.initView();
                 this.gridView01.initView();
                 // this.gridView02.initView();
-
+                if (SCRIPT_SESSION.cdGroup != 'WEB03' && SCRIPT_SESSION.cdGroup != 'WEB04'){
+					$("#btnOk").remove();
+                }
+                
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
 
@@ -99,10 +141,18 @@
 
                     this.target = axboot.gridBuilder({
                         showRowSelector: true,
-                        frozenColumnIndex: 2,
+                        frozenColumnIndex: 3,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "COMPANY_CD"      , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                        	{
+                            key: "CHK", width: 40, align: "center", dirty:false,
+                            label: '<div id="headerBox" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>',
+                                editor: {
+                                    type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'}
+                                }
+                            }
+                            
+                            ,{key: "COMPANY_CD"      , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
                             ,{key: "ADJUST_NO"       , label: "정산번호"        , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
                             ,{key: "ADJUST_PT_CD"    , label: "정산거래처코드"  , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_PT_NM"    , label: "정산거래처명"    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
@@ -185,6 +235,11 @@
                             display: false,
                             statusDisplay: false
                         }
+                    });
+                    axboot.buttonClick(this, "data-grid-view-01-btn", {
+                        "ok": function () {
+                            ACTIONS.dispatch(ACTIONS.ITEM_OK);
+                        },
                     });
                 },
                 getData: function (_type) {
@@ -398,6 +453,38 @@
                  */
             }
 
+            function isChecked(data) {
+                var array = [];
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].CHK == 'Y') {
+                        array.push(data[i])
+                    }
+                }
+                return array;
+            }
+
+            var cnt = 0;
+            $(document).on('click', '#headerBox', function(e) {
+                if(cnt == 0){
+                    $("div [data-ax5grid='grid-view-01']").find("div #headerBox").attr("data-ax5grid-checked",true);
+                    cnt++;
+                    var gridList = fnObj.gridView01.getData();
+                    gridList.forEach(function(e, i){
+                        fnObj.gridView01.target.setValue(i,"CHK",'Y');
+                    });
+                    $("div [data-ax5grid-editor='checkbox']").attr("data-ax5grid-checked",true)
+                }else{
+                    $("div [data-ax5grid='grid-view-01']").find("div #headerBox").attr("data-ax5grid-checked",false);
+                    cnt = 0;
+                    var gridList = fnObj.gridView01.getData();
+                    gridList.forEach(function(e, i){
+                        fnObj.gridView01.target.setValue(i,"CHK",'N');
+                    });
+                    $("div [data-ax5grid-editor='checkbox']").attr("data-ax5grid-checked",false)
+                }
+
+            });
+
         </script>
     </jsp:attribute>
     <jsp:body>
@@ -451,6 +538,8 @@
                         </h2>
                     </div>
                     <div class="right">
+                    	<button type="button" class="btn btn-small" id="btnOk" data-grid-view-01-btn="ok" style="width:80px;">
+                    	승인</button>
                     </div>
                 </div>
 
