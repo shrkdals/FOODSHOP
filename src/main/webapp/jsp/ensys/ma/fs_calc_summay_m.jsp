@@ -23,115 +23,35 @@
         </style>
         <script type="text/javascript">
 
-            var afterIndex = 0;
-            var selectRow2 = 0;
-            var VERIFY_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00021');
-            var YN_OP = [{value:'' , text:''},{value:'Y' , text:'Y'},{value:'N' , text:'N'}];
-
-            var CallBack1;
+        	var dl_ADJUST_SP         = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00031');	//	정산유형
+        
+	        /* var dl_PT_SP         = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00002');
+	        $("#PT_SP").ax5select({options: dl_PT_SP});
+	        $("#ADJUST_SP").ax5select({options: dl_ADJUST_SP}); */
+	        
+        	$("#TRANS_YN").ax5select({options: [{value: '', text: ''}, {value: 'Y', text: 'Y'}, {value: 'N', text: 'N'}]})
+            
             var fnObj = {}, CODE = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_SEARCH: function (caller, act, data) {
-                    var list = $.DATA_SEARCH('calcSummary','selectH',{CD_COMPANY:SCRIPT_SESSION.cdCompany });
-                    fnObj.gridView01.target.setData(list);
-                    caller.gridView01.target.select(afterIndex);
-                    caller.gridView01.target.focus(afterIndex);
-                    ACTIONS.dispatch(ACTIONS.ITEM_CLICK,caller);
-                    selectRow2 = 0;
-
-                    return false;
-                },
-                PAGE_SAVE: function (caller, act, data) {
-
-
-                    var itemH = [].concat(caller.gridView01.getData("modified"));
-                    itemH = itemH.concat(caller.gridView01.getData("deleted"));
-
-                    var itemD = [].concat(caller.gridView02.getData("modified"));
-                    itemD = itemD.concat(caller.gridView02.getData("deleted"));
-
-
-                    if(itemH.length == 0 && itemD.length == 0){
-                        qray.alert('변경된 정보가 없습니다.');
-                        return;
-                    }
-                    var data = {
-                         insertM: caller.gridView01.getData("modified")
-                        ,deleteM: caller.gridView01.getData("deleted")
-                        ,insertD: caller.gridView02.getData("modified")
-                        ,deleteD: caller.gridView02.getData("deleted")
-                    };
-
-                    axboot.ajax({
+                	axboot.ajax({
                         type: "POST",
-                        url: ["DeliverPartner", "save"],
-                        data: JSON.stringify(data),
+                        url: ["calcSummary", "selectH"],
+                        data: JSON.stringify({
+                        	ADJUST_DT_ST: $('#ADJUST_DT').getStartDate().replace(/-/g, ""),
+                         	ADJUST_DT_ED: $('#ADJUST_DT').getEndDate().replace(/-/g, ""),
+                         	PT_NM: $("#PT_NM").val(),
+                         	TRANS_YN : $('select[name="TRANS_YN"]').val()
+                        }),
                         callback: function (res) {
-                            qray.alert("저장 되었습니다.");
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                            caller.gridView01.target.select(afterIndex);
-                            caller.gridView01.target.focus(afterIndex);
-
+                            caller.gridView01.clear();
+                            if (res.list.length > 0) {
+                                caller.gridView01.setData(res);
+                                caller.gridView01.target.select(0);
+                            }
                         }
                     });
                 },
-                ITEM_CLICK: function (caller, act, data) {
-                    var selected = caller.gridView01.getData('selected')[0];
-                    if (nvl(selected) == '') {
-                        return false;
-                    }
-                    var list = $.DATA_SEARCH('DeliverPartner','selectD',selected);
-                    fnObj.gridView02.target.setData(list);
-
-                    return false;
-                },
-                ITEM_ADD1: function (caller, act, data) {
-
-                    CallBack1 = function (e) {
-                        var chkArr = [];
-                        for (var i = 0; i < fnObj.gridView01.target.list.length; i++) {
-                            chkArr.push(fnObj.gridView01.target.list[i].DISTRIB_PT_CD);
-                        }
-                        chkArr = chkArr.join('|');
-
-                        if (e.length > 0) {
-                            for (var i = 0; i < e.length; i++) {
-                                if (chkArr.indexOf(e[i].PT_CD) > -1) continue;
-                                fnObj.gridView01.addRow();
-
-                                var lastIdx = nvl(fnObj.gridView01.target.list.length, fnObj.gridView01.lastRow());
-
-                                fnObj.gridView01.target.setValue(lastIdx - 1, "DISTRIB_PT_CD", e[i].PT_CD);
-                                fnObj.gridView01.target.setValue(lastIdx - 1, "DISTRIB_PT_NM", e[i].PT_NM);
-                                fnObj.gridView01.target.select(lastIdx - 1);
-                            }
-
-                        }
-                        modal.close();
-                    };
-                    $.openCommonPopup("multiPartner", "CallBack1", 'HELP_PARTNER', '', {PT_SP : '03'}, 600, _pop_height, _pop_top);
-
-                },
-
-                ITEM_ADD2: function (caller, act, data) {
-
-                    caller.gridView02.addRow();
-                    var itemH = caller.gridView01.getData('selected')[0]
-                    var lastIdx = nvl(caller.gridView02.target.list.length, caller.gridView02.lastRow());
-                    caller.gridView02.target.select(lastIdx - 1);
-                    selectRow2 = lastIdx - 1;
-                    caller.gridView02.target.focus(lastIdx - 1);
-                    caller.gridView02.target.setValue(lastIdx - 1, "COMPANY_CD", itemH.COMPANY_CD);
-
-                },
-                ITEM_DEL1: function (caller, act, data) {
-                    var beforeIdx = caller.gridView01.getData('selected')[0].__index;
-                    caller.gridView01.delRow("selected");
-                }
-                ,
-                ITEM_DEL2: function (caller, act, data) {
-                    caller.gridView02.delRow("selected");
-                }
             });
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
@@ -143,22 +63,12 @@
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
 
-            fnObj.pageResize = function () {
-
-            };
-
             fnObj.pageButtonView = axboot.viewExtend({
                 initView: function () {
                     axboot.buttonClick(this, "data-page-btn", {
                         "search": function () {
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                         },
-                        "save": function () {
-                            ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                        },
-                        "excel": function () {
-
-                        }
                     });
                 }
             });
@@ -189,49 +99,47 @@
 
                     this.target = axboot.gridBuilder({
                         showRowSelector: true,
+                        frozenColumnIndex: 2,
                         target: $('[data-ax5grid="grid-view-01"]'),
-                        showRowSelector: true,
                         columns: [
-                            {key: "COMPANY_CD"      , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ADJUST_NO"       , label: "정산번호"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ADJUST_SP"       , label: "정산유형"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ADJUST_PT_CD"    , label: "정산거래처코드"  , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
+                            {key: "COMPANY_CD"      , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                            ,{key: "ADJUST_NO"       , label: "정산번호"        , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                            ,{key: "ADJUST_PT_CD"    , label: "정산거래처코드"  , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_PT_NM"    , label: "정산거래처명"    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ADJUST_AMT"      , label: "정산금액"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "CP_YN"           , label: "승인여부"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "TRANS_YN"        , label: "이체여부"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "TRANS_DT"        , label: "이체일시"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "ADJUST_SP"       , label: "정산유형"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false,
+                            	formatter: function () {
+                                    return $.changeTextValue(dl_ADJUST_SP, this.value)
+                                },
+                             }
+                            ,{key: "ADJUST_AMT"      , label: "정산금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "ADJUST_AMT"      , label: "정산누적금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "CP_YN"           , label: "승인여부"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "TRANS_YN"        , label: "이체여부"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "TRANS_DT"        , label: "이체일시"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "VIEW_ORDERLIST"  , label: "주문내역보기"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false,
+                            	formatter: function () {
+                                    return "[보기]";
+                                },
+                             }
                         ],
-
+                        footSum: [
+                            [
+                                {label: "", colspan: 4, align: "center"},
+                                {key: "ADJUST_AMT", collector: "sum", formatter: "money", align: "right"},
+                                {key: "ADJUST_AMT", collector: "sum", formatter: "money", align: "right"}
+                            ]
+                        ],
                         body: {
+                        	mergeCells: ["ADJUST_PT_CD", "ADJUST_PT_NM"],
                             onDataChanged: function () {
 
                             },
                             //444
                             onClick: function () {
                                 var index = this.dindex;
-                                if(afterIndex == index){return false;}
-                                // var data = []
-                                // data = data.concat(fnObj.gridView02.getData("modified"));
-                                // data = data.concat(fnObj.gridView02.getData("deleted"));
-                                //
-                                // if(data.length > 0){
-                                //     qray.confirm({
-                                //         msg: "작업중인 상세 데이터를 먼저 저장해주십시오."
-                                //         ,btns: {
-                                //             cancel: {
-                                //                 label:'확인', onClick: function(key){
-                                //                     qray.close();
-                                //                 }
-                                //             }
-                                //         }
-                                //     })
-                                // }else{
-                                //     afterIndex = index;
-                                //     this.self.select(this.dindex);
-                                //     ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
-                                // }
+                                //if(afterIndex == index){return false;}
+                                
 
                             }
                         },
@@ -243,28 +151,6 @@
                             display: false,
                             statusDisplay: false
                         }
-                    });
-                    axboot.buttonClick(this, "data-grid-view-01-btn", {
-                        "add": function () {
-                            ACTIONS.dispatch(ACTIONS.ITEM_ADD1);
-                        },
-                        "delete": function () {
-
-                            var beforeIdx = this.target.selectedDataIndexs[0];
-                            var dataLen = this.target.getList().length;
-
-                            if ((beforeIdx + 1) == dataLen) {
-                                beforeIdx = beforeIdx - 1;
-                            }
-
-                            ACTIONS.dispatch(ACTIONS.ITEM_DEL1);
-                            if (beforeIdx > 0 || beforeIdx == 0) {
-                                this.target.select(beforeIdx);
-                                selectRow2 = beforeIdx;
-                            }
-
-                        }
-
                     });
                 },
                 getData: function (_type) {
@@ -440,6 +326,13 @@
             var _pop_height = 0;
             $(document).ready(function () {
                 changesize();
+
+                $("#PT_NM").focus();
+                $("#PT_NM").keydown(function (e) {
+                    if (e.keyCode == '13') {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    }
+                });
             });
             $(window).resize(function () {
                 changesize();
@@ -477,16 +370,12 @@
 
         <div data-page-buttons="">
             <div class="button-warp">
-
                 <button type="button" class="btn btn-reload" data-page-btn="reload"
                         onclick="window.location.reload();" style="width:80px;">
-
                     <i class="icon_reload"></i></button>
                 <button type="button" class="btn btn-info" data-page-btn="search" style="width:80px;"><i
                         class="icon_search"></i><ax:lang
-                        id="ax.admin.sample.modal.button.search"/></button>
-                <button type="button" class="btn btn-info" data-page-btn="save" style="width:80px;"><i
-                        class="icon_save"></i>저장
+                        id="ax.admin.sample.modal.button.search"/>
                 </button>
             </div>
         </div>
@@ -494,14 +383,32 @@
         <div role="page-header" id="pageheader">
             <ax:form name="searchView0">
                 <ax:tbl clazz="ax-search-tb1" minWidth="500px">
+                    <ax:tr>
+                    	<ax:td label='정산일자' width="450px">
+                            <datepicker id="ADJUST_DT"></datepicker>
+                        </ax:td> 
+                    	<%-- <ax:td label='정산유형' width="350px">
+                        	<div id="ADJUST_SP" name="ADJUST_SP" data-ax5select="ADJUST_SP"
+                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                        </ax:td>
+                        <ax:td label='거래처유형' width="350px">
+                            <div id="PT_SP" name="PT_SP" data-ax5select="PT_SP"
+                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                        </ax:td> --%>
+                        <ax:td label="거래처명" width="350px">
+                            <div class="input-group" style="width:100%">
+                                <input type="text" class="form-control" name="PT_NM" id="PT_NM" style="width:100%"/>
+                            </div>
+                        </ax:td>
+                        <ax:td label='이체여부' width="350px">
+                            <div id="TRANS_YN" name="TRANS_YN" data-ax5select="TRANS_YN"
+                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                        </ax:td>
+                    </ax:tr>
                 </ax:tbl>
             </ax:form>
-            <div class="H10"></div>
         </div>
-
-
-        <%-- 그리드 영역 시작 --%>
-        <div style="width:100%;overflow:hidden">
+		<div class="H10"></div>
             <div style="width:99%;overflow:hidden;">
                 <div class="ax-button-group" data-fit-height-aside="grid-view-01" id="left_title" name="왼쪽그리드타이틀">
                     <div class="left">
@@ -510,12 +417,6 @@
                         </h2>
                     </div>
                     <div class="right">
-<%--                        <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i--%>
-<%--                                class="icon_add"></i>--%>
-<%--                            <ax:lang id="ax.admin.add"/></button>--%>
-<%--                        <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">--%>
-<%--                            <i--%>
-<%--                                    class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>--%>
                     </div>
                 </div>
 
@@ -524,30 +425,7 @@
                      id = "left_grid"
                      name="왼쪽그리드"
                 ></div>
-
-<%--                <div class="ax-button-group" data-fit-height-aside="grid-view-02" id="left_title2" name="왼쪽그리드타이틀">--%>
-<%--                    <div class="left">--%>
-<%--                        <h2>--%>
-<%--                            <i class="icon_list"></i> 배송추가--%>
-<%--                        </h2>--%>
-<%--                    </div>--%>
-<%--                    <div class="right">--%>
-<%--                        <button type="button" class="btn btn-small" data-grid-view-02-btn="add" style="width:80px;"><i--%>
-<%--                                class="icon_add"></i>--%>
-<%--                            <ax:lang id="ax.admin.add"/></button>--%>
-<%--                        <button type="button" class="btn btn-small" data-grid-view-02-btn="delete" style="width:80px;">--%>
-<%--                            <i--%>
-<%--                                    class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-
-<%--                <div data-ax5grid="grid-view-02"--%>
-<%--                     data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"--%>
-<%--                     id = "left_grid2"--%>
-<%--                     name="왼쪽그리드"--%>
-<%--                ></div>--%>
             </div>
-        </div>
 
 
 
