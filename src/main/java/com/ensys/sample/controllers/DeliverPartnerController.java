@@ -54,5 +54,10 @@ public class DeliverPartnerController extends BaseController {
         return Responses.ListResponse.of(service.MkselectD(param));
     }
 
+    @RequestMapping(value = "Mksave", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public ApiResponse Mksave(@RequestBody HashMap<String, Object> param) {
+        service.Mksave(param);
+        return ok();
+    }
 
 }

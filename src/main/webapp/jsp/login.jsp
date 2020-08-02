@@ -57,7 +57,7 @@
         });
     </script>
     <script type="text/javascript">
-        <%--axboot.requireSession('${config.sessionCookie}');--%>
+        axboot.requireSession('${config.sessionCookie}');
         var fnObj = {
             pageStart: function () {
                 if (localStorage.getItem("cdCompany") != null && localStorage.getItem("cdGroup") != null && localStorage.getItem("idUser") != null) {

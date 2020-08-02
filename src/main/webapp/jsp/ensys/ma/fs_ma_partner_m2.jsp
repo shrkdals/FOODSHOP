@@ -97,6 +97,37 @@
 
                     var itemH = [].concat(caller.gridView01.getData("modified"));
                     itemH = itemH.concat(caller.gridView01.getData("deleted"));
+
+                    for(var i = 0; i < itemH.length; i++){
+                        if(nvl(itemH[i].CONTRACT_NO) != ''){
+                            if(nvl(itemH[i].CONTRACT_SP) == ''){
+                                qray.alert('계약유형은 필수입니다.')
+                                return
+                            }
+                            if(nvl(itemH[i].CONTRACT_ST_DTE) == ''){
+                                qray.alert('계약시작일은 필수입니다.')
+                                return
+                            }
+                            if(nvl(itemH[i].CONTRACT_ED_DTE) == ''){
+                                qray.alert('계약종료일은 필수입니다.')
+                                return
+                            }
+                            if(nvl(itemH[i].CONTRACT_STAT) == ''){
+                                qray.alert('계약상태는 필수입니다.')
+                                return
+                            }
+                            if(nvl(itemH[i].PT_CONTRACT_PERSON) == ''){
+                                qray.alert('거래처 계약담당자는 필수입니다.')
+                                return
+                            }
+                            // if(nvl() == ''){
+                            //     qray.alert('')
+                            //     return
+                            // }
+
+                        }
+                    }
+
                     itemH = itemH.concat(caller.gridView02.getData("modified"));
                     itemH = itemH.concat(caller.gridView02.getData("deleted"));
                     itemH = itemH.concat(caller.gridView03.getData("modified"));
@@ -840,7 +871,11 @@
                     fnObj.gridView01.target.setValue(itemH.__index , 'PT_CONTRACT_PERSON', e.detail.ID_USER )
                 });
 
-
+                $("#CD_BANK").on('dataBind', function (e) {
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__index , 'CD_BANK', e.detail.CD_BANK )
+                    fnObj.gridView01.target.setValue(itemH.__index , 'NM_BANK', e.detail.NM_BANK )
+                });
             });
 
             function post() {
@@ -1249,10 +1284,10 @@
                                     <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"
                                          data-ax5select-config='{}' form-bind-type="selectBox"></div>
                                 </ax:td>
-                                <ax:td label='계약여부' width="300px">
-                                    <div id="CONTRACT_YN" name="CONTRACT_YN" data-ax5select="CONTRACT_YN"
-                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                                </ax:td>
+<%--                                <ax:td label='계약여부' width="300px">--%>
+<%--                                    <div id="CONTRACT_YN" name="CONTRACT_YN" data-ax5select="CONTRACT_YN"--%>
+<%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
+<%--                                </ax:td>--%>
                             </ax:tr>
                             <div class="ax-button-group">
                                 <div class="left">

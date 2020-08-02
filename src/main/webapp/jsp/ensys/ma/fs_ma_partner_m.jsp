@@ -702,6 +702,11 @@
                     var itemH = fnObj.gridView01.getData('selected')[0];
                     fnObj.gridView01.target.setValue(itemH.__index , 'JOIN_PT_CD', e.detail.PT_CD )
                 });
+                $("#CD_BANK").on('dataBind', function (e) {
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__index , 'CD_BANK', e.detail.CD_BANK )
+                    fnObj.gridView01.target.setValue(itemH.__index , 'NM_BANK', e.detail.NM_BANK )
+                });
                 $("#PT_CONTRACT_PERSON").on('dataBind', function (e) {
                     var itemH = fnObj.gridView01.getData('selected')[0];
                     fnObj.gridView01.target.setValue(itemH.__index , 'PT_CONTRACT_PERSON', e.detail.ID_USER )
@@ -1052,6 +1057,17 @@
                                 <ax:td label='팩스번호' width="300px">
                                     <input type="text" class="form-control" data-ax-path="FAX_NO"
                                            name="FAX_NO" id="FAX_NO" form-bind-text = 'FAX_NO' form-bind-type ='text'/>
+                                </ax:td>
+                            </ax:tr>
+                            <ax:tr>
+                                <ax:td label='계좌번호' width="300px">
+                                    <input type="text" class="form-control" data-ax-path="NO_DEPOSIT"
+                                           name="NO_DEPOSIT" id="NO_DEPOSIT" form-bind-text = 'NO_DEPOSIT' form-bind-type ='text'/>
+                                </ax:td>
+                                <ax:td label='계좌은행' width="300px">
+                                    <codepicker id="CD_BANK" HELP_ACTION="HELP_BANK" HELP_URL="bank" BIND-CODE="CD_BANK"
+                                                BIND-TEXT="NM_BANK" READONLY
+                                                form-bind-type="codepicker" form-bind-text="NM_BANK" form-bind-code="CD_BANK"/>
                                 </ax:td>
                             </ax:tr>
                             <ax:tr>

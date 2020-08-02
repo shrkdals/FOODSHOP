@@ -96,6 +96,7 @@
                     var lastIdx = nvl(fnObj.gridView01.target.list.length, fnObj.gridView01.lastRow());
                     afterIndex = lastIdx
                     fnObj.gridView01.target.select(lastIdx - 1);
+                    fnObj.gridView01.target.focus(lastIdx - 1);
                     fnObj.gridView01.target.setValue(lastIdx - 1, "BEGINING_IN_NUM", 0);
                     fnObj.gridView01.target.setValue(lastIdx - 1, "SAFE_STOCK_NUM", 0);
                     fnObj.gridView01.target.setValue(lastIdx - 1, "STOCK_NUM", 0);
@@ -159,12 +160,16 @@
                     caller.gridView02.delRow("selected");
                 }
                 ,APPLY_WEB01: function (caller, act, data) {
-                    var param = fnObj.gridView03.getData('selected')[0]
-                    param.GROUP = 'WEB01'
+                    var param = fnObj.gridView02.getData('selected')[0]
+                    if(nvl(param.MAKE_VERIFY_YN,'N') == 'Y'){
+                        qray.alert('이미 승인된 내역입니다.')
+                        return
+                    }
+                    param['GROUP'] = 'WEB01'
                     axboot.ajax({
                         type: "POST",
                         url: ["DeliverPartner", "APPLY_INOUT"],
-                        data: JSON.stringify(),
+                        data: JSON.stringify(param),
                         callback: function (res) {
                             qray.alert("저장 되었습니다.");
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -175,12 +180,16 @@
                     });
                 }
                 ,APPLY_WEB04: function (caller, act, data) {
-                    var param = fnObj.gridView03.getData('selected')[0]
-                    param.GROUP = 'WEB04'
+                    var param = fnObj.gridView02.getData('selected')[0]
+                    if(nvl(param.DISTRIB_VERIFY_YN,'N') == 'Y'){
+                        qray.alert('이미 승인된 내역입니다.')
+                        return
+                    }
+                    param['GROUP'] = 'WEB04'
                     axboot.ajax({
                         type: "POST",
                         url: ["DeliverPartner", "APPLY_INOUT"],
-                        data: JSON.stringify(data),
+                        data: JSON.stringify(param),
                         callback: function (res) {
                             qray.alert("저장 되었습니다.");
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -538,9 +547,9 @@
                                         options: YN_OP
                                     }
                                     ,disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                        // if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
                                             return true;
-                                        }
+                                        // }
                                     }
                                 }
                                 ,formatter: function () {
@@ -556,9 +565,9 @@
                                         options: YN_OP
                                     }
                                     ,disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                        // if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
                                             return true;
-                                        }
+                                        // }
                                     }
                                 }
                                 ,formatter: function () {
@@ -741,9 +750,9 @@
                                         options: YN_OP
                                     }
                                     ,disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                        // if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
                                             return true;
-                                        }
+                                        // }
                                     }
                                 }
                                 ,formatter: function () {
@@ -759,9 +768,9 @@
                                         options: YN_OP
                                     }
                                     ,disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                        // if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
                                             return true;
-                                        }
+                                        // }
                                     }
                                 }
                                 ,formatter: function () {
@@ -790,7 +799,7 @@
                         }
                     });
 
-                    axboot.buttonClick(this, "data-grid-view-03-btn", {
+                    axboot.buttonClick(this, "data-grid-view-02-btn", {
                         "applyWEB01": function () {
                             ACTIONS.dispatch(ACTIONS.APPLY_WEB01);
                         },
@@ -913,6 +922,14 @@
                 <div class="H10"></div>
         <div id="tab_area" data-ax5layout="ax1" data-config="{layout:'tab-panel'}" style="height:300px;" name="하단탭영역">
             <div data-tab-panel="{label: '입고 정보', active: 'true'}" id="tabGrid1">
+                <div class="ax-button-group" data-fit-height-aside="grid-view-02" id="tab2_button" name="왼쪽그리드타이틀">
+                    <div class="right">
+                        <button type="button" class="btn btn-small" data-grid-view-02-btn="applyWEB01" style="width:80px;">
+                            <i class="icon_add"></i>본사승인</button>
+                        <button type="button" class="btn btn-small" data-grid-view-02-btn="applyWEB04" style="width:80px;">
+                            <i class="icon_add"></i> 물류사승인</button>
+                    </div>
+                </div>
                 <div data-ax5grid="grid-view-02"
                      data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
                      id = "tab1_grid"
@@ -920,14 +937,6 @@
                 </div>
             </div>
             <div data-tab-panel="{label: '출고 정보', active: 'true'}" id="tabGrid2">
-                <div class="ax-button-group" data-fit-height-aside="grid-view-03" id="tab3_button" name="왼쪽그리드타이틀">
-                    <div class="right">
-                        <button type="button" class="btn btn-small" data-grid-view-03-btn="applyWEB01" style="width:80px;">
-                            <i class="icon_add"></i>본사승인</button>
-                        <button type="button" class="btn btn-small" data-grid-view-03-btn="applyWEB04" style="width:80px;">
-                            <i class="icon_add"></i> 물류사승인</button>
-                    </div>
-                </div>
                 <div data-ax5grid="grid-view-03"
                      data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
                      id = "tab2_grid"

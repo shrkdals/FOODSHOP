@@ -79,6 +79,60 @@
     { CALL UP_FS_ITEM_INOUT_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} , #{ITEM_CD} , #{INOUT_TP} ) }
     </select>
 
+    <insert id="MkinsertM" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_MKPARTNER_M_I(
+          #{COMPANY_CD}
+        , #{DISTRIB_PT_CD}
+        , #{ITEM_CD}
+        , #{BEGINING_IN_NUM}
+        , #{SAFE_STOCK_NUM}
+        , #{STOCK_NUM}
+        , #{ORDER_STOCK_NUM}
+        , #{ORDR_STAT}
+        , #{LOGIN_ID}
+        , #{MAKE_PT_CD}
+        , #{CCL_PRIOD_ST_DTE}
+        , #{CCL_PRIOD_ST_DTE}
+        ) }
+    </insert>
+
+    <update id="MkupdateM" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_MKPARTNER_M_U(
+          #{COMPANY_CD}
+        , #{DISTRIB_PT_CD}
+        , #{ITEM_CD}
+        , #{BEGINING_IN_NUM}
+        , #{SAFE_STOCK_NUM}
+        , #{STOCK_NUM}
+        , #{ORDER_STOCK_NUM}
+        , #{ORDR_STAT}
+        , #{LOGIN_ID}
+        , #{MAKE_PT_CD}
+        , #{CCL_PRIOD_ST_DTE}
+        , #{CCL_PRIOD_ED_DTE}
+        ) }
+    </update>
+
+    <update id="MkupdateD" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_MKPARTNER_D_U(
+          #{COMPANY_CD}
+        , #{DISTRIB_PT_CD}
+        , #{ITEM_CD}
+        , #{INOUT_SEQ}
+        , #{CCL_PRIOD_ST_DTE}
+        , #{CCL_PRIOD_ED_DTE}
+        , #{LOGIN_ID}
+        ) }
+    </update>
+
+    <update id="MkdeleteM" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_DELIVER_PARTNER_M_D(
+          #{COMPANY_CD}
+        , #{DISTRIB_PT_CD}
+        , #{ITEM_CD}
+        ) }
+    </update>
+
 </mapper>
 
 

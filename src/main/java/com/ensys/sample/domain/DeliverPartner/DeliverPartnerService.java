@@ -82,6 +82,33 @@ public class DeliverPartnerService extends BaseService {
         param.put("LOGIN_ID",user.getIdUser());
         mapper.APPLY_INOUT(param);
     }
+
+    public void Mksave(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        // #### 제조사 마스터 ####
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("deleteM")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("LOGIN_ID",user.getIdUser());
+            mapper.MkdeleteM(item);
+        }
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("insertM")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("LOGIN_ID",user.getIdUser());
+            if(item.get("__created__") != null){
+                mapper.MkinsertM(item);
+            }else{
+                mapper.MkupdateM(item);
+            }
+
+        }
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("updateD")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("LOGIN_ID",user.getIdUser());
+            mapper.MkupdateD(item);
+
+        }
+        // #### 제조사 마스터 ####
+    }
 }
 
 
