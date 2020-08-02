@@ -25,14 +25,15 @@
 
             var afterIndex = 0;
             var selectRow2 = 0;
-            var VERIFY_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00021');
+            var ORDR_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00020');
+            var INOUT_TP = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00019');
             var YN_OP = [{value:'' , text:''},{value:'Y' , text:'Y'},{value:'N' , text:'N'}];
 
             var CallBack1;
             var fnObj = {}, CODE = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_SEARCH: function (caller, act, data) {
-                    var list = $.DATA_SEARCH('mkpartner','selectH',{CD_COMPANY:SCRIPT_SESSION.cdCompany , KEYWORD : $('#KEYWORD').val()});
+                    var list = $.DATA_SEARCH('DeliverPartner','MkSelectH',{CD_COMPANY:SCRIPT_SESSION.cdCompany , KEYWORD : $('#KEYWORD').val()});
                     fnObj.gridView01.target.setData(list);
                     caller.gridView01.target.select(afterIndex);
                     caller.gridView01.target.focus(afterIndex);
@@ -56,7 +57,7 @@
                         return;
                     }
                     var data = {
-                         insertM: caller.gridView01.getData("modified")
+                        insertM: caller.gridView01.getData("modified")
                         ,deleteM: caller.gridView01.getData("deleted")
                         ,insertD: caller.gridView02.getData("modified")
                         ,deleteD: caller.gridView02.getData("deleted")
@@ -115,6 +116,11 @@
 
                 ITEM_ADD2: function (caller, act, data) {
 
+                    if (caller.gridView01.getData('selected').length == 0) {
+                        qray.alert("선택된 물류사가 없습니다.");
+                        return;
+                    }
+
                     caller.gridView02.addRow();
                     var itemH = caller.gridView01.getData('selected')[0]
                     var lastIdx = nvl(caller.gridView02.target.list.length, caller.gridView02.lastRow());
@@ -122,6 +128,13 @@
                     selectRow2 = lastIdx - 1;
                     caller.gridView02.target.focus(lastIdx - 1);
                     caller.gridView02.target.setValue(lastIdx - 1, "COMPANY_CD", itemH.COMPANY_CD);
+                    caller.gridView02.target.setValue(lastIdx - 1, "DISTRIB_PT_CD", itemH.DISTRIB_PT_CD);
+                    caller.gridView02.target.setValue(lastIdx - 1, "DISTRIB_PT_NM", itemH.DISTRIB_PT_NM);
+                    caller.gridView02.target.setValue(lastIdx - 1, "ITEM_CD", itemH.ITEM_CD);
+                    caller.gridView02.target.setValue(lastIdx - 1, "ITEM_NM", itemH.ITEM_NM);
+                    caller.gridView02.target.setValue(lastIdx - 1, "MAKE_PT_CD", itemH.MAKE_PT_CD);
+                    caller.gridView02.target.setValue(lastIdx - 1, "MAKE_PT_NM", itemH.MAKE_PT_NM);
+
 
                 },
                 ITEM_DEL1: function (caller, act, data) {
@@ -192,31 +205,62 @@
                         target: $('[data-ax5grid="grid-view-01"]'),
                         showRowSelector: true,
                         columns: [
-                            {key: "COMPANY_CD"         , label: ""              , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
-                            ,{key: "MAKE_PT_CD"        , label: "제조사코드"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "MAKE_PT_NM"        , label: "제조사명"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ITEM_CD"           , label: "상품코드"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ITEM_CD"           , label: "상품명"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "DELI_SEQ"          , label: "배송순번"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "DELI_DTE"          , label: "배송일자"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "DELI_NUM"          , label: "배송수량"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "CCL_PRIOD_ST_DTE"  , label: "유통기간시작일"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "CCL_PRIOD_ED_DTE"  , label: "유통기간종료일"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "VERIFY_STAT"       , label: "검증상태"              , width: 150, align: "left" , sortabled:true ,  hidden:false
+                            {key: "COMPANY_CD"       , label: ""              , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                            ,{key: "DISTRIB_PT_CD"    , label: "<span style=\"color:red;\"> * </span> 물류거래처코드" , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false
+                                , styleClass: function () {
+                                    return "readonly";
+                                }
+                            }
+                            ,{key: "DISTRIB_PT_NM"    , label: "<span style=\"color:red;\"> * </span> 물류거래처명"   , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "ITEM_CD"          , label: "<span style=\"color:red;\"> * </span> 상품코드"	    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false
+                                , styleClass: function () {
+                                    return "readonly";
+                                }
+                            }
+                            ,{key: "ITEM_NM"          , label: "<span style=\"color:red;\"> * </span> 상품명"		, width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false
+                                ,picker: {
+                                    top: _pop_top,
+                                    width: 600,
+                                    height: _pop_height,
+                                    url: "item",
+                                    action: ["commonHelp", "HELP_ITEM"],
+                                    param: function () {
+                                    },
+                                    callback: function (e) {
+                                        fnObj.gridView01.target.setValue(this.dindex, "ITEM_CD", e[0].ITEM_CD);
+                                        fnObj.gridView01.target.setValue(this.dindex, "ITEM_NM", e[0].ITEM_NM);
+                                        fnObj.gridView01.target.setValue(this.dindex, "MAKE_PT_CD", e[0].MAKE_PT_CD);
+                                        fnObj.gridView01.target.setValue(this.dindex, "MAKE_PT_NM", e[0].MAKE_PT_NM);
+                                    },
+                                    disabled: function () {
+                                        if(nvl(this.__created__,false)){
+                                            return true;
+                                        }else{
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
+                            ,{key: "BEGINING_IN_NUM"  , label: "<span style=\"color:red;\"> * </span> 초기입고수량"	, width: 150, align: "left" , sortabled:true ,  hidden:false , editor: {type:"number"} }
+                            ,{key: "SAFE_STOCK_NUM"   , label: "<span style=\"color:red;\"> * </span> 안전재고수량"	, width: 150, align: "left" , sortabled:true ,  hidden:false , editor: {type:"number"} }
+                            ,{key: "STOCK_NUM"        , label: "<span style=\"color:red;\"> * </span> 재고수량"	    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: {type:"number"} }
+                            ,{key: "ORDR_STAT"        , label: "발주상태"	    , width: 150, align: "left" , sortabled:true ,  hidden:false
                                 , editor: {
                                     type: "select", config: {
                                         columnKeys: {
                                             optionValue: "value", optionText: "text"
                                         },
-                                        options: VERIFY_STAT
+                                        options: ORDR_STAT
                                     }
                                     , disabled: function () {
                                     }
                                 }
-                                , formatter: function () {
-                                    return $.changeTextValue(VERIFY_STAT, this.value)
+                                ,formatter: function () {
+                                    return $.changeTextValue(ORDR_STAT, this.value)
                                 }
                             }
+                            ,{key: "MAKE_PT_CD"       , label:	"제조거래처코드"  , width: 150, align: "left" , sortabled:true ,  hidden:true, editor: false}
+                            ,{key: "MAKE_PT_NM"       , label:	"제조거래처명"  , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false}
                         ],
 
                         body: {
@@ -227,26 +271,28 @@
                             onClick: function () {
                                 var index = this.dindex;
                                 if(afterIndex == index){return false;}
-                                // var data = []
-                                // data = data.concat(fnObj.gridView02.getData("modified"));
-                                // data = data.concat(fnObj.gridView02.getData("deleted"));
-                                //
-                                // if(data.length > 0){
-                                //     qray.confirm({
-                                //         msg: "작업중인 상세 데이터를 먼저 저장해주십시오."
-                                //         ,btns: {
-                                //             cancel: {
-                                //                 label:'확인', onClick: function(key){
-                                //                     qray.close();
-                                //                 }
-                                //             }
-                                //         }
-                                //     })
-                                // }else{
-                                //     afterIndex = index;
-                                //     this.self.select(this.dindex);
-                                //     ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
-                                // }
+                                var data = []
+                                //     [].concat(fnObj.gridView01.getData("modified"));
+                                // data = data.concat(fnObj.gridView01.getData("deleted"));
+                                data = data.concat(fnObj.gridView02.getData("modified"));
+                                data = data.concat(fnObj.gridView02.getData("deleted"));
+
+                                if(data.length > 0){
+                                    qray.confirm({
+                                        msg: "작업중인 상세 데이터를 먼저 저장해주십시오."
+                                        ,btns: {
+                                            cancel: {
+                                                label:'확인', onClick: function(key){
+                                                    qray.close();
+                                                }
+                                            }
+                                        }
+                                    })
+                                }else{
+                                    afterIndex = index;
+                                    this.self.select(this.dindex);
+                                    ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
+                                }
 
                             }
                         },
@@ -327,10 +373,76 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-02"]'),
                         columns: [
-
-                            {key: "COMPANY_CD"         , label: ""              , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
-                            ,{key: "MAKE_PT_CD"       , label:	"<span style=\"color:red;\"> * </span> 제조거래처코드"  , width: 150, align: "left" , sortabled:true ,  hidden:true, editor: false}
-                            ,{key: "MAKE_PT_NM"       , label:	"<span style=\"color:red;\"> * </span>  제조거래처명"  , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false
+                            {key: "COMPANY_CD"       , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                            ,{key: "DISTRIB_PT_CD"    , label: "<span style=\"color:red;\"> * </span> 물류거래처코드"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:true , editor: false }
+                            ,{key: "DISTRIB_PT_NM"    , label: "<span style=\"color:red;\"> * </span> 물류거래처명"    , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false , editor: false
+                                , styleClass: function () {
+                                    return "readonly";
+                                }
+                            }
+                            ,{key: "ITEM_CD"          , label: "<span style=\"color:red;\"> * </span> 상품코드"	      , width: 150, align: "left" , sortabled:true , required:true ,  hidden:true , editor: false }
+                            ,{key: "ITEM_NM"          , label: "<span style=\"color:red;\"> * </span> 상품명"		  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false , editor: false
+                                , styleClass: function () {
+                                    return "readonly";
+                                }
+                            }
+                            ,{key: "INOUT_SEQ"        , label: "<span style=\"color:red;\"> * </span> 입출고순번"      , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                            ,{key: "INOUT_TP"         , label: "입출고구분"      , width: 150, align: "left" , sortabled:true ,  hidden:false
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: INOUT_TP
+                                    }
+                                    , disabled: function () {
+                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                                ,formatter: function () {
+                                    return $.changeTextValue(INOUT_TP, this.value)
+                                }
+                            }
+                            ,{key: "INOUT_DTE"        , label:	"입출고일자"      , width: 150, align: "left" , sortabled:true ,  hidden:false
+                                , editor: {type:"date"
+                                    ,disabled: function () {
+                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                            ,{key: "INOUT_NUM"        , label:	"입출고수량"      , width: 150, align: "left" , sortabled:true ,  hidden:false
+                                , editor: {type:"number"
+                                    ,disabled: function () {
+                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                            ,{key: "CCL_PRIOD_ST_DTE" , label:	"<span style=\"color:red;\"> * </span>유통기간시작일"  , width: 150, align: "left" , sortabled:true, required:true ,  hidden:false
+                                , editor: {type:"date"
+                                    ,disabled: function () {
+                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                            ,{key: "CCL_PRIOD_ED_DTE" , label:	"<span style=\"color:red;\"> * </span>유통기간종료일"  , width: 150, align: "left" , sortabled:true, required:true ,  hidden:false
+                                , editor: {type:"date"
+                                    ,disabled: function () {
+                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                            ,{key: "MAKE_PT_CD"       , label:	"제조거래처코드"  , width: 150, align: "left" , sortabled:true ,  hidden:true, editor: false}
+                            ,{key: "MAKE_PT_NM"       , label:	"제조거래처명"  , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false
                                 ,picker: {
                                     top: _pop_top,
                                     width: 600,
@@ -351,44 +463,42 @@
                                     }
                                 }
                             }
-                            ,{key: "ITEM_CD"          , label: "<span style=\"color:red;\"> * </span> 상품코드"	      , width: 150, align: "left" , sortabled:true , required:true ,  hidden:true , editor: false }
-                            ,{key: "ITEM_NM"          , label: "<span style=\"color:red;\"> * </span> 상품명"		  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false , editor: false
-                                ,picker: {
-                                    top: _pop_top,
-                                    width: 600,
-                                    height: _pop_height,
-                                    url: "item",
-                                    action: ["commonHelp", "HELP_ITEM"],
-                                    param: function () {
-                                        return {PT_SP : '03'}
-                                    },
-                                    callback: function (e) {
-                                        fnObj.gridView02.target.setValue(this.dindex, "ITEM_CD", e[0].ITEM_CD);
-                                        fnObj.gridView02.target.setValue(this.dindex, "ITEM_NM", e[0].ITEM_NM);
-                                    }
-                                    ,disabled: function () {
-                                    }
-                                }
-                            }
-                            ,{key: "DELI_SEQ"          , label: "배송순번"              , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
-                            ,{key: "DELI_DTE"          , label: "배송일자"              , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: {type:"date"} }
-                            ,{key: "DELI_NUM"          , label: "<span style=\"color:red;\"> * </span> 배송수량"              , width: 150, align: "left" , required:true , sortabled:true ,  hidden:false , editor: {type:"number"} }
-                            ,{key: "CCL_PRIOD_ST_DTE"  , label: "<span style=\"color:red;\"> * </span> 유통기간시작일"              , width: 150, align: "left" , required:true , sortabled:true ,  hidden:false , editor: {type:"date"} }
-                            ,{key: "CCL_PRIOD_ED_DTE"  , label: "<span style=\"color:red;\"> * </span> 유통기간종료일"              , width: 150, align: "left" , required:true , sortabled:true ,  hidden:false , editor: {type:"date"} }
-                            ,{key: "VERIFY_STAT"       , label: "검증상태"              , width: 150, align: "left" , sortabled:true ,  hidden:false
+                            ,{key: "DISTRIB_VERIFY_YN", label:	"<span style=\"color:red;\"> * </span>물류사검증여부"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
                                 , editor: {
                                     type: "select", config: {
                                         columnKeys: {
                                             optionValue: "value", optionText: "text"
                                         },
-                                        options: VERIFY_STAT
+                                        options: YN_OP
                                     }
-                                    , disabled: function () {
+                                    ,disabled: function () {
+                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                            return true;
+                                        }
                                     }
                                 }
+                                ,formatter: function () {
+                                    return $.changeTextValue(YN_OP, this.value)
+                                }
                             }
-
-
+                            ,{key: "MAKE_VERIFY_YN"   , label:	"<span style=\"color:red;\"> * </span>제조사검증여부"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: YN_OP
+                                    }
+                                    ,disabled: function () {
+                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                                ,formatter: function () {
+                                    return $.changeTextValue(YN_OP, this.value)
+                                }
+                            }
                         ],
                         body: {
                             onClick: function () {
@@ -521,13 +631,13 @@
                 <div class="ax-button-group" data-fit-height-aside="grid-view-01" id="left_title" name="왼쪽그리드타이틀">
                     <div class="left">
                         <h2>
-                            <i class="icon_list"></i> 배송리스트
+                            <i class="icon_list"></i> 입출고리스트
                         </h2>
                     </div>
                     <div class="right">
-<%--                        <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i--%>
-<%--                                class="icon_add"></i>--%>
-<%--                            <ax:lang id="ax.admin.add"/></button>--%>
+                        <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
+                                class="icon_add"></i>
+                            <ax:lang id="ax.admin.add"/></button>
                         <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">
                             <i
                                     class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
@@ -543,7 +653,7 @@
                 <div class="ax-button-group" data-fit-height-aside="grid-view-02" id="left_title2" name="왼쪽그리드타이틀">
                     <div class="left">
                         <h2>
-                            <i class="icon_list"></i> 배송추가
+                            <i class="icon_list"></i> 입출고상세
                         </h2>
                     </div>
                     <div class="right">

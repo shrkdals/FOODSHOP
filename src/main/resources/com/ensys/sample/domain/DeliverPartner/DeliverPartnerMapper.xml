@@ -9,7 +9,7 @@
     </select>
 
     <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_ITEM_INOUT_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} , #{ITEM_CD} ) }
+    { CALL UP_FS_ITEM_INOUT_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} , #{ITEM_CD} , #{INOUT_TP} ) }
     </select>
 
     <update id="insertM" parameterType="java.util.HashMap" statementType="CALLABLE">
@@ -60,6 +60,15 @@
     , #{INOUT_SEQ}
     ) }
     </update>
+
+
+    <select id="MkselectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_MKPARTNER_M_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} ,#{ITEM_CD} ,#{LOGIN_ID}) }
+    </select>
+
+    <select id="MkselectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ITEM_INOUT_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} , #{ITEM_CD} ) }
+    </select>
 
 </mapper>
 

@@ -19,6 +19,7 @@ public class DeliverPartnerController extends BaseController {
     @Inject
     private DeliverPartnerService service;
 
+    // ## 입출고관리 물류사용 ##
     @RequestMapping(value = "selectH", method = RequestMethod.POST, produces = APPLICATION_JSON)
     public Responses.ListResponse selectH(@RequestBody HashMap<String, Object> param) {
         return Responses.ListResponse.of(service.selectH(param));
@@ -29,11 +30,24 @@ public class DeliverPartnerController extends BaseController {
         return Responses.ListResponse.of(service.selectD(param));
     }
 
-
-
     @RequestMapping(value = "save", method = RequestMethod.POST, produces = APPLICATION_JSON)
     public ApiResponse save(@RequestBody HashMap<String, Object> param) {
         service.saveAll(param);
         return ok();
     }
+
+
+
+    // ## 제조사관리 제조사용 ##
+    @RequestMapping(value = "MkSelectH", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse MkselectH(@RequestBody HashMap<String, Object> param) {
+        return Responses.ListResponse.of(service.MkselectH(param));
+    }
+
+    @RequestMapping(value = "MkselectD", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse MkselectD(@RequestBody HashMap<String, Object> param) {
+        return Responses.ListResponse.of(service.MkselectD(param));
+    }
+
+
 }

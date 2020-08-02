@@ -428,7 +428,14 @@
                             ,{key: 'SALES_PERSON_ID2'    , label: '영업 담당자 아이디' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'SALES_PERSON_NM2'    , label: '영업 담당자 아이디' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'CD_AREA'    , label: '법정동코드' , width: 0 , align: "center" , editor: false  ,hidden:true}
-                            
+                            ,{key: 'LV1_AREA_CD'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'LV2_AREA_CD'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'LV3_AREA_CD'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'LV4_AREA_CD'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'NO_EMAIL'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'NO_DEPOSIT'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'CD_BANK'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'NM_BANK'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
                         ],
 
                         body: {
