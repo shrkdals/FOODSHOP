@@ -128,6 +128,22 @@
                         }
                     }
 
+                    var itemGrid3 = fnObj.gridView03.getData("modified")
+                    for(var i = 0 ; i <itemGrid3.length; i++){
+                        if(nvl(itemGrid3[i].USER_ID) == ''){
+                            qray.alert('사용자 아이디는 필수입니다.')
+                            return
+                        }
+                        if(nvl(itemGrid3[i].USER_NM) == ''){
+                            qray.alert('사용자명은 필수입니다.')
+                            return
+                        }
+                        if(nvl(itemGrid3[i].PASS_WORD) == ''){
+                            qray.alert('사용자 비밀번호는 필수입니다.')
+                            return
+                        }
+                    }
+
                     itemH = itemH.concat(caller.gridView02.getData("modified"));
                     itemH = itemH.concat(caller.gridView02.getData("deleted"));
                     itemH = itemH.concat(caller.gridView03.getData("modified"));
@@ -143,7 +159,7 @@
                         ,delete2 : caller.gridView02.getData("deleted")
                         ,insert2 : caller.gridView02.getData("modified")
                         ,delete3 : caller.gridView03.getData("deleted")
-                        ,insert3 : caller.gridView03.getData("modified").concat(caller.gridView03.getData("created"))
+                        ,insert3 : caller.gridView03.getData("modified")
                     };
 
                     qray.confirm({
@@ -159,7 +175,12 @@
 		                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 		                            caller.gridView01.target.select(afterIndex);
 		                            caller.gridView01.target.focus(afterIndex);
-		                        }
+		                        },
+                                options: {
+                                    onError: function (err) {
+                                        qray.alert(err.message)
+                                    }
+                                }
 		                    });
                         }
                     });
@@ -777,6 +798,7 @@
                                     }, disabled: function () {
                                     }
                                 }
+                                ,hidden:true
                             }
                         ],
                         body: {
@@ -1273,22 +1295,26 @@
                                     <div id="USE_YN" name="USE_YN" data-ax5select="USE_YN"
                                          data-ax5select-config='{}' form-bind-type="selectBox"></div>
                                 </ax:td>
-                                <ax:td label='영업담당자아이디' width="300px">
-                                    <codepicker id="SALES_PERSON_ID" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="USER_ID"
-                                                BIND-TEXT="USER_NM" READONLY
-                                                form-bind-type="codepicker" form-bind-text="SALES_PERSON_NM" form-bind-code="SALES_PERSON_ID"/>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
                                 <ax:td label='브랜드검증여부' width="300px">
                                     <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"
                                          data-ax5select-config='{}' form-bind-type="selectBox"></div>
                                 </ax:td>
+<%--                                <ax:td label='영업담당자아이디' width="300px">--%>
+<%--                                    <codepicker id="SALES_PERSON_ID" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="USER_ID"--%>
+<%--                                                BIND-TEXT="USER_NM" READONLY--%>
+<%--                                                form-bind-type="codepicker" form-bind-text="SALES_PERSON_NM" form-bind-code="SALES_PERSON_ID"/>--%>
+<%--                                </ax:td>--%>
+                            </ax:tr>
+<%--                            <ax:tr>--%>
+<%--                                <ax:td label='브랜드검증여부' width="300px">--%>
+<%--                                    <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"--%>
+<%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
+<%--                                </ax:td>--%>
 <%--                                <ax:td label='계약여부' width="300px">--%>
 <%--                                    <div id="CONTRACT_YN" name="CONTRACT_YN" data-ax5select="CONTRACT_YN"--%>
 <%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
 <%--                                </ax:td>--%>
-                            </ax:tr>
+<%--                            </ax:tr>--%>
                             <div class="ax-button-group">
                                 <div class="left">
                                     <h2>

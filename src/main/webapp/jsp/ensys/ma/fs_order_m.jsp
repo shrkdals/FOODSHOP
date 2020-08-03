@@ -151,7 +151,7 @@
                         
                     	order_seq_arr.push(list[i].ORDER_SEQ);
                     	
-                        if (list[i].DELI_STAT  == '02') {
+                        if (list[i].DELI_STAT  == '01') {
                             qray.alert('입금 완료되지 않은 주문건이 존재합니다')
                             return;
                         }else if (list[i].DELI_STAT  == '03') {
@@ -201,6 +201,9 @@
                 this.gridView03.initView();
                 if(SCRIPT_SESSION.cdGroup !='WEB01'){
                     $('#SUCCESS').css('display','none')
+                }
+                if(SCRIPT_SESSION.cdGroup !='WEB04'){
+                    $('#SUCCESS2').css('display','none')
                 }
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };

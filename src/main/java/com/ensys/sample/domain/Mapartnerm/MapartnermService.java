@@ -32,6 +32,7 @@ public class MapartnermService extends BaseService {
         return mapper.select2(param);
     }
 
+    //거래처 계약관리
     @Transactional
     public void saveAll(HashMap<String, Object> param) throws Exception {
         SessionUser user = SessionUtils.getCurrentUser();
@@ -39,7 +40,7 @@ public class MapartnermService extends BaseService {
         for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("delete")){
             item.put("COMPANY_CD",user.getCdCompany());
             item.put("USER_ID",user.getIdUser());
-            mapper.delete(item);
+//            mapper.delete(item);
             mapper.deleteCONT(item);
         }
         for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("insert")){
@@ -97,6 +98,7 @@ public class MapartnermService extends BaseService {
         return mapper.SAVE_USERMAPPING_H_S(param);
     }
 
+    //거래처 등록관리
     @Transactional
     public void saveAll2(HashMap<String, Object> param) {
 
@@ -139,7 +141,12 @@ public class MapartnermService extends BaseService {
         for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("insert3")){
             item.put("COMPANY_CD",user.getCdCompany());
             item.put("LOGIN_ID",user.getIdUser());
-            mapper.MEMBER_JOIN_I(item);
+            if(item.get("__created__") != null){
+                mapper.MEMBER_JOIN_I(item);
+            }else{
+                mapper.MEMBER_JOIN_U(item);
+            }
+
         }
         // #### 거래처 등록하면에서 거래처사용자 매핑 ####
     }

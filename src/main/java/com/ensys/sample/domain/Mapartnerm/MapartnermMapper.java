@@ -32,4 +32,5 @@ public interface MapartnermMapper extends MyBatisMapper {
     void MEMBER_JOIN_D(HashMap<String, Object> item);
 
     void MEMBER_JOIN_I(HashMap<String, Object> item);
+    void MEMBER_JOIN_U(HashMap<String, Object> item);
 }

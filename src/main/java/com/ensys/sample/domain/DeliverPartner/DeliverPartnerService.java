@@ -78,9 +78,12 @@ public class DeliverPartnerService extends BaseService {
     @Transactional
     public void APPLY_INOUT(HashMap<String, Object> param) {
         SessionUser user = SessionUtils.getCurrentUser();
-        param.put("COMPANY_CD",user.getCdCompany());
-        param.put("LOGIN_ID",user.getIdUser());
-        mapper.APPLY_INOUT(param);
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("list")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("LOGIN_ID",user.getIdUser());
+            mapper.APPLY_INOUT(item);
+        }
+
     }
 
     public void Mksave(HashMap<String, Object> param) {

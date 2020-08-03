@@ -72,6 +72,10 @@
         { CALL UP_FS_PARTNER_MEMBER_I(#{COMPANY_CD} ,#{PT_CD} , #{USER_ID}, #{USER_NM}, #{USER_TP}, #{PASS_WORD}, #{TEL} , #{TOK} ,#{PT_SP} ,#{PT_NM} ,#{USER_STAT},#{LOGIN_ID}) }
     </select>
 
+
+    <select id="MEMBER_JOIN_U" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_MEMBER_I(#{COMPANY_CD} ,#{PT_CD} , #{USER_ID}, #{USER_NM}, #{USER_TP}, #{PASS_WORD}, #{TEL} , #{TOK} ,#{PT_SP} ,#{PT_NM} ,#{USER_STAT},#{LOGIN_ID}) }
+    </select>
 </mapper>
 
 

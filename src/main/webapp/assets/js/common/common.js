@@ -683,7 +683,7 @@ $.extend({
         axboot.ajax({
             type: "POST",
             url: [Url, Url2],
-            data: JSON.stringify(paramData),
+            data: JSON.stringify(nvl(paramData,{})),
             async: false,
             callback: function (res) {
                 // console.log(" [ DATA_SEARCH - RETURN DATA :  ", res, " ] ")

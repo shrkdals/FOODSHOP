@@ -1095,22 +1095,26 @@
                                     <div id="USE_YN" name="USE_YN" data-ax5select="USE_YN"
                                          data-ax5select-config='{}' form-bind-type="selectBox"></div>
                                 </ax:td>
-                                <ax:td label='영업담당자아이디' width="300px">
-                                    <codepicker id="SALES_PERSON_ID" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="USER_ID"
-                                                BIND-TEXT="USER_NM" READONLY
-                                                form-bind-type="codepicker" form-bind-text="SALES_PERSON_NM" form-bind-code="SALES_PERSON_ID"/>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
                                 <ax:td label='브랜드검증여부' width="300px">
                                     <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"
                                          data-ax5select-config='{}' form-bind-type="selectBox"></div>
                                 </ax:td>
+<%--                                <ax:td label='영업담당자아이디' width="300px">--%>
+<%--                                    <codepicker id="SALES_PERSON_ID" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="USER_ID"--%>
+<%--                                                BIND-TEXT="USER_NM" READONLY--%>
+<%--                                                form-bind-type="codepicker" form-bind-text="SALES_PERSON_NM" form-bind-code="SALES_PERSON_ID"/>--%>
+<%--                                </ax:td>--%>
+                            </ax:tr>
+<%--                            <ax:tr>--%>
+<%--                                <ax:td label='브랜드검증여부' width="300px">--%>
+<%--                                    <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"--%>
+<%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
+<%--                                </ax:td>--%>
 <%--                                <ax:td label='계약여부' width="300px">--%>
 <%--                                    <div id="CONTRACT_YN" name="CONTRACT_YN" data-ax5select="CONTRACT_YN"--%>
 <%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
 <%--                                </ax:td>--%>
-                            </ax:tr>
+<%--                            </ax:tr>--%>
                             <div class="ax-button-group">
                                 <div class="left">
                                     <h2>
