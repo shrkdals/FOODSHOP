@@ -38,5 +38,15 @@ public class CalcSummaryService {
 		param.put("LOGIN_ID", user.getIdUser());
 		mapper.approve(param);
 	}
+	
+	@Transactional
+	public void FundTransfer(HashMap<String, Object> param) {
+		SessionUser user = SessionUtils.getCurrentUser();
+		param.put("COMPANY_CD", user.getCdCompany());
+		param.put("LOGIN_ID", user.getIdUser());
+		mapper.FundTransfer(param);
+	}
+	
+	
 
 }

@@ -8,7 +8,7 @@
     { CALL UP_FS_ORDER_H_S(#{COMPANY_CD} , #{KEYWORD} ,#{GROUP} ,#{LOGIN_ID} , #{DT_START}, #{DT_END}) }
     </select>
     <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_ORDER_D_S(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ) }
+    { CALL UP_FS_ORDER_D_S(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ,#{CD_GROUP} ) }
     </select>
 
     <select id="excel1" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">

@@ -20,11 +20,33 @@
             .readonly {
                 background: #EEEEEE !important;
             }
+            .warning {
+                background: #ffe0cf !important;
+            }
         </style>
         <script type="text/javascript">
-
-        	var dl_ADJUST_SP         = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00031');	//	정산유형
-	        var dl_PT_SP         = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00002');
+        
+        	var dl_ADJUST_SP_list = $.DATA_SEARCH('commition','getCommitionHList',{CD_COMPANY:SCRIPT_SESSION.cdCompany , KEYWORD : ''}).list;
+        	var dl_ADJUST_SP = [{
+        		CODE: '',
+                code: '',
+                value: '',
+                VALUE: '',
+                text: '',
+                TEXT: ''
+            }];
+        	for (var i = 0 ; i < dl_ADJUST_SP_list.length ; i ++){
+            	var n = dl_ADJUST_SP_list[i];
+            	dl_ADJUST_SP.push({
+                    CODE: n.COMT_CD,
+                    code: n.COMT_CD,
+                    value: n.COMT_CD,
+                    VALUE: n.COMT_CD,
+                    text: n.COMT_NM,
+                    TEXT: n.COMT_NM
+                });
+           	}
+        	var dl_PT_SP         = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00002');
 	        $("#PT_SP").ax5select({options: dl_PT_SP});
 	        $("#ADJUST_SP").ax5select({options: dl_ADJUST_SP});
 	        
@@ -48,18 +70,17 @@
                             caller.gridView01.clear();
                             if (res.list.length > 0) {
                                 caller.gridView01.setData(res);
-                                caller.gridView01.target.select(0);
                             }
                         }
                     });
                 },
-                ITEM_OK: function (caller, act, data){
-                    var checked = 
-                	qray.confirm({
-                        msg: "승인하시겠습니까?"
+                ITEM_FUND_TRANSFER: function(caller, act, data){
+					qray.confirm({
+                        msg: "자금이체하시겠습니까?"
                     }, function () {
                         if (this.key == "ok") {
                         	var count = 0 ;
+                        	var chkVal = false;
                         	var ADJUST_NO_ARR = [];
                             var grid = caller.gridView01.target.list;
                             var i = grid.length;
@@ -68,10 +89,63 @@
                                 if (data.CHK == 'Y') {
                                     count++;
                                     ADJUST_NO_ARR.push(data.ADJUST_NO);
+                                    if (data.TRANS_YN == 'Y'){
+                                    	chkVal = true;
+                                    }
+                                    
                                 }
                             }
                             i = null;
 
+                            if (chkVal){
+                            	qray.alert("이미 이체된 데이터가 존재합니다.");
+                                return false;
+                            }
+                            if (count == 0) {
+                                qray.alert("체크한 데이터가 없습니다.");
+                                return false;
+                            }
+
+                            axboot.ajax({
+                                type: "POST",
+                                url: ["calcSummary", "FundTransfer"],
+                                data: JSON.stringify({
+                                	ADJUST_NO: ADJUST_NO_ARR.join('|')
+                                }),
+                                callback: function (res) {
+                                    qray.alert('자금이체 되었습니다.').then(function(){
+                                    	ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                                    })
+                                }
+                            });
+                        }
+                    });
+                },
+                ITEM_OK: function (caller, act, data){
+                	qray.confirm({
+                        msg: "확정하시겠습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+                        	var count = 0 ;
+                        	var chkVal = false;
+                        	var ADJUST_NO_ARR = [];
+                            var grid = caller.gridView01.target.list;
+                            var i = grid.length;
+                            while (i--) {
+                                var data = caller.gridView01.target.list[i];
+                                if (data.CHK == 'Y') {
+                                    count++;
+                                    ADJUST_NO_ARR.push(data.ADJUST_NO);
+                                    if (data.CP_YN == 'Y'){
+                                    	chkVal = true;
+                                    }
+                                }
+                            }
+                            i = null;
+                            if (chkVal) {
+                                qray.alert("이미 확정된 데이터가 존재합니다.");
+                                return false;
+                            }
                             if (count == 0) {
                                 qray.alert("체크한 데이터가 없습니다.");
                                 return false;
@@ -84,7 +158,7 @@
                                 	ADJUST_NO: ADJUST_NO_ARR.join('|')
                                 }),
                                 callback: function (res) {
-                                    qray.alert('승인되었습니다.').then(function(){
+                                    qray.alert('확정되었습니다.').then(function(){
                                     	ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                                     })
                                 }
@@ -102,6 +176,9 @@
                 if (SCRIPT_SESSION.cdGroup != 'WEB03' && SCRIPT_SESSION.cdGroup != 'WEB04'){
 					$("#btnOk").remove();
                 }
+				if (SCRIPT_SESSION.cdGroup != 'WEB01'){
+					$("#btnFundTransfer").remove();
+				}
                 
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
@@ -155,7 +232,16 @@
                             
                             ,{key: "COMPANY_CD"      , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
                             ,{key: "ADJUST_NO"       , label: "정산번호"        , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
-                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 120, align: "center" , sortabled:true ,  hidden:false , editor: false,
+								formatter: function () {
+                                    var returnValue = this.item.ADJUST_DT;
+                                    if (nvl(this.item.ADJUST_DT, '') != '') {
+                                        this.item.ADJUST_DT = this.item.ADJUST_DT.replace(/\-/g, '');
+                                        returnValue = this.item.ADJUST_DT.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+                                    }
+                                    return returnValue;
+                                }
+	         				 }
                             ,{key: "ADJUST_PT_CD"    , label: "정산거래처코드"  , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_PT_NM"    , label: "정산거래처명"    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_SP"       , label: "정산유형"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false,
@@ -163,12 +249,45 @@
                                     return $.changeTextValue(dl_ADJUST_SP, this.value)
                                 },
                              }
-                            ,{key: "ADJUST_AMT"      , label: "정산금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false, formatter: "money" }
-                            ,{key: "ADJUST_ACCUM_AMT"  , label: "정산누적금액"        , width: 150, align: "right" , sortabled:true ,  hidden:false , editor: false, formatter: "money",  }
-                            ,{key: "CP_YN"           , label: "승인여부"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "TRANS_YN"        , label: "이체여부"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "TRANS_DT"        , label: "이체일시"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "VIEW_ORDERLIST"  , label: "주문내역보기"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false,
+                            ,{key: "ADJUST_AMT"      , label: "정산금액"        , width: 120, align: "right" , sortabled:true ,  hidden:false , editor: false, formatter: "money" }
+                            ,{key: "ADJUST_ACCUM_AMT"  , label: "정산누적금액"        , width: 120, align: "right" , sortabled:true ,  hidden:false , editor: false, formatter: "money",  }
+                            ,{key: "CP_YN"           , label: "확정여부"        , width: 90, align: "center" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "TRANS_YN"        , label: "이체여부"        , width: 90, align: "center" , sortabled:true ,  hidden:false , editor: false,
+                            	styleClass: function(){
+									if (nvl(this.item.TRANS_DT,'') != ''){
+	                                    var trans_dt = this.item.TRANS_DT;
+	                                    var nowDate = ax5.util.date(today, {"return": "yyyyMMdd"});
+	                                    console.log(nowDate);
+	                                    if ( Number(trans_dt.replace(/\-/g, '')) <  nowDate){
+	                                        if (nvl(this.item.TRANS_YN, 'N') == 'N'){
+	                                    		return "warning";
+	                                        }
+	                                    }
+	                                    
+	                                }
+								}
+                             }
+                            ,{key: "TRANS_DT"        , label: "이체일시"        , width: 120, align: "center" , sortabled:true ,  hidden:false , editor: false,
+								formatter: function () {
+                               		var returnValue = this.item.TRANS_DT;
+                              	 	if (nvl(this.item.TRANS_DT, '') != '') {
+	                                   	this.item.TRANS_DT = this.item.TRANS_DT.replace(/\-/g, '');
+	                                   	returnValue = this.item.TRANS_DT.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+                                    }
+                                    return returnValue;
+	      						 }
+							}
+	        				,{key: "PAYMENTS_DT"        , label: "지급일자"        , width: 120, align: "center" , sortabled:true ,  hidden:false , editor: false,
+								formatter: function () {
+                               		var returnValue = this.item.PAYMENTS_DT;
+                               	 	if (nvl(this.item.PAYMENTS_DT, '') != '') {
+                                      	this.item.PAYMENTS_DT = this.item.PAYMENTS_DT.replace(/\-/g, '');
+                                      	returnValue = this.item.PAYMENTS_DT.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+                                    }
+                                    return returnValue;
+		 						}
+                            }
+                            ,{key: "VIEW_ORDERLIST"  , label: "주문내역보기"        , width: 120, align: "center" , sortabled:true ,  hidden:false , editor: false,
                             	formatter: function () {
                                     return "[보기]";
                                 },
@@ -182,6 +301,19 @@
                             ]
                         ],
                         body: {
+                        	/* trStyleClass: function () {
+                                if (nvl(this.item.TRANS_DT,'') != ''){
+                                    var trans_dt = this.item.TRANS_DT;
+                                    var nowDate = ax5.util.date(today, {"return": "yyyyMMdd"});
+                                    console.log(nowDate);
+                                    if ( Number(trans_dt.replace(/\-/g, '')) <  nowDate){
+                                        if (nvl(this.item.TRANS_YN, 'N') == 'N'){
+                                    		return "warning";
+                                        }
+                                    }
+                                    
+                                }
+                            }, */
                         	mergeCells: ["ADJUST_DT", "ADJUST_PT_CD", "ADJUST_PT_NM"],
                             onDataChanged: function () {
 
@@ -241,6 +373,9 @@
                         "ok": function () {
                             ACTIONS.dispatch(ACTIONS.ITEM_OK);
                         },
+	    "FundTransfer": function(){
+	         ACTIONS.dispatch(ACTIONS.ITEM_FUND_TRANSFER);
+	    },
                     });
                 },
                 getData: function (_type) {
@@ -540,7 +675,9 @@
                     </div>
                     <div class="right">
                     	<button type="button" class="btn btn-small" id="btnOk" data-grid-view-01-btn="ok" style="width:80px;">
-                    	승인</button>
+                    	확정</button>
+		<button type="button" class="btn btn-small" id="btnFundTransfer" data-grid-view-01-btn="FundTransfer" style="width:80px;">
+                    	자금이체</button>
                     </div>
                 </div>
 

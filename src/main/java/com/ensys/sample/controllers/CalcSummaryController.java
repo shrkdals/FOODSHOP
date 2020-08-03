@@ -36,6 +36,13 @@ public class CalcSummaryController extends BaseController {
 		service.approve(param);
 		return ok();
 	}
+	
+	@RequestMapping(value = "FundTransfer", method = RequestMethod.POST, produces = APPLICATION_JSON)
+	public ApiResponse FundTransfer(@RequestBody HashMap<String, Object> param) {
+		service.FundTransfer(param);
+		return ok();
+	}
+	
 
 //    @RequestMapping(value = "selectD", method = RequestMethod.POST, produces = APPLICATION_JSON)
 //    public Responses.ListResponse selectD(@RequestBody HashMap<String, Object> param) {

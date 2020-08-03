@@ -21,6 +21,17 @@
 		)
 	}
 	</update>
+	
+	<update id="FundTransfer" parameterType="java.util.HashMap" statementType="CALLABLE">
+	{
+		CALL UP_FS_CALC_SUMMARY_TRANS_U
+		(
+			#{COMPANY_CD},
+			#{ADJUST_NO}
+		)
+	}
+	</update>
+	
 
 </mapper>
 

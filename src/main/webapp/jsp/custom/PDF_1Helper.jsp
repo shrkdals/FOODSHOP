@@ -135,12 +135,12 @@
                         +'<th style="width:50px;">상품중량</th>'
                         +'<th style="width:50px;">박스수량</th>'
                         +'<th style="width:50px;">출고단위</th>'
-                        +'<th style="width:50px;">원산지</th>'
                         +'<th style="width:50px;">상품수량</th>'
                         +'<th style="width:80px;">단가</th>'
                         +'<th style="width:80px;">금액</th>'
                         +'<th style="width:80px;">공급가액</th>'
                         +'<th style="width:80px;">세액</th>'
+                        +'<th style="width:50px;">원산지</th>'
                         +'</tr>'
                         +'</thead>'
                         +'<tbody>';
@@ -153,12 +153,12 @@
                                +'<td style="text-align:left">' + item.ITEM_WT + '</td>'
                                +'<td style="text-align:right">' + item.BOX_NUM + '</td>'
                                +'<td style="text-align:left">' + item.ITEM_UNIT + '</td>'
-                               +'<td style="text-align:left">' + item.ORIGIN_NM + '</td>'
                                +'<td style="text-align:right">' + item.SELECT_NUM + '</td>'
                                +'<td style="text-align:right">' + comma(item.SALE_COST) + '</td>'
                                +'<td style="text-align:right">' + comma(item.ORDER_AMT) + '</td>'
                                +'<td style="text-align:right">' + comma(item.OREDER_SPPLUY) + '</td>'
                                +'<td style="text-align:right">' + comma(item.ORDER_VAT) + '</td>'
+                               +'<td style="text-align:left">' + item.ORIGIN_NM + '</td>'
                                +'</tr>'
 
                                ,SUM_SELECT_NUM += Number(item.SELECT_NUM)
@@ -169,12 +169,13 @@
                        })
                         
                     MiddleHtml
-                        +='<td style="text-align:center; background:#ffe0cf"  colspan="7" > 합계 </td>'
+                        +='<td style="text-align:center; background:#ffe0cf"  colspan="6" > 합계 </td>'
                         +'<td style="text-align:center">' + comma(SUM_SELECT_NUM) + '</td>'
                         +'<td style="text-align:right">' + comma(SUM_SALE_COST) + '</td>'
                         +'<td style="text-align:right">' + comma(SUM_ORDER_AMT) + '</td>'
                         +'<td style="text-align:right">' + comma(SUM_OREDER_SPPLUY) + '</td>'
                         +'<td style="text-align:right">' + comma(SUM_ORDER_VAT) + '</td>'
+                        +'<td style="text-align:right"></td>'
                         +'</tr>'
                         +'</tbody>'
                         +'</table>'

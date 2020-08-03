@@ -391,8 +391,8 @@
                                 var data = []
                                 //     [].concat(fnObj.gridView01.getData("modified"));
                                 // data = data.concat(fnObj.gridView01.getData("deleted"));
-                                data = data.concat(fnObj.gridView02.getData("modified"));
-                                data = data.concat(fnObj.gridView02.getData("deleted"));
+                                // data = data.concat(fnObj.gridView02.getData("modified"));
+                                // data = data.concat(fnObj.gridView02.getData("deleted"));
 
                                 if(data.length > 0){
                                     qray.confirm({
@@ -513,9 +513,9 @@
                                         options: INOUT_TP
                                     }
                                     , disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                        // if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
                                             return true;
-                                        }
+                                        // }
                                     }
                                 }
                                 ,formatter: function () {
@@ -827,8 +827,8 @@
                                 var column = this.column.key;   //  컬럼 KEY명
                                 var idx = this.dindex;          //  선택한 ROW의 INDEX
 
-                                selectRow2 = idx;
-                                this.self.select(selectRow2);
+                                // selectRow2 = idx;
+                                // this.self.select(selectRow2);
                             }
                         },
                         onPageChange: function (pageNumber) {
@@ -1027,8 +1027,19 @@
                                 var column = this.column.key;   //  컬럼 KEY명
                                 var idx = this.dindex;          //  선택한 ROW의 INDEX
 
-                                selectRow2 = idx;
-                                this.self.select(selectRow2);
+                                afterIndex
+                                var list = fnObj.gridView01.getData();
+                                for(var i = 0 ; i < list.length; i++){
+                                    if(data.DISTRIB_PT_CD == list[i].DISTRIB_PT_CD && data.ITEM_CD == list[i].ITEM_CD){
+                                        afterIndex = list[i].__index
+                                        fnObj.gridView01.target.focus(afterIndex)
+                                        fnObj.gridView01.target.select(afterIndex)
+                                        ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
+
+                                    }
+                                }
+                                // selectRow2 = idx;
+                                // this.self.select(selectRow2);
                             }
                         },
                         onPageChange: function (pageNumber) {

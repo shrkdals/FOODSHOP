@@ -107,6 +107,9 @@
                 },
                 ITEM_CLICK : function (caller, act, data) {
                     var selected = caller.gridView01.getData('selected')[0];
+                    if(selected){
+                        selected.CD_GROUP = SCRIPT_SESSION.cdGroup
+                    }
                     var list2 = $.DATA_SEARCH('order','selectD',nvl(selected,{}));
                     fnObj.gridView02.target.setData(list2);
                 }
@@ -476,7 +479,6 @@
                                     return $.changeTextValue(dl_ITEM_UNIT, this.value)
                                 },
                               }
-                            , {key: "ORIGIN_NM"          , label: "원산지"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "SELECT_NUM"         , label: "상품수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "right"   , sortable: true  , editor: false
                                 ,formatter: function () {
@@ -488,6 +490,7 @@
                                     return $.changeDataFormat(this.value, 'money')
                                 }
                             }
+                            , {key: "ORIGIN_NM"          , label: "원산지"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "DELI_STAT"          , label: "배송상태"                   , width: 150     , align: "center"   , sortable: true
                                 , editor: {
                                     type: "select", config: {
@@ -508,9 +511,95 @@
                                 }
                             }
                             , {key: "AREA_NM"           , label: "관할구역"                   , width: 150     , align: "left"   , sortable: true  , editor: false}
-                        ],
-                        body: {
-                            onClick: function () {
+                        ]
+                        , footSum: [
+                            [
+                                {label: "총 합계", colspan: 7, align: "center"},
+                                {
+                                    key: "SELECT_NUM_TOT", collector: function () {
+                                        var value = 0;
+                                        this.list.forEach(function (n) {
+                                            if (!n.__isGrouping){
+                                                value += n.SELECT_NUM;
+                                            }
+                                        });
+                                        return ax5.util.number(value, {"money": 1});
+                                    }, align: "right"
+                                }
+                                ,{
+                                    key: "DISC_AMT_TOT", collector: function () {
+                                        var value = 0;
+                                        this.list.forEach(function (n) {
+                                            if (!n.__isGrouping){
+                                                value += n.DISC_AMT;
+                                            }
+                                        });
+                                        return ax5.util.number(value, {"money": 1});
+                                    }, align: "right"
+                                }
+                                ,{
+                                    key: "PAYM_AMT_TOT", collector: function () {
+                                        var value = 0;
+                                        this.list.forEach(function (n) {
+                                            if (!n.__isGrouping){
+                                                value += n.PAYM_AMT;
+                                            }
+                                        });
+                                        return ax5.util.number(value, {"money": 1});
+                                    }, align: "right"
+                                }
+                            ]
+                        ]
+                        , body: {
+                            grouping: {
+                                by: ["ITEM_SP"],
+                                multi : true,
+                                columns: [
+                                    [
+                                        {
+                                            label: '합계', colspan: 7, align: "center"
+                                        }
+                                        , {
+                                        key: "SELECT_NUM_SUM", collector: function () {
+                                            var value = 0;
+                                            this.list.forEach(function (n) {
+                                                if (!n.__isGrouping) {
+                                                    value += n.SELECT_NUM;
+                                                }
+                                            });
+
+                                            return ax5.util.number(value, {"money": 1});
+                                        }, align: "right"
+                                    }
+                                        , {
+                                        key: "DISC_AMT_SUM", collector: function () {
+                                            var value = 0;
+                                            this.list.forEach(function (n) {
+                                                if (!n.__isGrouping) {
+                                                    value += n.DISC_AMT;
+                                                }
+                                            });
+                                            return ax5.util.number(value, {"money": 1});
+                                        }, align: "right"
+                                    }
+                                        , {
+                                        key: "PAYM_AMT_SUM", collector: function () {
+                                            var value = 0;
+                                            this.list.forEach(function (n) {
+                                                if (!n.__isGrouping) {
+                                                    value += n.PAYM_AMT;
+                                                }
+                                            });
+                                            return ax5.util.number(value, {"money": 1});
+                                        }, align: "right"
+                                    }
+                                        ,{
+                                        label: '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp', colspan: 3, align: "left"
+                                    }
+                                    ]
+                                ]
+                            }
+                            , onClick: function () {
                                 var data = this.item;           //  선택한 ROW의 ITEM들
                                 var column = this.column.key;   //  컬럼 KEY명
                                 var idx = this.dindex;          //  선택한 ROW의 INDEX
@@ -587,6 +676,7 @@
                     this.target = axboot.gridBuilder({
                         showRowSelector: true,
                         frozenColumnIndex: 0,
+                        multiSort :true,
                         target: $('[data-ax5grid="grid-view-03"]'),
                         columns: [
                             {key: "COMPANY_CD"       , label: "", width: 150, align: "left", editor: false ,hidden:true}
@@ -614,10 +704,9 @@
                             ,{key: "ORDER_AMT"       , label: "금액", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "ORDER_VAT"       , label: "세액", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "OREDER_SPPLUY"       , label: "공급가액", width: 150, align: "left", editor: false ,hidden:false}
-
-                        ],
-                        body: {
-                            onClick: function () {
+                        ]
+                        , body: {
+                             onClick: function () {
                                 var data = this.item;           //  선택한 ROW의 ITEM들
                                 var column = this.column.key;   //  컬럼 KEY명
                                 var idx = this.dindex;          //  선택한 ROW의 INDEX
@@ -779,15 +868,15 @@
                 <button type="button" class="btn btn-info" data-page-btn="excel" id="excel" style="width: 130px;"><i
                         class="icon_save"></i>[본사용]엑셀다운로드
                 </button>
-                <button type="button" class="btn btn-info" data-page-btn="excel2" id="excel2" style="width: 150px;"><i
-                        class="icon_save"></i>[물류사용]엑셀다운로드
-                </button>
+<%--                <button type="button" class="btn btn-info" data-page-btn="excel2" id="excel2" style="width: 150px;"><i--%>
+<%--                        class="icon_save"></i>[물류사용]엑셀다운로드--%>
+<%--                </button>--%>
                 <button type="button" class="btn btn-info" data-page-btn="pdf1" id="pdf1" style="width: 150px;"><i
-                        class="icon_save"></i>[본사용]거래명세서
+                        class="icon_save"></i>거래명세서 출력
                 </button>
-                <button type="button" class="btn btn-info" data-page-btn="pdf2" id="pdf2" style="width: 150px;"><i
-                        class="icon_save"></i>[물류사용]거래명세서
-                </button>
+<%--                <button type="button" class="btn btn-info" data-page-btn="pdf2" id="pdf2" style="width: 150px;"><i--%>
+<%--                        class="icon_save"></i>[물류사용]거래명세서--%>
+<%--                </button>--%>
                 
             </div>
         </div>
