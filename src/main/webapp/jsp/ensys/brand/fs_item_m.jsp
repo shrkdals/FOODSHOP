@@ -369,7 +369,19 @@
                                 },
                                 editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_ITEM_SP}}
                             }
-
+                            , {key: "DISTRIB_AMT_YN" , label: "물류사지정금액여부"	, width: 120     , align: "center"   , editor: false  ,sortable:true, hidden: false,
+                            	editor: {
+                                    type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'}
+                                },
+                                formatter: function () {
+                                    var CHK = this.item.SURTAX_YN;
+                                    if (nvl(CHK, 'N') == 'N'){
+                                        return '<div class="columnBox" id="columnBox' + this.dindex + '" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>';
+                                    }else{
+                                        return '<div class="columnBox" id="columnBox' + this.dindex + '" data-ax5grid-editor="checkbox" data-ax5grid-checked="true" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>';
+                                    }
+                                }
+                              }
                             , {key: "INSERT_ID" , label: ""	, width: 150     , align: "center"   , editor: false  ,sortable:true, hidden: true}
                             , {key: "INSERT_DT" , label: ""	, width: 150     , align: "center"   , editor: false  ,sortable:true, hidden: true}
                             , {key: "UPDATE_ID" , label: ""	, width: 150     , align: "center"   , editor: false  ,sortable:true, hidden: true}

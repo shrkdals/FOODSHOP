@@ -40,7 +40,8 @@
                 #{UPDATE_ID},
                 #{MAKE_PT_CD},
                 #{ITEM_SP},
-                #{BOX_NUM}
+                #{BOX_NUM},
+                #{DISTRIB_AMT_YN}
             )
         }
     </update>
@@ -70,7 +71,8 @@
                 #{UPDATE_ID},
                 #{MAKE_PT_CD},
                 #{ITEM_SP},
-                #{BOX_NUM}
+                #{BOX_NUM},
+                #{DISTRIB_AMT_YN}
             )
         }
     </update>
