@@ -338,6 +338,8 @@
                                     return $.changeTextValue(ITEM_SP, this.value)
                                 }
                             }
+                            , {key: "BRD_CD"            , label: "브랜드코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
+                            , {key: "BRD_NM"            , label: "브랜드"                   , width: 150     , align: "left"   , sortable: true  , editor: false , hidden:false}
                             , {key: "ITEM_CD"            , label: "상품코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
                             , {key: "ITEM_NM"            , label: "상품명"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:false}
                             , {key: "ITEM_WT"         	 , label: "상품중량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}

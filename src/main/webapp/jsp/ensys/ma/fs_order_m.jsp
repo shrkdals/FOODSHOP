@@ -146,7 +146,11 @@
                         qray.alert('체크된 데이터가 없습니다.')
                         return false;
                     }
+                    var order_seq_arr = [];
                     for(var i = 0; i < list.length; i++) {
+                        
+                    	order_seq_arr.push(list[i].ORDER_SEQ);
+                    	
                         if (list[i].DELI_STAT  == '02') {
                             qray.alert('입금 완료되지 않은 주문건이 존재합니다')
                             return;
@@ -158,13 +162,12 @@
                     axboot.ajax({
                         type: "POST",
                         url: ["order", "success"],
-                        data: JSON.stringify({list : list , TYPE: '2'}),
+                        data: JSON.stringify({list : list , TYPE: '2', ORDER_SEQ_ARR : order_seq_arr.join('|')}),
                         callback: function (res) {
                             qray.alert("일괄배송완료처리가 되었습니다.");
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                             caller.gridView01.target.select(afterIndex);
                             caller.gridView01.target.focus(afterIndex);
-
                         }
                     });
                 }
@@ -459,6 +462,8 @@
                                     return $.changeTextValue(ITEM_SP, this.value)
                                 }
                             }
+                            , {key: "BRD_CD"            , label: "브랜드코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
+                            , {key: "BRD_NM"            , label: "브랜드"                   , width: 150     , align: "left"   , sortable: true  , editor: false , hidden:false}
                             , {key: "ITEM_CD"            , label: "상품코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
                             , {key: "ITEM_NM"            , label: "상품명"                   , width: 150     , align: "left"   , sortable: true  , editor: false , hidden:false}
                             , {key: "ITEM_WT"         	 , label: "상품중량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}

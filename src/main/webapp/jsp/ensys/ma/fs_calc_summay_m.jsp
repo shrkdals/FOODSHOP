@@ -24,10 +24,9 @@
         <script type="text/javascript">
 
         	var dl_ADJUST_SP         = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00031');	//	정산유형
-        
-	        /* var dl_PT_SP         = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00002');
+	        var dl_PT_SP         = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00002');
 	        $("#PT_SP").ax5select({options: dl_PT_SP});
-	        $("#ADJUST_SP").ax5select({options: dl_ADJUST_SP}); */
+	        $("#ADJUST_SP").ax5select({options: dl_ADJUST_SP});
 	        
         	$("#TRANS_YN").ax5select({options: [{value: '', text: ''}, {value: 'Y', text: 'Y'}, {value: 'N', text: 'N'}]})
             
@@ -41,7 +40,9 @@
                         	ADJUST_DT_ST: $('#ADJUST_DT').getStartDate().replace(/-/g, ""),
                          	ADJUST_DT_ED: $('#ADJUST_DT').getEndDate().replace(/-/g, ""),
                          	PT_NM: $("#PT_NM").val(),
-                         	TRANS_YN : $('select[name="TRANS_YN"]').val()
+                         	TRANS_YN : $('select[name="TRANS_YN"]').val(),
+                         	ADJUST_SP: $('select[name="ADJUST_SP"]').val(),
+                         	PT_SP: $('select[name="PT_SP"]').val(),
                         }),
                         callback: function (res) {
                             caller.gridView01.clear();
@@ -141,7 +142,7 @@
 
                     this.target = axboot.gridBuilder({
                         showRowSelector: true,
-                        frozenColumnIndex: 3,
+                        frozenColumnIndex: 4,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
                         	{
@@ -154,9 +155,9 @@
                             
                             ,{key: "COMPANY_CD"      , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
                             ,{key: "ADJUST_NO"       , label: "정산번호"        , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_PT_CD"    , label: "정산거래처코드"  , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_PT_NM"    , label: "정산거래처명"    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
-                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_SP"       , label: "정산유형"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false,
                             	formatter: function () {
                                     return $.changeTextValue(dl_ADJUST_SP, this.value)
@@ -175,13 +176,13 @@
                         ],
                         footSum: [
                             [
-                                {label: "", colspan: 4, align: "center"},
+                                {label: "", colspan: 5, align: "center"},
                                 {key: "ADJUST_AMT", collector: "sum", formatter: "money", align: "right"},
-                                {key: "ADJUST_AMT", collector: "sum", formatter: "money", align: "right"}
+                                {key: "ADJUST_ACCUM_AMT", collector: "sum", formatter: "money", align: "right"}
                             ]
                         ],
                         body: {
-                        	mergeCells: ["ADJUST_PT_CD", "ADJUST_PT_NM"],
+                        	mergeCells: ["ADJUST_DT", "ADJUST_PT_CD", "ADJUST_PT_NM"],
                             onDataChanged: function () {
 
                             },
@@ -508,20 +509,20 @@
                     	<ax:td label='정산일자' width="450px">
                             <datepicker id="ADJUST_DT"></datepicker>
                         </ax:td> 
-                    	<%-- <ax:td label='정산유형' width="350px">
-                        	<div id="ADJUST_SP" name="ADJUST_SP" data-ax5select="ADJUST_SP"
-                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                        </ax:td>
-                        <ax:td label='거래처유형' width="350px">
+                        <ax:td label='거래처유형' width="280px">
                             <div id="PT_SP" name="PT_SP" data-ax5select="PT_SP"
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                        </ax:td> --%>
-                        <ax:td label="거래처명" width="350px">
+                        </ax:td> 
+                        <ax:td label="거래처명" width="280px">
                             <div class="input-group" style="width:100%">
                                 <input type="text" class="form-control" name="PT_NM" id="PT_NM" style="width:100%"/>
                             </div>
                         </ax:td>
-                        <ax:td label='이체여부' width="350px">
+                    	<ax:td label='정산유형' width="280px">
+                        	<div id="ADJUST_SP" name="ADJUST_SP" data-ax5select="ADJUST_SP"
+                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                        </ax:td>
+                        <ax:td label='이체여부' width="200px">
                             <div id="TRANS_YN" name="TRANS_YN" data-ax5select="TRANS_YN"
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
                         </ax:td>

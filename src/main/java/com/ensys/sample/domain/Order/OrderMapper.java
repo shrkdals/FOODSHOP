@@ -16,4 +16,6 @@ public interface OrderMapper extends MyBatisMapper {
     List<HashMap<String, Object>> excel2(HashMap<String, Object> param);
 
     void success2(HashMap<String, Object> item);
+    
+    void adjust(HashMap<String, Object> item);
 }

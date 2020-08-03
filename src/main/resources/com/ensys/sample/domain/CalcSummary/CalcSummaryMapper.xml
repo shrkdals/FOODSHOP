@@ -5,7 +5,7 @@
 <mapper namespace="com.ensys.sample.domain.CalcSummary.CalcSummaryMapper">
 
     <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_CALC_SUMMARY_S(#{COMPANY_CD} ,#{ADJUST_DT_ST} ,#{ADJUST_DT_ED} ,#{PT_NM}, #{TRANS_YN}) }
+    { CALL UP_FS_CALC_SUMMARY_S(#{COMPANY_CD} ,#{ADJUST_DT_ST} ,#{ADJUST_DT_ED} ,#{PT_NM}, #{TRANS_YN}, #{ADJUST_SP}, #{PT_SP}) }
     </select>
     
     <select id="selectPop" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">

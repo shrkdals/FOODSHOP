@@ -26,6 +26,10 @@
     <update id="success2" parameterType="java.util.HashMap" statementType="CALLABLE">
         { CALL UP_FS_ORDER_U2(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ,#{ORDER_SEQ} ,#{LOGIN_ID}) }
     </update>
+    
+    <update id="adjust" parameterType="java.util.HashMap" statementType="CALLABLE">
+    	{ CALL UP_FS_ORDER_ADJUST(#{COMPANY_CD}, #{JOIN_PT_CD}, #{ORDER_CD} ,#{ORDER_SEQ}) }
+    </update>
 
 </mapper>
 

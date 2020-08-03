@@ -32,10 +32,11 @@ public class OrderService extends BaseService {
         return mapper.selectD(param);
     }
 
-
+    @Transactional
     public void success(HashMap<String, Object> param) {
         SessionUser user = SessionUtils.getCurrentUser();
-        for(HashMap<String, Object> item : (ArrayList<HashMap<String, Object>>)param.get("list") ){
+        ArrayList<HashMap<String, Object>> items = (ArrayList<HashMap<String, Object>>)param.get("list");
+        for(HashMap<String, Object> item :  items){
             item.put("COMPANY_CD",user.getCdCompany());
             item.put("LOGIN_ID",user.getIdUser());
             if(param.get("TYPE").toString().equals("1")){
@@ -43,10 +44,15 @@ public class OrderService extends BaseService {
             }else{
                 mapper.success2(item);
             }
-
         }
+        if (items != null && items.size() > 0) {
+        	items.get(0).put("COMPANY_CD", user.getCdCompany());
+        	items.get(0).put("ORDER_SEQ", param.get("ORDER_SEQ_ARR"));
+        	mapper.adjust(items.get(0));
+        }
+        
     }
-
+    
     public List<HashMap<String, Object>> excel(HashMap<String, Object> param) {
         if(param.get("TYPE").equals("01")){
             return mapper.excel1(param);
