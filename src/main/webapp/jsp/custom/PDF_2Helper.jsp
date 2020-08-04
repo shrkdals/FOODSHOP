@@ -42,7 +42,7 @@
 
                         , ORDER_CD = nvl(list[0].ORDER_CD)
                     }else{
-                        $('#TBODY1').append('<span> 데이터를 불러오는 과정에 오류가 발생하였습니다. </span>')
+                        $('#TBODY1').append('<span> 상품리스트가 존재하지 않습니다. </span>')
                         return;
                     }
                     var HeaderHtml = ''
