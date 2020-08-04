@@ -204,10 +204,14 @@
                 this.gridView03.initView();
                 if(SCRIPT_SESSION.cdGroup !='WEB01'){
                     $('#SUCCESS').css('display','none')
+                    $('#excel').css('display','none')
+                    $('#pdf1').css('display','none')
                 }
                 if(SCRIPT_SESSION.cdGroup !='WEB04'){
                     $('#SUCCESS2').css('display','none')
                 }
+
+
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
 

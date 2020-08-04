@@ -196,6 +196,11 @@
                 this.gridView01.initView();
                 this.gridView02.initView();
                 this.gridView03.initView();
+                if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                    $('[data-grid-view-01-btn="add"]').css('display','none')
+                    $('[data-grid-view-01-btn="delete"]').css('display','none')
+                }
+
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
 
@@ -268,6 +273,9 @@
                                         fnObj.gridView01.target.setValue(this.dindex, "DISTRIB_PT_NM", e[0].PT_NM);
                                     },
                                     disabled: function () {
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                                            return true;
+                                        }
                                         if(nvl(this.__created__,false)){
                                             return true;
                                         }else{
@@ -297,6 +305,9 @@
                                         fnObj.gridView01.target.setValue(this.dindex, "MAKE_PT_NM", e[0].MAKE_PT_NM);
                                     },
                                     disabled: function () {
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                                            return true;
+                                        }
                                         if(nvl(this.__created__,false)){
                                             return true;
                                         }else{
@@ -315,14 +326,18 @@
                             ,{key: "SAFE_STOCK_NUM"   , label: "<span style=\"color:red;\"> * </span> 안전재고수량"	, width: 150, align: "left" , sortabled:true ,  hidden:false
                                 , editor: {type:"number"
                                     , disabled: function () {
-                                        // return true;
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                                            return true;
+                                        }
                                     }
                                 }
                             }
                             ,{key: "STOCK_NUM"        , label: "<span style=\"color:red;\"> * </span> 재고수량"	    , width: 150, align: "left" , sortabled:true ,  hidden:false
                                 , editor: {type:"number"
                                     , disabled: function () {
-                                        // return true;
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                                            return true;
+                                        }
                                     }
                                 }
                             }
@@ -339,6 +354,9 @@
                                         options: ORDR_STAT
                                     }
                                     , disabled: function () {
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                                            return true;
+                                        }
                                     }
                                 }
                                 ,formatter: function () {
@@ -682,7 +700,7 @@
                                         options: INOUT_TP
                                     }
                                     , disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
                                             return true;
                                         }
                                     }
@@ -694,7 +712,7 @@
                             ,{key: "INOUT_DTE"        , label:	"입출고일자"      , width: 150, align: "left" , sortabled:true ,  hidden:false
                                 , editor: {type:"date"
                                     ,disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
                                             return true;
                                         }
                                     }
@@ -703,7 +721,7 @@
                             ,{key: "INOUT_NUM"        , label:	"입출고수량"      , width: 150, align: "left" , sortabled:true ,  hidden:false
                                 , editor: {type:"number"
                                     ,disabled: function () {
-                                        if(this.item.MAKE_VERIFY_YN == 'Y' && this.item.DISTRIB_VERIFY_YN == 'Y'){
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
                                             return true;
                                         }
                                     }

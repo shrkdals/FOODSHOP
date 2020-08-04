@@ -244,6 +244,9 @@
 
                 if(SCRIPT_SESSION.cdGroup == 'WEB01'){
                     $('#applyWEB01').css('display','')
+                }else{
+                    $('[data-grid-view-01-btn="add"]').css('display','none')
+                    $('[data-grid-view-01-btn="delete"]').css('display','none')
                 }
                 if(SCRIPT_SESSION.cdGroup == 'WEB04'){
                     $('#applyWEB04').css('display','')
@@ -358,9 +361,33 @@
                                     }
                                 }
                             }
-                            ,{key: "BEGINING_IN_NUM"  , label: "<span style=\"color:red;\"> * </span> 초기입고수량"	, width: 150, align: "left" , sortabled:true ,  hidden:false , editor: {type:"number"} }
-                            ,{key: "SAFE_STOCK_NUM"   , label: "<span style=\"color:red;\"> * </span> 안전재고수량"	, width: 150, align: "left" , sortabled:true ,  hidden:false , editor: {type:"number"} }
-                            ,{key: "STOCK_NUM"        , label: "<span style=\"color:red;\"> * </span> 재고수량"	    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: {type:"number"} }
+                            ,{key: "BEGINING_IN_NUM"  , label: "<span style=\"color:red;\"> * </span> 초기입고수량"	, width: 150, align: "left" , sortabled:true ,  hidden:false
+                                , editor: {type:"number"
+                                    , disabled: function () {
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                            ,{key: "SAFE_STOCK_NUM"   , label: "<span style=\"color:red;\"> * </span> 안전재고수량"	, width: 150, align: "left" , sortabled:true ,  hidden:false
+                                , editor: {type:"number"
+                                    , disabled: function () {
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                            ,{key: "STOCK_NUM"        , label: "<span style=\"color:red;\"> * </span> 재고수량"	    , width: 150, align: "left" , sortabled:true ,  hidden:false
+                                , editor: {type:"number"
+                                    , disabled: function () {
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
                             ,{key: "ORDR_STAT"        , label: "발주상태"	    , width: 150, align: "left" , sortabled:true ,  hidden:false
                                 , editor: {
                                     type: "select", config: {
@@ -370,6 +397,9 @@
                                         options: ORDR_STAT
                                     }
                                     , disabled: function () {
+                                        if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                                            return true;
+                                        }
                                     }
                                 }
                                 ,formatter: function () {
