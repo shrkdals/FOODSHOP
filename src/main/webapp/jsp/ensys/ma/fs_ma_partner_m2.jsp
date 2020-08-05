@@ -622,8 +622,10 @@
                                     if (nvl(value) == ''){
                                         return null;
                                     }
-                                    if (value > 31){
-                                    	value = 31;
+                                    if (this.item.ADJUST_STD == '02'){
+	                                    if (value > 31){
+	                                    	value = 31;
+	                                    }
                                     }
                                     this.item.ADJUST_DTE = value;
                                     return value + "일";
