@@ -34,17 +34,26 @@ public class CalcSummaryService {
 	@Transactional
 	public void approve(HashMap<String, Object> param) {
 		SessionUser user = SessionUtils.getCurrentUser();
-		param.put("COMPANY_CD", user.getCdCompany());
-		param.put("LOGIN_ID", user.getIdUser());
-		mapper.approve(param);
+		List<HashMap<String, Object>> items = (List<HashMap<String, Object>>) param.get("list");
+		for (HashMap<String, Object> item: items) {
+			item.put("COMPANY_CD", user.getCdCompany());
+			item.put("LOGIN_ID", user.getIdUser());
+			mapper.approve(item);
+		}
+		
+		
+		
 	}
 	
 	@Transactional
 	public void FundTransfer(HashMap<String, Object> param) {
 		SessionUser user = SessionUtils.getCurrentUser();
-		param.put("COMPANY_CD", user.getCdCompany());
-		param.put("LOGIN_ID", user.getIdUser());
-		mapper.FundTransfer(param);
+		List<HashMap<String, Object>> items = (List<HashMap<String, Object>>) param.get("list");
+		for (HashMap<String, Object> item: items) {
+			item.put("COMPANY_CD", user.getCdCompany());
+			item.put("LOGIN_ID", user.getIdUser());
+			mapper.FundTransfer(item);
+		}
 	}
 	
 	

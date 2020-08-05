@@ -18,6 +18,14 @@
     <select id="excel2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
     { CALL UP_FS_ORDER_EXCEL2(#{COMPANY_CD},#{ORDER_CD},#{TEMP1},#{TEMP2},#{TEMP3},#{TEMP4}) }
     </select>
+    
+    <select id="pdf1" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ORDER_PDF1(#{COMPANY_CD},#{ORDER_CD} ,#{TEMP1},#{TEMP2},#{TEMP3},#{TEMP4}) }
+    </select>
+
+    <select id="pdf2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ORDER_PDF2(#{COMPANY_CD},#{ORDER_CD},#{TEMP1},#{TEMP2},#{TEMP3},#{TEMP4}) }
+    </select>
 
     <update id="success" parameterType="java.util.HashMap" statementType="CALLABLE">
         { CALL UP_FS_ORDER_U(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ,#{LOGIN_ID}) }

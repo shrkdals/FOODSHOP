@@ -21,7 +21,7 @@
                     var param = parent.modal.modalConfig.sendData().initData
                     var today = new Date();
                     var dtNow = ax5.util.date(today, {"return": "yyyy-MM-dd"});
-                    var list = $.DATA_SEARCH("order", "excel",{TYPE:'04' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : param.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser}).list
+                    var list = $.DATA_SEARCH("order", "pdf",{TYPE:'04' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : param.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser}).list
                     listLen = list.length
                     var  ORDER_CD = ''
                         ,ORDER_DT = ''

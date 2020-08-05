@@ -81,16 +81,17 @@
                         if (this.key == "ok") {
                         	var count = 0 ;
                         	var chkVal = false;
-                        	var ADJUST_NO_ARR = [];
                             var grid = caller.gridView01.target.list;
                             var i = grid.length;
+                            var listData = [];
                             while (i--) {
                                 var data = caller.gridView01.target.list[i];
                                 if (data.CHK == 'Y') {
                                     count++;
-                                    ADJUST_NO_ARR.push(data.ADJUST_NO);
+                                    listData.push(data);
                                     if (data.TRANS_YN == 'Y'){
                                     	chkVal = true;
+                                    	break;
                                     }
                                     
                                 }
@@ -110,7 +111,7 @@
                                 type: "POST",
                                 url: ["calcSummary", "FundTransfer"],
                                 data: JSON.stringify({
-                                	ADJUST_NO: ADJUST_NO_ARR.join('|')
+                                	list : listData
                                 }),
                                 callback: function (res) {
                                     qray.alert('자금이체 되었습니다.').then(function(){
@@ -128,16 +129,17 @@
                         if (this.key == "ok") {
                         	var count = 0 ;
                         	var chkVal = false;
-                        	var ADJUST_NO_ARR = [];
+                        	var listData = [];
                             var grid = caller.gridView01.target.list;
                             var i = grid.length;
                             while (i--) {
                                 var data = caller.gridView01.target.list[i];
                                 if (data.CHK == 'Y') {
                                     count++;
-                                    ADJUST_NO_ARR.push(data.ADJUST_NO);
+                                    listData.push(data);
                                     if (data.CP_YN == 'Y'){
                                     	chkVal = true;
+                                    	break;
                                     }
                                 }
                             }
@@ -155,7 +157,7 @@
                                 type: "POST",
                                 url: ["calcSummary", "approve"],
                                 data: JSON.stringify({
-                                	ADJUST_NO: ADJUST_NO_ARR.join('|')
+                                	list: listData
                                 }),
                                 callback: function (res) {
                                     qray.alert('확정되었습니다.').then(function(){
@@ -524,7 +526,6 @@
                                 this.target.select(beforeIdx);
                                 selectRow2 = beforeIdx;
                             }
-
                         }
 
                     });

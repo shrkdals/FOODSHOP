@@ -60,6 +60,16 @@ public class OrderService extends BaseService {
             return mapper.excel2(param);
         }
     }
+    
+    public List<HashMap<String, Object>> pdf(HashMap<String, Object> param) {
+        if(param.get("TYPE").equals("01")){
+            return mapper.pdf1(param);
+        }else{
+            return mapper.pdf2(param);
+        }
+    }
+    
+    
 }
 
 
