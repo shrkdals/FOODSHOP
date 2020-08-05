@@ -37,7 +37,16 @@
                     fnObj.gridView01.target.setData(list);
                     caller.gridView01.target.select(afterIndex);
                     caller.gridView01.target.focus(afterIndex);
-                    ACTIONS.dispatch(ACTIONS.ITEM_CLICK,caller);
+
+                    var param = {INOUT_TP : '01'}
+                    var list = $.DATA_SEARCH('DeliverPartner','MkselectD',param);
+                    fnObj.gridView02.target.setData(list);
+
+                    var param = {INOUT_TP : '02'}
+                    var list2 = $.DATA_SEARCH('DeliverPartner','MkselectD',param);
+                    fnObj.gridView03.target.setData(list2);
+
+                    // ACTIONS.dispatch(ACTIONS.ITEM_CLICK,caller);
                     selectRow2 = 0;
 
                     return false;
@@ -59,6 +68,7 @@
                         ,deleteM: caller.gridView01.getData("deleted")
                         ,updateD : itemD
                     };
+
 
                     axboot.ajax({
                         type: "POST",
@@ -147,8 +157,38 @@
                     caller.gridView02.target.setValue(lastIdx - 1, "MAKE_PT_NM", itemH.MAKE_PT_NM);
 
 
-                },
-                ITEM_DEL1: function (caller, act, data) {
+                }
+                , TEMP_ADD: function (caller, act, data) {
+                    var temp = caller.gridView01.getData("modified")
+                    if(temp.length == 0){
+                        qray.alert('임시 발주 데이터가 없습니다.')
+                        return;
+                    }
+                    temp.forEach(function(item,index){
+                        fnObj.gridView04.addRow();
+                        var RowIndex = nvl(fnObj.gridView04.target.list.length, fnObj.gridView04.lastRow()) - 1;
+                        afterIndex = RowIndex
+                        fnObj.gridView04.target.select(RowIndex);
+                        fnObj.gridView04.target.focus(RowIndex);
+                        fnObj.gridView04.target.setValue(RowIndex, "COMPANY_CD", item.COMPANY_CD);
+                        fnObj.gridView04.target.setValue(RowIndex, "DISTRIB_PT_CD", item.DISTRIB_PT_CD);
+                        fnObj.gridView04.target.setValue(RowIndex, "DISTRIB_PT_NM", item.DISTRIB_PT_NM);
+                        fnObj.gridView04.target.setValue(RowIndex, "ITEM_CD", item.ITEM_CD);
+                        fnObj.gridView04.target.setValue(RowIndex, "ITEM_NM", item.ITEM_NM);
+                        fnObj.gridView04.target.setValue(RowIndex, "INOUT_SEQ", RowIndex);
+                        fnObj.gridView04.target.setValue(RowIndex, "INOUT_TP", '01');
+                        fnObj.gridView04.target.setValue(RowIndex, "INOUT_DTE", item.INOUT_DTE);
+                        fnObj.gridView04.target.setValue(RowIndex, "INOUT_NUM", item.ORDER_STOCK_NUM);
+                        fnObj.gridView04.target.setValue(RowIndex, "CCL_PRIOD_ST_DTE", item.CCL_PRIOD_ST_DTE);
+                        fnObj.gridView04.target.setValue(RowIndex, "CCL_PRIOD_ED_DTE", item.CCL_PRIOD_ED_DTE);
+                        fnObj.gridView04.target.setValue(RowIndex, "MAKE_PT_CD", item.MAKE_PT_CD);
+                        fnObj.gridView04.target.setValue(RowIndex, "MAKE_PT_NM", item.MAKE_PT_NM);
+                        fnObj.gridView04.target.setValue(RowIndex, "DISTRIB_VERIFY_YN", 'N');
+                        fnObj.gridView04.target.setValue(RowIndex, "MAKE_VERIFY_YN", 'N');
+
+                    })
+                }
+                , ITEM_DEL1: function (caller, act, data) {
                     var beforeIdx = caller.gridView01.getData('selected')[0].__index;
                     caller.gridView01.delRow("selected");
                 }
@@ -196,6 +236,7 @@
                 this.gridView01.initView();
                 this.gridView02.initView();
                 this.gridView03.initView();
+                this.gridView04.initView();
                 if(SCRIPT_SESSION.cdGroup != 'WEB01'){
                     $('[data-grid-view-01-btn="add"]').css('display','none')
                     $('[data-grid-view-01-btn="delete"]').css('display','none')
@@ -397,7 +438,7 @@
                                 }else{
                                     afterIndex = index;
                                     this.self.select(this.dindex);
-                                    ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
+                                    // ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
                                 }
 
                             }
@@ -414,8 +455,11 @@
                     axboot.buttonClick(this, "data-grid-view-01-btn", {
                         "add": function () {
                             ACTIONS.dispatch(ACTIONS.ITEM_ADD1);
-                        },
-                        "delete": function () {
+                        }
+                        , "temp_add": function () {
+                            ACTIONS.dispatch(ACTIONS.TEMP_ADD);
+                        }
+                        , "delete": function () {
 
                             var beforeIdx = this.target.selectedDataIndexs[0];
                             var dataLen = this.target.getList().length;
@@ -852,6 +896,174 @@
                 }
             });
 
+
+            /**
+             * gridView04
+             */
+            fnObj.gridView04 = axboot.viewExtend(axboot.gridView, {
+                page: {
+                    pageNumber: 0,
+                    pageSize: 10
+                },
+                initView: function () {
+                    var _this = this;
+
+                    this.target = axboot.gridBuilder({
+                        showRowSelector: true,
+                        frozenColumnIndex: 0,
+                        target: $('[data-ax5grid="grid-view-04"]'),
+                        columns: [
+                            {key: "COMPANY_CD"       , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                            ,{key: "DISTRIB_PT_CD"    , label: "<span style=\"color:red;\"> * </span> 물류거래처코드"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:true , editor: false }
+                            ,{key: "DISTRIB_PT_NM"    , label: "<span style=\"color:red;\"> * </span> 물류거래처명"    , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false , editor: false
+                                , styleClass: function () {
+                                    return "readonly";
+                                }
+                            }
+                            ,{key: "ITEM_CD"          , label: "<span style=\"color:red;\"> * </span> 상품코드"	      , width: 150, align: "left" , sortabled:true , required:true ,  hidden:true , editor: false }
+                            ,{key: "ITEM_NM"          , label: "<span style=\"color:red;\"> * </span> 상품명"		  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false , editor: false
+                                , styleClass: function () {
+                                    return "readonly";
+                                }
+                            }
+                            ,{key: "INOUT_SEQ"        , label: "<span style=\"color:red;\"> * </span> 입출고순번"      , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                            ,{key: "INOUT_TP"         , label: "입출고구분"      , width: 150, align: "left" , sortabled:true ,  hidden:false
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: INOUT_TP
+                                    }
+                                    , disabled: function () {
+                                        return true;
+                                    }
+                                }
+                                ,formatter: function () {
+                                    return $.changeTextValue(INOUT_TP, this.value)
+                                }
+                            }
+                            ,{key: "INOUT_DTE"        , label:	"입출고일자"      , width: 150, align: "left" , sortabled:true ,  hidden:true
+                                , editor: {type:"date"
+                                    ,disabled: function () {
+                                    }
+                                }
+                            }
+                            ,{key: "INOUT_NUM"        , label:	"입출고수량"      , width: 150, align: "left" , sortabled:true ,  hidden:false
+                                , editor: {type:"number"
+                                    ,disabled: function () {
+                                    }
+                                }
+                            }
+                            ,{key: "CCL_PRIOD_ST_DTE" , label:	"<span style=\"color:red;\"> * </span>유통기간시작일"  , width: 150, align: "left" , sortabled:true, required:true ,  hidden:false
+                                , editor: {type:"date"
+                                    ,disabled: function () {
+
+                                    }
+                                }
+                            }
+                            ,{key: "CCL_PRIOD_ED_DTE" , label:	"<span style=\"color:red;\"> * </span>유통기간종료일"  , width: 150, align: "left" , sortabled:true, required:true ,  hidden:false
+                                , editor: {type:"date"
+                                    ,disabled: function () {
+
+                                    }
+                                }
+                            }
+                            ,{key: "MAKE_PT_CD"       , label:	"제조거래처코드"  , width: 150, align: "left" , sortabled:true ,  hidden:true, editor: false}
+                            ,{key: "MAKE_PT_NM"       , label:	"제조거래처명"  , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false
+                                ,picker: {
+                                    top: _pop_top,
+                                    width: 600,
+                                    height: _pop_height,
+                                    url: "partner",
+                                    action: ["commonHelp", "HELP_PARTNER"],
+                                    param: function () {
+                                        return {PT_SP : '03'}
+                                    },
+                                    callback: function (e) {
+                                        fnObj.gridView02.target.setValue(this.dindex, "MAKE_PT_CD", e[0].PT_CD);
+                                        fnObj.gridView02.target.setValue(this.dindex, "MAKE_PT_NM", e[0].PT_NM);
+                                    }
+                                    ,disabled: function () {
+                                            return true;
+                                    }
+                                }
+                            }
+                            ,{key: "MAKE_VERIFY_YN"   , label:	"<span style=\"color:red;\"> * </span>본사입고확인"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: YN_OP
+                                    }
+                                    ,disabled: function () {
+                                            return true;
+                                    }
+                                }
+                                ,formatter: function () {
+                                    return $.changeTextValue(YN_OP, this.value)
+                                }
+                            }
+                            ,{key: "DISTRIB_VERIFY_YN", label:	"<span style=\"color:red;\"> * </span>물류사입고확인"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: YN_OP
+                                    }
+                                    ,disabled: function () {
+                                        return true;
+                                    }
+                                }
+                                ,formatter: function () {
+                                    return $.changeTextValue(YN_OP, this.value)
+                                }
+                            }
+
+                        ],
+                        body: {
+                            onClick: function () {
+                                var data = this.item;           //  선택한 ROW의 ITEM들
+                                var column = this.column.key;   //  컬럼 KEY명
+                                var idx = this.dindex;          //  선택한 ROW의 INDEX
+
+                                selectRow2 = idx;
+                                this.self.select(selectRow2);
+                            }
+                        },
+                        onPageChange: function (pageNumber) {
+                            _this.setPageData({pageNumber: pageNumber});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        },
+                        page: {
+                            display: false,
+                            statusDisplay: false
+                        }
+                    });
+
+                    axboot.buttonClick(this, "data-grid-view-04-btn", {
+                        "applyTemp": function () {
+                            ACTIONS.dispatch(ACTIONS.APPLY_TEMP);
+                        }
+                    });
+                },
+                getData: function (_type) {
+                    var list = [];
+                    var _list = this.target.getList(_type);
+                    list = _list;
+
+                    return list;
+                },
+                addRow: function () {
+                    this.target.addRow({__created__: true}, "last");
+                },
+                lastRow: function () {
+                    return ($("div [data-ax5grid='grid-view-04']").find("div [data-ax5grid-panel='body'] table tr").length)
+                }
+            });
+
             //////////////////////////////////////
             //크기자동조정
             var _pop_top = 0;
@@ -884,6 +1096,7 @@
 
                 $("#tab1_grid").css("height", $("#tab_area").height() - 50 - $("#tab1_button").height() );
                 $("#tab2_grid").css("height", $("#tab_area").height() - 50 - $("#tab2_button").height() );
+                $("#tab3_grid").css("height", $("#tab_area").height() - 50 - $("#tab3_button").height() );
                 /*
                 alert($("#ax-base-root").height()); // 컨텐츠영역높이
                 ax-base-title //타이틀부분높이(class)
@@ -934,8 +1147,10 @@
                                 class="icon_add"></i>
                             <ax:lang id="ax.admin.add"/></button>
                         <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">
-                            <i
-                                    class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
+                            <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
+                        <button type="button" class="btn btn-small" data-grid-view-01-btn="temp_add" style="width:80px;"><i
+                                class="icon_add"></i>
+                            임시발주</button>
                     </div>
                 </div>
 
@@ -947,15 +1162,20 @@
                 <div class="H10"></div>
                 <div class="H10"></div>
                 <div id="tab_area" data-ax5layout="ax1" data-config="{layout:'tab-panel'}" style="height:300px;" name="하단탭영역">
-                    <div data-tab-panel="{label: '입고 정보', active: 'true'}" id="tabGrid1">
-                        <div class="ax-button-group" data-fit-height-aside="grid-view-02" id="tab2_button" name="왼쪽그리드타이틀">
-<%--                            <div class="right">--%>
-<%--                                <button type="button" class="btn btn-small" data-grid-view-02-btn="applyWEB01" style="width:80px;">--%>
-<%--                                    <i class="icon_add"></i>본사승인</button>--%>
-<%--                                <button type="button" class="btn btn-small" data-grid-view-02-btn="applyWEB04" style="width:80px;">--%>
-<%--                                    <i class="icon_add"></i> 물류사승인</button>--%>
-<%--                            </div>--%>
+                    <div data-tab-panel="{label: '발주 정보', active: 'true'}" id="tabGrid3">
+                        <div class="ax-button-group" data-fit-height-aside="grid-view-04" id="tab3_button" name="왼쪽그리드타이틀">
+                                <div class="right">
+                                    <button type="button" class="btn btn-small" data-grid-view-04-btn="applyTemp" style="width:80px;">
+                                        <i class="icon_add"></i>발주승인</button>
+                                </div>
                         </div>
+                        <div data-ax5grid="grid-view-04"
+                             data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
+                             id = "tab3_grid"
+                             name="왼쪽그리드">
+                        </div>
+                    </div>
+                    <div data-tab-panel="{label: '입고 정보', active: 'true'}" id="tabGrid1">
                         <div data-ax5grid="grid-view-02"
                              data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
                              id = "tab1_grid"
