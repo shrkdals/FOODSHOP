@@ -181,7 +181,11 @@
                     // cklist.forEach(function(item, index){
                     //     ORDER_CD.push(item.ORDER_CD)
                     // })
-                    var itemH = fnObj.gridView01.getData('selected')[0]
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    if (nvl(itemH) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
                     $.openCustomPopup("PDF_1",'UserCallBack', '', { ORDER_CD : itemH.ORDER_CD }, '', 1400, 700,50);
                 }
                 ,
@@ -192,6 +196,10 @@
                     //     ORDER_CD.push(item.ORDER_CD)
                     // })
                     var itemH = fnObj.gridView01.getData('selected')[0]
+                    if (nvl(itemH) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
                     $.openCustomPopup("PDF_2",'UserCallBack', '', { ORDER_CD : itemH.ORDER_CD }, '', 1400, 700,50);
                 }
             });
@@ -208,7 +216,8 @@
                     $('#pdf1').css('display','none')
                 }
                 if(SCRIPT_SESSION.cdGroup !='WEB04'){
-                    $('#SUCCESS2').css('display','none')
+                    $('#SUCCESS2').css('display','none');
+                    $('#pdf2').css('display','none');
                 }
 
 
@@ -878,9 +887,9 @@
                 <button type="button" class="btn btn-info" data-page-btn="pdf1" id="pdf1" style="width: 150px;"><i
                         class="icon_save"></i>거래명세서 출력
                 </button>
-<%--                <button type="button" class="btn btn-info" data-page-btn="pdf2" id="pdf2" style="width: 150px;"><i--%>
-<%--                        class="icon_save"></i>[물류사용]거래명세서--%>
-<%--                </button>--%>
+                <button type="button" class="btn btn-info" data-page-btn="pdf2" id="pdf2" style="width: 150px;"><i
+                        class="icon_save"></i>[물류사용]거래명세서
+                </button>
                 
             </div>
         </div>
