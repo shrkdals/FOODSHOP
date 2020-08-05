@@ -159,9 +159,10 @@
 
                 }
                 , TEMP_ADD: function (caller, act, data) {
-                    var temp = caller.gridView01.getData("modified")
+
+                    var temp = caller.gridView01.getData("selected")
                     if(temp.length == 0){
-                        qray.alert('임시 발주 데이터가 없습니다.')
+                        qray.alert('선택한 발주대상이 없습니다.')
                         return;
                     }
                     temp.forEach(function(item,index){
@@ -187,6 +188,22 @@
                         fnObj.gridView04.target.setValue(RowIndex, "MAKE_VERIFY_YN", 'N');
 
                     })
+
+                    // caller.gridView01.getData().forEach(function(item,index){
+                    //     fnObj.gridView01.target.setValue(item.__index, "ORDER_STOCK_NUM", 0);
+                    // })
+                }
+                , APPLY_TEMP: function (caller, act, data) {
+                    var beforeIdx = caller.gridView01.getData('selected')[0].__index;
+                    caller.gridView01.delRow("selected");
+                }
+                , CANCEL_TEMP: function (caller, act, data) {
+                    var beforeIdx = caller.gridView04.getData('selected')[0].__index;
+                    caller.gridView04.delRow("selected");
+                }
+                , ITEM_DEL1: function (caller, act, data) {
+                    var beforeIdx = caller.gridView01.getData('selected')[0].__index;
+                    caller.gridView01.delRow("selected");
                 }
                 , ITEM_DEL1: function (caller, act, data) {
                     var beforeIdx = caller.gridView01.getData('selected')[0].__index;
@@ -382,7 +399,7 @@
                                     }
                                 }
                             }
-                            ,{key: "ORDER_STOCK_NUM"        , label: "<span style=\"color:red;\"> * </span> 발주수량"	    , width: 150, align: "left" , sortabled:true ,  hidden:false
+                            ,{key: "ORDER_STOCK_NUM"        , label: "<span style=\"color:red;\"> * </span> 발주수량"	    , width: 150, align: "left" , sortabled:true ,  hidden:true
                                 , editor: {type:"number"
                                 }
                             }
@@ -913,7 +930,15 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-04"]'),
                         columns: [
-                            {key: "COMPANY_CD"       , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
+                            {
+                                key: "CHKED", label: "", width: 30, align: "center",
+                                label:
+                                    '<div id="headerBox" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>',
+                                editor: {
+                                    type: "checkbox", config: {height: 17, trueValue: true, falseValue: false}
+                                }, dirty : false
+                            }
+                            ,{key: "COMPANY_CD"       , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
                             ,{key: "DISTRIB_PT_CD"    , label: "<span style=\"color:red;\"> * </span> 물류거래처코드"  , width: 150, align: "left" , sortabled:true , required:true ,  hidden:true , editor: false }
                             ,{key: "DISTRIB_PT_NM"    , label: "<span style=\"color:red;\"> * </span> 물류거래처명"    , width: 150, align: "left" , sortabled:true , required:true ,  hidden:false , editor: false
                                 , styleClass: function () {
@@ -1047,6 +1072,20 @@
                         "applyTemp": function () {
                             ACTIONS.dispatch(ACTIONS.APPLY_TEMP);
                         }
+                        ,"cancelTemp": function () {
+                            var beforeIdx = this.target.selectedDataIndexs[0];
+                            var dataLen = this.target.getList().length;
+
+                            if ((beforeIdx + 1) == dataLen) {
+                                beforeIdx = beforeIdx - 1;
+                            }
+
+                            ACTIONS.dispatch(ACTIONS.CANCEL_TEMP);
+                            if (beforeIdx > 0 || beforeIdx == 0) {
+                                this.target.select(beforeIdx);
+                            }
+
+                        }
                     });
                 },
                 getData: function (_type) {
@@ -1062,6 +1101,28 @@
                 lastRow: function () {
                     return ($("div [data-ax5grid='grid-view-04']").find("div [data-ax5grid-panel='body'] table tr").length)
                 }
+            });
+
+            var cnt = 0;
+            $(document).on('click', '#headerBox', function(e) {
+                if(cnt == 0){
+                    $("div [data-ax5grid='grid-view-04']").find("div #headerBox").attr("data-ax5grid-checked",true);
+                    cnt++;
+                    var gridList = fnObj.gridView04.getData();
+                    gridList.forEach(function(e, i){
+                        fnObj.gridView04.target.setValue(i,"CHKED",true);
+                    });
+                    // $("div [data-ax5grid-editor='checkbox']").attr("data-ax5grid-checked",true)
+                }else{
+                    $("div [data-ax5grid='grid-view-04']").find("div #headerBox").attr("data-ax5grid-checked",false);
+                    cnt = 0;
+                    var gridList = fnObj.gridView04.getData();
+                    gridList.forEach(function(e, i){
+                        fnObj.gridView04.target.setValue(i,"CHKED",false);
+                    });
+                    // $("div [data-ax5grid-editor='checkbox']").attr("data-ax5grid-checked",false)
+                }
+
             });
 
             //////////////////////////////////////
@@ -1103,6 +1164,7 @@
                 ax-base-content //검색조건높이(class)
                  */
             }
+
 
         </script>
     </jsp:attribute>
@@ -1162,11 +1224,13 @@
                 <div class="H10"></div>
                 <div class="H10"></div>
                 <div id="tab_area" data-ax5layout="ax1" data-config="{layout:'tab-panel'}" style="height:300px;" name="하단탭영역">
-                    <div data-tab-panel="{label: '발주 정보', active: 'true'}" id="tabGrid3">
+                    <div data-tab-panel="{label: '임시발주 정보', active: 'true'}" id="tabGrid3">
                         <div class="ax-button-group" data-fit-height-aside="grid-view-04" id="tab3_button" name="왼쪽그리드타이틀">
                                 <div class="right">
                                     <button type="button" class="btn btn-small" data-grid-view-04-btn="applyTemp" style="width:80px;">
                                         <i class="icon_add"></i>발주승인</button>
+                                    <button type="button" class="btn btn-small" data-grid-view-04-btn="cancelTemp" style="width:80px;">
+                                        <i class="icon_add"></i>발주삭제</button>
                                 </div>
                         </div>
                         <div data-ax5grid="grid-view-04"
