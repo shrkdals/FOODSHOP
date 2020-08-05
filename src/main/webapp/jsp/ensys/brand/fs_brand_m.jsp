@@ -960,7 +960,7 @@
                             {key: "BRD_MENU_CD", label: "브랜드메뉴코드", width: 150, align: "center", hidden: true},
                             {key: "ITEM_CD", label: "상품코드", width: 150, align: "center", hidden: false},
                             {key: "ITEM_NM", label: "상품명", width: 150, align: "center", editor: {type: "text"}, hidden: false},
-                            {key: "SALE_COST", label: "판매가", width: 150, align: "right",  hidden: false,
+                            {key: "SALE_COST", label: "판매가", width: 150, align: "right",  hidden: true,
                                 editor: {type: "number"},
                                 formatter: function () {
                                     if (nvl(this.item.SALE_COST) == '') {
