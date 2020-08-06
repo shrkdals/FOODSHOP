@@ -48,6 +48,8 @@ public interface CommonHelpMapper extends MyBatisMapper {
     List<HashMap<String, Object>> HELP_MULTI_EMP(Map<String, Object> param);
 
     List<HashMap<String, Object>> HELP_USER(Map<String, Object> param);
+    
+    List<HashMap<String, Object>> HELP_GROUP_USER(Map<String, Object> param);
 
     List<HashMap<String, Object>> HELP_PROG(Map<String, Object> param);
 

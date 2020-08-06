@@ -18,6 +18,11 @@ public class CommonHelpService extends BaseService {
     public CommonHelpMapper mapper;
     
     
+    public List<HashMap<String, Object>> HELP_GROUP_USER(HashMap<String, Object> param) {
+        SessionUser sessionUser = SessionUtils.getCurrentUser();
+        param.put("CD_COMPANY", sessionUser.getCdCompany());
+        return mapper.HELP_GROUP_USER(param);
+    }
     public List<HashMap<String, Object>> HELP_USER_NOTICE(HashMap<String, Object> param) {
         SessionUser sessionUser = SessionUtils.getCurrentUser();
         param.put("CD_COMPANY", sessionUser.getCdCompany());
