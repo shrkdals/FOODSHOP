@@ -7,8 +7,6 @@
 <ax:set key="page_desc" value="${pageRemark}"/>
 <ax:set key="page_auto_height" value="true"/>
 
-
-
 <ax:layout name="base">
     <jsp:attribute name="script">
         <ax:script-lang key="ax.script"/>
