@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.file.fileMapper">
+
+    <select id="BbsFileSearch" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BBS_FILE_S (#{CD_COMPANY}, #{BOARD_TYPE}, #{SEQ})}
+    </select>
+
+    <select id="getFiDocuFile" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_FI_DOCU_FILE_S (#{CD_COMPANY}, #{NO_DOCU})}
+    </select>
+
+
+    <update id="BbsFileInsert" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BBS_FILE_I (#{CD_COMPANY}, #{BOARD_TYPE}, #{SEQ}, #{FILE_NAME}, #{ORGN_FILE_NAME}, #{FILE_PATH}, #{FILE_EXT},  #{FILE_SIZE}, #{FILE_BYTE}, #{ID_INSERT})}
+    </update>
+
+    <select id="BbsFileDelete" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_BBS_FILE_D (#{CD_COMPANY}, #{BOARD_TYPE}, #{SEQ}, #{SEQ_FILE})}
+    </select>
+
+    <update id="MaFileInfoInsert" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_MA_FILE_INFO_I (#{CD_COMPANY}, #{CD_MODULE}, #{ID_MENU}, #{CD_FILE}, #{FILE_NAME}, #{FILE_PATH}, #{FILE_EXT}, #{FILE_DATE}, #{FILE_TIME}, #{FILE_SIZE}, #{FILE_BYTE}, #{ID_INSERT})}
+    </update>
+
+    <update id="MaFileInfoDelete" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_CZ_Q_MA_FILE_INFO_D (#{CD_COMPANY}, #{CD_MODULE}, #{ID_MENU}, #{CD_FILE})}
+    </update>
+
+
+    <select id="getFileData" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_FILE_S
+            (
+                #{CD_COMPANY},
+                #{CG_CD},
+                #{TB_KEY},
+                #{TB_ID}
+            )
+        }
+    </select>
+
+    <update id="insertFsFile" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_FILE_I
+            (
+                #{CD_COMPANY},
+                #{CG_CD},
+                #{TB_KEY},
+                #{TB_ID},
+                #{FILE_NAME},
+                #{ORGN_FILE_NAME},
+                #{FILE_PATH},
+                #{FILE_EXT},
+                #{FILE_SIZE},
+                #{FILE_SIZE},
+                #{ID_INSERT}
+            )
+        }
+    </update>
+
+</mapper>

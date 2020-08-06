@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.common.commonMapper">
+
+
+    <select id="getSeq" parameterType="hashmap" statementType="CALLABLE">
+    {
+        CALL UP_FS_CP_GETNO(
+                      #{cdCompany}
+                     ,#{cdModule}
+                     ,#{cdClass}
+                     ,#{docuYm}
+                     ,#{no, mode=OUT, jdbcType=VARCHAR, javaType=string }
+
+                     )
+    }
+    </select>
+
+
+    <select id="getWebSeq" resultType="map" parameterType="hashmap" statementType="CALLABLE">
+    {
+        CALL UP_FS_AUTH_WEBSEQ( #{CD_COMPANY} )
+    }
+    </select>
+
+
+    <select id="getCodeList" resultType="map" parameterType="common" statementType="CALLABLE">
+    {
+        CALL UP_FS_CODEDATA_SELECT(
+                      #{cdCompany}
+                     ,#{cdField}
+                     ,'KR'
+                     ,'N'
+                     ,null
+                     )
+    }
+    </select>
+
+
+    <select id="selectMenu" resultType="newMenu" parameterType="hashmap" statementType="CALLABLE">
+        { CALL  UP_FS_AUTH_MENU_S(#{CD_COMPANY}, #{ID_USER},#{CD_GROUP} ) }
+    </select>
+
+
+    <select id="selectProg" resultType="Program" parameterType="hashmap" statementType="PREPARED">
+          { CALL UP_FS_COMMON_SELECTPROG_S(#{CD_COMPANY}) }
+    </select>
+
+
+    <select id="HELP_CHECK_SEARCH" resultType="hashmap" parameterType="hashmap">
+        {
+            CALL UP_FS_HELP_CHECK_SEARCH
+            (
+                #{CD_COMPANY},
+                #{ID_ACTION},
+                #{USERDEF1},
+                #{USERDEF2},
+                #{USERDEF3},
+                #{USERDEF4},
+                #{USERDEF5},
+                #{USERDEF6},
+                #{USERDEF7},
+                #{USERDEF8},
+                #{USERDEF9},
+                #{USERDEF10},
+                #{USERDEF11},
+                #{USERDEF12},
+                #{USERDEF13},
+                #{USERDEF14},
+                #{USERDEF15},
+                #{USERDEF16},
+                #{USERDEF17},
+                #{USERDEF18},
+                #{USERDEF19},
+                #{USERDEF20}
+            )
+        }
+    </select>
+
+
+</mapper>
+
+

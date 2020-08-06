@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="com.ensys.sample.domain.authGroup.authGroupMapper">
+
+
+
+    <select id="groupMselect" resultType="authGroup" parameterType="authGroup" statementType="CALLABLE">
+         { CALL UP_FS_GROUP_M_S( #{groupGb}) }
+    </select>
+
+    <select id="groupDselect" resultType="authGroup" parameterType="authGroup" statementType="CALLABLE">
+         { CALL UP_FS_GROUP_D_S(#{groupCd},#{groupGb}) }
+    </select>
+
+
+    <update id="groupMinsert" parameterType="authGroup" statementType="CALLABLE">
+   { CALL UP_FS_GROUP_M_I(#{groupCd},#{groupGb},#{groupNm}) }
+    </update>
+
+    <update id="groupDinsert" parameterType="authGroup" statementType="CALLABLE">
+   { CALL UP_FS_GROUP_D_I(#{groupCd},#{groupGb},#{idUser} )}
+    </update>
+
+
+    <update id="groupMupdate" parameterType="authGroup" statementType="CALLABLE">
+   { CALL UP_FS_GROUP_M_U(#{groupCd},#{groupGb},#{groupNm}) }
+    </update>
+
+    <update id="groupMdelete" parameterType="authGroup" statementType="CALLABLE">
+   { CALL UP_FS_GROUP_M_D(#{groupCd},#{groupGb}) }
+    </update>
+
+    <update id="groupDdelete" parameterType="authGroup" statementType="CALLABLE">
+   { CALL UP_FS_GROUP_D_D(#{groupCd},#{groupGb},#{idUser}) }
+    </update>
+
+
+    <select id="deptUserSelect" resultType="authGroup" parameterType="authGroup" statementType="CALLABLE">
+         { CALL UP_FS_DEPT_USER_S( #{cdDept}) }
+    </select>
+
+
+    <update id="deptUserInsert" parameterType="authGroup" statementType="CALLABLE">
+   { CALL UP_FS_DEPT_USER_I(#{cdDept},#{idUser}) }
+    </update>
+
+    <update id="deptUserDelete" parameterType="authGroup" statementType="CALLABLE">
+   { CALL UP_FS_DEPT_USER_D(#{cdDept},#{idUser}) }
+    </update>
+
+
+
+
+</mapper>
+
+

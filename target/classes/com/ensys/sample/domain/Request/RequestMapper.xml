@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Request.RequestMapper">
+
+    <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_REQUEST_H_S(#{COMPANY_CD} ,#{KEYWORD} ,#{LOGIN_ID} ,#{DT_START} ,#{DT_END} ,#{TEMP1} ,#{TEMP2}) }
+    </select>
+
+    <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_REQUEST_D_S(#{COMPANY_CD} ,#{REQ_CD} ) }
+    </select>
+
+    <update id="update" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_REQUEST_H_U(#{COMPANY_CD} ,#{REQ_CD}  ,#{REQ_STAT}, #{LOGIN_ID} ) }
+    </update>
+
+</mapper>
+
+

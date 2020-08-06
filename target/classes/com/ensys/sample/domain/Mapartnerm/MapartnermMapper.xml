@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Mapartnerm.MapartnermMapper">
+
+
+
+    <select id="select" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_FS_PARTNER_H_S(#{COMPANY_CD},#{PT_NM},#{SALES_PERSON_ID},#{CONTRACT_YN} , #{TEMP1} , #{TEMP2} , #{TEMP3})}
+    </select>
+
+    <select id="select2" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_FS_PARTNER2_H_S(#{COMPANY_CD},#{PT_NM},#{SALES_PERSON_ID},#{CONTRACT_YN} , #{TEMP1} , #{TEMP2} , #{TEMP3})}
+    </select>
+
+    <select id="getPartnerCommitionList" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_FS_PARTNER_COMMITION_S(#{COMPANY_CD},#{PT_CD}, #{TEMP1} , #{TEMP2} , #{TEMP3})}
+    </select>
+
+    <update id="insert"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_H_I( #{USER_ID}, #{COMPANY_CD},#{PT_CD},#{PT_SP},#{PT_NM},#{BIZ_NO},#{OWNER_NM},#{SIGN_NM},#{PT_TYPE}
+        ,#{PT_COND},#{TEL_NO},#{HP_NO},#{POST_NO},#{PT_ADDR},#{SYSDEF_ADDR},#{FAX_NO},#{CLOSING_TP},#{USE_YN},#{SALES_PERSON_ID}
+        ,#{TAX_SP},#{BRD_VERIFY_YN},#{CONTRACT_YN},#{LAT_CD},#{LONG_CD} ,#{DELI_AMT} ,#{FREE_DELI_AMT} ,#{CD_AREA}
+        ,#{CD_BANK},#{NM_BANK},#{NO_DEPOSIT},#{NO_EMAIL}
+        ) }
+    </update>
+
+    <update id="delete"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_H_D( #{COMPANY_CD},#{PT_CD} ) }
+    </update>
+
+    <update id="insertCONT"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_CONTRACT_I( #{COMPANY_CD},#{CONTRACT_NO},#{JOIN_PT_CD},#{MAIN_PT_CD},#{CONTRACT_SP},#{CONTRACT_ST_DTE},#{CONTRACT_ED_DTE},#{CONTRACT_STAT},#{PT_CONTRACT_PERSON},#{SALES_PERSON_ID},#{USER_ID} ) }
+    </update>
+
+    <update id="deleteCONT"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_CONTRACT_D( #{COMPANY_CD},#{CONTRACT_NO} ) }
+    </update>
+
+
+    <update id="insert2"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_COMMITION_I( #{COMPANY_CD},#{PT_CD},#{COMT_CD},#{PT_COMT_CD},#{ADJUST_DTE},#{ADJUST_PT_CD},#{ADJUST_STD},#{ADJUST_DAY},#{USER_ID} ) }
+    </update>
+
+    <update id="delete2"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_COMMITION_D( #{COMPANY_CD},#{PT_CD},#{COMT_CD},#{PT_COMT_CD}) }
+    </update>
+
+    <select id="SAVE_USERMAPPING_S" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_FS_USER_PARTNER_S(#{COMPANY_CD},#{USER_ID},#{PT_CD})}
+    </select>
+
+    <update id="SAVE_USERMAPPING_I"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_USER_PARTNER_I( #{COMPANY_CD},#{USER_ID},#{PT_CD},#{USER_SP},#{USER_STAT},#{LOGIN_ID}) }
+    </update>
+
+    <update id="SAVE_USERMAPPING_D"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_USER_PARTNER_D( #{COMPANY_CD},#{USER_ID},#{PT_CD}) }
+    </update>
+
+    <select id="SAVE_USERMAPPING_H_S" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_FS_SAVE_USERMAPPING_H_S(#{COMPANY_CD},#{PT_NM},#{SALES_PERSON_ID},#{CONTRACT_YN} , #{TEMP1} , #{TEMP2} , #{TEMP3})}
+    </select>
+
+
+    <select id="MEMBER_JOIN_D" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_MEMBER_D(#{COMPANY_CD} ,#{PT_CD} , #{USER_ID}, #{USER_NM}, #{USER_TP}, #{PASS_WORD}, #{TEL} , #{TOK} ,#{PT_SP} ,#{PT_NM} ,#{USER_STAT},#{LOGIN_ID}) }
+    </select>
+
+    <select id="MEMBER_JOIN_I" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_MEMBER_I(#{COMPANY_CD} ,#{PT_CD} , #{USER_ID}, #{USER_NM}, #{USER_TP}, #{PASS_WORD}, #{TEL} , #{TOK} ,#{PT_SP} ,#{PT_NM} ,#{USER_STAT},#{LOGIN_ID}) }
+    </select>
+
+
+    <select id="MEMBER_JOIN_U" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_MEMBER_I(#{COMPANY_CD} ,#{PT_CD} , #{USER_ID}, #{USER_NM}, #{USER_TP}, #{PASS_WORD}, #{TEL} , #{TOK} ,#{PT_SP} ,#{PT_NM} ,#{USER_STAT},#{LOGIN_ID}) }
+    </select>
+</mapper>
+
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Area.AreaMapper">
+
+    <select id="select1" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_AREA_S(#{COMPANY_CD},#{CONTROL_AREA_CD} ,#{AREA_SEQ} ,#{SALES_PERSON_ID} ,#{KEYWORD} ,#{S_PT_CD} ,#{S_TYPE} ,#{TEMP1} ,#{TEMP2}) }
+    </select>
+
+    <update id="FS_AREA_M_CRUD" parameterType="hashmap" statementType="CALLABLE">
+      { CALL UP_FS_AREA_M_CRUD(#{COMPANY_CD},#{CONTROL_AREA_CD} ,#{ADM_PT_CD} ,#{CONTROL_AREA_NM} ,#{LOGIN_ID} ,#{CRUD_TYPE}) }
+    </update>
+
+    <update id="FS_AREA_D_CRUD" parameterType="hashmap" statementType="CALLABLE">
+      { CALL UP_FS_AREA_D_CRUD(#{COMPANY_CD},#{CONTROL_AREA_CD} ,#{AREA_SEQ} ,#{LV1_AREA_CD} ,#{LV1_AREA_NM} ,#{LV2_AREA_CD} ,#{LV2_AREA_NM} ,#{DISTRIB_PT_CD} ,#{DELI_PRIOD} ,#{LOGIN_ID} ,#{CRUD_TYPE}) }
+    </update>
+
+    <update id="FS_AREA_SALES_PERSON_CRUD" parameterType="hashmap" statementType="CALLABLE">
+      { CALL UP_FS_AREA_SALES_PERSON_CRUD(#{COMPANY_CD},#{CONTROL_AREA_CD} ,#{SALES_PERSON_ID} ,#{SALES_PERSON_LV} ,#{COMT_RATE} ,#{PARENT_SALES_PERSON} ,#{SORT} ,#{LOGIN_ID} ,#{CRUD_TYPE}) }
+    </update>
+
+
+</mapper>
+
+

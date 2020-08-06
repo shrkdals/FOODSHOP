@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.exact.SenarioExactMapper">
+
+
+    <select id="getData" resultType="java.util.HashMap" parameterType="java.util.HashMap"
+            statementType="CALLABLE">
+            { CALL UP_CZ_B_SENARIOEXACT_M
+                (
+                   #{CD_COMPANY},#{DT_START},#{DT_END},#{CD_EMP},#{CD_DEPT},#{TYPE}
+                )
+             }
+    </select>
+
+    <select id="getChartData" resultType="java.util.HashMap" parameterType="java.util.HashMap"
+            statementType="CALLABLE">
+            { CALL UP_CZ_B_SENARIOCHART_M
+                (
+                   #{CD_COMPANY},
+                   #{NO_SENARIO},
+                   #{DT_START},
+                   #{DT_END},
+                   #{CD_EMP},
+                   #{CD_DEPT}
+                )
+             }
+    </select>
+
+    <select id="getDetailData" resultType="java.util.HashMap" parameterType="java.util.HashMap"
+            statementType="CALLABLE">
+            { CALL UP_CZ_B_SENARIOEXACT_DETAIL
+                (
+                   #{CD_COMPANY},
+                   #{NO_SENARIO},
+                   #{DT_START},
+                   #{DT_END},
+                   #{CD_EMP},
+                   #{CD_DEPT}
+                )
+             }
+    </select>
+
+    <select id="getReportData" resultType="java.util.HashMap" parameterType="java.util.HashMap"
+            statementType="CALLABLE">
+            { CALL UP_CZ_B_SENARIOEXACT_REPORT
+                (
+                   #{CD_COMPANY},
+                   #{NO_SENARIO},
+                   #{DT_START},
+                   #{DT_END},
+                   #{CD_EMP},
+                   #{CD_DEPT}
+                )
+             }
+    </select>
+
+    <insert id="notifyInsert" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_B_SENARIOEXACT_NOTIFY_I ( #{CD_COMPANY}, #{C_CODE}, #{ACCT_NO}, #{BANK_CODE}, #{TRADE_DATE}, #{TRADE_TIME}, #{SEQ}, #{NO_SENARIO}, #{NOTIFY_SEQ}, #{SEND_CDEMP}, #{SEND_NMEMP}, #{NOTIFY_CDEMP}, #{NOTIFY_NMEMP}, #{TITLE}, #{CONTENT}, #{ID_INSERT} ) }
+    </insert>
+
+    <insert id="actionInsert" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_CZ_B_SENARIOEXACT_ACTION_I ( #{CD_COMPANY}, #{C_CODE}, #{ACCT_NO}, #{BANK_CODE}, #{TRADE_DATE}, #{TRADE_TIME}, #{SEQ}, #{NO_SENARIO}, #{ACTION_SEQ}, #{EXPLAN_CDEMP}, #{EXPLAN_NMEMP}, #{ACTION_CDEMP}, #{ACTION_NMEMP}, #{TITLE}, #{CONTENT}, #{ID_INSERT} ) }
+    </insert>
+
+    <select id="getSeq" parameterType="hashmap" resultType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_CZ_B_SENARIOEXACT_SEQ
+            (
+              #{CD_COMPANY}
+            )
+        }
+    </select>
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="com.ensys.sample.domain.transLang.translangMapper">
+
+
+
+    <select id="translanSelect" resultType="translan" parameterType="translan" statementType="CALLABLE">
+         { CALL UP_CZ_Q_TRANSLANG_SELECT(#{user},#{user_n}) }
+    </select>
+
+
+    <select id="translanSelectUser" resultType="translan" parameterType="translan" statementType="CALLABLE">
+         { CALL UP_CZ_Q_TRANSLANG_SELECT_USER() }
+    </select>
+
+
+    <select id="translanSelectUserChk" resultType="translan" parameterType="translan" statementType="CALLABLE">
+         { CALL UP_CZ_Q_TRANSLANG_SELECT_USER_CHK(#{user}) }
+    </select>
+
+    <update id="translanInsert" parameterType="translan" statementType="CALLABLE">
+   { CALL UP_CZ_Q_TRANSLANG_INSERT(#{userEnp},#{korTxt} ,#{engTxt},#{lang}  ,#{user_n} )  }
+    </update>
+
+    <update id="translanInsertUser" parameterType="translan" statementType="CALLABLE">
+   { CALL UP_CZ_Q_TRANSLANG_INSERT_USER(#{user})  }
+    </update>
+
+
+
+
+
+
+
+</mapper>
+
+

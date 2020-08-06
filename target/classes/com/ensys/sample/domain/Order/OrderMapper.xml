@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Order.OrderMapper">
+
+    <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ORDER_H_S(#{COMPANY_CD} , #{KEYWORD} ,#{GROUP} ,#{LOGIN_ID} , #{DT_START}, #{DT_END}) }
+    </select>
+    <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ORDER_D_S(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ,#{CD_GROUP} ) }
+    </select>
+
+    <select id="excel1" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ORDER_EXCEL1(#{COMPANY_CD},#{ORDER_CD} ,#{TEMP1},#{TEMP2},#{TEMP3},#{TEMP4}) }
+    </select>
+
+    <select id="excel2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ORDER_EXCEL2(#{COMPANY_CD},#{ORDER_CD},#{TEMP1},#{TEMP2},#{TEMP3},#{TEMP4}) }
+    </select>
+    
+    <select id="pdf1" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ORDER_PDF1(#{COMPANY_CD},#{ORDER_CD} ,#{TEMP1},#{TEMP2},#{TEMP3},#{TEMP4}) }
+    </select>
+
+    <select id="pdf2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ORDER_PDF2(#{COMPANY_CD},#{ORDER_CD},#{TEMP1},#{TEMP2},#{TEMP3},#{TEMP4}) }
+    </select>
+
+    <update id="success" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_ORDER_U(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ,#{LOGIN_ID}) }
+    </update>
+
+    <update id="success2" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_ORDER_U2(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ,#{ORDER_SEQ} ,#{LOGIN_ID}) }
+    </update>
+    
+    <update id="adjust" parameterType="java.util.HashMap" statementType="CALLABLE">
+    	{ CALL UP_FS_ORDER_ADJUST(#{COMPANY_CD}, #{JOIN_PT_CD}, #{ORDER_CD} ,#{ORDER_SEQ}) }
+    </update>
+
+</mapper>
+
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Event.EventMapper">
+
+
+    <select id="search" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_EVENT_M_S
+            (
+                #{COMPANY_CD},
+                #{EVENT_ST_DTE},
+                #{EVENT_ED_DTE},
+                #{EVENT_NM}
+            )
+        }
+    </select>
+
+    <update id="insert" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_EVENT_M_I
+            (
+                #{COMPANY_CD},
+                #{EVENT_CD},
+                #{EVENT_NM},
+                #{EVENT_ST_DTE},
+                #{EVENT_ED_DTE},
+                #{USE_YN},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="update" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_EVENT_M_U
+            (
+                #{COMPANY_CD},
+                #{EVENT_CD},
+                #{EVENT_NM},
+                #{EVENT_ST_DTE},
+                #{EVENT_ED_DTE},
+                #{USE_YN},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="delete" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_EVENT_M_D
+            (
+                #{COMPANY_CD},
+                #{EVENT_CD}
+            )
+        }
+    </update>
+
+</mapper>
+
+

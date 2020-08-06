@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.DefaultQna.DefaultQnaMapper">
+
+
+    <select id="search" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_DEFAULT_QNA_S
+            (
+                #{COMPANY_CD},
+                #{KEYWORD},
+                #{QNA_TYPE},
+                #{CONDITION}
+            )
+        }
+    </select>
+
+    <update id="insert" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_DEFAULT_QNA_I
+            (
+                #{COMPANY_CD},
+                #{QNA_TYPE},
+                #{SEQ},
+                #{QUESTION},
+                #{ANSWER},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="update" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_DEFAULT_QNA_U
+            (
+                #{COMPANY_CD},
+                #{QNA_TYPE},
+                #{SEQ},
+                #{QUESTION},
+                #{ANSWER},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="delete" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_DEFAULT_QNA_D
+            (
+                #{COMPANY_CD},
+                #{QNA_TYPE},
+                #{SEQ}
+            )
+        }
+    </update>
+
+</mapper>
+
+

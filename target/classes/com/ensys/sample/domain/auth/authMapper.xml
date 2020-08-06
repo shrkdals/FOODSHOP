@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.auth.authMapper">
+
+
+    <select id="authMselect" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_AUTH_M_S(#{CD_COMPANY}, #{AUTH_TYPE}) }
+    </select>
+
+
+    <select id="authDselect" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_AUTH_D_S(#{CD_COMPANY}, #{AUTH_TYPE},#{AUTH_CODE} ) }
+    </select>
+
+    <update id="authMinsert" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_AUTH_M_I(#{CD_COMPANY},#{AUTH_TYPE},#{AUTH_CODE},#{AUTH_NAME}) }
+    </update>
+
+    <update id="authMdelete" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_AUTH_M_D(#{CD_COMPANY},#{AUTH_TYPE},#{AUTH_CODE}) }
+    </update>
+
+    <update id="authDinsert" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_AUTH_D_I(#{CD_COMPANY},#{YN_USE},#{AUTH_TYPE} ,#{AUTH_CODE} ,#{PARENT_ID} ,#{MENU_ID} )  }
+    </update>
+
+    <update id="authDdelete" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_AUTH_D_D(#{CD_COMPANY},#{AUTH_TYPE}, #{AUTH_CODE}) }
+    </update>
+
+    <update id="AUTHD_UPDATE" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_AUTH_D_AUTHUPDATE (#{CD_COMPANY}, #{AUTH_CODE}) }
+    </update>
+
+</mapper>
+
+

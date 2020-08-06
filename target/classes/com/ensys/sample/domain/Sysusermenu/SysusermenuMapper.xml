@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Sysusermenu.SysusermenuMapper">
+
+    <select id="selectMst" resultType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_AUTHUSER_GROUPCODE_S(#{CD_COMPANY}) }
+    </select>
+
+    <select id="select" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_AUTHUSER_GROUPUSER_S(#{CD_COMPANY}, #{CD_GROUP} )}
+    </select>
+
+    <select id="selectDtl" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+         { CALL UP_FS_AUTH_USER_S( #{CD_COMPANY},#{CD_GROUP},#{ID_USER} ) }
+    </select>
+
+    <update id="authDinsert" parameterType="Sysusermenu" statementType="CALLABLE">
+         { CALL UP_FS_AUTH_D_USER_I(#{CD_COMPANY},#{YN_USE},#{AUTH_TYPE} ,#{AUTH_CODE} ,#{PARENT_ID} ,#{MENU_ID},#{AUTH_S},#{AUTH_I},#{AUTH_U},#{AUTH_D}, #{CD_GROUP} )  }
+    </update>
+
+    <delete id="authDdelete" parameterType="Sysusermenu" statementType="CALLABLE">
+        { CALL UP_FS_AUTH_D_USER_D (#{CD_COMPANY},#{AUTH_TYPE} ,#{AUTH_CODE}, #{CD_GROUP}) }
+    </delete>
+
+
+</mapper>
+
+

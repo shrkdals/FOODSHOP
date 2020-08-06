@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.CalcSummary.CalcSummaryMapper">
+
+    <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_CALC_SUMMARY_S(#{COMPANY_CD} ,#{ADJUST_DT_ST} ,#{ADJUST_DT_ED} ,#{PT_NM}, #{TRANS_YN}, #{ADJUST_SP}, #{PT_SP}, #{LOGIN_ID}) }
+    </select>
+    
+    <select id="selectPop" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_CALC_ITEM_S(#{COMPANY_CD} ,#{ADJUST_NO} ,#{ADJUST_DT} ,#{JOIN_PT_CD}) }
+    </select>
+    
+	<update id="approve" parameterType="java.util.HashMap" statementType="CALLABLE">
+	{
+		CALL UP_FS_CALC_SUMMARY_CP_U
+		(
+			#{COMPANY_CD},
+			#{ADJUST_NO},
+			#{ADJUST_DT},
+			#{ADJUST_SP}
+		)
+	}
+	</update>
+	
+	<update id="FundTransfer" parameterType="java.util.HashMap" statementType="CALLABLE">
+	{
+		CALL UP_FS_CALC_SUMMARY_TRANS_U
+		(
+			#{COMPANY_CD},
+			#{ADJUST_NO},
+			#{ADJUST_DT},
+			#{ADJUST_SP}
+		)
+	}
+	</update>
+	
+
+</mapper>
+
+
