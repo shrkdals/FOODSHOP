@@ -30,4 +30,6 @@ public interface DeliverPartnerMapper extends MyBatisMapper {
     void MkupdateM(HashMap<String, Object> item);
     void MkupdateD(HashMap<String, Object> item);
 
+    void MkApplyTemp(HashMap<String, Object> item);
+
 }

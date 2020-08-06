@@ -60,4 +60,10 @@ public class DeliverPartnerController extends BaseController {
         return ok();
     }
 
+    @RequestMapping(value = "MkApplyTemp", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public ApiResponse MkApplyTemp(@RequestBody HashMap<String, Object> param) {
+        service.MkApplyTemp(param);
+        return ok();
+    }
+
 }

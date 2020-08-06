@@ -112,6 +112,19 @@ public class DeliverPartnerService extends BaseService {
         }
         // #### 제조사 마스터 ####
     }
+
+    @Transactional
+    public void MkApplyTemp(HashMap<String, Object> param) {
+
+        SessionUser user = SessionUtils.getCurrentUser();
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("list")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("LOGIN_ID",user.getIdUser());
+            mapper.MkApplyTemp(item);
+
+        }
+
+    }
 }
 
 

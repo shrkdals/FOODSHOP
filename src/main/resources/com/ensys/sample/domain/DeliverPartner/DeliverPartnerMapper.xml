@@ -133,6 +133,19 @@
         ) }
     </update>
 
+    <update id="MkApplyTemp" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_MKPARTNER_APPLY(
+          #{COMPANY_CD}
+        , #{DISTRIB_PT_CD}
+        , #{ITEM_CD}
+        , #{INOUT_NUM}
+        , #{LOGIN_ID}
+        , #{MAKE_PT_CD}
+        , #{CCL_PRIOD_ST_DTE}
+        , #{CCL_PRIOD_ED_DTE}
+        ) }
+    </update>
+
 </mapper>
 
 

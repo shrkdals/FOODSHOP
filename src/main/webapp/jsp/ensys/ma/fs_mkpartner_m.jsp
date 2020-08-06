@@ -194,8 +194,31 @@
                     // })
                 }
                 , APPLY_TEMP: function (caller, act, data) {
-                    var beforeIdx = caller.gridView01.getData('selected')[0].__index;
-                    caller.gridView01.delRow("selected");
+
+                    var data = isChecked(fnObj.gridView04.getData())
+                    if(data.length == 0){
+                        qray.alert('체크된 발주 데이터가 없습니다')
+                        return
+                    }
+                    axboot.ajax({
+                        type: "POST",
+                        url: ["DeliverPartner", "MkApplyTemp"],
+                        data: JSON.stringify({ list : data}),
+                        callback: function (res) {
+                            qray.alert("저장 되었습니다.");
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                            caller.gridView01.target.select(afterIndex);
+                            caller.gridView01.target.focus(afterIndex);
+
+                            data.forEach(function(item, index){
+                                fnObj.gridView04.target.select(item.__index);
+                                fnObj.gridView04.target.focus(item.__index);
+                                fnObj.gridView04.delRow("selected");
+                            })
+
+                        }
+                    });
+
                 }
                 , CANCEL_TEMP: function (caller, act, data) {
                     var beforeIdx = caller.gridView04.getData('selected')[0].__index;
@@ -1102,7 +1125,15 @@
                     return ($("div [data-ax5grid='grid-view-04']").find("div [data-ax5grid-panel='body'] table tr").length)
                 }
             });
-
+            function isChecked(data) {
+                var array = [];
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].CHKED == true) {
+                        array.push(data[i])
+                    }
+                }
+                return array;
+            }
             var cnt = 0;
             $(document).on('click', '#headerBox', function(e) {
                 if(cnt == 0){
