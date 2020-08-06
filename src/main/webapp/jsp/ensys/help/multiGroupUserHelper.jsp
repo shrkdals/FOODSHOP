@@ -32,7 +32,7 @@
             }
             initData.P_KEYWORD = $("#KEYWORD").val();
 
-            var PT_TP = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00002');
+            var PT_SP = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00002');
             var fnObj = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_CLOSE: function (caller, act, data) {
@@ -181,9 +181,9 @@
                                 }
                             },
                             {key: "PT_NM", label: "거래처", width: 100, align: "left", editor: false},
-                            {key: "PT_TP", label: "거래처유형", width: 100, align: "center", editor: false
+                            {key: "PT_SP", label: "거래처유형", width: 100, align: "center", editor: false
                                 ,formatter: function () {
-                                    return $.changeTextValue(PT_TP, this.value)
+                                    return $.changeTextValue(PT_SP, this.value)
                                 }
                             },
                             // 혹시몰라서 유지
