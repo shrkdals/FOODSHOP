@@ -492,7 +492,7 @@
                                     return $.changeTextValue(dl_ITEM_UNIT, this.value)
                                 },
                               }
-                            , {key: "SELECT_NUM"         , label: "상품수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "SELECT_NUM"         , label: "출고수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "right"   , sortable: true  , editor: false
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'money')
@@ -712,7 +712,7 @@
                             , {key: "BOX_NUM"         	 , label: "박스수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             , {key: "ITEM_UNIT"          , label: "출고단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
                             ,{key: "ORIGIN_NM"       , label: "원산지", width: 150, align: "left", editor: false ,hidden:false}
-                            ,{key: "SELECT_NUM"       , label: "상품수량", width: 150, align: "left", editor: false ,hidden:false}
+                            ,{key: "SELECT_NUM"       , label: "출고수량", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "SALE_COST"       , label: "단가", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "ORDER_AMT"       , label: "금액", width: 150, align: "left", editor: false ,hidden:false}
                             ,{key: "ORDER_VAT"       , label: "세액", width: 150, align: "left", editor: false ,hidden:false}
