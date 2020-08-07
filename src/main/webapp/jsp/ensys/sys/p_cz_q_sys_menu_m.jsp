@@ -98,12 +98,12 @@
                         for (var i2 = 0; i2 < caller.gridView02.target.list.length; i2++) {
                             if (i == i2) continue;
 
-                            if (caller.gridView02.target.list[i].ID_SORT == caller.gridView02.target.list[i2].ID_SORT) {
+                            /* if (caller.gridView02.target.list[i].ID_SORT == caller.gridView02.target.list[i2].ID_SORT) {
                                 if (nvl(caller.gridView02.target.list[i].ID_SORT) != '' && nvl(caller.gridView02.target.list[i2].ID_SORT) != '') {
                                     qray.alert('하위메뉴의 조회순서가 중복됩니다.');
                                     return false;
                                 }
-                            }
+                            } */
 
                             if (caller.gridView02.target.list[i].MENU_ID == caller.gridView02.target.list[i2].MENU_ID) {
                                 qray.alert('하위메뉴의 메뉴아이디가 중복됩니다.');

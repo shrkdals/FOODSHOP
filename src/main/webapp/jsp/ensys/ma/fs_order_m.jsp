@@ -143,6 +143,9 @@
                         }
                     });
                 }
+                , ITEM_DEL: function(caller, act, data){
+
+                }
                 , SUCCESS2 : function (caller, act, data) {
                     var list = isChecked(fnObj.gridView02.getData())
                     if(list.length == 0){
@@ -236,6 +239,9 @@
                         },
                         "save": function () {
                             ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                        },
+                        "delete": function(){
+                        	ACTIONS.dispatch(ACTIONS.ITEM_DEL);
                         },
                         "excel": function () {
                             var item = fnObj.gridView01.getData('selected')[0];
@@ -918,6 +924,8 @@
                     <div class="right">
                         <button type="button" class="btn btn-info" data-page-btn="SUCCESS" id="SUCCESS" style="width: 130px;"><i
                                 class="icon_save"></i>일괄입금완료처리
+                        </button>
+                        <button type="button" class="btn btn-info" data-page-btn="delete" id="delete" style="width: 130px;">주문삭제
                         </button>
                     </div>
 
