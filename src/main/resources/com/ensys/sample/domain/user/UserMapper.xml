@@ -34,6 +34,6 @@
     </select>
 
     <update id="join" parameterType="hashmap" statementType="PREPARED">
-        { CALL UP_FS_USER_I (#{CD_COMPANY}, #{P_ID_USER}, #{P_NAME}, #{P_USER_TP}, #{P_PWD}, #{P_TEL} , #{P_TOK} ) }
+        { CALL UP_FS_USER_I (#{CD_COMPANY}, #{P_ID_USER}, #{P_NAME}, #{P_USER_TP}, #{P_PWD}, #{P_TEL} , #{P_TOK} ,#{P_PT_SP} ,#{P_PT_NM}) }
     </update>
 </mapper>
