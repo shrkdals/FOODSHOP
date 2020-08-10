@@ -350,7 +350,7 @@
                                 },
                               }
                             , {key: "ORIGIN_NM"          , label: "원산지"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "SELECT_NUM"         , label: "상품수량"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:false}
+                            , {key: "SELECT_NUM"         , label: "출고수량"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:false}
                             , {key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "center"   , sortable: true  , editor: false
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'money')

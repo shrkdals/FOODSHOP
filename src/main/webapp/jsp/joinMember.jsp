@@ -48,7 +48,8 @@
                             "P_ID_USER": $("#id_user").val(),
                             "P_NAME": $("#name").val(),
                             "P_TEL": $("#tel").val().replace(/\-/g, ''),
-                            "P_USER_TP": $("select[name='user_tp']").val(),
+                            // "P_USER_TP": $("select[name='user_tp']").val(),
+                            "P_USER_TP": '02',
                             // "P_USER_TP": '1',
                             "P_TOK": $("#tok").val(),
                             "P_PWD": $("#pwd").val(),
@@ -253,11 +254,11 @@
             <div class="H10"></div>
 
             <ax:tbl clazz="ax-search-tb2" minWidth="800px">
-                <ax:tr>
-                    <ax:td label='<span style="color:red">*</span> 로그인 구분' width="400px">
-                        <div id="user_tp" data-ax5select="user_tp" data-ax5select-config='{}'></div>
-                    </ax:td>
-                </ax:tr>
+<%--                <ax:tr>--%>
+<%--                    <ax:td label='<span style="color:red">*</span> 로그인 구분' width="400px">--%>
+<%--                        <div id="user_tp" data-ax5select="user_tp" data-ax5select-config='{}'></div>--%>
+<%--                    </ax:td>--%>
+<%--                </ax:tr>--%>
                 <ax:tr>
                     <ax:td label='<span style="color:red">*</span> 아이디' width="400px">
 

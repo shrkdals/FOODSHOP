@@ -210,7 +210,7 @@
                         }
                         modal.close();
                     };
-                    $.openCommonPopup("multiUser", "deptCallBack2", 'HELP_USER2', '', null, 600, _pop_height, _pop_top);
+                    $.openCommonPopup("multiGroupUser", "deptCallBack2", 'HELP_GROUP_USER', '', null, 600, _pop_height, _pop_top);
 
                     // caller.gridView02.addRow();
                     // var lastIdx =  nvl(caller.gridView02.target.list.length, caller.gridView02.lastRow());

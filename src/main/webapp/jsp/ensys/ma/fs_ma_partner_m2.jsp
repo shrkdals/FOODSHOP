@@ -1200,7 +1200,7 @@
                                 </ax:td>
                             </ax:tr>
                             <ax:tr>
-                                <ax:td label='거래처명' width="300px">
+                                <ax:td label='사업자명' width="300px">
                                     <input type="text" class="form-control" data-ax-path="PT_NM"
                                            name="PT_NM" id="PT_NM" form-bind-text = 'PT_NM' form-bind-type ='text'/>
                                 </ax:td>
