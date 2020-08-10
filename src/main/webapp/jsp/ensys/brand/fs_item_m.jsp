@@ -150,7 +150,14 @@
             fnObj.pageStart = function () {
                 this.pageButtonView.initView();
                 this.gridView01.initView();
+
+                if(SCRIPT_SESSION.cdGroup != 'WEB01'){
+                    $('#MAKE_PT_CD').attr('HELP_DISABLED','true')
+                    $('#MAKE_PT_CD').attr('readonly','readonly')
+                }
+
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
             };
 
             fnObj.pageButtonView = axboot.viewExtend({
@@ -386,8 +393,10 @@
                             , {key: "INSERT_DT" , label: ""	, width: 150     , align: "center"   , editor: false  ,sortable:true, hidden: true}
                             , {key: "UPDATE_ID" , label: ""	, width: 150     , align: "center"   , editor: false  ,sortable:true, hidden: true}
                             , {key: "UPDATE_DT" , label: ""	, width: 150     , align: "center"   , editor: false  ,sortable:true, hidden: true}
-                            , {key: "FILE_NAME", label: "파일", width: 150 , align: "center" , editor: false, sortable: true,},
-                              {key: "FILE", label: "이미지파일", width: 150 , align: "center" , editor: false, sortable: true, hidden:true},
+                            , {key: "ITEM_BIGO", label: "상품설명", width: 150 , align: "center" , editor: {type:"text"}, sortable: true}
+                            , {key: "FILE_NAME", label: "파일", width: 150 , align: "center" , editor: false, sortable: true}
+                            , {key: "FILE", label: "이미지파일", width: 150 , align: "center" , editor: false, sortable: true, hidden:true}
+
                         ],
 
                         body: {

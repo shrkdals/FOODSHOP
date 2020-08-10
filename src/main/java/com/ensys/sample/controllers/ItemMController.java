@@ -37,7 +37,8 @@ public class ItemMController extends BaseController {
             ParameterMap.put("COMPANY_CD", user.getCdCompany());
             ParameterMap.put("MAKE_PT_CD", param.get("MAKE_PT_CD"));
             ParameterMap.put("ITEM_NM", param.get("ITEM_NM"));
-
+            ParameterMap.put("GROUP_CD", user.getCdGroup());
+            ParameterMap.put("LOGIN_ID", user.getIdUser());
             result = service.search(ParameterMap);
         } catch (Exception e) {
             e.printStackTrace();

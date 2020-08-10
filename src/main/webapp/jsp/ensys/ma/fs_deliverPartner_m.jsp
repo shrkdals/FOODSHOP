@@ -33,7 +33,7 @@
             var fnObj = {}, CODE = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_SEARCH: function (caller, act, data) {
-                    var list = $.DATA_SEARCH('DeliverPartner','selectH',{CD_COMPANY:SCRIPT_SESSION.cdCompany , KEYWORD : $('#KEYWORD').val()});
+                    var list = $.DATA_SEARCH('DeliverPartner','selectH',{CD_COMPANY:SCRIPT_SESSION.cdCompany , KEYWORD : $('#KEYWORD').val() , S_MAKE : $('#S_MAKE').getCodes()});
                     fnObj.gridView01.target.setData(list);
                     caller.gridView01.target.select(afterIndex);
                     caller.gridView01.target.focus(afterIndex);
@@ -1147,6 +1147,7 @@
             var _pop_height = 0;
             $(document).ready(function () {
                 changesize();
+                $("#S_MAKE").setHelpParam(JSON.stringify({PT_SP: '03'}));
             });
             $(window).resize(function () {
                 changesize();
@@ -1204,6 +1205,13 @@
         <div role="page-header" id="pageheader">
             <ax:form name="searchView0">
                 <ax:tbl clazz="ax-search-tb1" minWidth="500px">
+                    <ax:tr>
+                        <ax:td label='제조사' width="350px">
+                            <multipicker id="S_MAKE" HELP_ACTION="HELP_PARTNER" HELP_URL="multiPartner"
+                                         BIND-CODE="PT_CD"
+                                         BIND-TEXT="PT_NM"/>
+                        </ax:td>
+                    </ax:tr>
                 </ax:tbl>
             </ax:form>
             <div class="H10"></div>

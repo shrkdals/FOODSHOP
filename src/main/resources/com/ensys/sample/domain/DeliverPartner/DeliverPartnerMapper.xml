@@ -5,7 +5,7 @@
 <mapper namespace="com.ensys.sample.domain.DeliverPartner.DeliverPartnerMapper">
 
     <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_DELIVER_PARTNER_M_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} ,#{ITEM_CD} ,#{LOGIN_ID}) }
+    { CALL UP_FS_DELIVER_PARTNER_M_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} ,#{ITEM_CD} ,#{LOGIN_ID} ,#{S_MAKE}) }
     </select>
 
     <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
@@ -72,7 +72,7 @@
 
 
     <select id="MkselectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_MKPARTNER_M_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} ,#{ITEM_CD} ,#{LOGIN_ID}) }
+    { CALL UP_FS_MKPARTNER_M_S(#{COMPANY_CD} ,#{DISTRIB_PT_CD} ,#{ITEM_CD} ,#{LOGIN_ID} ,#{S_DISTRIB}) }
     </select>
 
     <select id="MkselectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">

@@ -40,6 +40,7 @@
                 },
                 PAGE_SEARCH: function (caller, act, data) {
                     initData.P_KEYWORD = $("#KEYWORD").val();
+                    initData.PT_SP = nvl(initData.initData.PT_SP)
                     var temp = isChecked(fnObj.gridView01.getData());
 
                     if(initData && initData['initData'] && nvl(initData['initData']['DEFAULT_VALUE']) != ''){
@@ -52,13 +53,13 @@
                     var chkArr = [];
                     var temp2 = [];
                     for (var i = 0; i < temp.length; i++) {
-                        chkArr.push(temp[i].ID_USER);
+                        chkArr.push(temp[i].PT_CD);
                     }
                     chkArr = chkArr.join('|');
 
                     if(temp.length > 0){
                         for (var i = 0; i < data.length; i++) {
-                            if (chkArr.indexOf(data[i].ID_USER) == -1) {
+                            if (chkArr.indexOf(data[i].PT_CD) == -1) {
                                 temp2.push(data[i])
                             }
                         }

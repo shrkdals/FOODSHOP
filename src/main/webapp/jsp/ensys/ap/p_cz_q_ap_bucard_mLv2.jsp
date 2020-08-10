@@ -393,6 +393,14 @@
                         },
                         options : {
                             onError : function(err){
+                                var temp = err.message.split('FOODSHOP');
+
+                                if(temp.length == 1){
+                                    err.message = temp[0]
+                                }else{
+                                    err.message = temp[1]
+                                }
+
                                 qray.alert(err.message)
                             }
                         }

@@ -22,6 +22,7 @@ public class OrderService extends BaseService {
         SessionUser user = SessionUtils.getCurrentUser();
         param.put("COMPANY_CD",user.getCdCompany());
         param.put("LOGIN_ID",user.getIdUser());
+        param.put("GROUP_CD",user.getCdGroup());
         return mapper.selectH(param);
     }
 

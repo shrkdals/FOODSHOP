@@ -46,6 +46,7 @@
                     var param = {
                         DT_START : $('#S_DT').getStartDate()
                         ,DT_END : $('#S_DT').getEndDate()
+                        ,GROUP_CD : SCRIPT_SESSION.cdGroup
                     };
                     var list = $.DATA_SEARCH('request','selectH',param).list;
                     fnObj.gridView01.target.setData(list);

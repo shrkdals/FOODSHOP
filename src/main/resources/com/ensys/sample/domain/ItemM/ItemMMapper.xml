@@ -10,7 +10,9 @@
             (
                 #{COMPANY_CD},
                 #{MAKE_PT_CD},
-                #{ITEM_NM}
+                #{ITEM_NM},
+                #{GROUP_CD},
+                #{LOGIN_ID}
             )
         }
     </select>
@@ -42,6 +44,7 @@
                 #{ITEM_SP},
                 #{BOX_NUM},
                 #{DISTRIB_AMT_YN}
+                ,#{ITEM_BIGO}
             )
         }
     </update>
