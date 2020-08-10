@@ -177,7 +177,7 @@
                             {key: "USER_TP", label: "사용자유형", width: 100, align: "center", editor: false
                                 ,formatter: function () {
                                     return $.changeTextValue(USER_SP, this.value)
-                                }
+                                }, hidden: true
                             },
                             // 혹시몰라서 유지
                             {key: "ID_USER", label: "사원아이디", width: 150, align: "center", sortable: true,editor: false, hidden: true},

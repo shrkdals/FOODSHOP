@@ -69,6 +69,10 @@
     <select id="HELP_USER" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
         { CALL UP_FS_ACCT_USER3(#{CD_COMPANY}, #{KEYWORD} ,#{LOGIN_ID})}
     </select>
+
+    <select id="HELP_USER2" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_HELP_USER(#{CD_COMPANY}, #{KEYWORD} ,#{LOGIN_ID} ,#{CD_GROUP})}
+    </select>
     
     <select id="HELP_GROUP_USER" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
         { CALL UP_FS_GROUP_USER(#{CD_COMPANY}, #{KEYWORD} )}

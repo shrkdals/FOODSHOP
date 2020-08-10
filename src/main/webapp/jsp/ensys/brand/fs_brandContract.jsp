@@ -48,7 +48,11 @@
                         var S_2 = $.DATA_SEARCH("BrandContract", 'S_2',{PT_CD : $('select[name="S_1"]').val()}).list;
                         //관할구역
                         $("#S_2").ax5select("setOptions", [{value: '', text: ''}].concat(S_2), true);
+                        $("#S_3").setClear()
+                        $("#ALL_PT").attr({code : '' , text : ''})
+                        $("#ALL_PT").val('')
 
+                        $('#S_3').attr('HELP_PARAM', JSON.stringify({PT_CD : $('select[name="S_1"]').val() , AREA_CD : $('select[name="S_2"]').val()}))
                     }
                 }
             });
@@ -174,7 +178,28 @@
                     })
 
                 }
+                , CONTRACT_CANCEL: function (caller, act, data) {
+                    var list = isChecked(caller.gridView02.getData())
 
+                    if(list.length == 0){
+                        qray.alert('체크된 데이터가 없습니다.')
+                        return false;
+                    }
+
+                    var data = {
+                        list : list
+                    };
+
+                    axboot.ajax({
+                        type: "POST",
+                        url: ["BrandContract", "contract_cancel"],
+                        data: JSON.stringify(data),
+                        callback: function (res) {
+                            qray.alert("계약취소 처리가 완료되었습니다.");
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        }
+                    });
+                }
 
 
 
@@ -200,6 +225,9 @@
                         },
                         "save": function () {
                             ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                        },
+                        "cancel": function () {
+                            ACTIONS.dispatch(ACTIONS.CONTRACT_CANCEL);
                         },
                         "all_btn": function () {
 
@@ -831,7 +859,9 @@
                 <button type="button" class="btn btn-info" data-page-btn="save" id="save_btn" style="width: 80px;"><i
                         class="icon_save"></i>계약
                 </button>
-
+                <button type="button" class="btn btn-info" data-page-btn="cancel" id="cancel_btn" style="width: 80px;"><i
+                        class="icon_save"></i>계약취소
+                </button>
             </div>
         </div>
 

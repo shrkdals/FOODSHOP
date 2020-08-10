@@ -16,4 +16,6 @@ public interface BrandContractMapper extends MyBatisMapper {
     void save(HashMap<String, Object> item);
 
     List<HashMap<String, Object>> S_3(HashMap<String, Object> param);
+
+    void contract_cancel(HashMap<String, Object> item);
 }

@@ -1164,7 +1164,7 @@
                                          data-ax5select-config='{}' form-bind-type="selectBox"></div>
                                 </ax:td>
                                 <ax:td label='거래처계약담당자' width="300px">
-                                    <codepicker id="PT_CONTRACT_PERSON" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="USER_ID"
+                                    <codepicker id="PT_CONTRACT_PERSON" HELP_ACTION="HELP_USER2" HELP_URL="user" BIND-CODE="USER_ID"
                                                 BIND-TEXT="USER_NM" READONLY
                                                 form-bind-type="codepicker" form-bind-text="PT_CONTRACT_PERSON_NM" form-bind-code="PT_CONTRACT_PERSON"/>
                                 </ax:td>

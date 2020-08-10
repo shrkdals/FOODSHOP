@@ -4,6 +4,7 @@ import com.ensys.sample.domain.BaseService;
 import com.ensys.sample.domain.user.SessionUser;
 import com.ensys.sample.utils.SessionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class BrandContractService extends BaseService {
         SessionUser user = SessionUtils.getCurrentUser();
         param.put("COMPANY_CD",user.getCdCompany());
         param.put("LOGIN_ID",user.getIdUser());
+        param.put("GROUP_CD",user.getCdGroup());
         return mapper.S_1(param);
     }
 
@@ -41,9 +43,11 @@ public class BrandContractService extends BaseService {
         SessionUser user = SessionUtils.getCurrentUser();
         param.put("COMPANY_CD",user.getCdCompany());
         param.put("LOGIN_ID",user.getIdUser());
+        param.put("GROUP_CD",user.getCdGroup());
         return mapper.S_2(param);
     }
 
+    @Transactional
     public void saveAll(HashMap<String, Object> param) {
         SessionUser user = SessionUtils.getCurrentUser();
 
@@ -58,7 +62,18 @@ public class BrandContractService extends BaseService {
         SessionUser user = SessionUtils.getCurrentUser();
         param.put("COMPANY_CD",user.getCdCompany());
         param.put("LOGIN_ID",user.getIdUser());
+        param.put("GROUP_CD",user.getCdGroup());
         return mapper.S_3(param);
+    }
+
+    @Transactional
+    public void contract_cancel(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("list")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("LOGIN_ID",user.getIdUser());
+            mapper.contract_cancel(item);
+        }
     }
 }
 

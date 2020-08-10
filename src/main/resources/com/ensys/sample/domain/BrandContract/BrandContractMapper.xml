@@ -13,15 +13,15 @@
     </select>
 
     <select id="S_1" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_BRAND_CONTRACT_HELP_S1(#{COMPANY_CD} ,#{LOGIN_ID}) }
+    { CALL UP_FS_BRAND_CONTRACT_HELP_S1(#{COMPANY_CD} ,#{LOGIN_ID} ,#{GROUP_CD}) }
     </select>
 
     <select id="S_2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_BRAND_CONTRACT_HELP_S2(#{COMPANY_CD} ,#{PT_CD} ) }
+    { CALL UP_FS_BRAND_CONTRACT_HELP_S2(#{COMPANY_CD} ,#{PT_CD} ,#{GROUP_CD}) }
     </select>
 
     <select id="S_3" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_BRAND_CONTRACT_HELP_S3(#{COMPANY_CD} ,#{PT_CD} ,#{AREA_CD}) }
+    { CALL UP_FS_BRAND_CONTRACT_HELP_S3(#{COMPANY_CD} ,#{PT_CD} ,#{AREA_CD} ,#{GROUP_CD}) }
     </select>
 
     <update id="save"  parameterType="java.util.HashMap" statementType="CALLABLE">
@@ -42,6 +42,16 @@
     ) }
     </update>
 
+    <update id="contract_cancel"  parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_CONTRACT_CANCEL(
+     #{COMPANY_CD}
+    ,#{BRD_CONTRACT_PT_CD}
+    ,#{BRD_CD}
+    ,#{LV1_CD}
+    ,#{LV2_CD}
+    ,#{LV3_CD}
+    ) }
+    </update>
 
 </mapper>
 

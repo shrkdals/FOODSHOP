@@ -93,6 +93,13 @@
                     if(caller.gridView03.requirement()){
                         return false;
                     }
+                    var Grid3 = caller.gridView03.getData("modified")
+                    for(var i = 0; i < Grid3.length; i++){
+                        if( nvl(Grid3[i].SALES_PERSON_LV) == '02' &&  nvl(Grid3[i].PARENT_SALES_PERSON_ID) == ''){
+                            qray.alert('영업 담당자의 레벨이 영업일 경우 상위담당자 지정은 필수입니다.')
+                            return ;
+                        }
+                    }
                     var data = {
                          delete1 : caller.gridView01.getData("deleted")
                         ,insert1 : caller.gridView01.getData("modified")
@@ -527,7 +534,7 @@
                                     width: 600,
                                     height: _pop_height,
                                     url: "user",
-                                    action: ["commonHelp", "HELP_USER"],
+                                    action: ["commonHelp", "HELP_USER2"],
                                     param: function () {
                                     },
                                     callback: function (e) {
@@ -574,7 +581,7 @@
                                     width: 600,
                                     height: _pop_height,
                                     url: "user",
-                                    action: ["commonHelp", "HELP_USER"],
+                                    action: ["commonHelp", "HELP_USER2"],
                                     param: function () {
                                     },
                                     callback: function (e) {
@@ -595,6 +602,13 @@
 
                                 selectRow2 = idx;
                                 this.self.select(selectRow2);
+                            }
+                            ,onDataChanged: function () {
+                                console.log(this)
+                                if(this.key == 'SALES_PERSON_LV' && this.value == '01'){
+                                    fnObj.gridView03.target.setValue(this.dindex , 'PARENT_SALES_PERSON_ID' ,'')
+                                    fnObj.gridView03.target.setValue(this.dindex , 'PARENT_SALES_PERSON_NM' ,'')
+                                }
                             }
                         },
                         onPageChange: function (pageNumber) {

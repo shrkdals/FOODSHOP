@@ -370,6 +370,20 @@ public class CommonHelpController extends BaseController {
         return Responses.ListResponse.of(list);
     }
 
+    @RequestMapping(value = "HELP_USER2", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse HELP_USER2(@RequestBody Map<String, Object> requestParams) {
+        HashMap<String, Object> parameterMap = new HashMap<String, Object>();
+
+        SessionUser sessionUser = SessionUtils.getCurrentUser();
+
+        parameterMap.put("CD_COMPANY", sessionUser.getCdCompany());
+        parameterMap.put("CD_GROUP", sessionUser.getCdGroup());
+        parameterMap.put("KEYWORD", requestParams.get("P_KEYWORD"));
+        parameterMap.put("LOGIN_ID", sessionUser.getIdUser());
+        List<HashMap<String, Object>> list = service.HELP_USER2(parameterMap);
+        return Responses.ListResponse.of(list);
+    }
+
     @RequestMapping(value = "HELP_PROG", method = RequestMethod.POST, produces = APPLICATION_JSON)
     public Responses.ListResponse progList(@RequestBody Map<String, Object> requestParams) {
         HashMap<String, Object> parameterMap = new HashMap<String, Object>();

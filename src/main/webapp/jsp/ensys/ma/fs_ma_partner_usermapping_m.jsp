@@ -139,6 +139,7 @@
                                 fnObj.gridView02.target.setValue(lastIdx - 1, "CD_COMPANY", SCRIPT_SESSION.cdCompany);
                                 fnObj.gridView02.target.setValue(lastIdx - 1, "USER_ID", e[i].USER_ID);
                                 fnObj.gridView02.target.setValue(lastIdx - 1, "USER_NM", e[i].USER_NM);
+                                fnObj.gridView02.target.setValue(lastIdx - 1, "USER_SP", '01');
                             }
 
                         }
@@ -392,7 +393,7 @@
                             }
                             ,{key: "USER_NM", label: "사용자명", width: 150, align: "center", hidden:false}
                             ,{
-                                key: "USER_SP", label: "사용자유형", width: 150, align: "center",required:true,required:true
+                                key: "USER_SP", label: "사용자유형", width: 150, align: "center",required:true, hidden: true
                                 , formatter: function () {
                                     return $.changeTextValue(USER_SP, this.value)
                                 }

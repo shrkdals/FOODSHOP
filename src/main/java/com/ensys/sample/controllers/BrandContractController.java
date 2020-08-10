@@ -50,5 +50,10 @@ public class BrandContractController extends BaseController {
         return ok();
     }
 
+    @RequestMapping(value = "contract_cancel", method =  {RequestMethod.POST}, produces = APPLICATION_JSON)
+    public ApiResponse contract_cancel(@RequestBody HashMap<String, Object> param) throws Exception {
+        service.contract_cancel(param);
+        return ok();
+    }
 
 }
