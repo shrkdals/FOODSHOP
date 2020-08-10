@@ -52,5 +52,10 @@ public class OrderController extends BaseController {
     public Responses.ListResponse pdf(@RequestBody HashMap<String, Object> param) {
         return Responses.ListResponse.of(service.pdf(param));
     }
-    
+
+    @RequestMapping(value = "orderCancel", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public ApiResponse orderCancel(@RequestBody HashMap<String, Object> param) {
+        service.orderCancel(param);
+        return ok();
+    }
 }

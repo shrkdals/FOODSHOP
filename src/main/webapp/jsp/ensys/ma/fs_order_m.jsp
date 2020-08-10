@@ -144,7 +144,34 @@
                     });
                 }
                 , ITEM_DEL: function(caller, act, data){
-
+                    var list = isChecked(fnObj.gridView01.getData())
+                    if(list.length == 0){
+                        qray.alert('체크된 데이터가 없습니다.')
+                        return false;
+                    }
+                    qray.confirm({
+                        msg: "체크된 주문건을 취소하시겠습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+                            qray.loading.show('저장 중입니다.').then(function () {
+                                axboot.ajax({
+                                    type: "POST",
+                                    url: ["order", "orderCancel"],
+                                    data: JSON.stringify({
+                                        list : list
+                                    }),
+                                    callback: function (res) {
+                                        qray.loading.hide();
+                                        qray.alert("저장 되었습니다.").then(function(){
+                                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                                            caller.gridView01.target.select(selectIndex);
+                                            caller.gridView01.target.focus(selectIndex);
+                                        });
+                                    }
+                                });
+                            })
+                        }
+                    });
                 }
                 , SUCCESS2 : function (caller, act, data) {
                     var list = isChecked(fnObj.gridView02.getData())
@@ -217,6 +244,7 @@
                     $('#SUCCESS').css('display','none')
                     $('#excel').css('display','none')
                     $('#pdf1').css('display','none')
+                    $('#orderCancel').css('display','none')
                 }
                 if(SCRIPT_SESSION.cdGroup !='WEB04'){
                     $('#SUCCESS2').css('display','none');
@@ -925,7 +953,7 @@
                         <button type="button" class="btn btn-info" data-page-btn="SUCCESS" id="SUCCESS" style="width: 130px;"><i
                                 class="icon_save"></i>일괄입금완료처리
                         </button>
-                        <button type="button" class="btn btn-info" data-page-btn="delete" id="delete" style="width: 130px;">주문삭제
+                        <button type="button" class="btn btn-info" data-page-btn="delete" id="orderCancel" style="width: 130px;">주문삭제
                         </button>
                     </div>
 

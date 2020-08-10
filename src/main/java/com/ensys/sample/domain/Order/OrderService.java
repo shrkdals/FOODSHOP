@@ -68,8 +68,11 @@ public class OrderService extends BaseService {
             return mapper.pdf2(param);
         }
     }
-    
-    
+
+
+    public void orderCancel(HashMap<String, Object> param) {
+        mapper.orderCancel(param);
+    }
 }
 
 

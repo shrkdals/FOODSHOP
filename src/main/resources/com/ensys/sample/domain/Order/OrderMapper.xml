@@ -39,6 +39,9 @@
     	{ CALL UP_FS_ORDER_ADJUST(#{COMPANY_CD}, #{JOIN_PT_CD}, #{ORDER_CD} ,#{ORDER_SEQ}) }
     </update>
 
+    <delete id="orderCancel">
+        { CALL UP_FS_ORDER_CANCEL(#{COMPANY_CD}, #{ORDER_CD} ) }
+    </delete>
 </mapper>
 
 
