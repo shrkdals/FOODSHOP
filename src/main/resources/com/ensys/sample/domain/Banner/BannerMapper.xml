@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.Banner.BannerMapper">
+
+
+    <select id="search" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BANNER_M_S
+            (
+                #{COMPANY_CD},
+                #{KEYWORD}
+            )
+        }
+    </select>
+
+    <update id="insert" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BANNER_M_I
+            (
+                #{COMPANY_CD},
+                #{BANNER_CD},
+                #{BANNER_NM},
+                #{USE_YN},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="update" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BANNER_M_U
+            (
+                #{COMPANY_CD},
+                #{BANNER_CD},
+                #{BANNER_NM},
+                #{USE_YN},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="delete" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BANNER_M_D
+            (
+                #{COMPANY_CD},
+                #{BANNER_CD}
+            )
+        }
+    </update>
+
+</mapper>
+
+
