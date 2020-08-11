@@ -105,7 +105,7 @@
 	                            },
                              }
 	                        ,{key: "BOX_NUM"      , label: "박스수량"        , width: 90, align: "right" , sortabled:true ,  hidden:false , editor: false }
-	                        ,{key: "SELECT_NUM"      , label: "상품수량"        , width: 90, align: "right" , sortabled:true ,  hidden:false , editor: false }
+	                        ,{key: "SELECT_NUM"      , label: "출고수량"        , width: 90, align: "right" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_AMT"      , label: "정산금액"        , width: 120, align: "right" , sortabled:true ,  hidden:false , editor: false,
                                 formatter: "money"
                              }
