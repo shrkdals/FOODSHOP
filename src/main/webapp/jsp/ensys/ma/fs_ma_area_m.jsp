@@ -95,6 +95,10 @@
                     }
                     var Grid3 = caller.gridView03.getData("modified")
                     for(var i = 0; i < Grid3.length; i++){
+                        if( nvl(Grid3[i].SALES_PERSON_ID) == ''){
+                            qray.alert('영업 담당자의 선택은 필수입니다.')
+                            return ;
+                        }
                         if( nvl(Grid3[i].SALES_PERSON_LV) == '02' &&  nvl(Grid3[i].PARENT_SALES_PERSON_ID) == ''){
                             qray.alert('영업 담당자의 레벨이 영업일 경우 상위담당자 지정은 필수입니다.')
                             return ;
@@ -377,7 +381,7 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-02"]'),
                         columns: [
-                             {key: "COMPANY_CD"       , label: "", width: 150, align: "left", editor: {type: "text"} ,hidden:true}
+                              {key: "COMPANY_CD"       , label: "", width: 150, align: "left", editor: {type: "text"} ,hidden:true}
                             , {key: "CONTROL_AREA_CD" , label: "관할구역코드"    , width: 150, align: "center", hidden:true}
                             , {key: "CONTROL_AREA_NM" , label: "관할구역명"      , width: 150, align: "center", hidden:false}
                             , {key: "AREA_SEQ"        , label: "구역순번"        , width: 150, align: "center", hidden:true}
