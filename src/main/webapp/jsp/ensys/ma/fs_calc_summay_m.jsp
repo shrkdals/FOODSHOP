@@ -191,6 +191,10 @@
                         "search": function () {
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                         },
+                        "excel": function () {
+                            fnObj.gridView01.target.exportExcel('정산내역.xls')
+                        },
+
                     });
                 }
             });
@@ -221,7 +225,7 @@
 
                     this.target = axboot.gridBuilder({
                         showRowSelector: true,
-                        frozenColumnIndex: 4,
+                        // frozenColumnIndex: 4,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
                         	{
@@ -234,7 +238,7 @@
                             
                             ,{key: "COMPANY_CD"      , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
                             ,{key: "ADJUST_NO"       , label: "정산번호"        , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
-                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 120, align: "center" , sortabled:true ,  hidden:false , editor: false,
+                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 120, align: "center" , sortabled:true ,  hidden:true , editor: false,
 								formatter: function () {
                                     var returnValue = this.item.ADJUST_DT;
                                     if (nvl(this.item.ADJUST_DT, '') != '') {
@@ -244,7 +248,7 @@
                                     return returnValue;
                                 }
 	         				 }
-                            ,{key: "ADJUST_PT_CD"    , label: "정산거래처코드"  , width: 150, align: "center" , sortabled:true ,  hidden:false , editor: false }
+                            ,{key: "ADJUST_PT_CD"    , label: "정산거래처코드"  , width: 150, align: "center" , sortabled:true ,  hidden:true , editor: false }
                             ,{key: "ADJUST_PT_NM"    , label: "정산거래처명"    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_SP"       , label: "정산유형"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false,
                             	formatter: function () {
@@ -252,7 +256,7 @@
                                 },
                              }
                             ,{key: "ADJUST_AMT"      , label: "정산금액"        , width: 120, align: "right" , sortabled:true ,  hidden:false , editor: false, formatter: "money" }
-                            ,{key: "ADJUST_ACCUM_AMT"  , label: "정산누적금액"        , width: 120, align: "right" , sortabled:true ,  hidden:false , editor: false, formatter: "money",  }
+                            ,{key: "ADJUST_ACCUM_AMT"  , label: "정산누적금액"        , width: 120, align: "right" , sortabled:true ,  hidden:true , editor: false, formatter: "money",  }
                             ,{key: "CP_YN"           , label: "확정여부"        , width: 90, align: "center" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "TRANS_YN"        , label: "이체여부"        , width: 90, align: "center" , sortabled:true ,  hidden:false , editor: false,
                             	styleClass: function(){
@@ -297,12 +301,75 @@
                         ],
                         footSum: [
                             [
-                                {label: "", colspan: 5, align: "center"},
+                                {label: "합계", colspan: 3, align: "center"},
                                 {key: "ADJUST_AMT", collector: "sum", formatter: "money", align: "right"},
-                                {key: "ADJUST_ACCUM_AMT", collector: "sum", formatter: "money", align: "right"}
+                                // {key: "ADJUST_ACCUM_AMT", collector: "sum", formatter: "money", align: "right"}
                             ]
                         ],
                         body: {
+                            grouping: {
+                                by: ["ADJUST_PT_CD"],
+                                multi : true,
+                                columns: [
+                                    [
+                                        {
+                                            label: '미지급 금액', colspan: 3, align: "center"
+                                        }
+                                        , {
+                                            key: "SUM_AMT", collector: function () {
+                                            var value = 0;
+                                            this.list.forEach(function (n) {
+                                                if (!n.__isGrouping && n.TRANS_YN == 'N') {
+                                                    value += n.ADJUST_AMT;
+                                                }
+                                            });
+
+                                            return ax5.util.number(value, {"money": 1});
+                                            }, align: "right"
+                                        }
+                                    ]
+
+                                    ,
+                                    [
+                                        {
+                                            label: '지급 금액', colspan: 3, align: "center"
+                                        }
+                                        , {
+                                        key: "SUM_AMT", collector: function () {
+                                            var value = 0;
+                                            this.list.forEach(function (n) {
+                                                if (!n.__isGrouping && n.TRANS_YN == 'Y') {
+                                                    value += n.ADJUST_AMT;
+                                                }
+                                            });
+
+                                            return ax5.util.number(value, {"money": 1});
+                                        }, align: "right"
+                                    }
+                                    ]
+
+                                    // ,
+                                    // [
+                                    //     {
+                                    //         label: '합계', colspan: 3, align: "center"
+                                    //     }
+                                    //     , {
+                                    //     key: "SUM_AMT", collector: function () {
+                                    //         var value = 0;
+                                    //         this.list.forEach(function (n) {
+                                    //             if (!n.__isGrouping && n.TRANS_YN == 'Y') {
+                                    //                 value -= n.ADJUST_AMT;
+                                    //             }else{
+                                    //                 value += n.ADJUST_AMT;
+                                    //             }
+                                    //         });
+                                    //
+                                    //         return ax5.util.number(value, {"money": 1});
+                                    //     }, align: "right"
+                                    // }
+                                    // ]
+                                ]
+                            },
                         	/* trStyleClass: function () {
                                 if (nvl(this.item.TRANS_DT,'') != ''){
                                     var trans_dt = this.item.TRANS_DT;
@@ -635,6 +702,9 @@
                         class="icon_search"></i><ax:lang
                         id="ax.admin.sample.modal.button.search"/>
                 </button>
+                <button type="button" class="btn btn-info" data-page-btn="excel" style="width:150px;"><i
+                        class="icon_search"></i>엑셀다운로드
+                </button>
             </div>
         </div>
 
@@ -677,7 +747,7 @@
                     <div class="right">
                     	<button type="button" class="btn btn-small" id="btnOk" data-grid-view-01-btn="ok" style="width:80px;">
                     	확정</button>
-		<button type="button" class="btn btn-small" id="btnFundTransfer" data-grid-view-01-btn="FundTransfer" style="width:80px;">
+		            <button type="button" class="btn btn-small" id="btnFundTransfer" data-grid-view-01-btn="FundTransfer" style="width:80px;">
                     	자금이체</button>
                     </div>
                 </div>
