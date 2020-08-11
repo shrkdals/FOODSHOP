@@ -143,9 +143,18 @@
                     caller.gridView01.target.select(lastIdx - 1);
                     caller.gridView01.target.focus(lastIdx - 1);
 
+                    if (SCRIPT_SESSION.cdGroup == 'WEB05'){	//	협력사 일때만
+                    	var pt_cd = getLoginPartner();
+                    	if (pt_cd.length > 0){
+                    		caller.gridView01.target.setValue(lastIdx - 1, 'MAKE_PT_CD', pt_cd[0].PT_CD);
+                    		caller.gridView01.target.setValue(lastIdx - 1, 'MAKE_PT_NM', pt_cd[0].PT_NM);
+                    	}
+                    	caller.gridView01.target.setValue(lastIdx - 1, 'ITEM_SP', '02'); // 상품유형 택배상품
+                    }
 
                 }
             });
+            
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
                 this.pageButtonView.initView();
@@ -393,7 +402,7 @@
                             , {key: "INSERT_DT" , label: ""	, width: 150     , align: "center"   , editor: false  ,sortable:true, hidden: true}
                             , {key: "UPDATE_ID" , label: ""	, width: 150     , align: "center"   , editor: false  ,sortable:true, hidden: true}
                             , {key: "UPDATE_DT" , label: ""	, width: 150     , align: "center"   , editor: false  ,sortable:true, hidden: true}
-                            , {key: "ITEM_BIGO", label: "상품설명", width: 150 , align: "center" , editor: {type:"text"}, sortable: true}
+                            , {key: "ITEM_BIGO", label: "상품설명", width: 150 , align: "left" , editor: {type:"textarea"}, sortable: true}
                             , {key: "FILE_NAME", label: "파일", width: 150 , align: "center" , editor: false, sortable: true}
                             , {key: "FILE", label: "이미지파일", width: 150 , align: "center" , editor: false, sortable: true, hidden:true}
 

@@ -15,4 +15,14 @@
     <select id="GETNO" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
     { CALL  UP_FS_GETNO ( #{COMPANY_CD},#{MODULE_CD},#{CLASS_CD} ,#{RE_NO, mode=OUT, jdbcType=VARCHAR, javaType=string } ) }
     </select>
+    
+    <select id="getLoginPartner" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+    { 
+	    CALL UP_FS_GET_LOGIN_PARTNER 
+		    (
+		    	#{COMPANY_CD},
+		    	#{USER_ID}
+		    )
+    }
+    </select>
 </mapper>

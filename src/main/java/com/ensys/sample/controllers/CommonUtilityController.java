@@ -50,6 +50,12 @@ public class CommonUtilityController extends BaseController {
         service.GETNO(param);
         return Responses.MapResponse.of(param);
     }
+    
+    @RequestMapping(value = "getLoginPartner", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse getLoginPartner(@RequestBody HashMap<String, Object> param) {
+        return Responses.ListResponse.of(service.getLoginPartner(param));
+    }
+    
 
 //    @RequestMapping(value = "tempMethod", method = RequestMethod.POST)
 //    @ResponseBody

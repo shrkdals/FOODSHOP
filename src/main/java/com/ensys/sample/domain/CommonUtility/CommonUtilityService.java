@@ -39,4 +39,11 @@ public class CommonUtilityService extends BaseService {
     public List<HashMap<String, Object>> tempMethod(HashMap<String, Object> param) {
         return CommonUtilityMapper.selectList(param);
     }
+    
+    public List<HashMap<String, Object>> getLoginPartner(HashMap<String, Object> param){
+    	SessionUser sessionUser = SessionUtils.getCurrentUser();
+        param.put("CD_COMPANY", sessionUser.getCdCompany());
+        param.put("USER_ID", sessionUser.getIdUser());
+    	return CommonUtilityMapper.getLoginPartner(param);
+    }
 }

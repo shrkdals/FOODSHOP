@@ -17,4 +17,7 @@ public interface CommonUtilityMapper extends MyBatisMapper {
     Map<String, Object> checkMagam(HashMap<String, Object> param);
 
     Map<String, Object> GETNO(HashMap<String, Object> param);
+    
+    List<HashMap<String, Object>> getLoginPartner(HashMap<String, Object> param);
+    
 }

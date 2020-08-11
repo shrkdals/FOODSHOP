@@ -648,6 +648,31 @@ var GET_NO = function(MODULE_CD, CLASS_CD){
     return no
 };
 
+var getLoginPartner = function(){
+    var pt_cd = [];
+    axboot.ajax({
+        type: "POST",
+        url: ['commonutility','getLoginPartner'],
+        data: JSON.stringify({COMPANY_CD : SCRIPT_SESSION.cdCompany}),
+        async: false,
+        callback: function (res) {
+        	if (nvl(res) != ''){
+        		if (nvl(res.list) != ''){
+        			if (res.list.length > 0){
+		           		pt_cd =  res.list;
+		            }
+	            }
+            }
+        },
+        options: {
+            onError: function (err) {
+                qray.alert(err.message)
+            }
+        }
+    });
+    return pt_cd
+};
+
 $.extend({
     DATA_SEARCH_GET: function (Url, Url2, paramData, grid) {
         var result;

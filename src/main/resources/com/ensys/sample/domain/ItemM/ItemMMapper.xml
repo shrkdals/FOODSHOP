@@ -43,8 +43,8 @@
                 #{MAKE_PT_CD},
                 #{ITEM_SP},
                 #{BOX_NUM},
-                #{DISTRIB_AMT_YN}
-                ,#{ITEM_BIGO}
+                #{DISTRIB_AMT_YN},
+                #{ITEM_BIGO}
             )
         }
     </update>
@@ -75,7 +75,8 @@
                 #{MAKE_PT_CD},
                 #{ITEM_SP},
                 #{BOX_NUM},
-                #{DISTRIB_AMT_YN}
+                #{DISTRIB_AMT_YN},
+                #{ITEM_BIGO}
             )
         }
     </update>
