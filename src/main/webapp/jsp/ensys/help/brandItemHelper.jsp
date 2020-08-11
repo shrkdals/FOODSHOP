@@ -20,15 +20,15 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "ITEM_CD", label: "상품코드", width: "*", align: "center", editor: false},
-                            {key: "ITEM_NM", label: "상품명", width: "*", align: "left", editor: false},
+                            {key: "ITEM_CD", label: "상품코드", width: "*", align: "center", editor: false, sortable:true},
+                            {key: "ITEM_NM", label: "상품명", width: "*", align: "left", editor: false, sortable:true},
                             {key: "ITEM_SP", label: "상품유형", width: "*", align: "left", editor: false,
                                 formatter: function () {
                                     return $.changeTextValue(dl_ITEM_SP, this.value)
-                                },
+                                }, sortable:true
                             },
-                            {key: "PT_NM", label: "제조사", width: "*", align: "left", editor: false},
-                            {key: "PT_SP_NM", label: "제조사유형", width: "*", align: "left", editor: false},
+                            {key: "PT_NM", label: "제조사", width: "*", align: "left", editor: false, sortable:true},
+                            {key: "PT_SP_NM", label: "제조사유형", width: "*", align: "left", editor: false, sortable:true},
                             {key: "SALE_COST", label: "상품원가", width: "*", align: "right", editor: false, hidden:true},
                             {key: "MAKE_PT_CD", label: "제조사코드", width: "*", align: "center", editor: false, hidden:true},
                             {key: "PT_SP", label: "제조사유형코드", width: "*", align: "center", editor: false, hidden:true},

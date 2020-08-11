@@ -20,12 +20,12 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "PT_CD", label: "제조사코드", width: "*", align: "center", editor: false},
-                            {key: "PT_NM", label: "제조사명", width: "*", align: "left", editor: false},
+                            {key: "PT_CD", label: "제조사코드", width: "*", align: "center", editor: false, sortable:true},
+                            {key: "PT_NM", label: "제조사명", width: "*", align: "left", editor: false, sortable:true},
                             {key: "PT_SP", label: "제조사유형", width: "*", align: "left", editor: false,
                                 formatter: function () {
                                     return $.changeTextValue(dl_PT_SP, this.value)
-                                },
+                                }, sortable:true
                             },
                         ],
                         body: {

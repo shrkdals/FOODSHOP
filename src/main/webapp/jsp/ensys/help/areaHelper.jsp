@@ -17,8 +17,8 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "AREA_CD", label: "시군구코드", width: 100, align: "center", editor: false},
-                            {key: "AREA_NM", label: "시군구명", width: 100, align: "center", editor: false},
+                            {key: "AREA_CD", label: "시군구코드", width: 100, align: "center", editor: false, sortable:true},
+                            {key: "AREA_NM", label: "시군구명", width: 100, align: "center", editor: false, sortable:true},
 
                         ],
                         body: {

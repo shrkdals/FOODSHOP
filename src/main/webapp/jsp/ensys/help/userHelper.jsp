@@ -18,12 +18,12 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "USER_ID", label: "아이디", width: 100, align: "center", editor: false},
-                            {key: "USER_NM", label: "이름", width: 100, align: "center", editor: false},
+                            {key: "USER_ID", label: "아이디", width: 100, align: "center", editor: false, sortable:true},
+                            {key: "USER_NM", label: "이름", width: 100, align: "center", editor: false, sortable:true},
                             {key: "USER_TP", label: "사용자유형", width: 100, align: "center", editor: false
                                 ,formatter: function () {
                                     return $.changeTextValue(USER_SP, this.value)
-                                }, hidden : true
+                                }, hidden : true, sortable:true
                             },
                             //시스템쪽때문에 과거 키 유지
                             {key: "ID_USER", label: "사원아이디", width: 100, align: "center", editor: false, hidden: true},

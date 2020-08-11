@@ -18,10 +18,10 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "ITEM_CD", label: "상품코드", width: 100, align: "center", editor: false},
-                            {key: "ITEM_NM", label: "상품명", width: 150, align: "center", editor: false},
-                            {key: "CCL_PRIOD_ST_DTE", label: "유통기간시작일", width: 120, align: "center", editor: false},
-                            {key: "CCL_PRIOD_ED_DTE", label: "유통기간종료일", width: 150, align: "center", editor: false}
+                            {key: "ITEM_CD", label: "상품코드", width: 100, align: "center", editor: false, sortable:true},
+                            {key: "ITEM_NM", label: "상품명", width: 150, align: "center", editor: false, sortable:true},
+                            {key: "CCL_PRIOD_ST_DTE", label: "유통기간시작일", width: 120, align: "center", editor: false, sortable:true},
+                            {key: "CCL_PRIOD_ED_DTE", label: "유통기간종료일", width: 150, align: "center", editor: false, sortable:true}
                         ],
                         body: {
                             onClick: function () {

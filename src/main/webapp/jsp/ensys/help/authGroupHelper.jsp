@@ -18,8 +18,8 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "groupCd", label: "그룹코드", width: 80, align: "left", editor: false},
-                            {key: "groupNm", label: "그룹명", width: '200', align: "left", editor: false},
+                            {key: "groupCd", label: "그룹코드", width: 80, align: "left", editor: false, sortable:true},
+                            {key: "groupNm", label: "그룹명", width: '200', align: "left", editor: false, sortable:true},
 
                         ],
                         body: {

@@ -121,15 +121,15 @@
                         showRowSelector: true,
                         columns: [
                             {key: "COMPANY_CD", label: "회사코드", width: 150, align: "left", editor: {type: "text"},hidden:true}
-                            ,{key: "COMT_CD", label: "수수료코드", width: 110, align: "center", editor: false}
+                            ,{key: "COMT_CD", label: "수수료코드", width: 110, align: "center", editor: false, sortable:true}
                             ,{
                                 key: "COMT_SP", label: "수수료유형", width: 120, align: "center",
                                 formatter: function () {
                                     return $.changeTextValue(COMT_SP, this.value)
                                 }
-                                , editor:false
+                                , editor:false, sortable:true
                             }
-                            ,{key: "COMT_NM", label: "수수료명", width: 150, align: "left", editor:false}
+                            ,{key: "COMT_NM", label: "수수료명", width: 150, align: "left", editor:false, sortable:true}
                             ,{
                                 key: "SECT_YN", label: "구간여부", width: 70, align: "center"
                                 , editor: {
@@ -137,7 +137,7 @@
                                     , disabled: function () {
                                         return true
                                     }
-                                }
+                                }, sortable:true
                             }
                         ],
 

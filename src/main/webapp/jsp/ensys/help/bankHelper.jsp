@@ -18,8 +18,8 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "CD_BANK", label: "은행코드", width: 100, align: "center", editor: false},
-                            {key: "NM_BANK", label: "은행명", width: "*", align: "left", editor: false},
+                            {key: "CD_BANK", label: "은행코드", width: 100, align: "center", editor: false,sortable:true},
+                            {key: "NM_BANK", label: "은행명", width: "*", align: "left", editor: false, sortable:true},
                         ],
                         body: {
                             onClick: function () {

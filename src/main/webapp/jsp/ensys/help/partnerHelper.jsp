@@ -19,20 +19,20 @@
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
                              {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "left" , editor: {type: "text"},hidden:true}
-                            ,{key: "PT_CD", label: "거래처코드", width: 150   , align: "center" , editor: false}
+                            ,{key: "PT_CD", label: "거래처코드", width: 150   , align: "center" , editor: false, sortable:true}
                             ,{key: "PT_SP", label: "거래처유형", width: 150   , align: "center" ,
                                 formatter: function () {
                                     return $.changeTextValue(PT_SP, this.value)
                                 }
-                                , editor: false
+                                , editor: false, sortable:true
                             }
-                            ,{key: "PT_NM", label: "거래처 명", width: 150, align: "center", editor: false}
+                            ,{key: "PT_NM", label: "거래처 명", width: 150, align: "center", editor: false, sortable:true}
                             ,{key: "BIZ_NO", label: "사업자번호", width: 150, align: "center", editor: false
                                 ,formatter: function () {
                                     return $.changeDataFormat( this.value , 'company')
-                                }
+                                }, sortable:true
                             }
-                            ,{key: "OWNER_NM", label: "대표자명", width: 150, align: "center", editor: false}
+                            ,{key: "OWNER_NM", label: "대표자명", width: 150, align: "center", editor: false, sortable:true}
                             ,{key: "SIGN_NM", label: "간판명", width: 150, align: "center", editor: false ,hidden:true}
                             ,{key: "PT_TYPE", label: "거래처업종", width: 150, align: "center", editor: false ,hidden:true}
                             ,{key: "PT_COND", label: "거래처업태", width: 150, align: "center", editor: false ,hidden:true}
