@@ -170,7 +170,9 @@ public class fileController extends BaseController {
         try {
 
             //저장경로, 파일이름
-            File f = new File(param.get("FILE_PATH") + "/" + param.get("FILE_NAME") + "." + param.get("FILE_EXT"));
+        	System.out.println("/rahan2000/" + param.get("FILE_PATH") + "/" + param.get("FILE_NAME"));
+        	
+            File f = new File("/rahan2000/" + param.get("FILE_PATH") + "/" + param.get("FILE_NAME"));
 
             BufferedInputStream bis = null;
 

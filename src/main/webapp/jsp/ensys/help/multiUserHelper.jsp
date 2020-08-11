@@ -172,8 +172,8 @@
                                     type: "checkbox", config: {height: 17, trueValue: true, falseValue: false}
                                 }
                             },
-                            {key: "USER_ID", label: "아이디", width: 100, align: "center", editor: false},
-                            {key: "USER_NM", label: "이름", width: 100, align: "center", editor: false},
+                            {key: "USER_ID", label: "아이디", width: 100, align: "center", editor: false, sortable: true},
+                            {key: "USER_NM", label: "이름", width: 100, align: "center", editor: false, sortable: true},
                             {key: "USER_TP", label: "사용자유형", width: 100, align: "center", editor: false
                                 ,formatter: function () {
                                     return $.changeTextValue(USER_SP, this.value)

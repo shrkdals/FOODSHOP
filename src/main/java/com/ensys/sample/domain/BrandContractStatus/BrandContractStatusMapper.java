@@ -10,4 +10,6 @@ public interface BrandContractStatusMapper extends MyBatisMapper {
 	List<HashMap<String, Object>> select(HashMap<String, Object> param);
 
 	List<HashMap<String, Object>> selectDtl(HashMap<String, Object> param);
+	
+	int delete(HashMap<String, Object> param);
 }

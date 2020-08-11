@@ -48,6 +48,12 @@ public class OrderController extends BaseController {
         service.success(param);
         return ok();
     }
+    @RequestMapping(value = "success3", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public ApiResponse success3(@RequestBody HashMap<String, Object> param) {
+        service.success3(param);
+        return ok();
+    }
+    
     @RequestMapping(value = "pdf", method = RequestMethod.POST, produces = APPLICATION_JSON)
     public Responses.ListResponse pdf(@RequestBody HashMap<String, Object> param) {
         return Responses.ListResponse.of(service.pdf(param));

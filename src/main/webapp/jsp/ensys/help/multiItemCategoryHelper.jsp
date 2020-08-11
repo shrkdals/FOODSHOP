@@ -175,27 +175,27 @@
                             }
                             ,{key: "COMPANY_CD", label: "회사코드", width: 150 , align: "left" , editor: {type: "text"},hidden:true}
                             ,{key: "BRD_CD", label: "브랜드코드", width: 150   , align: "center" , editor: false ,hidden:true}
-                            ,{key: "BRD_NM", label: "브랜드명", width: 150   , align: "center" , editor: false}
+                            ,{key: "BRD_NM", label: "브랜드명", width: 150   , align: "center" , editor: false, sortable: true}
                             ,{key: "ITEM_CD", label: "상품코드", width: 150   , align: "center" , editor: false ,hidden:true}
-                            ,{key: "ITEM_NM", label: "상품명", width: 150   , align: "center" , editor: false}
+                            ,{key: "ITEM_NM", label: "상품명", width: 150   , align: "center" , editor: false, sortable: true}
                             ,{key: "CG_CD", label: "분류코드", width: 150   , align: "center"
                                 // ,formatter: function () {
                                 //     return $.changeTextValue(PT_SP, this.value)
                                 // }
-                                ,editor: false
+                                ,editor: false, sortable: true
                             }
 
-                            ,{key: "DISC_RATE", label: "할인율", width: 150, align: "center", editor: false
+                            ,{key: "DISC_RATE", label: "할인율", width: 150, align: "center", editor: false, sortable: true
                                 ,formatter: function () {
                                     return $.changeDataFormat( this.value , 'rt_exch')
                                 }
                             }
-                            ,{key: "DISC_AMT", label: "할인금액", width: 150, align: "center", editor: false
+                            ,{key: "DISC_AMT", label: "할인금액", width: 150, align: "center", editor: false, sortable: true
                                 ,formatter: function () {
                                     return $.changeDataFormat( this.value , 'money')
                                 }
                             }
-                            ,{key: "DELI_AMT_YN", label: "배송금액여부", width: 150, align: "center", editor: false
+                            ,{key: "DELI_AMT_YN", label: "배송금액여부", width: 150, align: "center", editor: false, sortable: true
                             }
 
                         ],

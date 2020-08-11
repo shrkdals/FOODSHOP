@@ -170,8 +170,8 @@
                                     type: "checkbox", config: {height: 17, trueValue: true, falseValue: false}
                                 }, dirty : false
                             },
-                            {key: "AREA_CD", label: "시군구코드", width: 100, align: "center", editor: false},
-                            {key: "AREA_NM", label: "시군구 명", width: 180, align: "center", editor: false},
+                            {key: "AREA_CD", label: "시군구코드", width: 100, align: "center", editor: false, sortable: true},
+                            {key: "AREA_NM", label: "시군구 명", width: 180, align: "center", editor: false, sortable: true},
                             // {key: "AREA2_NM", label: "동 명", width: 100, align: "center", editor: false},
 
                         ],

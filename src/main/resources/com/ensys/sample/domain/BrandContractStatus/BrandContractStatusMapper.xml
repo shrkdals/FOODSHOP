@@ -23,6 +23,10 @@
     <select id="S_3" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
     { CALL UP_FS_BRAND_CONTRACT_HELP_S3(#{COMPANY_CD} ,#{PT_CD} ,#{AREA_CD}) }
     </select>
+     
+    <update id="delete" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_BRAND_CONTRACT_STATUS_D_D(#{COMPANY_CD} ,#{JOIN_PT_CD} ,#{BRD_CD}) }
+    </update>
 
 
 

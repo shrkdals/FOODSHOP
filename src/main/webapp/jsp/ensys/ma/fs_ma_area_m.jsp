@@ -530,9 +530,9 @@
                         columns: [
                               {key: "COMPANY_CD"              , label: "회사코드"               , width: 150, align: "left", editor: {type: "file"} ,hidden:true}
                             , {key: "CONTROL_AREA_CD"         , label: "관할구역코드"           , width: 150, align: "center", hidden:true}
-                            , {key: "CONTROL_AREA_NM"         , label: "관할구역명"             , width: 150, align: "center", hidden:false}
-                            , {key: "SALES_PERSON_ID"         , label: "영업담당자아이디"       , width: 150, align: "center", hidden:false}
-                            , {key: "SALES_PERSON_NM"         , label: "영업담당자명"           , width: 150, align: "center", hidden:false
+                            , {key: "CONTROL_AREA_NM"         , label: "관할구역명"             , width: 120, align: "left", hidden:false}
+                            , {key: "SALES_PERSON_ID"         , label: "영업담당자아이디"       , width: 120, align: "left", hidden:false}
+                            , {key: "SALES_PERSON_NM"         , label: "영업담당자명"           , width: 120, align: "left", hidden:false
                                 ,picker: {
                                     top: _pop_top,
                                     width: 600,
@@ -555,7 +555,7 @@
                                     return "red";
                                 }, required:true
                             }
-                            , {key: "SALES_PERSON_LV"         , label: "영업담당자레벨"         , width: 150, align: "center", hidden:false
+                            , {key: "SALES_PERSON_LV"         , label: "영업담당자레벨"         , width: 130, align: "left", hidden:false
                                , formatter: function () {
                                     return $.changeTextValue(SALES_PERSON_LV, this.value)
                                 }
@@ -572,14 +572,14 @@
                                     }
                                 }
                             }
-                            , {key: "COMT_RATE"               , label: "수수료율"               , width: 150, align: "center", hidden:false , editor:{type:"number"}
+                            , {key: "COMT_RATE"               , label: "수수료율"               , width: 100, align: "right", hidden:false , editor:{type:"number"}
                                 ,formatter : function(){
                                     //Number(this.value).toFixed(2)
                                     return Number(nvl(this.value,0)).toFixed(2) + '%'
                                 }
                             }
                             , {key: "PARENT_SALES_PERSON_ID"  , label: "상위영업담당자아이디"   , width: 150, align: "center", hidden:true}
-                            , {key: "PARENT_SALES_PERSON_NM"  , label: "상위영업담당자명"       , width: 150, align: "center", hidden:false
+                            , {key: "PARENT_SALES_PERSON_NM"  , label: "상위영업담당자명"       , width: 120, align: "left", hidden:false
                                 ,picker: {
                                     top: _pop_top,
                                     width: 600,

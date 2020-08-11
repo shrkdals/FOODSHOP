@@ -70,6 +70,38 @@
                         }
                     });
                 },
+                ITEM_DEL: function(caller, act, data){
+                    var selected = fnObj.gridView01.getData('selected')[0];
+                    var selectedDtl = fnObj.gridView02.getData('selected')[0];
+                    if (nvl(selected) == ''){
+						qray.alert('가맹점을 선택해주십시오.');
+						return false;
+                    }
+                    if (nvl(selectedDtl) == ''){
+						qray.alert('브랜드를 선택해주십시오.');
+						return false;
+                    }
+                	qray.confirm({
+                        msg: "정말 삭제하시겠습니까?<br>즉시 삭제처리 됩니다."
+                    }, function () {
+                        if (this.key == "ok") {
+                            
+                        	axboot.ajax({
+                                type: "POST",
+                                url: ["brandContractStatus", "delete"],
+                                data: JSON.stringify({ 
+                                	JOIN_PT_CD : selected.JOIN_PT_CD,
+                                	BRD_CD     : selectedDtl.BRD_CD
+                                }),
+                                callback: function (res) {
+                                	qray.alert("삭제 처리되었습니다.").then(function(){
+                                		ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                                   	});
+                                }
+                            });
+                        }
+                    });
+                }
             });
             
             // fnObj 기본 함수 스타트와 리사이즈
@@ -91,6 +123,9 @@
                         "search": function () {
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                         },
+                        "delete": function(){
+							ACTIONS.dispatch(ACTIONS.ITEM_DEL);
+                        }
                     });
                 }
             });
@@ -342,6 +377,8 @@
                         </h2>
                     </div>
                     <div class="right" style="width:350px">
+                    	<button type="button" class="btn btn-info" data-page-btn="delete" id="delete" style="width: 130px;">삭제
+                        </button>
                     </div>
 
                 </div>

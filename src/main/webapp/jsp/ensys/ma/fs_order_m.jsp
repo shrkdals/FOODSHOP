@@ -113,6 +113,47 @@
                     var list2 = $.DATA_SEARCH('order','selectD',nvl(selected,{}));
                     fnObj.gridView02.target.setData(list2);
                 }
+                , SUCCESS3: function (caller, act, data){
+                	var list = isChecked(fnObj.gridView01.getData())
+                    if(list.length == 0){
+                        qray.alert('체크된 데이터가 없습니다.')
+                        return false;
+                    }
+
+                	for(var i = 0; i < list.length; i++) {
+                		if (list[i].ORDER_STAT == '01') {
+                            qray.alert('주문요청중인 주문건이 존재합니다')
+                            return;
+                        }
+                        if (list[i].ORDER_STAT == '03') {
+                            qray.alert('배송완료된 주문건이 존재합니다')
+                            return;
+                        }
+                        if (list[i].ORDER_STAT == '04') {
+                            qray.alert('주문취소된 주문건이 존재합니다')
+                            return false;
+                        }
+                    }
+
+                	qray.confirm({
+                        msg: "일괄배송처리하시겠습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+		                	axboot.ajax({
+		                        type: "POST",
+		                        url: ["order", "success3"],
+		                        data: JSON.stringify({list : list , TYPE: '1'}),
+		                        callback: function (res) {
+		                            qray.alert("일괄배송처리가 되었습니다.");
+		                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+		                            caller.gridView01.target.select(afterIndex);
+		                            caller.gridView01.target.focus(afterIndex);
+		                        }
+		                    });
+                        }
+                    });
+
+                }
                 , SUCCESS : function (caller, act, data) {
                     var list = isChecked(fnObj.gridView01.getData())
                     if(list.length == 0){
@@ -128,18 +169,23 @@
                             qray.alert('주문취소된 주문건이 존재합니다')
                             return false;
                         }
-
                     }
-                    axboot.ajax({
-                        type: "POST",
-                        url: ["order", "success"],
-                        data: JSON.stringify({list : list , TYPE: '1'}),
-                        callback: function (res) {
-                            qray.alert("일괄입금완료처리가 되었습니다.");
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                            caller.gridView01.target.select(afterIndex);
-                            caller.gridView01.target.focus(afterIndex);
-
+                    qray.confirm({
+                        msg: "일괄입금완료 처리하시겠습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+		                    axboot.ajax({
+		                        type: "POST",
+		                        url: ["order", "success"],
+		                        data: JSON.stringify({list : list , TYPE: '1'}),
+		                        callback: function (res) {
+		                            qray.alert("일괄입금완료처리가 되었습니다.");
+		                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+		                            caller.gridView01.target.select(afterIndex);
+		                            caller.gridView01.target.focus(afterIndex);
+		
+		                        }
+		                    });
                         }
                     });
                 }
@@ -201,6 +247,19 @@
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                             caller.gridView01.target.select(afterIndex);
                             caller.gridView01.target.focus(afterIndex);
+                        },
+                        options: {
+                            onError : function(err){
+                                var temp = err.message.split('FOODSHOP');
+
+                                if(temp.length == 1){
+                                    err.message = temp[0]
+                                }else{
+                                    err.message = temp[1]
+                                }
+
+                                qray.alert(err.message)
+                            }
                         }
                     });
                 }
@@ -248,6 +307,7 @@
                 }
                 if(SCRIPT_SESSION.cdGroup !='WEB04'){
                     $('#SUCCESS2').css('display','none');
+                    $('#SUCCESS3').css('display','none');
                     $('#pdf2').css('display','none');
                 }
 
@@ -308,6 +368,9 @@
                         }
                         , "SUCCESS" : function(){
                             ACTIONS.dispatch(ACTIONS.SUCCESS);
+                        }
+                        , "SUCCESS3" : function(){
+                            ACTIONS.dispatch(ACTIONS.SUCCESS3);
                         }
 
                     });
@@ -950,6 +1013,9 @@
                         </h2>
                     </div>
                     <div class="right">
+                    	<button type="button" class="btn btn-info" data-page-btn="SUCCESS3" id="SUCCESS3" style="width: 130px;"><i
+                                class="icon_save"></i>일괄배송처리
+                        </button>
                         <button type="button" class="btn btn-info" data-page-btn="SUCCESS" id="SUCCESS" style="width: 130px;"><i
                                 class="icon_save"></i>일괄입금완료처리
                         </button>
@@ -973,7 +1039,7 @@
                     </div>
                     <div class="right">
                         <button type="button" class="btn btn-info" data-grid-view-02-btn="SUCCESS2" id="SUCCESS2" style="width: 130px;"><i
-                                class="icon_save"></i>일괄배송완료처리
+                                class="icon_save"></i>배송완료처리
                         </button>
                     </div>
                 </div>
