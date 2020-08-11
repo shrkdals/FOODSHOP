@@ -23,6 +23,7 @@
             "event" : "/api/event",
             "FcOrder" : "/api/FcOrder",
             "Terms" : "/api/Terms",
+            "BANNER": "/api/banner",
             // 노강민추가 //
 
             "sysprogram": "/api/v1/Sysprogram",         // 프로그램목록
