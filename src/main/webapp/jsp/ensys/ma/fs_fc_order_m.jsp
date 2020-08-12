@@ -307,100 +307,186 @@
             /**
              * gridView02
              */
-            fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
-                page: {
-                    pageNumber: 0,
-                    pageSize: 10
-                },
-                initView: function () {
-                    var _this = this;
+             fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+                 page: {
+                     pageNumber: 0,
+                     pageSize: 10
+                 },
+                 initView: function () {
+                     var _this = this;
 
-                    this.target = axboot.gridBuilder({
-                        showRowSelector: true,
-                        frozenColumnIndex: 0,
-                        target: $('[data-ax5grid="grid-view-02"]'),
-                        columns: [
-                             {key: "COMPANY_CD"       , label: "", width: 150, align: "left", editor: {type: "text"} ,hidden:true}
-                            ,{
-                                key: "CHKED", label: "", width: 30, align: "center",
-                                label:
-                                    '<div id="headerBox2" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>',
-                                editor: {
-                                    type: "checkbox", config: {height: 17, trueValue: true, falseValue: false}
-                                }, dirty : false, hidden:true
-                            }
-                            , {key: "JOIN_PT_CD"         , label: "가맹점거래처코드"           , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
-                            , {key: "JOIN_PT_NM"         , label: "가맹점거래처명"             , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
-                            , {key: "ORDER_CD"           , label: "주문코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
-                            , {key: "ORDER_SEQ"          , label: "주문번호"                   , width: 80     , align: "center"   , sortable: true  , editor: false , hidden:true}
-                            , {key: "ITEM_SP"            , label: "상품유형"                   , width: 150     , align: "center"   , sortable: true  , editor: false
-                                ,formatter: function () {
-                                    return $.changeTextValue(ITEM_SP, this.value)
-                                }
-                            }
-                            , {key: "BRD_CD"            , label: "브랜드코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
-                            , {key: "BRD_NM"            , label: "브랜드"                   , width: 150     , align: "left"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "ITEM_CD"            , label: "상품코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
-                            , {key: "ITEM_NM"            , label: "상품명"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "ITEM_WT"         	 , label: "상품중량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "BOX_NUM"         	 , label: "박스수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "ITEM_UNIT"          , label: "출고단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false,
-                            	formatter: function () {
-                                    return $.changeTextValue(dl_ITEM_UNIT, this.value)
-                                },
-                              }
-                            , {key: "ORIGIN_NM"          , label: "원산지"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "SELECT_NUM"         , label: "출고수량"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:false}
-                            , {key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "center"   , sortable: true  , editor: false
-                                ,formatter: function () {
-                                    return $.changeDataFormat(this.value, 'money')
-                                }
-                            }
-                            , {key: "PAYM_AMT"           , label: "결제금액"                   , width: 150     , align: "center"   , sortable: true  , editor: false
-                                ,formatter: function () {
-                                    return $.changeDataFormat(this.value, 'money')
-                                }
-                            }
-                            , {key: "DELI_STAT"          , label: "배송상태"                   , width: 150     , align: "center"   , sortable: true
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: DELI_STAT
-                                    }, disabled: function () {
-                                        // if(SCRIPT_SESSION.cdGroup == 'WEB02' || SCRIPT_SESSION.cdGroup == 'WEB03'){
-                                            return false;
-                                        // }else{
-                                        //     return true;
-                                        // }
-                                    }
-                                }
-                                , formatter: function () {
-                                    return $.changeTextValue(DELI_STAT, this.value)
-                                }
-                            }
-                            , {key: "AREA_NM"           , label: "관할구역"                   , width: 150     , align: "center"   , sortable: true  , editor: false}
-                        ],
-                        body: {
-                            onClick: function () {
-                                var data = this.item;           //  선택한 ROW의 ITEM들
-                                var column = this.column.key;   //  컬럼 KEY명
-                                var idx = this.dindex;          //  선택한 ROW의 INDEX
+                     this.target = axboot.gridBuilder({
+                         showRowSelector: true,
+                         frozenColumnIndex: 0,
+                         target: $('[data-ax5grid="grid-view-02"]'),
+                         columns: [
+                              {key: "COMPANY_CD"       , label: "", width: 150, align: "left", editor: {type: "text"} ,hidden:true}
+                             ,{
+                                 key: "CHKED", label: "", width: 30, align: "center",
+                                 label:
+                                     '<div id="headerBox2" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>',
+                                 editor: {
+                                     type: "checkbox", config: {height: 17, trueValue: true, falseValue: false}
+                                 }, dirty : false
+                             }
+                             , {key: "JOIN_PT_CD"         , label: "가맹점거래처코드"           , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
+                             , {key: "JOIN_PT_NM"         , label: "가맹점거래처명"             , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
+                             , {key: "ORDER_CD"           , label: "주문코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
+                             , {key: "ORDER_SEQ"          , label: "주문일자"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
+                             , {key: "ITEM_SP"            , label: "상품유형"                   , width: 150     , align: "center"   , sortable: true  , editor: false
+                                 ,formatter: function () {
+                                     return $.changeTextValue(ITEM_SP, this.value)
+                                 }
+                             }
+                             , {key: "BRD_CD"            , label: "브랜드코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
+                             , {key: "BRD_NM"            , label: "브랜드"                   , width: 150     , align: "left"   , sortable: true  , editor: false , hidden:false}
+                             , {key: "ITEM_CD"            , label: "상품코드"                   , width: 150     , align: "center"   , sortable: true  , editor: false , hidden:true}
+                             , {key: "ITEM_NM"            , label: "상품명"                   , width: 150     , align: "left"   , sortable: true  , editor: false , hidden:false}
+                             , {key: "ITEM_WT"         	 , label: "상품중량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                             , {key: "BOX_NUM"         	 , label: "박스수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                             , {key: "ITEM_UNIT"          , label: "출고단위"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false,
+                             	formatter: function () {
+                                     return $.changeTextValue(dl_ITEM_UNIT, this.value)
+                                 },
+                               }
+                             , {key: "SELECT_NUM"         , label: "출고수량"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                             , {key: "DISC_AMT"           , label: "할인금액"                   , width: 150     , align: "right"   , sortable: true  , editor: false
+                                 ,formatter: function () {
+                                     return $.changeDataFormat(this.value, 'money')
+                                 }
+                             }
+                             , {key: "PAYM_AMT"           , label: "결제금액"                   , width: 150     , align: "right"   , sortable: true  , editor: false
+                                 ,formatter: function () {
+                                     return $.changeDataFormat(this.value, 'money')
+                                 }
+                             }
+                             , {key: "ORIGIN_NM"          , label: "원산지"                   , width: 100     , align: "right"   , sortable: true  , editor: false , hidden:false}
+                             , {key: "DELI_STAT"          , label: "배송상태"                   , width: 150     , align: "center"   , sortable: true
+                                 , editor: {
+                                     type: "select", config: {
+                                         columnKeys: {
+                                             optionValue: "value", optionText: "text"
+                                         },
+                                         options: DELI_STAT
+                                     }, disabled: function () {
+                                         // if(SCRIPT_SESSION.cdGroup == 'WEB02' || SCRIPT_SESSION.cdGroup == 'WEB03'){
+                                             return false;
+                                         // }else{
+                                         //     return true;
+                                         // }
+                                     }
+                                 }
+                                 , formatter: function () {
+                                     return $.changeTextValue(DELI_STAT, this.value)
+                                 }
+                             }
+                             , {key: "AREA_NM"           , label: "관할구역"                   , width: 150     , align: "left"   , sortable: true  , editor: false}
+                         ]
+                         , footSum: [
+                             [
+                                 {label: "총 합계", colspan: 7, align: "center"},
+                                 {
+                                     key: "SELECT_NUM_TOT", collector: function () {
+                                         var value = 0;
+                                         this.list.forEach(function (n) {
+                                             if (!n.__isGrouping){
+                                                 value += n.SELECT_NUM;
+                                             }
+                                         });
+                                         return ax5.util.number(value, {"money": 1});
+                                     }, align: "right"
+                                 }
+                                 ,{
+                                     key: "DISC_AMT_TOT", collector: function () {
+                                         var value = 0;
+                                         this.list.forEach(function (n) {
+                                             if (!n.__isGrouping){
+                                                 value += n.DISC_AMT;
+                                             }
+                                         });
+                                         return ax5.util.number(value, {"money": 1});
+                                     }, align: "right"
+                                 }
+                                 ,{
+                                     key: "PAYM_AMT_TOT", collector: function () {
+                                         var value = 0;
+                                         this.list.forEach(function (n) {
+                                             if (!n.__isGrouping){
+                                                 value += n.PAYM_AMT;
+                                             }
+                                         });
+                                         return ax5.util.number(value, {"money": 1});
+                                     }, align: "right"
+                                 }
+                             ]
+                         ]
+                         , body: {
+                             grouping: {
+                                 by: ["ITEM_SP"],
+                                 multi : true,
+                                 columns: [
+                                     [
+                                         {
+                                             label: '합계', colspan: 7, align: "center"
+                                         }
+                                         , {
+                                         key: "SELECT_NUM_SUM", collector: function () {
+                                             var value = 0;
+                                             this.list.forEach(function (n) {
+                                                 if (!n.__isGrouping) {
+                                                     value += n.SELECT_NUM;
+                                                 }
+                                             });
 
-                                selectRow2 = idx;
-                                this.self.select(selectRow2);
-                            }
-                        },
-                        onPageChange: function (pageNumber) {
-                            _this.setPageData({pageNumber: pageNumber});
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                        },
-                        page: {
-                            display: false,
-                            statusDisplay: false
-                        }
-                    });
+                                             return ax5.util.number(value, {"money": 1});
+                                         }, align: "right"
+                                     }
+                                         , {
+                                         key: "DISC_AMT_SUM", collector: function () {
+                                             var value = 0;
+                                             this.list.forEach(function (n) {
+                                                 if (!n.__isGrouping) {
+                                                     value += n.DISC_AMT;
+                                                 }
+                                             });
+                                             return ax5.util.number(value, {"money": 1});
+                                         }, align: "right"
+                                     }
+                                         , {
+                                         key: "PAYM_AMT_SUM", collector: function () {
+                                             var value = 0;
+                                             this.list.forEach(function (n) {
+                                                 if (!n.__isGrouping) {
+                                                     value += n.PAYM_AMT;
+                                                 }
+                                             });
+                                             return ax5.util.number(value, {"money": 1});
+                                         }, align: "right"
+                                     }
+                                         ,{
+                                         label: '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp', colspan: 3, align: "left"
+                                     }
+                                     ]
+                                 ]
+                             }
+                             , onClick: function () {
+                                 var data = this.item;           //  선택한 ROW의 ITEM들
+                                 var column = this.column.key;   //  컬럼 KEY명
+                                 var idx = this.dindex;          //  선택한 ROW의 INDEX
+
+                                 selectRow2 = idx;
+                                 this.self.select(selectRow2);
+                             }
+                         },
+                         onPageChange: function (pageNumber) {
+                             _this.setPageData({pageNumber: pageNumber});
+                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                         },
+                         page: {
+                             display: false,
+                             statusDisplay: false
+                         }
+                     });
 
                     axboot.buttonClick(this, "data-grid-view-02-btn", {
                         "add": function () {

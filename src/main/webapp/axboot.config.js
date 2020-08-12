@@ -22,6 +22,7 @@
             "itemM" : "/api/itemM",
             "event" : "/api/event",
             "FcOrder" : "/api/FcOrder",
+            "PtOrder" : "/api/PtOrder",
             "Terms" : "/api/Terms",
             "BANNER": "/api/banner",
             // 노강민추가 //
