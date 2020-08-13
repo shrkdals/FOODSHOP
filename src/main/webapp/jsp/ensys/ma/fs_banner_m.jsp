@@ -132,7 +132,7 @@
                             {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "center" ,hidden:true},
                             {key: "BANNER_CD", label: "배너코드", width: 150 , align: "center" , editor: false, sortable: true,},
                             {key: "BANNER_NM", label: "배너명", width: 150 , editor: {type: "text"}, align: "left",sortable: true,},
-                            
+                            {key: "URL_LINK", label: "링크주소", width: "*" , editor: {type: "text"}, align: "left",sortable: true,},
                             {key: "USE_YN", label: "사용여부", width: 150 , align: "center", sortable: true,
                                 editor: {
                                     type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'}
