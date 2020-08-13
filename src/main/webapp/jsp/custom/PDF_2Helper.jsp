@@ -25,6 +25,7 @@
                     listLen = list.length
                     var  ORDER_CD = ''
                         ,ORDER_DT = ''
+                        ,DELI_REQ = ''
                         ,PT_NM  = '' ,BIZ_NO  = '' ,OWNER_NM  = '' ,TEL_NO  = '' ,FAX_NO  = '' ,ADDR  = '', PT_TYPE = '', PT_COND = ''       // 공급자 필드
                         ,PT_NM2 = '' ,BIZ_NO2 = '' ,OWNER_NM2 = '' ,TEL_NO2 = '' ,FAX_NO2 = '' ,ADDR2 = '', SIGN_NM2 = '', PT_TYPE2 = '', PT_COND2 = ''  // 공급받는자 필드
                         ,ORDER_ITEM = ''
@@ -41,6 +42,7 @@
                         , TEL_NO2  = nvl(list[0].TEL_NO2) , FAX_NO2  = nvl(list[0].FAX_NO2) , ADDR2      = nvl(list[0].ADDR2), PT_TYPE2 = nvl(list[0].PT_TYPE2), PT_COND2 = nvl(list[0].PT_COND2)
 
                         , ORDER_CD = nvl(list[0].ORDER_CD)
+                        , DELI_REQ = nvl(list[0].DELI_REQ)
                     }else{
                         $('#TBODY1').append('<span> 상품리스트가 존재하지 않습니다. </span>')
                         return;
@@ -105,6 +107,13 @@
                         +'<td width="40px" style="text-align:center;">업태</td>'
                         +'<td id="T16" colspan="2"> <input type="text" style="width:100%; border:none" value= "' + PT_COND2 + '"/> </td>'
                         +'</tr>'
+                        +'<tr>'
+                        +'<th rowspan="4" width="20px">배<br>송<br>요<br>청<br></th>'
+                        +'<td colspan="4"><textarea style="width: 100%;resize: none;overflow-y: hidden; padding-bottom: 0.2em;line-height: 1.6;height: 100%;border:0px;">'+ DELI_REQ +'</textarea></td>'
+                       
+                        +'<th rowspan="4" width="20px">비<br>고</th>'
+                        +'<td colspan="6"><textarea style="width: 100%;resize: none;overflow-y: hidden; padding-bottom: 0.2em;line-height: 1.6;height: 100%;border:0px;"></textarea></td>'
+                        + '</tr>'
                         +'</tbody>'
                         +'</table>'
                         +'</td>'
@@ -115,7 +124,7 @@
                         +'<caption class="hidden">거래명세서 상세내역</caption>'
                         +'<colgroup>'
                         +'<col width="10px">'
-                        +'<col width="80px">'
+                        //+'<col width="80px">'
                         +'<col>'
                         +'<col width="60px">'
                         +'<col width="50px">'
@@ -129,7 +138,7 @@
                         +'<thead>'
                         +'<tr>'
                         +'<th style="width:10px;">No</th>'
-                        +'<th style="width:100px;">제조사</th>'
+                        //+'<th style="width:100px;">제조사</th>'
                         +'<th>품명</th>'
                         +'<th style="width:50px;">상품중량</th>'
                         +'<th style="width:50px;">박스수량</th>'
@@ -147,7 +156,7 @@
                        list.forEach(function(item, index){
                            MiddleHtml +='<tr>'
                                +'<td style="text-align:center">' + (Number(index) + 1) + '</td>'
-                               +'<td>' + nvl(item.MAKE_PT_NM) + '</td>'
+                               //+'<td>' + nvl(item.MAKE_PT_NM) + '</td>'
                                +'<td>' + nvl(item.ORDER_ITEM) + '</td>'
                                +'<td style="text-align:left">' + nvl(item.ITEM_WT) + '</td>'
                                +'<td style="text-align:right">' + nvl(item.BOX_NUM) + '</td>'
@@ -169,9 +178,11 @@
                     
 
                     MiddleHtml
-                        +='<td style="text-align:center; background:#ffe0cf"  colspan="6" > 합계 </td>'
-                        +'<td style="text-align:center">' + comma(SUM_SELECT_NUM) + '</td>'
-                        +'<td style="text-align:right">' + comma(SUM_SALE_COST) + '</td>'
+	                  //+='<td style="text-align:center; background:#ffe0cf"  colspan="6" > 합계 </td>'
+	                    +='<td style="text-align:center; background:#ffe0cf"  colspan="5" > 합계 </td>'
+                        +'<td style="text-align:right">' + comma(SUM_SELECT_NUM) + '</td>'
+                        //+'<td style="text-align:right">' + comma(SUM_SALE_COST) + '</td>'
+                        +'<td style="text-align:right"></td>'
                         +'<td style="text-align:right">' + comma(SUM_ORDER_AMT) + '</td>'
                         +'<td style="text-align:right">' + comma(SUM_OREDER_SPPLUY) + '</td>'
                         +'<td style="text-align:right">' + comma(SUM_ORDER_VAT) + '</td>'
