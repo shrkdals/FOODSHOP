@@ -38,6 +38,7 @@
                         	ADJUST_DT: initData.ADJUST_DT,
                         	ADJUST_NO: initData.ADJUST_NO,
                         	JOIN_PT_CD: initData.JOIN_PT_CD,
+                        	ADJUST_SP : initData.ADJUST_SP
                         }),
                         callback: function (res) {
                             caller.gridView01.clear();

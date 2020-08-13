@@ -9,7 +9,7 @@
     </select>
     
     <select id="selectPop" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_CALC_ITEM_S(#{COMPANY_CD} ,#{ADJUST_NO} ,#{ADJUST_DT} ,#{JOIN_PT_CD}) }
+    { CALL UP_FS_CALC_ITEM_S(#{COMPANY_CD} ,#{ADJUST_NO} ,#{ADJUST_DT} ,#{JOIN_PT_CD}, #{ADJUST_SP}) }
     </select>
     
 	<update id="approve" parameterType="java.util.HashMap" statementType="CALLABLE">

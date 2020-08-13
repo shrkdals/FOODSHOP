@@ -410,6 +410,7 @@
                                                 	ADJUST_DT: data.ADJUST_DT,
                                                 	ADJUST_NO: data.ADJUST_NO,
                                                 	JOIN_PT_CD: data.ADJUST_PT_CD,
+                                                	ADJUST_SP: data.ADJUST_SP
                                                 }
                                             }
                                         },
