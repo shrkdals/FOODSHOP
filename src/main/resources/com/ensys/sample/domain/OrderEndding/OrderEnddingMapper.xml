@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.OrderEndding.OrderEnddingMapper">
+
+    <select id="search" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    	{ 
+    	CALL UP_FS_ORDER_ENDDING_S
+	    	(
+	    		#{COMPANY_CD}
+	    	) 
+    	}
+    </select>
+   
+
+    <update id="save" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { 
+        CALL UP_FS_ORDER_ENDDING_I
+	        (
+		        #{COMPANY_CD},
+		        #{ORDER_YN},
+		        #{ORD_START_TIME},
+		        #{ORD_END_TIME}, 
+		        #{ORD_MSG}, 
+		        #{USER_ID}
+	        ) 
+        }
+    </update>
+    
+</mapper>
+
+

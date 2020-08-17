@@ -25,6 +25,7 @@
             "PtOrder" : "/api/PtOrder",
             "Terms" : "/api/Terms",
             "BANNER": "/api/banner",
+            "OrderEndding": "/api/OrderEndding",
             // 노강민추가 //
 
             "sysprogram": "/api/v1/Sysprogram",         // 프로그램목록
