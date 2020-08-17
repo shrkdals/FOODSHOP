@@ -224,7 +224,7 @@
                     caller.gridView01.target.focus(lastIdx - 1);
                     selectRow = lastIdx - 1;
 
-                    caller.gridView01.target.setValue(lastIdx - 1, "MENU_LEVEL", "0");
+                    caller.gridView01.target.setValue(lastIdx - 1, "LEVEL", "0");
                     // caller.gridView01.target.setValue(lastIdx - 1, "PARENT_ID", "");
                     // caller.gridView01.target.setValue(lastIdx - 1, "PROG_CD", "");
                     caller.gridView02.clear();
@@ -242,7 +242,7 @@
                     selectRow2 = lastIdx - 1;
 
                     caller.gridView02.target.setValue(lastIdx - 1, "PARENT_ID", MENU_ID);
-                    caller.gridView02.target.setValue(lastIdx - 1, "MENU_LEVEL", "1");
+                    caller.gridView02.target.setValue(lastIdx - 1, "LEVEL", "1");
                     caller.gridView02.target.setValue(lastIdx - 1, "ID_SORT", lastIdx - 1);
 
 
@@ -268,7 +268,7 @@
                     caller.gridView02.target.setValue(selectedIndex, 'PROG_CD', data.PROG_CD);
                     caller.gridView02.target.setValue(selectedIndex, 'PROG_NM', data.PROG_NM);
                     caller.gridView02.target.setValue(selectedIndex, 'PROG_PH', data.PROG_PH);
-                    caller.gridView02.target.setValue(selectedIndex, 'MENU_LEVEL', data.MENU_LEVEL);
+                    caller.gridView02.target.setValue(selectedIndex, 'LEVEL', data.LEVEL);
                     caller.gridView02.target.setValue(selectedIndex, 'GB_APPROVE', data.GB_APPROVE);
                     caller.gridView02.target.setValue(selectedIndex, '__modified__', data.__modified__);
                     caller.gridView02.target.setValue(selectedIndex, '__created__', data.__created__);
@@ -278,7 +278,7 @@
                     caller.gridView02.target.setValue(data.__index, 'PROG_CD', selected.PROG_CD);
                     caller.gridView02.target.setValue(data.__index, 'PROG_NM', selected.PROG_NM);
                     caller.gridView02.target.setValue(data.__index, 'PROG_PH', selected.PROG_PH);
-                    caller.gridView02.target.setValue(data.__index, 'MENU_LEVEL', selected.MENU_LEVEL);
+                    caller.gridView02.target.setValue(data.__index, 'LEVEL', selected.LEVEL);
                     caller.gridView02.target.setValue(data.__index, 'PARENT_ID', selected.PARENT_ID);
                     caller.gridView02.target.setValue(data.__index, '__modified__', selected.__modified__);
                     caller.gridView02.target.setValue(data.__index, '__created__', selected.__created__);
@@ -304,7 +304,7 @@
                     caller.gridView02.target.setValue(selectedIndex, 'PROG_CD', data.PROG_CD);
                     caller.gridView02.target.setValue(selectedIndex, 'PROG_NM', data.PROG_NM);
                     caller.gridView02.target.setValue(selectedIndex, 'PROG_PH', data.PROG_PH);
-                    caller.gridView02.target.setValue(selectedIndex, 'MENU_LEVEL', data.MENU_LEVEL);
+                    caller.gridView02.target.setValue(selectedIndex, 'LEVEL', data.LEVEL);
                     caller.gridView02.target.setValue(selectedIndex, 'GB_APPROVE', data.GB_APPROVE);
                     caller.gridView02.target.setValue(selectedIndex, '__modified__', data.__modified__);
                     caller.gridView02.target.setValue(selectedIndex, '__created__', data.__created__);
@@ -314,7 +314,7 @@
                     caller.gridView02.target.setValue(data.__index, 'PROG_CD', selected.PROG_CD);
                     caller.gridView02.target.setValue(data.__index, 'PROG_NM', selected.PROG_NM);
                     caller.gridView02.target.setValue(data.__index, 'PROG_PH', selected.PROG_PH);
-                    caller.gridView02.target.setValue(data.__index, 'MENU_LEVEL', selected.MENU_LEVEL);
+                    caller.gridView02.target.setValue(data.__index, 'LEVEL', selected.LEVEL);
                     caller.gridView02.target.setValue(data.__index, 'PARENT_ID', selected.PARENT_ID);
                     caller.gridView02.target.setValue(data.__index, '__modified__', selected.__modified__);
                     caller.gridView02.target.setValue(data.__index, '__created__', selected.__created__);
@@ -414,7 +414,7 @@
                                 }
                             },
                             {key: "MENU_NM", label: "메뉴명", width: 200, align: "left", editor: {type: "text"}},
-                            {key: "MENU_LEVEL", label: "MENU_LEVEL", width: 80, align: "right", hidden: true},
+                            {key: "LEVEL", label: "LEVEL", width: 80, align: "right", hidden: true},
                             // {key: "PARENT_ID", label: "PARENT_ID", width: 80, align: "right", hidden: true},
                             // {key: "PROG_CD", label: "PROG_CD", width: 80, align: "right", hidden: true},
                         ],
@@ -601,7 +601,7 @@
                             {key: "PROG_NM", label: "프로그램명", width: 200, align: "left", editor: false},
                             {key: "PROG_PH", label: "프로그램경로", width: 300, align: "left", editor: false},
 
-                            {key: "MENU_LEVEL", label: "MENU_LEVEL", width: 80, align: "right", hidden: true},
+                            {key: "LEVEL", label: "LEVEL", width: 80, align: "right", hidden: true},
                             {key: "PARENT_ID", label: "PARENT_ID", width: 80, align: "right", hidden: true},
                         ],
                         body: {

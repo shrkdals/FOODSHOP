@@ -18,9 +18,12 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "PROG_CD", label: "프로그램코드", width: 100, align: "center", editor: false},
-                            {key: "PROG_NM", label: "프로그램명", width: 100, align: "center", editor: false},
-                            {key: "PROG_PH", label: "경로", width: 500, align: "left", editor: false},
+                            {key: "PROG_CD", label: "프로그램코드", width: 100, align: "center",  hidden:true,editor: false},
+                            {key: "PROG_NM", label: "프로그램명", width: 100, align: "center",  hidden:true,editor: false},
+                            {key: "PROG_PH", label: "경로", width: 500, align: "left", hidden:true, editor: false},
+                            {key: "progCd", label: "프로그램코드", width: 100, align: "center", editor: false},
+                            {key: "progNm", label: "프로그램명", width: 100, align: "center", editor: false},
+                            {key: "progPh", label: "경로", width: 500, align: "left",  editor: false},
 
 
                         ],
