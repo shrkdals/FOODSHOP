@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ax" tagdir="/WEB-INF/tags" %>
 
-<ax:set key="title" value="이벤트관리"/>
+<ax:set key="title" value="배너관리"/>
 <ax:set key="page_desc" value="${pageRemark}"/>
 <ax:set key="page_auto_height" value="true"/>
 
@@ -166,7 +166,7 @@
 
                                 afterIndex = index;
                                 this.self.select(this.dindex);
-                                ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
+                                
 
                             },
                             onDBLClick: function () {
@@ -241,7 +241,7 @@
                             ACTIONS.dispatch(ACTIONS.ITEM_DEL1);
                             fnObj.gridView01.target.select(beforeIdx);
                             fnObj.gridView01.target.focus(beforeIdx);
-                            ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
+                            
                         },
                         "add": function () {
                             ACTIONS.dispatch(ACTIONS.ITEM_ADD1);
