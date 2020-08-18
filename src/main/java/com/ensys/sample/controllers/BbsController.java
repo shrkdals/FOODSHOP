@@ -41,12 +41,32 @@ public class BbsController extends BaseController {
 		}
 		return Responses.ListResponse.of(result);
 	}
+	
+	@RequestMapping(value = "selectDtl", method = RequestMethod.POST, produces = APPLICATION_JSON)
+	@ResponseBody
+	public Responses.ListResponse selectDtl(@RequestBody HashMap<String, Object> param) {
+		List<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
+
+		try {
+			result = service.selectDtl(param);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Responses.ListResponse.of(result);
+	}
 
 	@RequestMapping(value = "save", method = { RequestMethod.PUT }, produces = APPLICATION_JSON)
 	public ApiResponse save(@RequestBody HashMap<String, Object> param) throws Exception {
 		service.save(param);
 		return ok();
 	}
+	
+	@RequestMapping(value = "saveNotice", method = { RequestMethod.PUT }, produces = APPLICATION_JSON)
+	public ApiResponse saveNotice(@RequestBody HashMap<String, Object> param) throws Exception {
+		service.saveNotice(param);
+		return ok();
+	}
+	
 
 	/*
 	 * @RequestMapping(value = "selectList", method = RequestMethod.GET, produces =

@@ -9,6 +9,12 @@
 		statementType="CALLABLE">
 		{CALL UP_FS_BBS_S (#{COMPANY_CD} ,#{BOARD_TYPE} ,#{KEYWORD},#{CONDITION}, #{BOARD_SP} ) }
 	</select>
+	
+	<select id="selectDtl" resultType="hashmap" parameterType="hashmap"
+		statementType="CALLABLE">
+		{CALL UP_FS_BBS_NOTICE_S (#{COMPANY_CD} ,#{BOARD_TYPE}, #{SEQ} ) }
+	</select>
+	
 
 	<update id="write" parameterType="hashmap"
 		statementType="CALLABLE">
@@ -25,6 +31,10 @@
 	<update id="deleteWrite" parameterType="hashmap"
 		statementType="CALLABLE">
 		{CALL UP_FS_BBS_D(#{COMPANY_CD}, #{BOARD_TYPE}, #{BOARD_SP}, #{SEQ}) }
+	</update>
+	
+	<update id="saveNotice" parameterType="hashmap" statementType="CALLABLE">
+		{CALL UP_FS_BBS_NOTICE_I(#{COMPANY_CD}, #{BOARD_TYPE}, #{SEQ}, #{USER_ID}, #{LOGIN_ID}) }
 	</update>
 
 	<!-- <select id="selectList" resultType="hashmap" parameterType="hashmap" 

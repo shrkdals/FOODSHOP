@@ -27,6 +27,12 @@ public class BbsNoticeService extends BaseService {
 		param.put("COMPANY_CD", user.getCdCompany());
 		return BbsNoticeMapper.select(param);
 	}
+	public List<HashMap<String, Object>> selectDtl(HashMap<String, Object> param) {
+		SessionUser user = SessionUtils.getCurrentUser();
+		param.put("COMPANY_CD", user.getCdCompany());
+		return BbsNoticeMapper.selectDtl(param);
+	}
+	
 
 	@Transactional
 	public void save(HashMap<String, Object> param) throws Exception {
@@ -54,6 +60,28 @@ public class BbsNoticeService extends BaseService {
 			}
 		}
 	}
+	
+	@Transactional
+	public void saveNotice(HashMap<String, Object> param) throws Exception {
+		SessionUser user = SessionUtils.getCurrentUser();
+		List<HashMap<String, Object>> users = (List<HashMap<String, Object>>) param.get("USER_ID");
+		
+		if (users != null && users.size() > 0) {
+			for (HashMap<String, Object> item : users) {
+				
+				item.put("COMPANY_CD", user.getCdCompany());
+				item.put("LOGIN_ID", user.getIdUser());
+				item.put("BOARD_TYPE", param.get("BOARD_TYPE"));
+				item.put("SEQ", param.get("SEQ"));
+				
+				BbsNoticeMapper.saveNotice(item);
+			}
+			
+		}
+		
+	}
+	
+	
 
 	/*
 	 * public List<HashMap<String, Object>> selectList(HashMap<String, Object>

@@ -179,6 +179,7 @@
                                     return $.changeTextValue(USER_SP, this.value)
                                 }, sortable: true
                             },
+                            {key: "HP_NO", label: "전화번호", width: 100, align: "left", sortable: true,editor: false},
                             // 혹시몰라서 유지
                             {key: "ID_USER", label: "사원아이디", width: 150, align: "center", sortable: true,editor: false, hidden: true},
                             {key: "NO_EMP", label: "사원번호", width: 150, align: "center", sortable: true,editor: false, hidden: true},

@@ -8,10 +8,11 @@ import java.util.List;
 public interface BbsNoticeMapper extends MyBatisMapper {
 
 	List<HashMap<String, Object>> select(HashMap<String, Object> param);
-	
+	List<HashMap<String, Object>> selectDtl(HashMap<String, Object> param);
 	int write(HashMap<String, Object> param);
 	int updateWrite(HashMap<String, Object> param);
 	int deleteWrite(HashMap<String, Object> param);
+	int saveNotice(HashMap<String, Object> param);
 	/*
 	 * List<HashMap<String, Object>> selectList(HashMap<String, Object> param);
 	 * 

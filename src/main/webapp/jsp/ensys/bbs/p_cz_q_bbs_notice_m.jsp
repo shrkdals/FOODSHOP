@@ -17,8 +17,6 @@
                 background: #ffe0cf !important;
             }
         </style>
-
-
         <script type="text/javascript">
             var userCallBack;
             var afterIndex = 0;
@@ -93,9 +91,34 @@
                         }),
                         callback: function (res) {
                             caller.gridView01.clear();
+                            caller.gridView02.clear();
                             if (res.list.length > 0) {
                                 caller.gridView01.setData(res);
                                 caller.gridView01.target.select(0);
+                            }
+                            ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
+                        }
+                    });
+                },
+                ITEM_CLICK: function (caller, act, data) {
+                	caller.gridView02.clear();
+                    var selected = fnObj.gridView01.getData('selected')[0];
+
+                    if (nvl(selected) == ''){
+						return;
+                    }
+                    
+                    axboot.ajax({
+                        type: "POST",
+                        url: ["Bbs", "selectDtl"],
+                        data: JSON.stringify({
+                            BOARD_TYPE: selected.BOARD_TYPE,
+                            SEQ: selected.SEQ
+                            
+                        }),
+                        callback: function (res) {
+                            if (res.list.length > 0) {
+                                caller.gridView02.setData(res);
                             }
                         }
                     });
@@ -104,6 +127,12 @@
                 PAGE_SAVE: function (caller, act, data) {
                     var saveData = [].concat(caller.gridView01.getData("modified"));
                     saveData = saveData.concat(caller.gridView01.getData("deleted"));
+
+                    if (saveData.length == 0){
+						qray.alert('변경된 데이터가 존재하지않습니다.');
+						return;
+                    }
+                    
                     qray.confirm({
                         msg: "저장하시겠습니까?"
                     }, function () {
@@ -124,6 +153,88 @@
                         }
                     });
                 },
+                SMS_MESSAGE: function(caller, act, data){
+                	var saveData = [].concat(caller.gridView01.getData("modified"));
+                    saveData = saveData.concat(caller.gridView01.getData("deleted"));
+                    if (saveData.length > 0){
+						qray.alert('변경된 데이터가 존재합니다.<br>저장 후 진행해주십시오');
+						return;
+                    }
+                    
+                	var data = caller.gridView01.getData('selected')[0];
+                	if (nvl(data) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
+                	if (data.BOARD_SP != '02'){
+						qray.alert('게시판유형이 알림인 데이터만<br>문자메세지를 보낼 수 있습니다.');
+						return true;
+					}
+                	if (nvl(data.TITLE) == ''){
+						qray.alert('제목을 입력해주십시오.');
+						return true;
+					}
+                	if (nvl(data.CONTENTS) == ''){
+						qray.alert('내용을 입력해주십시오.');
+						return true;
+					}
+                	userCallBack = function(e){
+                    	modal.close();
+                   
+                		var strTelList = [], user_id = [], SUBJECT = "", DATE = "", CONTENT = "", BOARD_TYPE = "", SEQ = "";
+                	
+	                	qray.confirm({
+	                        msg: "문자메세지를 보내시겠습니까?"
+	                    }, function () {
+	                        if (this.key == "ok") {
+		                        
+								for (var i = 0 ; i < e.length ; i ++){
+									strTelList.push(e[i].HP_NO);
+									user_id.push({
+										USER_ID : e[i].USER_ID
+									})
+								}
+								SEQ = data.SEQ;
+								BOARD_TYPE = data.BOARD_TYPE;
+	                          	SUBJECT = data.TITLE;
+	                          	CONTENT = data.CONTENTS;
+	                          	
+	                            axboot.ajax({
+	                                type: "POST",
+	                                url: ["common", "SendMessage"],
+	                                data: JSON.stringify({
+	                                	strTelList : strTelList,
+	                                	SUBJECT : SUBJECT,
+	                                	DATE : DATE,
+	                                	CONTENT : CONTENT
+	                                }),
+	                                callback: function (res) {
+	                                    console.log(res);
+	                                    var msg = res.map.MSG;
+                                    	axboot.ajax({
+                                            type: "PUT",
+                                            url: ["Bbs", "saveNotice"],
+                                            data: JSON.stringify({
+                                            	USER_ID: user_id,
+                                            	BOARD_TYPE : BOARD_TYPE,
+                                            	SEQ        : SEQ
+                                            }),
+                                            callback: function (res) {
+                                            	qray.alert(msg).then(function(){
+                                                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                                                });
+                                            }
+                                        });
+	                                }
+	                            });
+	                            
+	                        }
+	                    });
+                	}
+                	
+                	$.openCommonPopup("multiUserNotice", "userCallBack", 'HELP_USER_NOTICE', '', {PT_SP : '06' }, 600, _pop_height, _pop_top);
+						
+                },
                 //상단추가버튼
                 ITEM_ADD1: function (caller, act, data) {
                     caller.gridView01.addRow();
@@ -135,49 +246,45 @@
                     caller.gridView01.target.setValue(lastIdx - 1,'BOARD_TYPE', 'notice');
                     caller.gridView01.target.setValue(lastIdx - 1,'HIT', 0);
 
+                    caller.gridView02.clear();
+
                 },
                 ITEM_DEL1: function (caller, act, data) {
+                	var data = caller.gridView01.getData('selected')[0];
+                	if (nvl(data) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
+                    
                     qray.confirm({
-                        msg: "삭제 하시겠습니까?<br>삭제할 데이터가 많으면, 느려질 수 있습니다."
+                        msg: "삭제 하시겠습니까?"
                     }, function () {
                         if (this.key == "ok") {
+                        	var beforeIdx = fnObj.gridView01.target.selectedDataIndexs[0];
+                            var dataLen = fnObj.gridView01.target.getList().length;
 
+                            if ((beforeIdx + 1) == dataLen) {
+                                beforeIdx = beforeIdx - 1;
+                            }
+
+                            fnObj.gridView01.delRow('selected');
+
+                            if (beforeIdx > 0 || beforeIdx == 0) {
+                                fnObj.gridView01.target.select(beforeIdx);
+                                afterIndex = beforeIdx;
+                            }
+                            ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
                         }
                     });
-                    var beforeIdx = fnObj.gridView01.target.selectedDataIndexs[0];
-                    var dataLen = fnObj.gridView01.target.getList().length;
-
-                    if ((beforeIdx + 1) == dataLen) {
-                        beforeIdx = beforeIdx - 1;
-                    }
-
-                    var count = 0 ;
-                    var grid = caller.gridView01.target.list;
-                    var i = grid.length;
-                    while (i--) {
-                        var data = caller.gridView01.target.list[i];
-                        if (data.CHK == 'Y') {
-                            fnObj.gridView01.delRow(i);
-                            count++;
-                        }
-                    }
-                    i = null;
-
-                    if (count == 0) {
-                        qray.alert("삭제할 데이터가 없습니다.");
-                        return false;
-                    }
-
-                    if (beforeIdx > 0 || beforeIdx == 0) {
-                        fnObj.gridView01.target.select(beforeIdx);
-                    }
+                    
                 }
             });
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
                 this.pageButtonView.initView();
                 this.gridView01.initView();
-
+                this.gridView02.initView();
+                
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
 
@@ -206,20 +313,13 @@
                     var _this = this;
 
                     this.target = axboot.gridBuilder({
-                        showRowSelector: true,
+                        showLineNumber: true,
+                        showRowSelector: false,
+                        multipleSelect: false,
+                        lineNumberColumnWidth: 40,
+                        rowSelectorColumnWidth: 27,
                         target: $('[data-ax5grid="grid-view-01"]'),
-                        // parentFlag:true,
-                        // parentGrid: $(fnObj.gridView02),
-                        // childrenGrid: [$(fnObj.gridView02),$(fnObj.gridView03)],
-                        showRowSelector: true,
                         columns: [
-                            {
-                                key: "CHK", width: 40, align: "center", dirty:false,
-                                label: '<div id="headerBox" data-ax5grid-editor="checkbox" data-ax5grid-checked="false" data-ax5grid-column-selected="true" style="height:17px;width:17px;margin-top:2px;  onclick="javascript:alert(1);"></div>',
-                                editor: {
-                                    type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'}
-                                }
-                            },
                             {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "center" ,hidden:true},
                             {key: "BOARD_TYPE", label: "게시판타입", width: 100 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
                             {key: "SEQ", label: "채번", width: 150 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
@@ -231,7 +331,8 @@
                             },
                             {key: "TITLE", label: "제목", width: 220, align: "left" ,sortable: true, editor: {type:"textarea"}},
                             {key: "CONTENTS", label: "내용", width: "*" , align: "left" ,sortable: true, editor: {type:"textarea"}},
-                            {key: "ID_USER", label: "알림대상자", width: 120 , align: "left" ,sortable: true,
+                            {key: "HP_NO", label: "전화번호", width: "*" , align: "left" ,sortable: true, hidden:true, },
+                           /*  {key: "ID_USER", label: "알림대상자", width: 120 , align: "left" ,sortable: true,
                             	picker: {
                                     top: _pop_top,
                                     width: 600,
@@ -244,7 +345,7 @@
                                         }
                                   	},
                                   	disabled: function () {
-										if (this.item.BOARD_SP == '01'){
+										if (this.item.BOARD_SP != '02'){
 											qray.alert('게시판유형이 알림인 데이터만<br>알림대상자를 넣을 수 있습니다.');
 											return true;
 										}else{
@@ -256,12 +357,19 @@
 											if (e.length  == 1){
 												fnObj.gridView01.target.setValue(this.dindex, 'ID_USER', e[0].ID_USER);
 											}else{
-												fnObj.gridView01.target.setValue(this.dindex, 'ID_USER', e[0].ID_USER + " 외 " + e.length - 1);
+												fnObj.gridView01.target.setValue(this.dindex, 'ID_USER', e[0].ID_USER + " 외 " + (e.length - 1));
+												var hp_no = [];
+												for (var i = 0 ; i < e.length ; i ++){
+													hp_no.push(e[i].HP_NO);
+												}
+												fnObj.gridView01.target.list[this.dindex]['HP_NO'] = hp_no;
 											}
                                         }
+                                        
+                                        modal.close();
                                     }
                             	}
-                            },
+                            }, */
                             {key: "USER_NM", label: "처리자", width: 120 , align: "left" ,sortable: true, hidden:true},
                             {key: "INSERT_ID", label: "처리자아이디", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
                             {key: "INSERT_DT", label: "처리일자", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
@@ -281,6 +389,7 @@
 
                                 afterIndex = index;
                                 this.self.select(this.dindex);
+                                ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
                             },
                         },
                         onPageChange: function (pageNumber) {
@@ -298,6 +407,9 @@
                         },
                         "add": function () {
                             ACTIONS.dispatch(ACTIONS.ITEM_ADD1);
+                        },
+                        "sms": function(){
+                        	ACTIONS.dispatch(ACTIONS.SMS_MESSAGE);
                         }
                     });
                 },
@@ -327,38 +439,78 @@
 
             });
 
-            function isChecked(data) {
-                var array = [];
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].CHK == 'Y') {
-                        array.push(data[i])
-                    }
-                }
-                return array;
-            }
+            fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+                page: {
+                    pageNumber: 0,
+                    pageSize: 10
+                },
+                initView: function () {
+                    var _this = this;
 
-            var cnt = 0;
-            $(document).on('click', '#headerBox', function(e) {
-                if(cnt == 0){
-                    $("div [data-ax5grid='grid-view-01']").find("div #headerBox").attr("data-ax5grid-checked",true);
-                    cnt++;
-                    var gridList = fnObj.gridView01.getData();
-                    gridList.forEach(function(e, i){
-                        fnObj.gridView01.target.setValue(i,"CHK",'Y');
+                    this.target = axboot.gridBuilder({
+                    	showLineNumber: false,
+                        showRowSelector: false,
+                        multipleSelect: false,
+                        lineNumberColumnWidth: 40,
+                        rowSelectorColumnWidth: 27,
+                        target: $('[data-ax5grid="grid-view-02"]'),
+                        columns: [
+                            {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "center" ,hidden:true},
+                            {key: "BOARD_TYPE", label: "게시판타입", width: 100 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
+                            {key: "SEQ", label: "채번", width: 150 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
+                            {key: "USER_ID", label: "알림대상자 아이디", width: 120 , align: "left" ,sortable: true},
+                            {key: "USER_NM", label: "알림대상자", width: 120 , align: "left" ,sortable: true},
+                            {key: "DTS_INSERT", label: "알림일자", width: 150 , align: "center" , editor: false, sortable: true,},
+                            {key: "INSERT_ID", label: "처리자아이디", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
+                            {key: "UPDATE_ID", label: "변경자아이디", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
+                            {key: "UPDATE_DT", label: "변경일자", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
+                        ],
+                        body: {
+                            onDataChanged: function () {
+
+                            },
+                            //444
+                            onClick: function () {
+                               
+                            },
+                        },
+                        onPageChange: function (pageNumber) {
+                            _this.setPageData({pageNumber: pageNumber});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        },
+                        page: {
+                            display: false,
+                            statusDisplay: false
+                        }
                     });
-                    $("div [data-ax5grid-editor='checkbox']").attr("data-ax5grid-checked",true)
-                }else{
-                    $("div [data-ax5grid='grid-view-01']").find("div #headerBox").attr("data-ax5grid-checked",false);
-                    cnt = 0;
-                    var gridList = fnObj.gridView01.getData();
-                    gridList.forEach(function(e, i){
-                        fnObj.gridView01.target.setValue(i,"CHK",'N');
+                   
+                },
+                getData: function (_type) {
+                    var list = [];
+                    var _list = this.target.getList(_type);
+                    list = _list;
+                    return list;
+                },
+                getCheckData: function () {
+                    var list = [];
+                    $(this.target.getList()).each(function () {
+                        if (this.s == "Y") {
+                            list.push(this);
+                        }
                     });
-                    $("div [data-ax5grid-editor='checkbox']").attr("data-ax5grid-checked",false)
+                    return list;
+                },
+                addRow: function () {
+                    this.target.addRow({__created__: true}, "last");
+                },
+                lastRow: function () {
+                    return ($("div [data-ax5grid='grid-view-02']").find("div [data-ax5grid-panel='body'] table tr").length)
+                }
+                , sort: function () {
                 }
 
             });
-
+            
             //////////////////////////////////////
             //크기자동조정
             var _pop_top = 0;
@@ -407,10 +559,8 @@
                 //타이틀을 뺀 상하단 그리드 합친높이
                 var tempgridheight = datarealheight - $("#left_title").height();
 
-                $("#left_grid").css("height" ,(tempgridheight / 100 * 99));
-                $("#tab1_grid").css("height" ,$("#tab_area").height() - 40);
-                $("#tab2_grid").css("height" ,$("#tab_area").height() - 40);
-                $("#right_content").css("height" ,(datarealheight / 100 * 99));
+                $("#left_grid").css("height" ,tempgridheight / 100 * 99  );
+                $("#right_grid").css("height", tempgridheight / 100 * 99  );
                 //$("#right_grid").css("height", tempgridheight / 100 * 99);
                 //console.log($("#QRAY_FORM").height(), 'qray', (tempgridheight / 100 * 99), '(tempgridheight / 100 * 99)' ,$('#binder-form').height(), '$(\'#binder-form\').height()')
                 //$("#right_grid").css("height", (tempgridheight / 100 * 99) - $('#binder-form').height() - $('.ax-button-group').height());
@@ -476,32 +626,44 @@
             </ax:form>
         </div>
 
-        <%-- 그리드 영역 시작 --%>
-        <div style="width:100%;overflow:hidden;">
-            <div style="width:100%;overflow:hidden;">
+       <%-- 그리드 영역 시작 --%>
+        <div style="width:100%;overflow:hidden">
+            <div style="width:71%;overflow:hidden;float:left;">
                 <div class="ax-button-group" data-fit-height-aside="grid-view-01" id="left_title" name="왼쪽그리드타이틀">
                     <div class="left">
-                        <h2>
-                        </h2>
                     </div>
                     <div class="right">
                         <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
                                 class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
                         <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">
                             <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
+                            <button type="button" class="btn btn-small" data-grid-view-01-btn="sms" style="width:80px;">문자메세지</button>
                     </div>
                 </div>
 
-
-
                 <div data-ax5grid="grid-view-01"
-                     data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
+                     data-ax5grid-config="{  }"
                      id = "left_grid"
-                     name="왼쪽그리드"
                 ></div>
 
             </div>
 
+            <div style="width:28%;overflow:hidden;float:right;">
+                <div class="ax-button-group" data-fit-height-aside="grid-view-02" id="left_title2" name="왼쪽그리드타이틀">
+                    <div class="left">
+                        <h2>
+                            <i class="icon_list"></i> 알림리스트
+                        </h2>
+                    </div>
+                </div>
+
+                <div data-ax5grid="grid-view-02"
+                     data-ax5grid-config="{  }"
+                     id = "right_grid"
+                ></div>
+            </div>
+
+            </div>
         </div>
 
 
