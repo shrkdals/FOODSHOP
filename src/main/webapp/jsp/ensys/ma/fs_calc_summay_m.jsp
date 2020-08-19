@@ -285,9 +285,9 @@
                             }
 	        				,{key: "PAYMENTS_DT"        , label: "지급일자"        , width: 120, align: "center" , sortabled:true ,  hidden:false , editor: false,
 								formatter: function () {
-                               		var returnValue = this.item.PAYMENTS_DT.reaplce('-','').substring(0,8);
+                               		var returnValue = this.item.PAYMENTS_DT;
                                	 	if (nvl(this.item.PAYMENTS_DT, '') != '') {
-                                      	this.item.PAYMENTS_DT = this.item.PAYMENTS_DT.replace(/\-/g, '');
+                                      	this.item.PAYMENTS_DT = this.item.PAYMENTS_DT.replace(/\-/g, '').substring(0,8);
                                       	returnValue = this.item.PAYMENTS_DT.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
                                     }
                                     return returnValue;
