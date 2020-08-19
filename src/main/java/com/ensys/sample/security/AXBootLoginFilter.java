@@ -56,7 +56,7 @@ public class AXBootLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         int TIME = 60 * 60; // 1시간
 
-        request.getSession().setMaxInactiveInterval(TIME);
+        //request.getSession().setMaxInactiveInterval(TIME);
 
         response.setContentType(HttpUtils.getJsonContentType(request));
         response.getWriter().write(JsonUtils.toJson(ApiResponse.of(ApiStatus.SUCCESS, "Login Success")));

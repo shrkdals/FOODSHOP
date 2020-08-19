@@ -238,16 +238,6 @@
                             
                             ,{key: "COMPANY_CD"      , label: ""                , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
                             ,{key: "ADJUST_NO"       , label: "정산번호"        , width: 150, align: "left" , sortabled:true ,  hidden:true , editor: false }
-                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 120, align: "center" , sortabled:true ,  hidden:true , editor: false,
-								formatter: function () {
-                                    var returnValue = this.item.ADJUST_DT;
-                                    if (nvl(this.item.ADJUST_DT, '') != '') {
-                                        this.item.ADJUST_DT = this.item.ADJUST_DT.replace(/\-/g, '');
-                                        returnValue = this.item.ADJUST_DT.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
-                                    }
-                                    return returnValue;
-                                }
-	         				 }
                             ,{key: "ADJUST_PT_CD"    , label: "정산거래처코드"  , width: 150, align: "center" , sortabled:true ,  hidden:true , editor: false }
                             ,{key: "ADJUST_PT_NM"    , label: "정산거래처명"    , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false }
                             ,{key: "ADJUST_SP"       , label: "정산유형"        , width: 150, align: "left" , sortabled:true ,  hidden:false , editor: false,
@@ -283,9 +273,19 @@
                                     return returnValue;
 	      						 }
 							}
+                            ,{key: "ADJUST_DT"       , label: "정산일자"        , width: 120, align: "center" , sortabled:true ,  hidden:true , editor: false,
+                                formatter: function () {
+                                    var returnValue = this.item.ADJUST_DT;
+                                    if (nvl(this.item.ADJUST_DT, '') != '') {
+                                        this.item.ADJUST_DT = this.item.ADJUST_DT.replace(/\-/g, '');
+                                        returnValue = this.item.ADJUST_DT.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+                                    }
+                                    return returnValue;
+                                }
+                            }
 	        				,{key: "PAYMENTS_DT"        , label: "지급일자"        , width: 120, align: "center" , sortabled:true ,  hidden:false , editor: false,
 								formatter: function () {
-                               		var returnValue = this.item.PAYMENTS_DT;
+                               		var returnValue = this.item.PAYMENTS_DT.reaplce('-','').substring(0,8);
                                	 	if (nvl(this.item.PAYMENTS_DT, '') != '') {
                                       	this.item.PAYMENTS_DT = this.item.PAYMENTS_DT.replace(/\-/g, '');
                                       	returnValue = this.item.PAYMENTS_DT.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
