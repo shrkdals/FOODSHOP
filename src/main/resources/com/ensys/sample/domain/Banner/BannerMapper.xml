@@ -74,6 +74,7 @@
             (
                 #{COMPANY_CD},
                 #{BANNER_CD},
+                #{SEQ},
                 #{BANNER_NM},
                 #{USE_YN},
                 #{LINK_SEQ},

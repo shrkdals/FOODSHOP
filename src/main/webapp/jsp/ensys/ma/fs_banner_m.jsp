@@ -20,7 +20,6 @@
         <script type="text/javascript">
             var userCallBack;
             var afterIndex = 0;
-            
           
             var fnObj = {}, CODE = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
@@ -123,6 +122,12 @@
 
                 },
                 ITEM_DEL1: function (caller, act, data) {
+                	var selected = fnObj.gridView01.getData('selected')[0];
+
+                    if (nvl(selected) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
                     fnObj.gridView01.delRow("selected");
                 },
                 ITEM_ADD2: function (caller, act, data){
@@ -146,7 +151,173 @@
                     caller.gridView02.target.setValue(lastIdx - 1, 'USE_YN', 'Y');
                 },
                 ITEM_DEL2: function (caller, act, data) {
+                	var selected = fnObj.gridView02.getData('selected')[0];
+
+                    if (nvl(selected) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
                     fnObj.gridView02.delRow("selected");
+                },
+                ITEM_UP1: function(caller, act, data){
+                    for (var i = 0 ; i < fnObj.gridView01.target.list.length ; i++){
+                    	if (nvl(fnObj.gridView01.target.list[i].__created__) != ''){
+                        	qray.alert('추가된 데이터가 존재합니다.<br>순서변경은 저장 후 진행해주십시오.');
+    						return;
+                        }
+                    }
+                	var selected = fnObj.gridView01.getData('selected')[0];
+                	
+                    if (nvl(selected) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
+                    
+                    if (selected.__index == 0){
+						return;
+                    }
+                    var changeData = fnObj.gridView01.target.list[selected.__index - 1];
+
+                    fnObj.gridView01.target.setValue(selected.__index, 'COMPANY_CD', changeData['COMPANY_CD']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'BANNER_CD', changeData['BANNER_CD']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'BANNER_NM', changeData['BANNER_NM']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'URL_YN', changeData['URL_YN']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'USE_YN', changeData['USE_YN']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'URL_LINK', changeData['URL_LINK']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'FILE_NAME', changeData['FILE_NAME']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'FILE', changeData['FILE']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'COMPANY_CD', changeData['COMPANY_CD']);
+
+                    fnObj.gridView01.target.setValue(changeData.__index, 'COMPANY_CD', selected['COMPANY_CD']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'BANNER_CD', selected['BANNER_CD']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'BANNER_NM', selected['BANNER_NM']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'URL_YN', selected['URL_YN']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'USE_YN', selected['USE_YN']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'URL_LINK', selected['URL_LINK']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'FILE_NAME', selected['FILE_NAME']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'FILE', selected['FILE']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'COMPANY_CD', selected['COMPANY_CD']);
+                    
+                    afterIndex  = changeData.__index;
+                    fnObj.gridView01.target.select(changeData.__index);
+                },
+                ITEM_DOWN1: function(caller, act, data){
+                	for (var i = 0 ; i < fnObj.gridView01.target.list.length ; i++){
+                    	if (nvl(fnObj.gridView01.target.list[i].__created__) != ''){
+                        	qray.alert('추가된 데이터가 존재합니다.<br>순서변경은 저장 후 진행해주십시오.');
+    						return;
+                        }
+                    }
+                	var selected = fnObj.gridView01.getData('selected')[0];
+
+                    if (nvl(selected) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
+                    if (selected.__index == (fnObj.gridView01.target.list.length - 1)){
+                    	console.log('(fnObj.gridView01.target.list.length - 1)' + '=' + 'selected.__index')
+						return;
+                    }
+
+                    var changeData = fnObj.gridView01.target.list[selected.__index + 1];
+
+                    fnObj.gridView01.target.setValue(selected.__index, 'COMPANY_CD', changeData['COMPANY_CD']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'BANNER_CD', changeData['BANNER_CD']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'BANNER_NM', changeData['BANNER_NM']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'URL_YN', changeData['URL_YN']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'USE_YN', changeData['USE_YN']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'URL_LINK', changeData['URL_LINK']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'FILE_NAME', changeData['FILE_NAME']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'FILE', changeData['FILE']);
+                    fnObj.gridView01.target.setValue(selected.__index, 'COMPANY_CD', changeData['COMPANY_CD']);
+
+                    fnObj.gridView01.target.setValue(changeData.__index, 'COMPANY_CD', selected['COMPANY_CD']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'BANNER_CD', selected['BANNER_CD']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'BANNER_NM', selected['BANNER_NM']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'URL_YN', selected['URL_YN']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'USE_YN', selected['USE_YN']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'URL_LINK', selected['URL_LINK']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'FILE_NAME', selected['FILE_NAME']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'FILE', selected['FILE']);
+                    fnObj.gridView01.target.setValue(changeData.__index, 'COMPANY_CD', selected['COMPANY_CD']);
+
+                    afterIndex  = changeData.__index;
+                    fnObj.gridView01.target.select(changeData.__index);
+                },
+                ITEM_UP2: function(caller, act, data){
+                	for (var i = 0 ; i < fnObj.gridView02.target.list.length ; i++){
+                    	if (nvl(fnObj.gridView02.target.list[i].__created__) != ''){
+                        	qray.alert('추가된 데이터가 존재합니다.<br>순서변경은 저장 후 진행해주십시오.');
+    						return;
+                        }
+                    }
+                	var selected = fnObj.gridView02.getData('selected')[0];
+                	
+                    if (nvl(selected) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
+                    if (selected.__index == 0){
+						return;
+                    }
+                    var changeData = fnObj.gridView02.target.list[selected.__index - 1];
+
+                          
+                    fnObj.gridView02.target.setValue(selected.__index, 'COMPANY_CD', changeData['COMPANY_CD']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'BANNER_CD', changeData['BANNER_CD']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'BANNER_NM', changeData['BANNER_NM']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'SEQ', changeData['SEQ']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'USE_YN', changeData['USE_YN']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'FILE_NAME', changeData['FILE_NAME']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'FILE', changeData['FILE']);
+
+                    fnObj.gridView02.target.setValue(changeData.__index, 'COMPANY_CD', selected['COMPANY_CD']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'BANNER_CD', selected['BANNER_CD']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'BANNER_NM', selected['BANNER_NM']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'SEQ', selected['SEQ']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'USE_YN', selected['USE_YN']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'FILE_NAME', selected['FILE_NAME']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'FILE', selected['FILE']);
+
+                    fnObj.gridView02.target.select(changeData.__index);
+                },
+                ITEM_DOWN2: function(caller, act, data){
+                	for (var i = 0 ; i < fnObj.gridView02.target.list.length ; i++){
+                    	if (nvl(fnObj.gridView02.target.list[i].__created__) != ''){
+                        	qray.alert('추가된 데이터가 존재합니다.<br>순서변경은 저장 후 진행해주십시오.');
+    						return;
+                        }
+                    }
+                	var selected = fnObj.gridView02.getData('selected')[0];
+
+                    if (nvl(selected) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
+                    if (selected.__index == (fnObj.gridView02.target.list.length - 1)){
+                        console.log('(fnObj.gridView02.target.list.length - 1)' + '=' + 'selected.__index')
+						return;
+                    }
+
+                    var changeData = fnObj.gridView02.target.list[selected.__index + 1];
+
+                    fnObj.gridView02.target.setValue(selected.__index, 'COMPANY_CD', changeData['COMPANY_CD']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'BANNER_CD', changeData['BANNER_CD']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'BANNER_NM', changeData['BANNER_NM']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'SEQ', changeData['SEQ']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'USE_YN', changeData['USE_YN']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'FILE_NAME', changeData['FILE_NAME']);
+                    fnObj.gridView02.target.setValue(selected.__index, 'FILE', changeData['FILE']);
+
+                    fnObj.gridView02.target.setValue(changeData.__index, 'COMPANY_CD', selected['COMPANY_CD']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'BANNER_CD', selected['BANNER_CD']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'BANNER_NM', selected['BANNER_NM']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'SEQ', selected['SEQ']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'USE_YN', selected['USE_YN']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'FILE_NAME', selected['FILE_NAME']);
+                    fnObj.gridView02.target.setValue(changeData.__index, 'FILE', selected['FILE']);
+
+                    fnObj.gridView02.target.select(changeData.__index);
                 },
             });
             // fnObj 기본 함수 스타트와 리사이즈
@@ -190,9 +361,9 @@
                         // parentGrid: $(fnObj.gridView02),
                         // childrenGrid: [$(fnObj.gridView02),$(fnObj.gridView03)],
                         showRowSelector: true,
-                        columns: [
+                        columns: [ 
                             {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "center" ,hidden:true},
-                            {key: "SORT_SEQ", label: "배너순서", width: 100 , editor: {type: "number"}, align: "center",sortable: true,},
+                            {key: "SORT_SEQ", label: "배너순서", width: 100 , editor: {type: "number"}, align: "center",sortable: true,hidden:true},
                             {key: "BANNER_CD", label: "배너코드", width: 150 , align: "center" , editor: false, sortable: true,},
                             {key: "BANNER_NM", label: "배너명", width: 150 , editor: {type: "text"}, align: "left",sortable: true,},
                             {key: "URL_LINK", label: "링크주소", width: "*" , editor: {type: "text"}, align: "left",sortable: true,},
@@ -231,7 +402,7 @@
                         ],
                         body: {
                             onDataChanged: function () {
-                            	if (this.key == 'URL_YN'){
+                            	/* if (this.key == 'URL_YN'){
 									if (this.value == 'Y'){
 										fnObj.gridView01.target.setValue(this.dindex, 'URL_LINK', '');
 									}else{
@@ -239,7 +410,7 @@
 											fnObj.gridView02.delRow(i);
 										}
 									}
-                               	}
+                               	} */
                             },
                             //444
                             onClick: function () {
@@ -331,6 +502,12 @@
                         }
                     });
                     axboot.buttonClick(this, "data-grid-view-01-btn", {
+                    	"up": function(){
+                       	 ACTIONS.dispatch(ACTIONS.ITEM_UP1);
+                        },
+                        "down": function(){
+                       	 ACTIONS.dispatch(ACTIONS.ITEM_DOWN1);
+                        },
                         "delete": function () {
                             var beforeIdx = fnObj.gridView01.target.selectedDataIndexs[0];
                             var dataLen = fnObj.gridView01.target.getList().length;
@@ -411,14 +588,14 @@
                         // parentGrid: $(fnObj.gridView02),
                         // childrenGrid: [$(fnObj.gridView02),$(fnObj.gridView03)],
                         showRowSelector: true,
-                        columns: [
+                        columns: [ 
                             {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "center" ,hidden:true},
                             {key: "BANNER_CD", label: "배너코드", width: 150 , align: "center" , editor: false, sortable: true, hidden:true},
                             {key: "SEQ", label: "채번코드", width: 150 , align: "center" , editor: false, sortable: true, hidden:true},
                             {key: "BANNER_NM", label: "배너명", width: 200 , editor: {type: "text"}, align: "left",sortable: true,},
                             {key: "FILE_NAME", label: "파일", width: 150 , align: "center" , editor: false, sortable: true,},
                             {key: "FILE", label: "이미지파일", width: 150 , align: "center" , editor: false, sortable: true, hidden:true},
-                            {key: "LINK_SEQ", label: "연결배너순서", width: 100 , editor: {type: "number"}, align: "center",sortable: true,},
+                            {key: "LINK_SEQ", label: "연결배너순서", width: 100 , editor: {type: "number"}, align: "center",sortable: true,hidden:true},
                             {key: "USE_YN", label: "사용여부", width: 100 , align: "center", sortable: true,
                                 editor: {
                                     type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'}
@@ -444,14 +621,7 @@
                             //444
                             onClick: function () {
                                 var index = this.dindex;
-                                if(afterIndex == index) {
-                                    return false;
-                                }
-
-                                afterIndex = index;
                                 this.self.select(this.dindex);
-                                
-
                             },
                             onDBLClick: function () {
                                 var column = this.column.key;
@@ -515,6 +685,12 @@
                         }
                     });
                     axboot.buttonClick(this, "data-grid-view-02-btn", {
+                         "up": function(){
+                        	 ACTIONS.dispatch(ACTIONS.ITEM_UP2);
+                         },
+                         "down": function(){
+                        	 ACTIONS.dispatch(ACTIONS.ITEM_DOWN2);
+                         },
                         "delete": function () {
                             var beforeIdx = fnObj.gridView02.target.selectedDataIndexs[0];
                             var dataLen = fnObj.gridView02.target.getList().length;
@@ -676,6 +852,12 @@
                     <div class="left">
                     </div>
                     <div class="right">
+                    <button type="button" class="btn btn-small" data-grid-view-01-btn="up" style="width:80px;"><i
+                                class="icon_up"></i>  위로
+                        </button>
+                        <button type="button" class="btn btn-small" data-grid-view-01-btn="down" style="width:80px;"><i
+                                class="icon_down"></i> 아래로
+                        </button>
                         <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
                         class="icon_add"></i>
                     		<ax:lang id="ax.admin.add"/></button>
@@ -699,6 +881,12 @@
                         </h2>
                     </div>
                     <div class="right">
+                    	<button type="button" class="btn btn-small" data-grid-view-02-btn="up" style="width:80px;"><i
+                                class="icon_up"></i> 위로
+                        </button>
+                        <button type="button" class="btn btn-small" data-grid-view-02-btn="down" style="width:80px;"><i
+                                class="icon_down"></i> 아래로
+                        </button>
                         <button type="button" class="btn btn-small" data-grid-view-02-btn="add" style="width:80px;"><i
                         class="icon_add"></i>
                     <ax:lang id="ax.admin.add"/></button>
