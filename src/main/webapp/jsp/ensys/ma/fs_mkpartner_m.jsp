@@ -452,7 +452,7 @@
 
                         body: {
                             trStyleClass: function () {
-                                if (this.item.ORDR_STAT != '01') {
+                                if (this.item.ORDR_STAT == '01') {
                                     return "red";
 
                                 }
