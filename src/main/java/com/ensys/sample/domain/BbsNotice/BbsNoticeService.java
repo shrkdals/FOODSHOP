@@ -72,7 +72,9 @@ public class BbsNoticeService extends BaseService {
 				item.put("COMPANY_CD", user.getCdCompany());
 				item.put("LOGIN_ID", user.getIdUser());
 				item.put("BOARD_TYPE", param.get("BOARD_TYPE"));
+				item.put("BOARD_SP", param.get("BOARD_SP"));
 				item.put("SEQ", param.get("SEQ"));
+				
 				
 				BbsNoticeMapper.saveNotice(item);
 			}

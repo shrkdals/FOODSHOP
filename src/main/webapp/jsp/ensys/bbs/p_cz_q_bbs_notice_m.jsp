@@ -166,10 +166,10 @@
 						qray.alert('선택된 데이터가 없습니다.');
 						return;
                     }
-                	if (data.BOARD_SP != '02'){
+                	/* if (data.BOARD_SP != '02'){
 						qray.alert('게시판유형이 알림인 데이터만<br>문자메세지를 보낼 수 있습니다.');
 						return true;
-					}
+					} */
                 	if (nvl(data.TITLE) == ''){
 						qray.alert('제목을 입력해주십시오.');
 						return true;
@@ -181,7 +181,7 @@
                 	userCallBack = function(e){
                     	modal.close();
                    
-                		var strTelList = [], user_id = [], SUBJECT = "", DATE = "", CONTENT = "", BOARD_TYPE = "", SEQ = "";
+                		var strTelList = [], user_id = [], SUBJECT = "", DATE = "", CONTENT = "", BOARD_TYPE = "", SEQ = "", BOARD_SP = "";
                 	
 	                	qray.confirm({
 	                        msg: "문자메세지를 보내시겠습니까?"
@@ -198,6 +198,7 @@
 								BOARD_TYPE = data.BOARD_TYPE;
 	                          	SUBJECT = data.TITLE;
 	                          	CONTENT = data.CONTENTS;
+	                          	BOARD_SP = data.BOARD_SP;
 	                          	
 	                            axboot.ajax({
 	                                type: "POST",
@@ -217,6 +218,7 @@
                                             data: JSON.stringify({
                                             	USER_ID: user_id,
                                             	BOARD_TYPE : BOARD_TYPE,
+                                            	BOARD_SP   : BOARD_SP,
                                             	SEQ        : SEQ
                                             }),
                                             callback: function (res) {
@@ -457,7 +459,9 @@
                         columns: [
                             {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "center" ,hidden:true},
                             {key: "BOARD_TYPE", label: "게시판타입", width: 100 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
+                            {key: "BOARD_SP", label: "채번", width: 150 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
                             {key: "SEQ", label: "채번", width: 150 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
+                            {key: "NOTICE_SEQ", label: "채번", width: 150 , editor: {type: "text"}, align: "left",sortable: true, hidden:true},
                             {key: "USER_ID", label: "알림대상자 아이디", width: 120 , align: "left" ,sortable: true},
                             {key: "USER_NM", label: "알림대상자", width: 120 , align: "left" ,sortable: true},
                             {key: "DTS_INSERT", label: "알림일자", width: 150 , align: "center" , editor: false, sortable: true,},

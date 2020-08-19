@@ -2575,8 +2575,8 @@ $(document).ready(function () {
                         s4() + '-' + s4() + s4() + s4();
                 }
             }
-        } //read end
-        , getDirtyData: {
+        }, 
+        getDirtyData: {
             value: function () {
                 var self = this;
                 var createList = [];
@@ -2679,8 +2679,8 @@ $(document).ready(function () {
                 };
                 return result;
             }
-        }
-        , getDirtyDataCount: {
+        }, 
+        getDirtyDataCount: {
             value: function () {
                 var result = this.getDirtyData();
                 var cnt = 0;
@@ -2689,19 +2689,19 @@ $(document).ready(function () {
                 cnt += nvl(result.deleted.length, 0);
                 return cnt;
             }
-        }
-        , getChangeRow: {
+        }, 
+        getChangeRow: {
             value: function () {
 
                 return cnt;
             }
-        }
-        , refresh: {
+        }, 
+        refresh: {
             value: function () {
                 $(this).find('#copyData').remove()
             }
-        }
-        , setFormData: {
+        }, 
+        setFormData: {
             value: function (d) {
                 //console.log(d,'<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
                 this.FormClear();
@@ -2755,8 +2755,8 @@ $(document).ready(function () {
                     }
                 }
             }
-        }
-        , FormClear : {
+        }, 
+        FormClear : {
             value: function (d) {
                 var el = $(this).find('[form-bind-type]');
                 for (var i = 0; i < el.length; i++) {
@@ -2765,13 +2765,17 @@ $(document).ready(function () {
                         $('[data-ax5select="' + el[i].id + '"]').ax5select("setValue", '');
                     } else if (type == 'checkBox') {
                         $('#' + el[i].id).prop("checked", false);
+                    } else if (type == 'codepicker'){
+                    	$('#' + el[i].id).attr({code: '', text: ''});
+                        $('#' + el[i].id).val('');
                     } else {
-                        $('#' + el[i].id).val('')
+                        $('#' + el[i].id).val('');
+                        $('#' + el[i].id).attr({code: '', text: ''});
                     }
                 }
             }
-        }
-        , requirement: {
+        }, 
+        requirement: {
             value: function (e) {
                 var self = this;
                 var config = self.target.columns;

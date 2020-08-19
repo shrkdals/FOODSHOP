@@ -34,7 +34,7 @@
 	</update>
 	
 	<update id="saveNotice" parameterType="hashmap" statementType="CALLABLE">
-		{CALL UP_FS_BBS_NOTICE_I(#{COMPANY_CD}, #{BOARD_TYPE}, #{SEQ}, #{USER_ID}, #{LOGIN_ID}) }
+		{CALL UP_FS_BBS_NOTICE_I(#{COMPANY_CD}, #{BOARD_TYPE}, #{BOARD_SP}, #{SEQ}, #{USER_ID}, #{LOGIN_ID}) }
 	</update>
 
 	<!-- <select id="selectList" resultType="hashmap" parameterType="hashmap" 
