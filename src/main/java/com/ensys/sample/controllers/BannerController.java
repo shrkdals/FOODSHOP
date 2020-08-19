@@ -25,6 +25,11 @@ public class BannerController extends BaseController {
 	public Responses.ListResponse search(@RequestBody HashMap<String, Object> param) {
 		return Responses.ListResponse.of(service.search(param));
 	}
+	
+	@RequestMapping(value = "searchDtl", method = RequestMethod.POST, produces = APPLICATION_JSON)
+	public Responses.ListResponse searchDtl(@RequestBody HashMap<String, Object> param) {
+		return Responses.ListResponse.of(service.searchDtl(param));
+	}
 
 	@RequestMapping(value = "save", method = RequestMethod.POST, produces = APPLICATION_JSON)
 	public ApiResponse save(@RequestBody HashMap<String, Object> param) {
