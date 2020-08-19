@@ -828,10 +828,7 @@
                 var tempgridheight = datarealheight - $("#left_title").height() - $("#bottom_left_title").height() - $("#bottom_left_amt").height();
 
                 $("#left_grid").css("height" ,(tempgridheight / 100 * 99));
-                // $("#left_grid").css("height" ,(tempgridheight / 100 * 99) / 2);
-                // $("#left_grid2").css("height",(tempgridheight / 100 * 99) / 2);
-                //$("#right_grid").css("height", tempgridheight / 100 * 99);
-                console.log($("#QRAY_FORM").height(), 'qray', (tempgridheight / 100 * 99), '(tempgridheight / 100 * 99)' ,$('#binder-form').height(), '$(\'#binder-form\').height()')
+                $("#right_content").css("height" ,( (datarealheight - $("#left_title").height()) / 100 * 99));
                 $("#right_grid").css("height", (tempgridheight / 100 * 99) - $('#binder-form').height() - $('.ax-button-group').height());
                 /*
                 alert($("#ax-base-root").height()); // 컨텐츠영역높이
