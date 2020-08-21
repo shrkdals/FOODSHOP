@@ -33040,9 +33040,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
 
     var resize = function resize() {
+
+        var grouping_len = 0;
+        if (this.bodyGrouping && this.bodyGrouping.columns){
+            grouping_len = this.bodyGrouping.columns.length
+        }
+
         var _vertical_scroller_height = this.$["scroller"]["vertical"].height(),
             _horizontal_scroller_width = this.$["scroller"]["horizontal"].width(),
-            _panel_height = this.$["panel"]["body"].height()-( (nvl(this.$target.find('[data-ax5grid-grouping-tr="true"]').length,0) / 3) * 20),
+            _panel_height = nvl(grouping_len,0) > 0 ? this.$["panel"]["body"].height()-( (nvl(this.$target.find('[data-ax5grid-grouping-tr="true"]').length,0) / nvl(grouping_len,1)) ) : this.$["panel"]["body"].height(),
             _panel_width = this.$["panel"]["body"].width(),
             _content_height = this.xvar.scrollContentHeight,
             _content_width = this.xvar.scrollContentWidth,
