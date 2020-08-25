@@ -38,8 +38,15 @@
     <select id="success3" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
         { CALL UP_FS_ORDER_U3(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD}, #{LOGIN_ID}) }
     </select>
-    
-    
+
+    <update id="DEL_DT_SAVE" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_ORDER_DEL_DT_SAVE(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ,#{DEL_DT} ,#{LOGIN_ID}) }
+    </update>
+
+    <update id="REMARK_SAVE" parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_ORDER_REMARK_SAVE(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ,#{REMARK} ,#{LOGIN_ID}) }
+    </update>
+
     <update id="adjust" parameterType="java.util.HashMap" statementType="CALLABLE">
     	{ CALL UP_FS_ORDER_ADJUST(#{COMPANY_CD}, #{JOIN_PT_CD}, #{ORDER_CD} ,#{ORDER_SEQ}) }
     </update>

@@ -108,4 +108,19 @@ public class OrderService extends BaseService {
 			mapper.orderCancel(item);
 		}
 	}
+
+    public void DEL_DT_SAVE(HashMap<String, Object> param) {
+		SessionUser user = SessionUtils.getCurrentUser();
+		ArrayList<HashMap<String, Object>> items = (ArrayList<HashMap<String, Object>>) param.get("list");
+		for (HashMap<String, Object> item : items) {
+			item.put("COMPANY_CD", user.getCdCompany());
+			mapper.DEL_DT_SAVE(item);
+		}
+    }
+
+	public void REMARK_SAVE(HashMap<String, Object> param) {
+		SessionUser user = SessionUtils.getCurrentUser();
+		param.put("COMPANY_CD", user.getCdCompany());
+		mapper.REMARK_SAVE(param);
+	}
 }

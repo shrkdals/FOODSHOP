@@ -291,6 +291,40 @@
                     }
                     $.openCustomPopup("PDF_2",'UserCallBack', '', { ORDER_CD : itemH.ORDER_CD }, '', 1400, 700,50);
                 }
+                ,
+                DEL_DT_SAVE : function (caller, act, data) {
+
+                    var list = fnObj.gridView01.getData('modified')
+                    if (list.length == 0){
+                        qray.alert('배송일자를 입력한 주문건이 없습니다.');
+                        return;
+                    }
+                    axboot.ajax({
+                        type: "POST",
+                        url: ["order", "DEL_DT_SAVE"],
+                        data: JSON.stringify({list : list }),
+                        callback: function (res) {
+                            qray.alert("배송일자 저장이 완료되었습니다.");
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                            caller.gridView01.target.select(afterIndex);
+                            caller.gridView01.target.focus(afterIndex);
+                        },
+                        options: {
+                            onError : function(err){
+                                var temp = err.message.split('FOODSHOP');
+
+                                if(temp.length == 1){
+                                    err.message = temp[0]
+                                }else{
+                                    err.message = temp[1]
+                                }
+
+                                qray.alert(err.message)
+                            }
+                        }
+                    });
+                }
+
             });
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
@@ -372,6 +406,9 @@
                         , "SUCCESS3" : function(){
                             ACTIONS.dispatch(ACTIONS.SUCCESS3);
                         }
+                        , "DEL_DT_SAVE" : function(){
+                            ACTIONS.dispatch(ACTIONS.DEL_DT_SAVE);
+                        }
 
                     });
                 }
@@ -435,6 +472,11 @@
                                 }
                             }
                             ,{key: "ORDER_DTE"          , label: "주문일자"                   , width: 150     , align: "center"   , editor: false  ,sortable:true}
+                            ,{key: "DEL_DT"          , label: "배송일자"                   , width: 150     , align: "center"   , editor: {type:"date"}  ,sortable:true
+                                ,formatter: function () {
+                                    return $.changeDataFormat(this.value, 'YYYYMMDD')
+                                }
+                            }
                             ,{key: "ORDER_AMT"          , label: "주문금액"                   , width: 120     , align: "right"   , editor: false  ,sortable:true
                                 ,formatter: function () {
                                     return $.changeDataFormat(this.value, 'money')
@@ -1013,6 +1055,9 @@
                         </h2>
                     </div>
                     <div class="right">
+                        <button type="button" class="btn btn-info" data-page-btn="DEL_DT_SAVE" id="DEL_DT_SAVE" style="width: 130px;"><i
+                                class="icon_save"></i>배송일자저장
+                        </button>
                     	<button type="button" class="btn btn-info" data-page-btn="SUCCESS3" id="SUCCESS3" style="width: 130px;"><i
                                 class="icon_save"></i>일괄배송처리
                         </button>

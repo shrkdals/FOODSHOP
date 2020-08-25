@@ -64,4 +64,16 @@ public class OrderController extends BaseController {
         service.orderCancel(param);
         return ok();
     }
+
+    @RequestMapping(value = "DEL_DT_SAVE", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public ApiResponse DEL_DT_SAVE(@RequestBody HashMap<String, Object> param) {
+        service.DEL_DT_SAVE(param);
+        return ok();
+    }
+
+    @RequestMapping(value = "REMARK_SAVE", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public ApiResponse REMARK_SAVE(@RequestBody HashMap<String, Object> param) {
+        service.REMARK_SAVE(param);
+        return ok();
+    }
 }
