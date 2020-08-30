@@ -20,10 +20,6 @@
                         qray.alert('이름을 입력해주십시오.');
                         return false;
                     }
-                    if (nvl($("#birth").val()) == '') {
-                        qray.alert('생년월일을 입력해주십시오.');
-                        return false;
-                    }
                     if (nvl($("#email").val()) == '') {
                         qray.alert('이메일을 입력해주십시오.');
                         return false;
@@ -33,23 +29,22 @@
                         url: ["users", "findId"],
                         data: {
                             "P_NAME": $("#name").val(),
-                            "P_BIRTH": $("#birth").val().replace(/\-/g, ''),
+                            // "P_BIRTH": $("#birth").val().replace(/\-/g, ''),
                             "P_EMAIL": $("#email").val(),
                         },
                         callback: function (res) {
                             if (res.list.length == 0) {
                                 qray.alert('등록된 아이디가 없습니다.');
+                                return
                             }
 
                             var html = "";
                             for (var i = 0; i < res.list.length; i++) {
-                                if (i != 0) {
-                                    html += " | ";
-                                }
-                                html += "<font color='#ff7f50'>" + res.list[i].ID_USER + "</font>";
+                                html += "<font color='#ff7f50'> 아이디 : " + res.list[i].USER_ID + "</font> <br>";
+                                html += "<font color='#ff7f50'> 그룹코드 : " + res.list[i].GRP_CD + "</font> <br>";
                             }
 
-                            qray.alert("아이디 <font color='#ff7f50'>" + res.list.length + "</font> 개 검색되었습니다. \n\n" + html);
+                            qray.alert("아이디 <font color='#ff7f50'>" + res.list.length + "</font> 개 검색되었습니다. <br>" + html);
                         }
                     });
                 }
@@ -137,16 +132,7 @@
                     </ax:td>
                 </ax:tr>
                 <ax:tr>
-                    <ax:td label='생년월일' width="400px">
-                        <input type="text"
-                               class="form-control"
-                               data-ax-path="birth"
-                               name="birth"
-                               id="birth" formatter="YYYYMMDD"/>
-                    </ax:td>
-                </ax:tr>
-                <ax:tr>
-                    <ax:td label='E-Mail' width="400px">
+                    <ax:td label='아이디' width="400px">
                         <input type="text"
                                class="form-control"
                                data-ax-path="email"
