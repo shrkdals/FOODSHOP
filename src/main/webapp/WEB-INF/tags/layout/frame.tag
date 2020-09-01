@@ -124,9 +124,10 @@
 
         <h1 class="logo"><a maunPath = '/jsp/dashboard.jsp' menuId="00-dashboard" progNm="홈" id="dashboard" menuNm="홈"
         progPh="/jsp/dashboard.jsp" >logo <span>|</span></a></h1>
-        <div class="gnb_wrap"> <span><label id="LoginUserNm"></label><span style="display: none;" id="LoginUserId"> 안녕하세요 </span>
+        <div class="gnb_wrap"> <i class="cqc-cog" style="font-size:20px;"></i> <span><label id="LoginUserNm"></label><span style="display: none;" id="LoginUserId"> 안녕하세요 </span>
         <!--<button type="button" onclick="" class="btn_user">정보수정</button>-->
         <a href ="/api/logout" class="btn_user">로그아웃</a>
+
 
 
         <ul>
@@ -268,7 +269,16 @@
                         });
                     }
                 });
-
+                var FnCall
+                $('.gnb_wrap .cqc-cog').click(function(){
+                    FnCall = function (e) {
+                        qray.alert('회원정보 변경이 완료되었습니다. <br> 로그인을 다시 진행해주십시요.').then(function(){
+                            modal.close();
+                            window.location.href = '/api/logout'
+                        })
+                    };
+                    $.openCommonPopup("userInfo", "FnCall", '', '', null, 700, 400, 50);
+                })
 
                 $('.lnb_arrowbottom').mouseenter(function(){
                     $('.lnb_arrowbottom').css("opacity","0.7");

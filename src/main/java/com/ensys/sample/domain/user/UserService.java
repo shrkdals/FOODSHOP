@@ -201,4 +201,13 @@ public class UserService extends BaseService<User, String> {
     public void join(HashMap<String, Object> param) {
         userMapper.join(param);
     }
+
+    @Transactional
+    public void USER_SAVE(HashMap<String, Object> param) {
+        userMapper.USER_SAVE(param);
+    }
+
+    public List<HashMap<String, Object>> USER_SEARCH(HashMap<String, Object> param) {
+        return userMapper.USER_SEARCH(param);
+    }
 }

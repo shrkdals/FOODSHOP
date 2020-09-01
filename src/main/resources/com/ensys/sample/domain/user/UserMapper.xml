@@ -9,6 +9,14 @@
         { CALL UP_FS_USER_ID_S( #{cdCompany} , #{idUser} , #{cdGroup} ) }
     </select>
 
+    <select id="USER_SEARCH" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_USER_ID_S( #{COMPANY_CD} , #{USER_ID} , #{GROUP_CD} ) }
+    </select>
+
+    <select id="USER_SAVE" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_USER_U( #{COMPANY_CD} , #{USER_ID} , #{USER_NAME} ,#{PASS_WORD} , #{HP_NO} ) }
+    </select>
+
     <select id="chkPw" resultType="hashmap" parameterType="hashmap" statementType="PREPARED">
         { CALL UP_FS_PASSWORD_S( #{CD_COMPANY}, #{GROUP_CD}, #{ID_USER} )}
     </select>
