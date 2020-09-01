@@ -25,4 +25,8 @@ public interface OrderMapper extends MyBatisMapper {
     void adjust(HashMap<String, Object> item);
 
     void orderCancel(HashMap<String, Object> param);
+
+    void DEL_DT_SAVE(HashMap<String, Object> item);
+
+    void REMARK_SAVE(HashMap<String, Object> param);
 }

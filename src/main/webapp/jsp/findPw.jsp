@@ -23,43 +23,28 @@
                         qray.alert('이름을 입력해주십시오.');
                         return false;
                     }
-                    if (nvl($("#birth").val()) == ''){
-                        qray.alert('생년월일을 입력해주십시오.');
-                        return false;
-                    }
-                    if (nvl($("#email").val()) == ''){
-                        qray.alert('이메일을 입력해주십시오.');
-                        return false;
-                    }
+
                     axboot.ajax({
                         method: "GET",
-                        url: ["users", "findPw"],
+                        url: ["users", "findId"],
                         data: {
-                            "P_ID_USER": $("#id_user").val(),
                             "P_NAME": $("#name").val(),
-                            "P_BIRTH": $("#birth").val().replace(/\-/g, ''),
-                            "P_EMAIL": $("#email").val(),
+                            "P_EMAIL":  $("#id_user").val()
                         },
                         callback: function (res) {
-                            if (res.map != null) {
-                                if (res.map.MSG != null) {
-                                    messageDialog.alert({
-                                        title: "알림",
-                                        msg: res.map.MSG,
-                                        onStateChanged: function () {
-                                            if (this.state === "open") {
-                                                mask.open();
-                                            } else if (this.state === "close") {
-                                                mask.close();
-
-                                                if (res.map.CHKVAL != null && res.map.CHKVAL == 'Y') {
-                                                    window.location = '/jsp/login.jsp';
-                                                }
-                                            }
-                                        }
-                                    });
-                                }
+                            if (res.list.length == 0) {
+                                qray.alert('등록된 아이디가 없습니다.');
+                                return
                             }
+
+                            var html = "";
+                            for (var i = 0; i < res.list.length; i++) {
+                                html += "<font color='#ff7f50'> 아이디 : " + res.list[i].USER_ID + "</font> <br>";
+                                html += "<font color='#ff7f50'> 그룹코드 : " + res.list[i].GRP_CD + "</font> <br>";
+                                html += "<font color='#ff7f50'> 비밀번호 : " + res.list[i].USER_PW + "</font> <br>";
+                            }
+                            qray.alert("아이디 <font color='#ff7f50'>" + res.list.length + "</font> 개 검색되었습니다. <br>" + html);
+
                         }
                     });
                 }
@@ -157,24 +142,15 @@
                                id="name"/>
                     </ax:td>
                 </ax:tr>
-                <ax:tr>
-                    <ax:td label='생년월일' width="400px">
-                        <input type="text"
-                               class="form-control"
-                               data-ax-path="birth"
-                               name="birth"
-                               id="birth" formatter="YYYYMMDD"/>
-                    </ax:td>
-                </ax:tr>
-                <ax:tr>
-                    <ax:td label='E-Mail' width="400px">
-                        <input type="text"
-                               class="form-control"
-                               data-ax-path="email"
-                               name="email"
-                               id="email"/>
-                    </ax:td>
-                </ax:tr>
+<%--                <ax:tr>--%>
+<%--                    <ax:td label='E-Mail' width="400px">--%>
+<%--                        <input type="text"--%>
+<%--                               class="form-control"--%>
+<%--                               data-ax-path="email"--%>
+<%--                               name="email"--%>
+<%--                               id="email"/>--%>
+<%--                    </ax:td>--%>
+<%--                </ax:tr>--%>
             </ax:tbl>
             <div class="H10"></div>
 

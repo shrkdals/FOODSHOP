@@ -14,16 +14,29 @@
             )
         }
     </select>
+    
+    <select id="searchDtl" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BANNER_D_S
+            (
+                #{COMPANY_CD},
+                #{BANNER_CD}
+            )
+        }
+    </select>
+    
 
     <update id="insert" parameterType="hashmap" statementType="CALLABLE">
         {
-        CALL UP_FS_BANNER_M_I
+        CALL UP_FS_BANNER_M_I2
             (
                 #{COMPANY_CD},
                 #{BANNER_CD},
                 #{BANNER_NM},
                 #{URL_LINK},
                 #{USE_YN},
+                #{URL_YN},
+                #{SORT_SEQ},
                 #{USER_ID}
             )
         }
@@ -31,13 +44,15 @@
 
     <update id="update" parameterType="hashmap" statementType="CALLABLE">
         {
-        CALL UP_FS_BANNER_M_U
+        CALL UP_FS_BANNER_M_U2
             (
                 #{COMPANY_CD},
                 #{BANNER_CD},
                 #{BANNER_NM},
                 #{URL_LINK},
                 #{USE_YN},
+                #{URL_YN},
+                #{SORT_SEQ},
                 #{USER_ID}
             )
         }
@@ -45,7 +60,7 @@
 
     <update id="delete" parameterType="hashmap" statementType="CALLABLE">
         {
-        CALL UP_FS_BANNER_M_D
+        CALL UP_FS_BANNER_M_D2
             (
                 #{COMPANY_CD},
                 #{BANNER_CD}
@@ -53,6 +68,46 @@
         }
     </update>
 
+	<update id="insertDtl" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BANNER_D_I
+            (
+                #{COMPANY_CD},
+                #{BANNER_CD},
+                #{SEQ},
+                #{BANNER_NM},
+                #{USE_YN},
+                #{LINK_SEQ},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="updateDtl" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BANNER_D_U
+            (
+                #{COMPANY_CD},
+                #{BANNER_CD},
+                #{SEQ},
+                #{BANNER_NM},
+                #{USE_YN},
+                #{LINK_SEQ},
+                #{USER_ID}
+            )
+        }
+    </update>
+
+    <update id="deleteDtl" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_BANNER_D_D
+            (
+                #{COMPANY_CD},
+                #{BANNER_CD},
+                #{SEQ}
+            )
+        }
+    </update>
 </mapper>
 
 

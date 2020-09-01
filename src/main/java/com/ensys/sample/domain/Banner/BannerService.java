@@ -27,14 +27,21 @@ public class BannerService extends BaseService {
 		param.put("COMPANY_CD", user.getCdCompany());
 		return mapper.search(param);
 	}
+	
+	public List<HashMap<String, Object>> searchDtl(HashMap<String, Object> param) {
+		SessionUser user = SessionUtils.getCurrentUser();
+		param.put("COMPANY_CD", user.getCdCompany());
+		return mapper.searchDtl(param);
+	}
 
 	@Transactional
 	public void save(HashMap<String, Object> param) {
 		SessionUser user = SessionUtils.getCurrentUser();
 
 		List<HashMap<String, Object>> items = (List<HashMap<String, Object>>) param.get("saveData");
-
-		if (items != null && items.size() > 0) { // 브랜드마스터
+		List<HashMap<String, Object>> saveDataD = (List<HashMap<String, Object>>) param.get("saveDataD");
+		
+		if (items != null && items.size() > 0) { // 마스터
 			for (HashMap<String, Object> item : items) {
 				item.put("COMPANY_CD", user.getCdCompany());
 				item.put("USER_ID", user.getIdUser());
@@ -63,7 +70,36 @@ public class BannerService extends BaseService {
 				}
 			}
 		}
+		
+		if (saveDataD != null && saveDataD.size() > 0) { // 마스터
+			for (HashMap<String, Object> item : saveDataD) {
+				item.put("COMPANY_CD", user.getCdCompany());
+				item.put("USER_ID", user.getIdUser());
+				if (item.get("__deleted__") != null) {
+					if ((boolean) item.get("__deleted__")) {
+						mapper.deleteDtl(item);
+					}
+				} else if (item.get("__created__") != null) {
+					if ((boolean) item.get("__created__")) {
+						mapper.insertDtl(item);
 
+						if (item.get("FILE") != null) {
+							HashMap<String, Object> file = (HashMap<String, Object>) item.get("FILE");
+							fileservice.insertFsFile(file);
+						}
+					}
+				} else if (item.get("__modified__") != null && item.get("__created__") == null) {
+					if ((boolean) item.get("__modified__")) {
+						mapper.updateDtl(item);
+
+						if (item.get("FILE") != null) {
+							HashMap<String, Object> file = (HashMap<String, Object>) item.get("FILE");
+							fileservice.insertFsFile(file);
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

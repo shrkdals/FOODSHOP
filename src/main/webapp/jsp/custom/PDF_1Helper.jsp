@@ -7,7 +7,7 @@
 <ax:set key="page_auto_height" value="true"/>
 <ax:layout name="modal">
     <jsp:attribute name="script">
-        <link href="/assets/css/PDF_1.css" rel="stylesheet" type="text/css"/>
+        <link href="/assets/css/PDF_1.css?ver3" rel="stylesheet" type="text/css"/>
         <script type="text/javascript">
             console.log(parent.modal.modalConfig.sendData().initData)
             var listLen = 0
@@ -15,6 +15,7 @@
             var html2canvasWidth = 0;
             var doc;
 
+            var REMARK_SAVE_OBJ = {}
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_SEARCH: function (caller, act, data) {
 
@@ -30,6 +31,7 @@
                         ,PT_NM  = '' ,BIZ_NO  = '' ,OWNER_NM  = '' ,TEL_NO  = '' ,FAX_NO  = '' ,ADDR  = '', PT_TYPE = '', PT_COND = ''        // 공급자 필드
                         ,PT_NM2 = '' ,BIZ_NO2 = '' ,OWNER_NM2 = '' ,TEL_NO2 = '' ,FAX_NO2 = '' ,ADDR2 = '', SIGN_NM2 = '', PT_TYPE2 = '', PT_COND2 = ''  // 공급받는자 필드
                         ,ORDER_ITEM = ''
+                        ,REMARK = ''
                         ,SUM_SELECT_NUM = 0
                         ,SUM_SALE_COST = 0
                         ,SUM_ORDER_AMT = 0
@@ -41,13 +43,17 @@
 
                         , PT_NM2   = nvl(list[0].PT_NM2)  , BIZ_NO2  = nvl(list[0].BIZ_NO2) , OWNER_NM2  = nvl(list[0].OWNER_NM2), SIGN_NM2 = nvl(list[0].SIGN_NM2)
                         , TEL_NO2  = nvl(list[0].TEL_NO2) , FAX_NO2  = nvl(list[0].FAX_NO2) , ADDR2      = nvl(list[0].ADDR2) , PT_TYPE2 = nvl(list[0].PT_TYPE2), PT_COND2 = nvl(list[0].PT_COND2)
-
+                        , REMARK = nvl(list[0].REMARK)
                         , ORDER_CD = nvl(list[0].ORDER_CD)
                         , DELI_REQ = nvl(list[0].DELI_REQ)
                     }else{
                         $('#TBODY1').append('<span> 상품리스트가 존재하지 않습니다. </span>')
                         return;
                     }
+                    REMARK_SAVE_OBJ.ORDER_CD = list[0].ORDER_CD
+                    REMARK_SAVE_OBJ.JOIN_PT_CD = list[0].JOIN_PT_CD
+                    REMARK_SAVE_OBJ.REMARK = list[0].REMARK
+
                     var HeaderHtml = ''
                     HeaderHtml += '<table cellpadding="0" cellspacing="0" width="650px" summary="거래명세서 내역" style="width : 100%;">'
                         + '<caption class="hidden">거래명세서 내역</caption>'
@@ -113,7 +119,7 @@
                         +'<td colspan="4"><textarea style="width: 100%;resize: none;overflow-y: hidden; padding-bottom: 0.2em;line-height: 1.6;height: 100%;border:0px;">'+ DELI_REQ +'</textarea></td>'
                        
                         +'<th rowspan="4" width="20px">비<br>고</th>'
-                        +'<td colspan="6"><textarea style="width: 100%;resize: none;overflow-y: hidden; padding-bottom: 0.2em;line-height: 1.6;height: 100%;border:0px;"></textarea></td>'
+                        +'<td colspan="6"><textarea id="REMARK" style="width: 100%;resize: none;overflow-y: hidden; padding-bottom: 0.2em;line-height: 1.6;height: 100%;border:0px; ">' + REMARK + '</textarea></td>'
                         + '</tr>'
                         +'</tbody>'
                         +'</table>'
@@ -229,9 +235,40 @@
                     } else { // Chrome
                         window.open(doc.output('bloburl'));
                     }
-
-                    
                 }
+                , SAVE : function (caller, act, data) {
+                    REMARK_SAVE_OBJ.REMARK = $('#REMARK').val()
+                    REMARK_SAVE_OBJ.LOGIN_ID = SCRIPT_SESSION.idUser
+                    qray.confirm({
+                        msg: "저장하시겠습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+                            axboot.ajax({
+                                type: "POST",
+                                url: ["order", "REMARK_SAVE"],
+                                data: JSON.stringify(REMARK_SAVE_OBJ),
+                                callback: function (res) {
+                                    qray.alert("비고 저장이 완료되었습니다.");
+                                },
+                                options: {
+                                    onError : function(err){
+                                        var temp = err.message.split('FOODSHOP');
+
+                                        if(temp.length == 1){
+                                            err.message = temp[0]
+                                        }else{
+                                            err.message = temp[1]
+                                        }
+
+                                        qray.alert(err.message)
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                }
+
             })
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
@@ -280,6 +317,9 @@
                         "close": function () {
                             parent.modal.close();
                         }
+                        ,"save": function () {
+                            ACTIONS.dispatch(ACTIONS.SAVE);
+                        }
                     });
                 }
             });
@@ -292,6 +332,7 @@
                 <button type="button" class="btn btn-reload" data-page-btn="reload" style="width: 50px;"
                         onclick="window.location.reload();">
                     <i class="icon_reload"></i></button>
+                <button type="button" class="btn btn-popup-default" data-page-btn="save" style="width:80px;margin-right: 3px;"><i class="icon_ok"></i>비고 저장</button>
                 <button type="button" class="btn btn-popup-default" data-page-btn="print"><i class="icon_ok"></i>인쇄
                 </button>
                 <button type="button" class="btn btn-popup-close" data-page-btn="close">닫기</button>

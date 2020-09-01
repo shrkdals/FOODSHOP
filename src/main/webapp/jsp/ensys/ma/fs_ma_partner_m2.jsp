@@ -1012,17 +1012,15 @@
 
                 //데이터가 들어갈 실제높이
                 var datarealheight = $("#ax-base-root").height() - $(".ax-base-title").height() - $("#pageheader").height() - $("#tab_area").height() - 20;
+                var datarealheight2 = $("#ax-base-root").height() - $(".ax-base-title").height() - $("#pageheader").height() - $(".ax-button-group").height()
                 //타이틀을 뺀 상하단 그리드 합친높이
                 var tempgridheight = datarealheight - $("#left_title").height();
 
 
                 $("#left_grid").css("height", (tempgridheight / 100 * 99));
+                $("#right_content").css("height", (datarealheight2 / 100 * 99));
                 $("#tab1_grid").css("height", $("#tab_area").height() - $("#tab1_button").height() - 80 );
                 $("#tab2_grid").css("height", $("#tab_area").height() - $("#tab2_button").height() - 80 );
-
-                // $("#left_grid2").css("height",(tempgridheight / 100 * 99) / 2);
-                //$("#right_grid").css("height", tempgridheight / 100 * 99);
-                console.log($("#QRAY_FORM").height(), 'qray', (tempgridheight / 100 * 99), '(tempgridheight / 100 * 99)' ,$('#binder-form').height(), '$(\'#binder-form\').height()')
                 $("#right_grid").css("height", (tempgridheight / 100 * 99) - $('#binder-form').height() - $('.ax-button-group').height());
                 /*
                 alert($("#ax-base-root").height()); // 컨텐츠영역높이
@@ -1176,6 +1174,7 @@
                 </div>
 
             </div>
+
             <div style="width:50%;float:right;overflow:hidden;">
                 <div class="ax-button-group" id="right_title" name="오른쪽부분타이틀">
                     <div class="left">
@@ -1384,8 +1383,6 @@
                     </ax:form>
 
                     </div>
-
-
                 </div>
             </div>
         </div>
