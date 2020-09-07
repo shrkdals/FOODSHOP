@@ -162,7 +162,11 @@ axboot.pageStart = function () {
                             if (nvl(event.newValue) == ''){
                                 var target = $(this);
                                 var div = target.parents('.input-group');
-                                div[0].removeAttribute('data-tooltip-text')
+                                if(div.length > 0){
+                                    div[0].removeAttribute('data-tooltip-text')    
+                                }else{
+                                    div.context.removeAttribute('data-tooltip-text')    
+                                }
                             }else{
                                 var target = $(this);
                                 var div = target.parents('.input-group');

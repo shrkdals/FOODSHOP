@@ -25804,7 +25804,7 @@ jQuery.fn.ax5formatter = function () {
                         if (optionIndex > -1) {
                             item.options[optionIndex][item.columnKeys.optionSelected] = getSelected(item, item.options[optionIndex][item.columnKeys.optionSelected], selected);
                         } else {
-                            console.log(ax5.info.getError("ax5select", "501", "val"));
+                            //console.log(ax5.info.getError("ax5select", "501", "val"));
                             return;
                         }
 
@@ -27420,13 +27420,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
              * ax5Grid.setValue(0, "price", 100);
              * ```
              */
-            this.setValue = function (_dindex, _key, _value) {
+            this.setValue = function (_dindex, _key, _value, _dirty) {
                 // getPanelname;
                 // let doindex = (typeof _doindex === "undefined") ? _dindex : _doindex;
                 // setValue를 doindex로 처리하는 상황이 아직 발생전으므로 선언만 하고 넘어감
                 var doindex = void 0;
 
-                if (GRID.data.setValue.call(this, _dindex, doindex, _key, _value)) {
+                if (GRID.data.setValue.call(this, _dindex, doindex, _key, _value, null, _dirty)) {
                     var repaintCell = function repaintCell(_panelName, _rows, __dindex, __doindex, __key, __value) {
                         for (var r = 0, rl = _rows.length; r < rl; r++) {
                             for (var c = 0, cl = _rows[r].cols.length; c < cl; c++) {
@@ -27627,6 +27627,120 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 }
                 return this;
             };
+
+			/**
+			* 최웅석
+			* custom function
+			* 그리드가 트리일경우 select함수 대체
+			* collapse : true[트리접힘] , false[트리열림]
+			*/
+			 this.treeSelect = function(_treeindex){
+				/*
+				var _dindex = _treeindex;
+				for(var i = 0; i < this.list.length; i++){
+					if(this.list[i].__tree_index__  && this.list[i].__tree_index__ == _treeindex){
+						_dindex = this.list[i].__tree_index__
+						break;
+					}
+				}
+				*/
+				
+				// 모든 데이터를 숨김처리후 로직시작해야함
+				this.list.forEach(function(item, index){
+					//item['collapse'] = true
+					item['hidden'] = true
+				})
+				
+				var _dindex = _treeindex;
+			 	// 최웅석 트리일경우 선택한 로우의 부모를 모두 표시 현재 자신과 동일한 레벨을 모두 표시
+				if(this.list[_dindex] && this.list[_dindex].__tree_index__){
+					// 그리드에 담겨있는 리스트와 실제로 가지고있는 리스트 목록이 다르기때문에 그리드에 담겨있는 본 리스트를 기준으로 데이터 얻음
+					var _this = this.list[_dindex]
+					
+					var pid = this.config.tree.columnKeys.parentKey
+					var sid = this.config.tree.columnKeys.selfKey
+					var tree_list = this.list
+					var tree_proxyList = []
+					
+					//console.log('[ ** FOREACH IN ** ]')
+					// 실제 가지고 있는 데이터 기준으로 트리 만들기 시작
+					tree_list.forEach(function(item , index){
+						
+						// 선택 로우의 부모를 찾기
+						if(_this[pid] == item[sid]){
+							//console.log('[ ** THIS NODE : ' , _this['ACCT_NM'] , ' ** ]')
+							//console.log('[ ** ' , _this['ACCT_NM'] , '의 PARENT NODE : ' , item['ACCT_NM'] ,' ** ]')
+							// 선택 로우의 부모 노드는 모두 false 상태가 되어야함
+							item['collapse'] = false
+							item['hidden'] = false
+							// 부모 노드의 부모도 찾아 트리를 열수 있도록 재귀함수 실행
+							forNode(item)
+						}
+						
+						// 선택 로우와 동일선상에 있는 노드를 찾기
+						if(_this[pid] == item[pid]){
+							//console.log('[ ** 재귀 함수 끝난후 ** ]')
+							//console.log('[ ** THIS NODE : ' , _this['ACCT_NM'] , ' FRIEND_NODE ' , item['ACCT_NM'] ,  ' ** ]')
+							// 선택 로우의 동일 선상의 있는 노드들은 collapse 는 true 접힌상태 / hidden 는 false 보이는 상태로
+							//item['collapse'] = true
+							item['hidden'] = false
+						}
+						
+					})
+					
+                    tree_list.forEach(function(item, index){
+                    
+                    	if(_this[sid] == item[sid]){
+                    		item['__selected__'] = true
+                    	}else{
+                    		item['__selected__'] = false
+                    	}
+                    	
+                    	if(!item['hidden']){
+                    		tree_proxyList.push(item)    
+                        }
+                        
+                    })
+                    
+					this.proxyList = tree_proxyList
+					
+					this.list = tree_list
+					this.align()
+					this.select(_this.__tree_index__)
+					this.focus(_this.__tree_index__)
+					
+					function forNode(row){
+						console.log('[ ** FORNODE FOREACH IN ** ]')
+						tree_list.forEach(function(item , index){
+							
+							// 선택 로우의 부모를 찾기
+							if(row[pid] == item[sid]){
+								//console.log('[ ** FORNODE THIS NODE : ' , row['ACCT_NM'] , ' ** ]')
+								//console.log('[ ** ' , row['ACCT_NM'] , '의 PARENT NODE : ' , item['ACCT_NM'] ,' ** ]')
+								// 선택 로우의 부모 노드는 모두 false 상태가 되어야함
+								item['collapse'] = false
+								item['hidden'] = false
+								
+								// 부모 노드의 부모도 찾아 트리를 열수 있도록 재귀함수 실행
+								forNode(item)
+							}
+							
+							// 선택 로우와 동일선상에 있는 노드를 찾기
+							if(row[pid] == item[pid]){
+								//console.log('[ ** FORNODE ' , row['ACCT_NM'] , '의 FRIEND_NODE ' , item['ACCT_NM'] ,  ' ** ]')
+								// 선택 로우의 동일 선상의 있는 노드들은 collapse 는 true 접힌상태 / hidden 는 false 보이는 상태로
+								//item['collapse'] = true
+								item['hidden'] = false
+							}
+							
+						})
+					}
+					
+					
+				}else{
+					console.log(' [ ** treeSelect error ** ] ')
+				}
+			}
 
             /**
              * @method firstGrid.clickBody
@@ -27992,6 +28106,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             cfg = this.config,
             processor = {
             "selected": function selected(_dindex, _doindex) {
+            	// 최웅석 트리일경우 선택 로우의 오리지널 인덱스를 이용하도록
+				if(this.config.tree && this.config.tree.use){
+					if(this.proxyList[_dindex] && this.proxyList[_dindex].__origin_index__){
+						_doindex = this.proxyList[_dindex].__origin_index__
+					}else{
+						_doindex = this.list[_dindex].__origin_index__
+					}
+				}else{
+					if (typeof _doindex === "undefined") _doindex = _dindex;	
+				}
+				
                 if (this.list[_doindex]) {
                     var i = this.$.livePanelKeys.length;
                     while (i--) {
@@ -28014,12 +28139,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                         this.list[di][cfg.columnKeys.selected] = false;
                     }
                 } else {
+                // 최웅석 트리그리드 선택시 셀렉트 안되던 부분임
+                // console.log('TREE SELECT IN ')
                     while (di--) {
                         this.list[di][cfg.columnKeys.selected] = false;
+                        pi = this.$.livePanelKeys.length;
+						while (pi--) {
+							this.$.panel[this.$.livePanelKeys[pi]].find('[data-ax5grid-tr-data-index="' + di + '"]').attr("data-ax5grid-selected", false);
+						}
                     }
                     di = this.proxyList.length;
                     while (di--) {
-                        if (this.list[doi][cfg.columnKeys.selected]) {
+                        if (this.list[di][cfg.columnKeys.selected]) {
                             pi = this.$.livePanelKeys.length;
                             while (pi--) {
                                 this.$.panel[this.$.livePanelKeys[pi]].find('[data-ax5grid-tr-data-index="' + di + '"]').attr("data-ax5grid-selected", false);
@@ -28027,7 +28158,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                         }
 
                         this.proxyList[di][cfg.columnKeys.selected] = false;
-                        var doi = this.proxyList[di].__original_index__;
+                        
+                        var di = this.proxyList[di].__original_index__;
                     }
                 }
             },
@@ -28729,7 +28861,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             paintStartRowIndex = this.xvar.paintStartRowIndex;
         }
 
-        if (this.xvar.dataRowCount === list.length && this.xvar.paintStartRowIndex === paintStartRowIndex && this.xvar.paintRowCount === paintRowCount && this.xvar.paintStartColumnIndex === paintStartColumnIndex && this.xvar.paintEndColumnIndex === paintEndColumnIndex) return this; // 스크롤 포지션 변경 여부에 따라 프로세스 진행여부 결정
+        //if (this.xvar.dataRowCount === list.length && this.xvar.paintStartRowIndex === paintStartRowIndex && this.xvar.paintRowCount === paintRowCount && this.xvar.paintStartColumnIndex === paintStartColumnIndex && this.xvar.paintEndColumnIndex === paintEndColumnIndex) return this; // 스크롤 포지션 변경 여부에 따라 프로세스 진행여부 결정
 
         // bodyRowData 수정 : 페인트 컬럼 포지션이 달라지므로
         if (nopaintLeftColumnsWidth || nopaintRightColumnsWidth) {
@@ -28834,7 +28966,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     }
                     // 최웅석
                     for (tri = 0, trl = rowTable.rows.length; tri < trl; tri++) {
-                        var f_html = ''
+
                         SS.push('<tr class="tr-' + di % 4 + '', cfg.body.trStyleClass ? U.isFunction(cfg.body.trStyleClass) ? ' ' + cfg.body.trStyleClass.call({
                             item: _list[di],
                             index: di
@@ -28845,7 +28977,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                             cellHeight = cfg.body.columnHeight * col.rowspan - cfg.body.columnBorderWidth;
                             colAlign = col.align || bodyAlign;
                             var fontColor = this.$target.find('[data-ax5grid-data-index="'+di+'"][data-ax5grid-data-o-index="'+odi+'"][data-ax5grid-column-colIndex="'+col.colIndex+'"]').attr('data-ax5grid-fontColor');
-                            SS.push('<td ' , 'data-ax5grid-file="' + '' + '" ', 'data-ax5grid-panel-name="' + _elTargetKey + '" ', 'data-ax5grid-data-index="' + di + '" ', 'data-ax5grid-data-o-index="' + odi + '" ', 'data-ax5grid-column-row="' + tri + '" ', 'data-ax5grid-column-col="' + ci + '" ', 'data-ax5grid-column-rowIndex="' + col.rowIndex + '" ', 'data-ax5grid-column-colIndex="' + col.colIndex + '" ', 'data-ax5grid-column-attr="' + (col.columnAttr || "default") + '" ', 'data-ax5grid-fontColor="' + fontColor + '" ', function (_focusedColumn, _selectedColumn) {
+                            SS.push('<td ', 'data-ax5grid-panel-name="' + _elTargetKey + '" ', 'data-ax5grid-data-index="' + di + '" ', 'data-ax5grid-data-o-index="' + odi + '" ', 'data-ax5grid-column-row="' + tri + '" ', 'data-ax5grid-column-col="' + ci + '" ', 'data-ax5grid-column-rowIndex="' + col.rowIndex + '" ', 'data-ax5grid-column-colIndex="' + col.colIndex + '" ', 'data-ax5grid-column-attr="' + (col.columnAttr || "default") + '" ', 'data-ax5grid-fontColor="' + fontColor + '" ', function (_focusedColumn, _selectedColumn) {
                                 
                                 var attrs = "";
                                 if (_focusedColumn) {
@@ -28880,17 +29012,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                                     _cellHeight = cfg.body.columnHeight - cfg.body.columnBorderWidth;
                                 }
 
-                                // if(col.editor && nvl(col.editor.type) == 'file'){
-                                //     f_html = '<i id="fileUIcon"  class = "cqc-arrow-bold-up"' + ' style="padding-top:3px; font-size:18px; float: right; height:' + _cellHeight + 'px;' + (col.multiLine ? '' : 'line-height: ' + lineHeight + 'px;') + '"></i>';
-                                //     f_html += '<i id="fileDIcon" class = "cqc-arrow-bold-down"' + ' style="padding-top:3px; font-size:18px; float: right; height:' + _cellHeight + 'px;' + (col.multiLine ? '' : 'line-height: ' + lineHeight + 'px;') + '"></i>';
-                                //     // f_html += '<img id="fileDIcon" src="/assets/css/images/FDicon.png"' + ' style="padding-top:3px; font-size:22px; float: right; height:' + _cellHeight + 'px;' + (col.multiLine ? '' : 'line-height: ' + lineHeight + 'px;') + '"></img>';
-                                //     return '<span data-ax5grid-cellHolder="' + (col.multiLine ? 'multiLine' : '') + '" ' + (colAlign ? 'data-ax5grid-text-align="' + colAlign + '"' : '') + '" style="max-width:80%; float:left; height:' + _cellHeight + 'px;' + (col.multiLine ? '' : 'line-height: ' + lineHeight + 'px;') + '">';
-                                // }else{
-                                //     f_html = ''
-                                // }
                                 return '<span data-ax5grid-cellHolder="' + (col.multiLine ? 'multiLine' : '') + '" ' + (colAlign ? 'data-ax5grid-text-align="' + colAlign + '"' : '') + '" style="height:' + _cellHeight + 'px;' + (col.multiLine ? '' : 'line-height: ' + lineHeight + 'px;') + '">';
-
-                            }(cellHeight), isGroupingRow ? getGroupingValue.call(this, _list[di], di, col) : getFieldValue.call(this, _list, _list[di], di, col), '</span>' + f_html);
+                            }(cellHeight), isGroupingRow ? getGroupingValue.call(this, _list[di], di, col) : getFieldValue.call(this, _list, _list[di], di, col), '</span>');
 
                             SS.push('</td>');
                         }
@@ -30322,12 +30445,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
                     if (__editor.type == "money") {
                         return U.number(__value, { "money": true });
-                    }
-                    // else if (__editor.type == "file") {
-                    //         console.log('file active in')
-                    //     return __value;
-                    // }
-                    else {
+                    } else {
                         return __value;
                     }
                 }.call(this, _initValue, editor);
@@ -30357,24 +30475,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                         _msg = "CANCEL";
                         return false;
                     }
-                }
-                // else if (__editor.type == "file") {
-                //     console.log('file deActive in')
-                //     return __value;
-                // }
-                else {
+                } else {
                     return _value;
                 }
             }(this.inlineEditing[_key].$inlineEditor),
                 newValue = function (__value, __editor) {
                 if (__editor.type == "money") {
                     return U.number(__value);
-                }
-                // else if (__editor.type == "file") {
-                //     console.log('file deActive in')
-                //     return __value;
-                // }
-                else {
+                } else {
                     return __value;
                 }
             }.call(this, editorValue, column.editor);
@@ -30902,11 +31010,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             l = _list.length,
             returnList = [];
         for (; i < l; i++) {
-
+			
+			// 최웅석 treeSelect에서 사용할 인덱스 추가
+			_list[i].__tree_index__ = i;
+			_list[i].__origin_index__ = i;
             if (_list[i] && !_list[i][this.config.tree.columnKeys.hidden]) {
                 _list[i].__origin_index__ = i;
                 returnList.push(_list[i]);
             }
+            
         }
         return returnList;
     };
@@ -31303,7 +31415,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
     };
 
-    var setValue = function setValue(_dindex, _doindex, _key, _value, modified) {
+    var setValue = function setValue(_dindex, _doindex, _key, _value, modified, _dirty) {
         var target = this;
         var originalValue = getValue.call(this, _dindex, _doindex, _key);
         var list = this.list;
@@ -31320,7 +31432,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }
         }
         if (dirty){
-            if (nvl(originalValue,'') !== nvl(_value, '')) {
+            if (nvl(originalValue,'') != nvl(_value, '')) {
                 if (/[\.\[\]]/.test(_key)) {
                     try {
                         if(editor != null && editor.type == 'date'
@@ -31341,7 +31453,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
                 }
 
-                if (this.onDataChanged) {
+                if (this.onDataChanged && !_dirty) {
                     this.onDataChanged.call({
                         self: this,
                         list: this.list,
@@ -31355,7 +31467,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 }
             }
         }else{
-            if (nvl(originalValue,'') !== nvl(_value, '')) {
+            if (nvl(originalValue,'') != nvl(_value, '')) {
                 if (/[\.\[\]]/.test(_key)) {
                     try {
                         Function("val", "this" + GRID.util.getRealPathForDataItem(_key) + " = val;").call(list[listIndex], _value);
@@ -31364,7 +31476,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     list[listIndex][_key] = _value;
                 }
 
-                if (this.onDataChanged) {
+                if (this.onDataChanged  && !_dirty) {
                     this.onDataChanged.call({
                         self: this,
                         list: this.list,
@@ -31401,7 +31513,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     var select = function select(_dindex, _doindex, _selected, _options) {
         var cfg = this.config;
-
+	
+		// 최웅석 트리일경우 선택 로우의 오리지널 인덱스를 이용하도록
+		if(this.config.tree && this.config.tree.use){
+            if (typeof _doindex === "undefined"){
+            	if(this.proxyList[_dindex] && this.proxyList[_dindex].__origin_index__){
+                    _doindex = this.proxyList[_dindex].__origin_index__
+            	}else{
+            		_doindex = this.list[_dindex].__origin_index__
+            	}
+            	
+            }
+        }else{
+            if (typeof _doindex === "undefined") _doindex = _dindex;	
+        }
+		
         if (typeof _doindex === "undefined") _doindex = _dindex;
 
         if (!this.list[_doindex]) return false;
@@ -31615,17 +31741,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             originIndex = void 0;
 
         if (typeof _dindex === "undefined") return false;
-        originIndex = this.proxyList[_dindex].__origin_index__;
-
+        //originIndex = this.proxyList[_dindex].__origin_index__;
+		// 최웅석
+		originIndex = this.proxyList[_dindex].__tree_index__;
+		var this_row = this.proxyList[_dindex]
+		var this_proxyList = this.list;
+		
+		
         if (this.list[originIndex][keys.children]) {
             this.proxyList = []; // 리셋 프록시
             if (typeof _collapse == "undefined") {
                 _collapse = !(this.list[originIndex][keys.collapse] || false);
             }
-
             this.list[originIndex][keys.collapse] = _collapse;
             selfHash = this.list[originIndex][keys.selfHash];
-
+            
+			// 최웅석 트리 펼칠때 하위 모든 노드 열리도록 설정
+			/*
             var i = this.list.length;
             while (i--) {
                 if (this.list[i]) {
@@ -31638,6 +31770,46 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                         this.proxyList.push(this.list[i]);
                     }
                 }
+            }
+            */
+            // 최웅석 트리 펼칠때 바로 하위단계만 열리도록 설정
+            
+            var this_clist = this_row[keys.children]
+
+			for(var tc = 0; tc < this_clist.length; tc++){
+				this_proxyList.forEach(function(pl , index){
+					if (this_clist[tc] == pl[keys.selfKey]) {
+						pl[keys.hidden] = _collapse;
+						pl['collapse']  = !_collapse;
+						forIn(pl)
+					}    	
+				})
+
+			}
+            
+            
+            function forIn( item ){	
+				var for_clist = item[keys.children]
+
+				for(var fc = 0; fc < for_clist.length; fc++){
+					this_proxyList.forEach(function(pl , index){
+						if (for_clist[fc] == pl[keys.selfKey]) {
+							pl[keys.hidden] = true;
+							pl['collapse']  = !true;
+							forIn(pl)
+						}    	
+					})
+
+				}
+            }
+			var i = this_proxyList.length;
+            this.proxyList = []; // 리셋 프록시
+            while (i--) {
+				if (this_proxyList[i]) {
+					if (!this_proxyList[i][keys.hidden]) {
+						this.proxyList.push(this_proxyList[i]);
+					}
+				}
             }
 
             return true;
@@ -33040,15 +33212,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
 
     var resize = function resize() {
-
-        var grouping_len = 0;
-        if (this.bodyGrouping && this.bodyGrouping.columns){
-            grouping_len = this.bodyGrouping.columns.length
-        }
-
         var _vertical_scroller_height = this.$["scroller"]["vertical"].height(),
             _horizontal_scroller_width = this.$["scroller"]["horizontal"].width(),
-            _panel_height = nvl(grouping_len,0) > 0 ? this.$["panel"]["body"].height()-( (nvl(this.$target.find('[data-ax5grid-grouping-tr="true"]').length,0) / nvl(grouping_len,1)) ) : this.$["panel"]["body"].height(),
+            _panel_height = this.$["panel"]["body"].height()-( (nvl(this.$target.find('[data-ax5grid-grouping-tr="true"]').length,0) / 3) * 20),
             _panel_width = this.$["panel"]["body"].width(),
             _content_height = this.xvar.scrollContentHeight,
             _content_width = this.xvar.scrollContentWidth,

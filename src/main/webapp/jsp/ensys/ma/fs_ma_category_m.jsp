@@ -43,6 +43,14 @@
             //상위분류코드
             $("#S_PARENTBRCODE").ax5select({ options: DATA_PARENTBRCODE });
 
+          	//노출여부
+            $("#SEE_YN").ax5select({ options: DATA_YN });
+
+          	//파일여부
+            $("#FILE_YN").ax5select({ options: DATA_YN });
+            
+          	//분류유형
+            $("#CG_SP").ax5select({ options: DATA_BRTYPE });
             //-----------------------------상단조회조건 종료 ------------------------------------
 
 
@@ -57,11 +65,9 @@
                     };
                     var list = $.DATA_SEARCH('Categorym','categorymSearchMain',param).list;
                     fnObj.gridView01.target.setData(list);
-                    if(list.length < afterIndex ){
-                        afterIndex = 0
-                    }
-                    caller.gridView01.target.select(afterIndex);
-                    caller.gridView01.target.focus(afterIndex);
+                   
+                    caller.gridView01.target.select(0);
+                    caller.gridView01.target.focus(0);
                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK,caller);
                     selectRow2 = 0;
 
@@ -69,7 +75,7 @@
                 },
                 //저장버튼
                 PAGE_SAVE: function (caller, act, data) {
-                    var grid = fnObj.gridView01.target.list;
+                    var grid = fnObj.gridView01.getData("modified");
 
                     for (var i = 0; i < grid.length; i++) {
 
@@ -77,7 +83,10 @@
                             qray.alert("분류코드는 필수입니다.");
                             return false;
                         }
-
+                        if (nvl(grid[i].CG_SP) == '') {
+                            qray.alert("분류유형은 필수입니다.");
+                            return false;
+                        }
                         if (nvl(grid[i].CG_NM) == '') {
                             qray.alert("분류명은 필수입니다.");
                             return false;
@@ -145,31 +154,53 @@
                 ITEM_CLICK: function (caller, act, data) {
                     //그리드,우측컨트롤 동기화(setFormData) 컨트롤ID, 그리드컬럼명일치시킬것
                     //var selected = caller.gridView01.getData('selected')[0];
-                    /*
-                    if(nvl($('#CONTRACT_NO').val()) == ''){
-                        Disabled()
+                	var selected = nvl(caller.gridView01.getData('selected')[0], {});
+                    $('.QRAY_FORM').setFormData(selected);
+
+                    if (nvl(selected.__created__) == ''){
+						$("#CG_CD").attr('readonly', 'true');
                     }else{
-                        Activation()
+                    	$("#CG_CD")[0].removeAttribute('readonly');
                     }
-                    */
-                    return false;
+
+                    if (selected.CG_CD == SCRIPT_SESSION.cdCompany){
+                    	$("#CG_NM").attr('readonly', 'true');
+                    	$("#SEE_YN").ax5select("disable");
+                    	$("#FILE_YN").ax5select("disable");
+                    	$("#CG_SP").ax5select("disable");
+                    }else{
+                    	$("#CG_NM")[0].removeAttribute('readonly');
+                    	$("#SEE_YN").ax5select("enable");
+                    	$("#FILE_YN").ax5select("enable");
+                    	$("#CG_SP").ax5select("enable");
+                    }
                 },
                 //상단추가버튼
                 ITEM_ADD1: function (caller, act, data) {
-                    caller.gridView01.addRow();
-                    var lastIdx = nvl(caller.gridView01.target.list.length, caller.gridView01.lastRow());
-                    caller.gridView01.target.select(lastIdx - 1);
-                    caller.gridView01.target.focus(lastIdx - 1);
-                    afterIndex  = lastIdx - 1;
-                    caller.gridView01.target.setValue(lastIdx - 1, "FILE_YN", "Y");
-                    caller.gridView01.target.setValue(lastIdx - 1, "SEE_YN", "Y");
-
+                    var selected = fnObj.gridView01.getData('selected')[0];
+                    if (nvl(selected) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
+                    
+                    
+                    fnObj.gridView01.target.addRow(
+   						{
+   				            __created__: true , 
+   				            LV : Number(selected.LV) + 1,
+   				            PARENT_CG_CD :selected.CG_CD,
+   				            FILE_YN : 'N',
+   				         	SEE_YN : 'Y',
+   				            CG_CD     :' ',
+   				            __depth__ :  Number(selected.__depth__) + 1
+   					    }
+   				    );
+   				    
+   	                fnObj.gridView01.target.repaint();
                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
                 },
                 ITEM_DEL1: function (caller, act, data) {
-
                     fnObj.gridView01.delRow("selected");
-
                 }
             });
             // fnObj 기본 함수 스타트와 리사이즈
@@ -178,24 +209,6 @@
                 this.searchView.initView();
                 this.gridView01.initView();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            };
-
-            fnObj.beforeClose = {
-                initView: function () {
-
-                    var gridView01 = [].concat(fnObj.gridView01.getData("modified"));
-                    gridView01 = gridView01.concat(fnObj.gridView01.getData("deleted"));
-
-                },
-                ok: function () {   //  저장하시겠습니까? yes
-                    var result = ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    return result;
-                }
-            };
-
-
-            fnObj.pageResize = function () {
-
             };
 
             fnObj.pageButtonView = axboot.viewExtend({
@@ -270,126 +283,59 @@
                 },
                 initView: function () {
                     var _this = this;
-
                     this.target = axboot.gridBuilder({
-                        showRowSelector: true,
+                    	showLineNumber: false,
+                        showRowSelector: false,
+                        header: {align:'center'},
+                        frozenColumnIndex: 0,
+                        frozenRowIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
-                        // parentFlag:true,
-                        // parentGrid: $(fnObj.gridView02),
-                        // childrenGrid: [$(fnObj.gridView02),$(fnObj.gridView03)],
-                        showRowSelector: true,
                         columns: [
                             {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "left" , editor: {type: "text"},hidden:true}
-                            ,{key: "CG_CD", label: "분류코드", width: 150   , align: "center" ,
-                                editor: {type: "text"
-                                    , disabled: function () {
-                                        var IS_READ = fnObj.gridView01.target.getList()[this.dindex].IS_READ;
-                                        if (nvl(IS_READ) == 'Y') {
-                                            return true;
-                                        } else {
-                                            return false;
-                                        }
-                                    }
-                                }
-                            }
-                            ,{key: "CG_NM", label: "분류명", width: 150   , align: "center" , editor: {type: "text"}}
-                            ,{key: "DEPTH_TEXT", label: "분류명", width: 150, align: "left", editor: false}
-                            ,{key: "PARENT_CG_CD", label: "상위분류코드", width: 150   , align: "center" ,
-                                editor: {type: "text"
-                                    , disabled: function () {
-                                        var IS_READ = fnObj.gridView01.target.getList()[this.dindex].IS_READ;
-                                        if (nvl(IS_READ) == 'Y') {
-                                            return true;
-                                        } else {
-                                            return false;
-                                        }
-                                    }
-                                }
-                            }
-                            /*
-                            ,{key: "PARENT_CG_CD", label: "상위분류코드", width: 150   , align: "center" ,
-                                formatter: function () {
-                                    return $.changeTextValue(DATA_BRCODE, this.value)
-                                }
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: DATA_BRCODE
-                                    }, disabled: function () {
-                                        return true;
-
-                                    }
-                                }
-                            }
-                            */
-                            ,{key: "SORT", label: "정렬", width: 150, align: "center", editor: {type: "number"}}
-                            ,{key: "LV", label: "레벨", width: 150, align: "center", editor: false}
-                            ,{key: "LAST_YN", label: "최하위 여부", width: 150, align: "center",
+                            ,{key: "CG_CD", label: "분류코드", width: 200   , align: "left" , enableFilter: true, treeControl: true}
+                            ,{key: "CG_NM", label: "분류명", width: 300   , align: "left" , editor: false}
+                            ,{key: "DEPTH_TEXT", label: "분류명", width: 150, align: "left", editor: false, hidden:true}
+                            ,{key: "PARENT_CG_CD", label: "상위분류코드", width: 150   , align: "center" , editor: false, hidden:true}
+                            ,{key: "SORT", label: "정렬", width: 150, align: "center", editor: false, hidden:true}
+                            ,{key: "LV", label: "레벨", width: 150, align: "center", editor: false, hidden:true}
+                            ,{key: "LAST_YN", label: "최하위 여부", width: 150, align: "center", hidden:true,
                                 formatter: function () {
                                     return $.changeTextValue(DATA_YN, this.value)
                                 }
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: DATA_YN
-                                    }, disabled: function () {
-                                        return true;
-                                    }
-                                }
                             }
-                            ,{key: "CG_SP", label: "분류유형", width: 150, align: "center",
+                            ,{key: "CG_SP", label: "분류유형", width: 150, align: "center", hidden:false,
                                 formatter: function () {
                                     return $.changeTextValue(DATA_BRTYPE, this.value)
                                 }
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: DATA_BRTYPE
-                                    }, disabled: function () {
-                                        //return true;
-                                    }
-                                }
                             }
-                            ,{key: "FILE_YN", label: "파일여부", width: 150, align: "center",
+                            ,{key: "FILE_YN", label: "파일여부", width: 150, align: "center", hidden:false,
                                 formatter: function () {
                                     return $.changeTextValue(DATA_YN, this.value)
                                 }
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: DATA_YN
-                                    }, disabled: function () {
-                                        //return true;
-                                    }
-                                }
                             }
-                            ,{key: "SEE_YN", label: "노출여부", width: 150, align: "center",
+                            ,{key: "SEE_YN", label: "노출여부", width: 150, align: "center", hidden:false,
                                 formatter: function () {
                                     return $.changeTextValue(DATA_YN, this.value)
                                 }
-                                , editor: {
-                                    type: "select", config: {
-                                        columnKeys: {
-                                            optionValue: "value", optionText: "text"
-                                        },
-                                        options: DATA_YN
-                                    }, disabled: function () {
-                                        //return true;
-                                    }
-                                }
                             }
-                            ,{key: "IS_READ", label: "셀렉트해온데이터인지여부", width: 150, align: "center", editor: false,hidden: true}
-
                         ],
-
+                        tree: {
+                            use: true,
+                            indentWidth: 10,
+                            arrowWidth: 15,
+                            iconWidth: 18,
+                            icons: {
+                                openedArrow: '<i class="cqc-chevron-down" aria-hidden="true"></i>',
+                                collapsedArrow: '<i class="cqc-chevron-right" aria-hidden="true"></i>',
+                                groupIcon: '<i style="font-size: 15px;padding-left: 2px;"" class="cqc-folder" aria-hidden="true"></i>',
+                                collapsedGroupIcon: '<i style="font-size: 15px;padding-left: 2px;" class="cqc-folder" aria-hidden="true"></i>',
+                                itemIcon: '<i style="font-size:18px;" class="cqc-file" aria-hidden="true"></i>'
+                            },
+                            columnKeys: {
+                                parentKey: "PARENT_CG_CD",
+                                selfKey: "CG_CD"
+                            }
+                        },
                         body: {
                             onDataChanged: function () {
 
@@ -399,26 +345,6 @@
                                 var index = this.dindex;
                                 if(afterIndex == index){return false;}
 
-                                /*
-                                var data = [].concat(fnObj.gridView01.getData("modified"));
-
-                                if(data.length > 0){
-                                    qray.confirm({
-                                        msg: "작업중인 데이터를 먼저 저장해주십시오."
-                                        ,btns: {
-                                            cancel: {
-                                                label:'확인', onClick: function(key){
-                                                    qray.close();
-                                                }
-                                            }
-                                        }
-                                    })
-                                }else{
-                                    afterIndex = index;
-                                    this.self.select(this.dindex);
-                                    ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
-                                }
-                                */
                                 afterIndex = index;
                                 this.self.select(this.dindex);
                                 ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
@@ -429,7 +355,7 @@
                             _this.setPageData({pageNumber: pageNumber});
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                         },
-                        page: {
+                        page: { //그리드아래 목록개수보여주는부분 숨김
                             display: false,
                             statusDisplay: false
                         }
@@ -604,6 +530,18 @@
             $(document).ready(function () {
                 changesize();
 
+                $(".QRAY_FORM").find("[data-ax5select]").change(function () {
+                    console.log(this.id, " : ", this.value);
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__origin_index__, this.id, $('select[name="' + this.id + '"]').val())
+                });
+
+                $(".QRAY_FORM").find("input").change(function () {
+                    console.log(this.id, " : ", this.value);
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__origin_index__, this.id, $('#' + this.id).val())
+                });
+
             });
             $(window).resize(function () {
                 changesize();
@@ -693,7 +631,7 @@
         </div>
         <%-- 상단조회조건 --%>
         <div role="page-header" id="pageheader">
-            <ax:form name="searchView0">
+            <%-- <ax:form name="searchView0">
                 <ax:tbl clazz="ax-search-tb1" minWidth="500px">
                     <ax:tr>
                         <ax:td label='분류코드' width="350px">
@@ -708,42 +646,91 @@
 
                     </ax:tr>
                 </ax:tbl>
-            </ax:form>
+            </ax:form> --%>
         </div>
 
-        <%-- 그리드 영역 시작 --%>
-        <div style="width:100%;overflow:hidden;">
-            <div style="width:100%;overflow:hidden;">
+       <%-- 그리드 영역 시작 --%>
+        <div style="width:100%;overflow:hidden">
+            <div style="width:59%;float:left;overflow:hidden;">
                 <div class="ax-button-group" data-fit-height-aside="grid-view-01" id="left_title" name="왼쪽그리드타이틀">
                     <div class="left">
                         <h2>
+                            <i class="icon_list"></i> 카테고리 리스트
                         </h2>
-                            <%--
-                            <h2>
-                                <i class="icon_list"></i> 거래처리스트
-                            </h2>
-                            --%>
                     </div>
                     <div class="right">
-                        <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
-                                class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
-                        <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">
-                            <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
-                    </div>
+			                <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
+			                        class="icon_add"></i>
+			                    <ax:lang id="ax.admin.add"/></button>
+			                <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" id="deleteBtn" style="width:80px;">
+			                    <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
+			            </div>
                 </div>
-
-
-
                 <div data-ax5grid="grid-view-01"
-                     data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
+                     data-ax5grid-config="{ }"
                      id = "left_grid"
                      name="왼쪽그리드"
                 ></div>
-
             </div>
-
+            <div style="width:40%;float:right;overflow:hidden;">
+                <div class="ax-button-group" id="right_title" name="오른쪽부분타이틀">
+                    <div class="left">
+                        <h2>
+                            <i class="icon_list"></i> 상세정보
+                        </h2>
+                    </div>
+                </div>
+                <div id="right_content" style="overflow-y:auto;" name="오른쪽부분내용">
+                    <div class="QRAY_FORM">
+                    <ax:form name="binder-form">
+                           
+                        <ax:tbl clazz="ax-search-tb2" minWidth="600px">
+                            <ax:tr>
+                                <ax:td label='분류코드' width="300px">
+                                	<input type="text" class="form-control" data-ax-path="CG_CD" name="CG_CD" 
+                                    id="CG_CD" form-bind-text='CG_CD' form-bind-type='text'/>
+                                </ax:td>
+                                <ax:td label='분류명' width="300px">
+                                    <input type="text" class="form-control" data-ax-path="CG_NM" name="CG_NM"
+                                    id="CG_NM" form-bind-text='"CG_NM"' form-bind-type='text'/>
+                                </ax:td>
+                            </ax:tr>
+                            <ax:tr>
+                                <ax:td label='상위분류코드' width="300px">
+                                	<input type="text" class="form-control" data-ax-path="PARENT_CG_CD" name="PARENT_CG_CD"
+                                    id="PARENT_CG_CD" form-bind-text='"PARENT_CG_CD"' form-bind-type='text' readonly/>
+                                </ax:td>
+                                <ax:td label='분류유형' width="300px">
+	                                <div id="CG_SP" name="CG_SP" data-ax5select="CG_SP"
+	                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                </ax:td>
+                            </ax:tr>
+                            <ax:tr>
+                                <ax:td label='파일여부' width="300px">
+	                                <div id="FILE_YN" name="FILE_YN" data-ax5select="FILE_YN"
+	                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                </ax:td>
+                                <ax:td label='노출여부' width="300px">
+                                   <div id="SEE_YN" name="SEE_YN" data-ax5select="SEE_YN"
+	                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                </ax:td>
+                            </ax:tr>
+                            <ax:tr>
+                                <ax:td label='최하위여부' width="300px">
+                                    
+                                    <input type="text" class="form-control" data-ax-path="LAST_YN" name="LAST_YN"
+                                    id="LAST_YN" form-bind-text='LAST_YN' form-bind-type='text' readonly/>
+                                </ax:td>
+                                <ax:td label='레벨' width="300px"> 
+                                    <input type="text" class="form-control" data-ax-path="LV" name="LV"
+                                    id="LV" form-bind-text='LV' form-bind-type='text' readonly/>
+                                </ax:td>
+                            </ax:tr>
+                        </ax:tbl>
+                    </ax:form>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
     </jsp:body>
 </ax:layout>
