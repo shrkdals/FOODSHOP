@@ -1,4 +1,4 @@
-﻿package com.ensys.sample.utils;
+package com.ensys.sample.utils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -6,42 +6,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.Socket;
-import java.util.HashMap;
 
 public class SMSComponent {
-	public static void main(String[] args) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		String[] strDestList = {"01041003961", "01041003961"};	//	수신자번호리스트
-		String strCallBack = "15220896";		//	보낸번호
-		String strSubject = "";		//	제목
-		String strDate = "";			//	
-		String strData = "테스트";			//	내용
-		int nCount = 2;					//	
-		String strMsg = "";
-		SMSComponent smsc = null;
-		try {
-			smsc = new SMSComponent();
-
-			try {
-				smsc.connect();
-			} catch (Exception e) {
-				strMsg = "SMS Server 연결에 실패했습니다.";
-			} // catch
-
-			try {
-				strMsg = smsc.SendMsg(strDestList, strCallBack, strSubject, strDate, strData, nCount);
-				strMsg = "문자 발송을 완료했습니다.";
-				strMsg = strMsg.replaceAll("\n", "<br>");
-			} catch (IOException e) {
-				strMsg = "발송할 수 없습니다.";
-			}
-			smsc.disconnect();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println(strMsg);
-	}
 	// 일반적으로 사용하게될 변수입니다.
 	Socket socket;
 	DataOutputStream out;

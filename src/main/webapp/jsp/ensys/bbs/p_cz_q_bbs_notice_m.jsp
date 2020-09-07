@@ -92,10 +92,13 @@
                         callback: function (res) {
                             caller.gridView01.clear();
                             caller.gridView02.clear();
-                            if (res.list.length > 0) {
-                                caller.gridView01.setData(res);
-                                caller.gridView01.target.select(0);
+                            fnObj.gridView01.target.setData(res.list);
+                            
+                            if (res.list.length <= afterIndex) {
+                            	afterIndex = 0
                             }
+                            fnObj.gridView01.target.select(afterIndex);
+                            
                             ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
                         }
                     });

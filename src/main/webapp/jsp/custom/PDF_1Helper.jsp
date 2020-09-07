@@ -282,24 +282,28 @@
 	                var myOffscreenEl = document.body;
 	                
 	                html2canvas(myOffscreenEl,{}).then(function(canvas) {
-	
-	                    var imgData = canvas.toDataURL('image/png');
-	
-	                    var imgWidth = 297;
-	                    var pageHeight = imgWidth / 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
-	                    var imgHeight = canvas.height * imgWidth / canvas.width;
-	                    var heightLeft = imgHeight;
-	                    var position = 0;
-	
-	                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-	                    heightLeft -= pageHeight;
-	
-	                    while (heightLeft >= 0) {
-	                        position = heightLeft - imgHeight;
-	                        doc.addPage();
-	                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-	                        heightLeft -= pageHeight;
-	                    }
+	                	var imgData = canvas.toDataURL('image/png');
+	                	
+	                	for (var i = 0 ; i < 2 ; i ++){
+							if (i == 1){
+								doc.addPage();
+							}
+		                    var imgWidth = 297;
+		                    var pageHeight = imgWidth / 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
+		                    var imgHeight = canvas.height * imgWidth / canvas.width;
+		                    var heightLeft = imgHeight;
+		                    var position = 0;
+		
+		                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+		                    heightLeft -= pageHeight;
+		
+		                    while (heightLeft >= 0) {
+		                        position = heightLeft - imgHeight;
+		                        doc.addPage();
+		                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+		                        heightLeft -= pageHeight;
+		                    }
+		               	}
 	                    $('.button-warp').css('display','')
 	                })
                 }, 1000);

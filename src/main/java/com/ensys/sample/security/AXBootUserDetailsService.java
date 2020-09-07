@@ -57,19 +57,19 @@ public class AXBootUserDetailsService implements UserDetailsService {
         sessionUser.setCdGroup(user.getCdGroup());
         sessionUser.setIdUser(user.getId());
         sessionUser.setNmUser(user.getNmUser());
-        sessionUser.setNmEmp(user.getNmEmp());
+        sessionUser.setEmpNm(user.getNmEmp());
         sessionUser.setPassWord(user.getPassWord());
-        sessionUser.setNoEmp(user.getNoEmp());
-        sessionUser.setCdDept(user.getCdDept());
-        sessionUser.setNmDept(user.getNmDept());
+        sessionUser.setEmpNo(user.getNoEmp());
+        sessionUser.setDeptCd(user.getCdDept());
+        sessionUser.setDeptNm(user.getNmDept());
         sessionUser.setCdBizarea(user.getCdBizarea());
         sessionUser.setNmBizarea(user.getNmBIZRAREA());
         sessionUser.setCdPc(user.getCdPc());
         sessionUser.setNmPc(user.getNmPc());
-        sessionUser.setCdCc(user.getCdCc());
-        sessionUser.setNmCc(user.getNmCc());
-        sessionUser.setCdDutyRank(user.getCdDutyRank());
-        sessionUser.setNmDutyRank(user.getNmDutyRank());
+        sessionUser.setCcCd(user.getCdCc());
+        sessionUser.setCcNm(user.getNmCc());
+        sessionUser.setDutyRankCd(user.getCdDutyRank());
+        sessionUser.setDutyRankNm(user.getNmDutyRank());
 
         sessionUser.addAuthority("ASP_ACCESS");
         sessionUser.addAuthority("SYSTEM_MANAGER");

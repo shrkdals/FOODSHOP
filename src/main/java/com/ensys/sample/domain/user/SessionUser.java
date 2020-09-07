@@ -21,29 +21,29 @@ public class SessionUser implements UserDetails {
 
     private String passWord;
 
-    private String nmEmp;
+    private String empNm;
 
-    private String noEmp;
+    private String empNo;
 
-    private String cdDept;
+    private String deptCd;
 
-    private String nmDept;
+    private String deptNm;
 
     private String cdBizarea;
 
     private String nmBizarea;
 
-    private String cdCc;
+    private String ccCd;
 
-    private String nmCc;
+    private String ccNm;
 
     private String cdPc;
 
     private String nmPc;
 
-    private String cdDutyRank;
+    private String DutyRankCd;
 
-    private String nmDutyRank;
+    private String DutyRankNm;
 //    private String timeZone;
 //
 //    private String menuGrpCd;
