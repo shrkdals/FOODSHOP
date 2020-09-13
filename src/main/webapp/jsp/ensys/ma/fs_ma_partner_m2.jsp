@@ -34,6 +34,7 @@
             var USER_STAT     = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00006');
             var dl_ADJUST_STD = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00033'); // 정산기준
             var dl_ADJUST_DAY = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00034'); // 정산요일
+            var DATA_BRTYPE   = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00015'); // 카테고리분류유형
 
             var YN_OP = [{value:'' , text:''},{value:'Y' , text:'Y'},{value:'N' , text:'N'}];
 
@@ -144,10 +145,32 @@
                         }
                     }
 
+                    var itemGrid4 = fnObj.gridView04.getData("modified")
+                    for (var i2 = 0 ; i2 < fnObj.gridView04.getData().length ; i2++){
+	                    for(var i = 0 ; i <itemGrid4.length; i++){
+	                        if(nvl(itemGrid4[i].CG_CD) == ''){
+	                            qray.alert('분류코드는 필수입니다.')
+	                            return
+	                        }
+	                        if(nvl(itemGrid4[i].CG_NM) == ''){
+	                            qray.alert('분류명는 필수입니다.')
+	                            return
+	                        }
+	                        if (fnObj.gridView04.getData()[i2].__index != itemGrid4[i].__index){
+								if (fnObj.gridView04.getData()[i2].CG_CD == itemGrid4[i].CG_CD){
+									qray.alert('카테고리관리에서 분류코드가 중복됩니다.');
+									return;
+								}
+		                    }
+	                    }
+                    }
+
                     itemH = itemH.concat(caller.gridView02.getData("modified"));
                     itemH = itemH.concat(caller.gridView02.getData("deleted"));
                     itemH = itemH.concat(caller.gridView03.getData("modified"));
                     itemH = itemH.concat(caller.gridView03.getData("deleted"));
+                    itemH = itemH.concat(caller.gridView04.getData("modified"));
+                    itemH = itemH.concat(caller.gridView04.getData("deleted"));
                     if(itemH.length == 0){
                         qray.alert('변경된 정보가 없습니다.');
                         return;
@@ -160,6 +183,8 @@
                         ,insert2 : caller.gridView02.getData("modified")
                         ,delete3 : caller.gridView03.getData("deleted")
                         ,insert3 : caller.gridView03.getData("modified")
+                        ,delete4 : caller.gridView04.getData("deleted")
+                        ,insert4 : caller.gridView04.getData("modified")
                     };
 
                     qray.confirm({
@@ -195,6 +220,8 @@
                     fnObj.gridView02.target.setData(list);
                     var list2 = $.DATA_SEARCH('mapartnerm','SAVE_USERMAPPING_S',nvl(selected,{}));
                     fnObj.gridView03.target.setData(list2);
+                    var list3 = $.DATA_SEARCH('mapartnerm','select4',nvl(selected,{}));
+                    fnObj.gridView04.target.setData(list3);
                     if(nvl($('#CONTRACT_NO').val()) == ''){
                         Disabled()
                     }else{
@@ -250,6 +277,22 @@
 
                 }
                 ,
+                ITEM_ADD4: function (caller, act, data) {
+                    if (caller.gridView01.getData('selected').length == 0) {
+                        qray.alert("선택된 거래처가 없습니다.");
+                        return;
+                    }
+                    caller.gridView04.addRow();
+                    var itemH = caller.gridView01.getData('selected')[0];
+                    var lastIdx = nvl(caller.gridView04.target.list.length, caller.gridView04.lastRow());
+                    caller.gridView04.target.select(lastIdx - 1);
+                    caller.gridView04.target.focus(lastIdx - 1);
+                    caller.gridView04.target.setValue(lastIdx - 1, "PT_CD", itemH.PT_CD);
+                    caller.gridView04.target.setValue(lastIdx - 1, "PT_SP", itemH.PT_CD);
+                    caller.gridView04.target.setValue(lastIdx - 1, "PT_CG_CD", GET_NO('MA', '10'));
+
+                }
+                ,
                 ITEM_DEL1: function (caller, act, data) {
                     fnObj.gridView01.delRow("selected");
 
@@ -262,6 +305,10 @@
                 ITEM_DEL3: function (caller, act, data) {
                     caller.gridView03.delRow("selected");
                 }
+                ,
+                ITEM_DEL4: function (caller, act, data) {
+                    caller.gridView04.delRow("selected");
+                }
             });
             // fnObj 기본 함수 스타트와 리사이즈
             fnObj.pageStart = function () {
@@ -270,6 +317,7 @@
                 this.gridView01.initView();
                 this.gridView02.initView();
                 this.gridView03.initView();
+                this.gridView04.initView();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
 
@@ -383,6 +431,8 @@
                                 }
                             }
                             ,{key: "OWNER_NM", label: "대표자명", width: 150, align: "center", editor: false}
+                            ,{key: "FILE_NAME", label: "협력사이미지", width: 150, align: "center", editor: false ,hidden:true}
+                            ,{key: "FILE", label: "협력사이미지파일", width: 150 , align: "center" , editor: false, sortable: true, hidden:true}
                             ,{key: "SIGN_NM", label: "간판명", width: 150, align: "center", editor: false ,hidden:true}
                             ,{key: "PT_TYPE", label: "거래처업종", width: 150, align: "center", editor: false ,hidden:true}
                             ,{key: "PT_COND", label: "거래처업태", width: 150, align: "center", editor: false ,hidden:true}
@@ -863,6 +913,127 @@
                 }
             });
 
+            /**
+             * gridView04
+             */
+            fnObj.gridView04 = axboot.viewExtend(axboot.gridView, {
+                page: {
+                    pageNumber: 0,
+                    pageSize: 10
+                },
+                initView: function () {
+                    var _this = this;
+
+                    this.target = axboot.gridBuilder({
+                        showRowSelector: true,
+                        frozenColumnIndex: 0,
+                        target: $('[data-ax5grid="grid-view-04"]'),
+                        columns: [
+                             {key: "COMPANY_CD", label: "", width: 150, align: "left", editor: {type: "text"} ,hidden:true}
+                            ,{key: "PT_CG_CD", label: "채번", width: 150, align: "center", hidden:true}
+                            ,{key: "PT_CD", label: "거래처코드", width: 150, align: "center", hidden:true}
+                            ,{key: "PT_SP", label: "거래처유형", width: 150, align: "center", hidden:true}
+                            ,{key: "CG_CD", label: "분류코드", width: 120   , align: "left" ,
+								picker: {
+									top: _pop_top,
+                                    width: 1000,
+                                    height: _pop_height,
+                                    url: "category",
+                                    action: ["commonHelp", "HELP_CATEGORY"],
+                                    param: function () {
+                                        var selected = fnObj.gridView01.getData('selected')[0];
+                                        if (nvl(selected) == '') return;
+
+                                        return {
+											PT_SP : selected.PT_SP
+                                        }
+                                    },
+                                    callback: function (e) {
+                                        var index = fnObj.gridView04.getData('selected')[0].__index;
+                                        fnObj.gridView04.target.setValue(index, "CG_CD", e[0].CG_CD);
+                                        fnObj.gridView04.target.setValue(index, "CG_NM", e[0].CG_NM);
+                                        fnObj.gridView04.target.setValue(index, "CG_SP", e[0].CG_SP);
+                                        fnObj.gridView04.target.setValue(index, "COMMITION", e[0].COMMITION);
+                                    },
+                                    disabled: function () {
+                                        if(!nvl(this.item.__created__,false)){
+                                            return true;
+                                        }
+                                    }
+								},
+								styleClass: function () {
+                                    return "red";
+                                }
+                             }
+                            ,{key: "CG_NM", label: "분류명", width: 150   , align: "left" , editor: false}
+                            ,{key: "CG_SP", label: "분류유형", width: 120, align: "center", hidden:false,
+                                formatter: function () {
+                                    return $.changeTextValue(DATA_BRTYPE, this.value)
+                                }
+                            }
+                            ,{key: "COMMITION", label: "카테고리수수료", width: 120   , align: "right", editor: false}
+                            
+                        ],
+                        body: {
+                            onClick: function () {
+                                var data = this.item;           //  선택한 ROW의 ITEM들
+                                var column = this.column.key;   //  컬럼 KEY명
+                                var idx = this.dindex;          //  선택한 ROW의 INDEX
+
+                                selectRow2 = idx;
+                                this.self.select(selectRow2);
+                            }
+                        },
+                        onPageChange: function (pageNumber) {
+                            _this.setPageData({pageNumber: pageNumber});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        },
+                        page: {
+                            display: false,
+                            statusDisplay: false
+                        }
+                    });
+
+                    axboot.buttonClick(this, "data-grid-view-04-btn", {
+                        "add": function () {
+                            ACTIONS.dispatch(ACTIONS.ITEM_ADD4);
+                        },
+                        "delete": function () {
+
+                            var beforeIdx = this.target.selectedDataIndexs[0];
+                            var dataLen = this.target.getList().length;
+
+                            if ((beforeIdx + 1) == dataLen) {
+                                beforeIdx = beforeIdx - 1;
+                            }
+
+                            var item = fnObj.gridView03.getData('selected')[0]
+
+                            ACTIONS.dispatch(ACTIONS.ITEM_DEL4);
+                            if (beforeIdx > 0 || beforeIdx == 0) {
+                                this.target.select(beforeIdx);
+                                selectRow2 = beforeIdx;
+                            }
+
+                        }
+
+                    });
+                },
+                getData: function (_type) {
+                    var list = [];
+                    var _list = this.target.getList(_type);
+                    list = _list;
+
+                    return list;
+                },
+                addRow: function () {
+                    this.target.addRow({__created__: true}, "last");
+                },
+                lastRow: function () {
+                    return ($("div [data-ax5grid='grid-view-04']").find("div [data-ax5grid-panel='body'] table tr").length)
+                }
+            });
+
             
             $(document).ready(function(){
 
@@ -946,6 +1117,8 @@
             //크기자동조정
             var _pop_top = 0;
             var _pop_height = 0;
+            var _pop_height800 = 0;
+            var _pop_top800 = 0;
             $(document).ready(function () {
                 changesize();
 
@@ -1005,9 +1178,13 @@
                 if (totheight > 700) {
                     _pop_height = 600;
                     _pop_top = parseInt((totheight - _pop_height) / 2);
+                    _pop_height800 = 800;
+                    _pop_top800 = parseInt((totheight - 800) / 2);
                 } else {
                     _pop_height = totheight / 10 * 8;
                     _pop_top = parseInt((totheight - _pop_height) / 2);
+                    _pop_height800 = totheight / 10 * 9;
+                    _pop_top800 = parseInt((totheight - _pop_height800) / 2);
                 }
 
                 //데이터가 들어갈 실제높이
@@ -1021,6 +1198,7 @@
                 $("#right_content").css("height", (datarealheight2 / 100 * 99));
                 $("#tab1_grid").css("height", $("#tab_area").height() - $("#tab1_button").height() - 80 );
                 $("#tab2_grid").css("height", $("#tab_area").height() - $("#tab2_button").height() - 80 );
+                $("#tab3_grid").css("height", $("#tab_area").height() - $("#tab3_button").height() - 80 );
                 $("#right_grid").css("height", (tempgridheight / 100 * 99) - $('#binder-form').height() - $('.ax-button-group').height());
                 /*
                 alert($("#ax-base-root").height()); // 컨텐츠영역높이
@@ -1028,7 +1206,61 @@
                 ax-base-content //검색조건높이(class)
                  */
             }
+            var userCallBack;
+            $(".openFile").click(function () {
+                var selected = fnObj.gridView01.getData('selected')[0];
+                var target = $(this).prevAll('[data-file-input]');
 
+                userCallBack = function (e) {
+                    e['TB_ID'] = target.attr('TB_ID');
+                    e['CG_CD'] = target.attr('CG_CD');
+                    e['TB_KEY'] = selected.PT_CD;
+
+                    target.val(e.ORGN_FILE_NAME);
+                    fnObj.gridView01.target.setValue(selected.__index, 'FILE_NAME', e.ORGN_FILE_NAME);
+                    fnObj.gridView01.target.list[selected.__index]['FILE'] = e;
+                };
+
+
+                var data = {
+                    TB_ID: target.attr('TB_ID'),
+                    CG_CD: target.attr('CG_CD'),
+                    TB_KEY: selected.PT_CD,
+                    FILE_PATH: target.attr('FILE_PATH'),
+                    SIZE_LIMIT: {
+                        HEIGHT: 1500,
+                        WIDTH : 1500
+                    },
+                    CALL_BACK: selected['FILE']
+                }
+                
+                modal.open({
+                    width: 1100,
+                    height: _pop_height800,
+                    top: _pop_top800,
+                    iframe: {
+                        method: "get",
+                        url: "../../common/FileCanvas.jsp",
+                        param: "callBack=userCallBack"
+                    },
+                    sendData: function () {
+                        return {
+                            initData: data
+                        }
+                    },
+                    onStateChanged: function () {
+                        if (this.state === "open") {
+                            mask.open({
+                                content: '<h1><i class="fa fa-spinner fa-spin"></i> Loading</h1>'
+                            });
+                        } else if (this.state === "close") {
+                            mask.close();
+                        }
+                    }
+                }, function () {
+
+                });
+            })
         </script>
     </jsp:attribute>
     <jsp:body>
@@ -1171,6 +1403,26 @@
                         ></div>
                     </div>
 
+					<div data-tab-panel="{label: '카테고리관리', active: 'true'}" id="tabGrid3">
+                        <div class="ax-button-group" data-fit-height-aside="grid-view-04" id="tab3_button">
+                            <div class="left">
+
+                            </div>
+                            <div class="right">
+                                <button type="button" class="btn btn-small" data-grid-view-04-btn="add" style="width:80px;"><i
+                                        class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
+                                <button type="button" class="btn btn-small" data-grid-view-04-btn="delete"
+                                        style="width:80px;">
+                                    <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
+                            </div>
+                        </div>
+                        <div data-ax5grid="grid-view-04"
+                             data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
+                             id="tab3_grid"
+                             name="탭3그리드"
+                        ></div>
+                    </div>
+                    
                 </div>
 
             </div>
@@ -1316,6 +1568,20 @@
 <%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
 <%--                                </ax:td>--%>
 <%--                            </ax:tr>--%>
+							<ax:tr>
+								<ax:td label='협력사이미지' width="300px">
+                                    <div class="input-group" id="filemodal">
+                                        <input type="text" class="form-control" id="FILE_NAME"
+                                               TB_ID="FS_PARTNER_M2"
+                                               CG_CD="PTFC00001"
+                                               FILE_PATH="partner/FC"
+                                               data-file-input readonly="readonly" 
+                                               form-bind-text = 'FILE_NAME' form-bind-type ='text'>
+                                        <span class="input-group-addon openFile" style="cursor: pointer"><i
+                                                class="cqc-magnifier"></i></span>
+                                    </div>
+                                </ax:td>
+                            </ax:tr>
                             <div class="ax-button-group">
                                 <div class="left">
                                     <h2>

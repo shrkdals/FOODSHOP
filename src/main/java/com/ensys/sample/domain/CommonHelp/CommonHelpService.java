@@ -227,4 +227,20 @@ public class CommonHelpService extends BaseService {
     public List<HashMap<String, Object>> HELP_USER2(HashMap<String, Object> param) {
         return mapper.HELP_USER2(param);
     }
+
+    public List<HashMap<String, Object>> COMMON_PRC(HashMap<String, Object> param) {
+        return mapper.COMMON_PRC(param);
+    }
+
+    public List<HashMap<String, Object>> HELP_CATE_COMMITION(HashMap<String, Object> param) {
+        return mapper.HELP_CATE_COMMITION(param);
+    }
+    
+    public List<HashMap<String, Object>> HELP_CATEGORY(HashMap<String, Object> param) {
+        return mapper.HELP_CATEGORY(param);
+    }
+    
+    public List<HashMap<String, Object>> HELP_PARTNER_CATEGORY(HashMap<String, Object> param) {
+        return mapper.HELP_PARTNER_CATEGORY(param);
+    }
 }

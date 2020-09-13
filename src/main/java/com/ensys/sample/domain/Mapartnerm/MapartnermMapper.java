@@ -16,7 +16,11 @@ public interface MapartnermMapper extends MyBatisMapper {
 
     void insert2(HashMap<String, Object> param);
     void delete2(HashMap<String, Object> param);
-
+    
+    List<HashMap<String, Object>> select4(HashMap<String, Object> param);
+    void insert4(HashMap<String, Object> param);
+    void delete4(HashMap<String, Object> param);
+    
     List<HashMap<String, Object>> getPartnerCommitionList(HashMap<String, Object> param);
 
     void SAVE_USERMAPPING_I(HashMap<String, Object> item);

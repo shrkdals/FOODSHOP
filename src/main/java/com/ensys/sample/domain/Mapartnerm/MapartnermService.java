@@ -20,6 +20,9 @@ public class MapartnermService extends BaseService {
 
     @Inject
     private MapartnermMapper mapper;
+    
+    @Inject
+    private fileService fileservice;
 
     public List<HashMap<String, Object>> select(HashMap<String, Object> param) {
         SessionUser user = SessionUtils.getCurrentUser();
@@ -31,6 +34,13 @@ public class MapartnermService extends BaseService {
         param.put("COMPANY_CD",user.getCdCompany());
         return mapper.select2(param);
     }
+    public List<HashMap<String, Object>> select4(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD",user.getCdCompany());
+        return mapper.select4(param);
+    }
+    
+    
 
     //거래처 계약관리
     @Transactional
@@ -116,6 +126,10 @@ public class MapartnermService extends BaseService {
             item.put("USER_ID",user.getIdUser());
             mapper.insert(item);
             mapper.insertCONT(item);
+            if (item.get("FILE") != null){
+                HashMap<String, Object> file = (HashMap<String, Object>) item.get("FILE");
+                fileservice.insertFsFile(file);
+            }
         }
         // #### 거래처 마스터 ####
 
@@ -149,6 +163,19 @@ public class MapartnermService extends BaseService {
 
         }
         // #### 거래처 등록하면에서 거래처사용자 매핑 ####
+        
+        // #### 거래처 등록화면에서 카테고리 ####
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("delete4")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("USER_ID",user.getIdUser());
+            mapper.delete4(item);
+        }
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("insert4")){
+            item.put("COMPANY_CD",user.getCdCompany());
+            item.put("USER_ID",user.getIdUser());
+            mapper.insert4(item);
+        }
+        // #### 거래처 등록화면에서 카테고리 ####
     }
 }
 

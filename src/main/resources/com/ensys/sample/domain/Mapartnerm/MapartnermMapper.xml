@@ -76,6 +76,20 @@
     <select id="MEMBER_JOIN_U" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
         { CALL UP_FS_PARTNER_MEMBER_I(#{COMPANY_CD} ,#{PT_CD} , #{USER_ID}, #{USER_NM}, #{USER_TP}, #{PASS_WORD}, #{TEL} , #{TOK} ,#{PT_SP} ,#{PT_NM} ,#{USER_STAT},#{LOGIN_ID}) }
     </select>
+    
+    
+    <select id="select4" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        {CALL UP_FS_PARTNER_CATEGORY_S(#{COMPANY_CD},#{PT_CD})}
+    </select>
+    
+    <update id="insert4"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_CATEGORY_I( #{COMPANY_CD},#{PT_CG_CD},#{PT_CD},#{CG_CD},#{USER_ID} ) }
+    </update>
+
+    <update id="delete4"  parameterType="java.util.HashMap" statementType="CALLABLE">
+        { CALL UP_FS_PARTNER_CATEGORY_D( #{COMPANY_CD},#{PT_CG_CD}) }
+    </update>
+    
 </mapper>
 
 

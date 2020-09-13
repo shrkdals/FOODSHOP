@@ -165,6 +165,15 @@
                     $('#MAKE_PT_CD').attr('readonly','readonly')
                 }
 
+
+                if(SCRIPT_SESSION.cdGroup == 'WEB08'){
+                    var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'SHOPIN_SEARCH'}).list
+                    if(list.length > 0 ){
+                        $('#MAKE_PT_CD').attr({code : list[0].PT_CD , text :list[0].PT_NM })
+                        $('#MAKE_PT_CD').val(list[0].PT_NM)
+                    }
+                }
+
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 
             };
@@ -385,8 +394,46 @@
                                 },
                                 editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_ITEM_SP}}
                             }
-                            , {key: "DISTRIB_AMT_YN" , label: "물류사지정금액여부"	, width: 120     , align: "center"   , editor: false  ,sortable:true, hidden: false,
-                            	editor: {
+                            , {key: "ITEM_CG_CD" , label: "카테고리코드"	, width: 150     , align: "left"   , editor: false  ,sortable:true, hidden:true}
+                            
+                            , {key: "ITEM_CG_NM" , label: "카테고리"	, width: 130     , align: "center"   , editor: false  ,sortable:true,
+                                picker: function(){
+                                    return {
+                                        top: _pop_top,
+                                        width: 600,
+                                        height: _pop_height,
+                                        url: "partnerCategory",
+                                        action: ["commonHelp", "HELP_PARTNER_CATEGORY"],
+                                        disabled: function(){
+											if (nvl(this.item.MAKE_PT_CD) == ''){
+												qray.alert('제조거래처가 등록되지않았습니다.');
+												return;
+											}else{
+												return false;
+											}
+                                        },
+                                        param: function(){
+											return {
+												PT_CD: this.item.MAKE_PT_CD
+											}
+                                        },
+                                        callback: function (e) {
+                                            var itemH = fnObj.gridView01.getData('selected')[0];
+                                            var index = itemH.__index;
+                                            fnObj.gridView01.target.setValue(index, "ITEM_CG_CD", e[0].CG_CD);
+                                            fnObj.gridView01.target.setValue(index, "ITEM_CG_NM", e[0].CG_NM);
+                                        },
+                                    }
+                                }
+                            }
+                            , {key: "PT_COMMITION" , label: "총판수수료"	, width: 120, align: "center", sortable:true,
+                                editor: {type: "number"} , hidden : SCRIPT_SESSION.cdGroup != 'WEB01' ? true : false
+                            }
+                            , {key: "SALES_COMMITION" , label: "영업사원수수료"	, width: 120, align: "center", sortable:true,
+                                editor: {type: "number"} , hidden : SCRIPT_SESSION.cdGroup != 'WEB01' ? true : false
+                            }
+                            , {key: "DISTRIB_AMT_YN" , label: "물류사지정금액여부"	, width: 120     , align: "center"   , editor: false  ,sortable:true, hidden : SCRIPT_SESSION.cdGroup != 'WEB01' ? true : false
+                            	, editor: {
                                     type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'}
                                 },
                                 formatter: function () {

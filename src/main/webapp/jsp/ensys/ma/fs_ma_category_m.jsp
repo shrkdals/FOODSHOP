@@ -182,7 +182,10 @@
 						qray.alert('선택된 데이터가 없습니다.');
 						return;
                     }
-                    
+                    if (nvl(selected.CG_CD) == ''){
+						qray.alert('선택된 데이터의 분류코드를 입력해주십시오.');
+						return;
+                    }
                     
                     fnObj.gridView01.target.addRow(
    						{
@@ -293,7 +296,7 @@
                         columns: [
                             {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "left" , editor: {type: "text"},hidden:true}
                             ,{key: "CG_CD", label: "분류코드", width: 200   , align: "left" , enableFilter: true, treeControl: true}
-                            ,{key: "CG_NM", label: "분류명", width: 300   , align: "left" , editor: false}
+                            ,{key: "CG_NM", label: "분류명", width: 200   , align: "left" , editor: false}
                             ,{key: "DEPTH_TEXT", label: "분류명", width: 150, align: "left", editor: false, hidden:true}
                             ,{key: "PARENT_CG_CD", label: "상위분류코드", width: 150   , align: "center" , editor: false, hidden:true}
                             ,{key: "SORT", label: "정렬", width: 150, align: "center", editor: false, hidden:true}
@@ -303,21 +306,30 @@
                                     return $.changeTextValue(DATA_YN, this.value)
                                 }
                             }
-                            ,{key: "CG_SP", label: "분류유형", width: 150, align: "center", hidden:false,
+                            ,{key: "CG_SP", label: "분류유형", width: 120, align: "center", hidden:false,
                                 formatter: function () {
                                     return $.changeTextValue(DATA_BRTYPE, this.value)
                                 }
                             }
-                            ,{key: "FILE_YN", label: "파일여부", width: 150, align: "center", hidden:false,
+                            ,{key: "FILE_YN", label: "파일여부", width: 120, align: "center", hidden:false,
                                 formatter: function () {
                                     return $.changeTextValue(DATA_YN, this.value)
                                 }
                             }
-                            ,{key: "SEE_YN", label: "노출여부", width: 150, align: "center", hidden:false,
+                            ,{key: "SEE_YN", label: "노출여부", width: 120, align: "center", hidden:false,
                                 formatter: function () {
                                     return $.changeTextValue(DATA_YN, this.value)
                                 }
                             }
+                            ,{key: "COMMITION", label: "수수료", width: 120,
+                            	align: "right", 
+                                editor: {type: "number", disabled:function(){return true;}},
+                            	formatter : function(){
+                                	this.item.COMMITION = Number(nvl(this.value,0));
+                                    return Number(nvl(this.value,0)) + '%'
+                                }
+                             }
+                            
                         ],
                         tree: {
                             use: true,
@@ -540,6 +552,7 @@
                     console.log(this.id, " : ", this.value);
                     var itemH = fnObj.gridView01.getData('selected')[0];
                     fnObj.gridView01.target.setValue(itemH.__origin_index__, this.id, $('#' + this.id).val())
+                    fnObj.gridView01.target.repaint();
                 });
 
             });
@@ -725,6 +738,12 @@
                                     <input type="text" class="form-control" data-ax-path="LV" name="LV"
                                     id="LV" form-bind-text='LV' form-bind-type='text' readonly/>
                                 </ax:td>
+                            </ax:tr>
+                            <ax:tr>
+                            	<ax:td label='수수료율' width="300px">
+                            		<input type="text" class="form-control" data-ax-path="COMMITION" name="COMMITION"
+                                    id="COMMITION" form-bind-text='"COMMITION"' form-bind-type='text'/>
+                            	</ax:td>
                             </ax:tr>
                         </ax:tbl>
                     </ax:form>
