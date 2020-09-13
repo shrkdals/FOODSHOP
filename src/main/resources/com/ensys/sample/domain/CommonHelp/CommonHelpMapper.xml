@@ -112,5 +112,12 @@
         { CALL UP_FS_HELP_PARTNER_DEPOSIT (#{CD_COMPANY}, #{CD_PARTNER}, #{KEYWORD}) }
     </select>
 
+	<select id="HELP_CATEGORY" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_HELP_CATEGORY (#{COMPANY_CD}, #{PT_SP}, #{KEYWORD}) }
+    </select>
+    
+    <select id="HELP_PARTNER_CATEGORY" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_HELP_PARTNER_CATEGORY (#{COMPANY_CD}, #{PT_CD}, #{KEYWORD}) }
+    </select>
 
 </mapper>

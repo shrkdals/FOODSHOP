@@ -394,6 +394,38 @@
                                 },
                                 editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_ITEM_SP}}
                             }
+                            , {key: "ITEM_CG_CD" , label: "카테고리코드"	, width: 150     , align: "left"   , editor: false  ,sortable:true, hidden:true}
+                            
+                            , {key: "ITEM_CG_NM" , label: "카테고리"	, width: 130     , align: "center"   , editor: false  ,sortable:true,
+                                picker: function(){
+                                    return {
+                                        top: _pop_top,
+                                        width: 600,
+                                        height: _pop_height,
+                                        url: "partnerCategory",
+                                        action: ["commonHelp", "HELP_PARTNER_CATEGORY"],
+                                        disabled: function(){
+											if (nvl(this.item.MAKE_PT_CD) == ''){
+												qray.alert('제조거래처가 등록되지않았습니다.');
+												return;
+											}else{
+												return false;
+											}
+                                        },
+                                        param: function(){
+											return {
+												PT_CD: this.item.MAKE_PT_CD
+											}
+                                        },
+                                        callback: function (e) {
+                                            var itemH = fnObj.gridView01.getData('selected')[0];
+                                            var index = itemH.__index;
+                                            fnObj.gridView01.target.setValue(index, "ITEM_CG_CD", e[0].CG_CD);
+                                            fnObj.gridView01.target.setValue(index, "ITEM_CG_NM", e[0].CG_NM);
+                                        },
+                                    }
+                                }
+                            }
                             , {key: "PT_COMMITION" , label: "총판수수료"	, width: 120, align: "center", sortable:true,
                                 editor: {type: "number"} , hidden : SCRIPT_SESSION.cdGroup != 'WEB01' ? true : false
                             }
