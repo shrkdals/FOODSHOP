@@ -22,8 +22,4 @@ public interface UserMapper extends MyBatisMapper {
     List<HashMap<String, Object>> ensysLoginChk(String param);
 
     void join(HashMap<String, Object> param);
-
-    void USER_SAVE(HashMap<String, Object> param);
-
-    List<HashMap<String, Object>> USER_SEARCH(HashMap<String, Object> param);
 }

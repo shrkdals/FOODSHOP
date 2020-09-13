@@ -210,8 +210,7 @@
             (
                 #{COMPANY_CD},
                 #{BRD_CD},
-                #{BRD_MENU_CD},
-                #{ITEM_CD}
+                #{BRD_MENU_CD}
             )
         }
     </update>

@@ -4,7 +4,17 @@
 
 <mapper namespace="com.ensys.sample.domain.CommonHelp.CommonHelpMapper">
 
+    <select id="HELP_CATE_COMMITION" parameterType="hashmap" resultType="hashmap" statementType="PREPARED">
+        { CALL UP_HELP_CATE_COMMITION(#{COMPANY_CD},#{LOGIN_ID} ,#{LOGIN_GROUP} ) }
+    </select>
 
+    <select id="COMMON_PRC" parameterType="hashmap" resultType="hashmap" statementType="PREPARED">
+        { CALL UP_FS_COMMON_PRC(#{COMPANY_CD},#{LOGIN_ID} ,#{LOGIN_GROUP} ,#{PRC_TYPE}
+        , #{PARAM_STRING_1} , #{PARAM_STRING_2} , #{PARAM_STRING_3} , #{PARAM_STRING_4} , #{PARAM_STRING_5}
+         , #{PARAM_STRING_6} , #{PARAM_STRING_7} , #{PARAM_STRING_8} , #{PARAM_STRING_9} , #{PARAM_STRING_10}
+         , #{PARAM_INT_1} , #{PARAM_INT_2} , #{PARAM_INT_3} , #{PARAM_INT_4} , #{PARAM_INT_5}
+           , #{PARAM_INT_6} , #{PARAM_INT_7} , #{PARAM_INT_8} , #{PARAM_INT_9} , #{PARAM_INT_10}) }
+    </select>
 
     <select id="HELP_DISTRIP_PARTNER" parameterType="hashmap" resultType="hashmap" statementType="PREPARED">
         { CALL UP_FS_HELP_DISTRIP_PARTNER_S(#{COMPANY_CD},#{KEYWORD} ,#{LOGIN_ID}) }

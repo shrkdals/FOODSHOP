@@ -529,6 +529,24 @@ public class CommonHelpController extends BaseController {
         return Responses.ListResponse.of(list);
     }
 
+    @RequestMapping(value = "COMMON_PRC", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse COMMON_PRC(@RequestBody HashMap<String, Object> param) {
+        SessionUser sessionUser = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD", sessionUser.getCdCompany());
+        param.put("LOGIN_ID", sessionUser.getIdUser());
+        param.put("LOGIN_GROUP", sessionUser.getCdGroup());
+        List<HashMap<String, Object>> list = service.COMMON_PRC(param);
+        return Responses.ListResponse.of(list);
+    }
 
+    @RequestMapping(value = "HELP_CATE_COMMITION", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse HELP_CATE_COMMITION(@RequestBody HashMap<String, Object> param) {
+        SessionUser sessionUser = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD", sessionUser.getCdCompany());
+        param.put("LOGIN_ID", sessionUser.getIdUser());
+        param.put("LOGIN_GROUP", sessionUser.getCdGroup());
+        List<HashMap<String, Object>> list = service.HELP_CATE_COMMITION(param);
+        return Responses.ListResponse.of(list);
+    }
 
 }
