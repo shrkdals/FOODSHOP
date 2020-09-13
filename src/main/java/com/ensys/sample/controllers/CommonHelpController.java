@@ -30,8 +30,6 @@ public class CommonHelpController extends BaseController {
     @Inject
     private CommonHelpService service;
 
-    
-
     @RequestMapping(value = "HELP_GROUP_USER", method = RequestMethod.POST, produces = APPLICATION_JSON)       //  상품도움창
     public Responses.ListResponse HELP_GROUP_USER(@RequestBody HashMap<String, Object> param) {
         SessionUser sessionUser = SessionUtils.getCurrentUser();
