@@ -933,7 +933,7 @@
                             ,{key: "PT_CG_CD", label: "채번", width: 150, align: "center", hidden:true}
                             ,{key: "PT_CD", label: "거래처코드", width: 150, align: "center", hidden:true}
                             ,{key: "PT_SP", label: "거래처유형", width: 150, align: "center", hidden:true}
-                            ,{key: "CG_CD", label: "분류코드", width: 120   , align: "left" ,
+                            ,{key: "CG_CD", label: "분류코드", width: 120   , align: "center" ,
 								picker: {
 									top: _pop_top,
                                     width: 1000,
@@ -971,7 +971,13 @@
                                     return $.changeTextValue(DATA_BRTYPE, this.value)
                                 }
                             }
-                            ,{key: "COMMITION", label: "카테고리수수료", width: 120   , align: "right", editor: false}
+                            ,{key: "COMMITION", label: "수수료", width: 100   , align: "right" , editor: false,
+                            	formatter : function(){
+                                	this.item.COMMITION = Number(nvl(this.value,0));
+                                    return Number(nvl(this.value,0)) + '%'
+                                }
+                             }
+                           
                             
                         ],
                         body: {

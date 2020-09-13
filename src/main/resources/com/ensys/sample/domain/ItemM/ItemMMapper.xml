@@ -46,7 +46,8 @@
                 #{DISTRIB_AMT_YN},
                 #{ITEM_BIGO},
                 #{PT_COMMITION},
-                #{SALES_COMMITION}
+                #{SALES_COMMITION},
+                #{ITEM_CG_CD}
             )
         }
     </update>
@@ -80,7 +81,8 @@
                 #{DISTRIB_AMT_YN},
                 #{ITEM_BIGO},
                 #{PT_COMMITION},
-                #{SALES_COMMITION}
+                #{SALES_COMMITION},
+                #{ITEM_CG_CD}
             )
         }
     </update>

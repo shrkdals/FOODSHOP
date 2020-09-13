@@ -2,13 +2,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ax" tagdir="/WEB-INF/tags" %>
 
-<ax:set key="title" value="거래처 카테고리 도움창"/>
+<ax:set key="title" value="카테고리 검색 도움창"/>
 <ax:set key="page_desc" value="${PAGE_REMARK}"/>
 <ax:set key="page_auto_height" value="true"/>
 
 <ax:layout name="modal">
     <jsp:attribute name="script">
         <script type="text/javascript">
+
+      
+        //검증상태
+        var DATA_BRTYPE = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00015');
+        // YN
+        var DATA_YN = [{value:'' , text:''},{value:'Y' , text:'Y'},{value:'N' , text:'N'}];
+        
             fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 initView: function () {
                     var _this = this;
@@ -18,16 +25,22 @@
                         frozenColumnIndex: 0,
                         target: $('[data-ax5grid="grid-view-01"]'),
                         columns: [
-                            {key: "CG_CD", label: "분류코드", width: 100, align: "center", editor: false, sortable:true},
-                            {key: "CG_NM", label: "카테고리", width: 150, align: "center", editor: false, sortable:true},
-                            {key: "COMMITION", label: "수수료율", width: 120, align: "right", editor: false, sortable:true},
+                        	{key: "COMPANY_CD", label: "회사코드", width: 150 , align: "left" , editor: {type: "text"},hidden:true}
+                            ,{key: "CG_CD", label: "분류코드", width: 120   , align: "left" }
+                            ,{key: "CG_NM", label: "분류명", width: 200   , align: "left" , editor: false}
+                            ,{key: "COMMITION", label: "수수료", width: 100   , align: "right" , editor: false,
+                            	formatter : function(){
+                                	this.item.COMMITION = Number(nvl(this.value,0));
+                                    return Number(nvl(this.value,0)) + '%'
+                                }
+                             }
+                            
                         ],
                         body: {
                             onClick: function () {
                                 this.self.select(this.dindex);
                             }
-                            ,
-                            onDBLClick: function () {
+                            , onDBLClick: function () {
                                 ACTIONS.dispatch(ACTIONS.ITEM_SELECT);
                             }
                         }
@@ -48,7 +61,7 @@
                     }
                     return list;
                 }
-            })
+            });
         </script>
     </jsp:attribute>
     <jsp:body>
@@ -78,7 +91,17 @@
 
         <ax:split-layout name="ax1" orientation="horizontal">
             <ax:split-panel width="*" style="">
+
+                <!-- 목록 -->
+                <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                    <div class="left">
+                        <h2><i class="cqc-list"></i>
+                             카테고리 리스트 </h2>
+                    </div>
+
+                </div>
                 <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+
             </ax:split-panel>
         </ax:split-layout>
 
