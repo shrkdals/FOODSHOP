@@ -53,6 +53,7 @@
                 #{BRD_GOOD},
                 #{IMG_DOWNLOAD_TXT},
                 #{USER_ID}
+                ,#{CATE_CD}
             )
         }
     </update>
@@ -78,6 +79,7 @@
                 #{BRD_GOOD},
                 #{IMG_DOWNLOAD_TXT},
                 #{USER_ID}
+                ,#{CATE_CD}
             )
         }
     </update>

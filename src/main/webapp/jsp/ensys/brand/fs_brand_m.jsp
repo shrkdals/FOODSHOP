@@ -82,6 +82,8 @@
                     fnObj.gridView02.target.setData($.DATA_SEARCH('Brandm', 'selectBrandMenu', nvl(selected, {})));
                     fnObj.gridView04.target.setData($.DATA_SEARCH('Brandm', 'selectBrandBeginItem', nvl(selected, {})));
                     fnObj.gridView05.target.setData($.DATA_SEARCH('Brandm', 'selectBrandItemCategory', nvl(selected, {})));
+                    var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'PT_CATE_SEARCH' , PARAM_STRING_1 : selected.ADM_PT_CD }).list
+                    $("#CATE_CD").ax5select({options: list}); //분류코드
 
                     axboot.ajax({
                         type: "POST",
@@ -497,7 +499,7 @@
                                 editor: {type: "text"},
                                 hidden: true
                             }
-                            
+                            ,{key: "CATE_CD", label: "카테고리코드드", width: 110, alig: "center", editor: false, sortable:true}
                         ],
 
                         body: {
@@ -1904,6 +1906,13 @@
                                                     BIND-CODE="PT_CD" BIND-TEXT="PT_NM" READONLY
                                                     form-bind-type="codepicker" form-bind-text="ADM_PT_NM"
                                                     form-bind-code="ADM_PT_CD"/>
+                                    </ax:td>
+                                </ax:tr>
+                                <ax:tr>
+                                    <ax:td label='카테고리' width="300px">
+                                        <div id="CATE_CD" name="CATE_CD" data-ax5select="CATE_CD"
+                                             data-ax5select-config='{}' form-bind-text='CATE_CD'
+                                             form-bind-type="selectBox"></div>
                                     </ax:td>
                                 </ax:tr>
                                 <ax:tr>

@@ -28,6 +28,11 @@
             var dl_TAX_TP      = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00025');   // 과세구분
             var dl_ITEM_SP     = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00011');   // 상품유형
 
+            if(SCRIPT_SESSION.cdGroup == 'WEB08'){
+                dl_ITEM_SP = [{value:'06' , text : '브랜드본사상품'}]
+            }
+
+
             var fnObj = {}, CODE = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_SEARCH: function (caller, act, data) {
