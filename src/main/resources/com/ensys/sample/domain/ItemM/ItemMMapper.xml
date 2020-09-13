@@ -44,7 +44,9 @@
                 #{ITEM_SP},
                 #{BOX_NUM},
                 #{DISTRIB_AMT_YN},
-                #{ITEM_BIGO}
+                #{ITEM_BIGO},
+                #{PT_COMMITION},
+                #{SALES_COMMITION}
             )
         }
     </update>
@@ -76,7 +78,9 @@
                 #{ITEM_SP},
                 #{BOX_NUM},
                 #{DISTRIB_AMT_YN},
-                #{ITEM_BIGO}
+                #{ITEM_BIGO},
+                #{PT_COMMITION},
+                #{SALES_COMMITION}
             )
         }
     </update>

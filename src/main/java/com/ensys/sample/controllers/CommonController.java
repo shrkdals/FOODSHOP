@@ -18,7 +18,6 @@ import com.chequer.axboot.core.controllers.BaseController;
 import com.ensys.sample.domain.common.common;
 import com.ensys.sample.domain.common.commonService;
 import com.ensys.sample.domain.user.SessionUser;
-import com.ensys.sample.utils.SMSComponent;
 import com.ensys.sample.utils.SessionUtils;
 
 @Controller
@@ -27,47 +26,6 @@ public class CommonController extends BaseController {
 
 	@Inject
 	private commonService commonService;
-
-	@RequestMapping(value = "SendMessage", method = RequestMethod.POST, produces = APPLICATION_JSON)
-	public Responses.MapResponse SendMessage(@RequestBody HashMap<String, Object> param) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		List<String> strTelList = (List<String>) param.get("strTelList");
-		String[] strDestList = null;
-		if (strTelList != null && strTelList.size() > 0) {
-			strDestList = strTelList.toArray(new String[strTelList.size()]);
-		}
-		
-		String strCallBack = "15220896";							//	보낸번호
-		String strSubject = (String) param.get("SUBJECT");			//	제목
-		String strDate = (String) param.get("DATE");				//	
-		String strData = (String) param.get("CONTENT");				//	내용
-		int nCount = strDestList.length;
-		
-		String strMsg = "";
-		SMSComponent smsc = null;
-		try {
-			smsc = new SMSComponent();
-
-			try {
-				smsc.connect();
-			} catch (Exception e) {
-				strMsg = "SMS Server 연결에 실패했습니다.";
-			} // catch
-
-			try {
-				strMsg = smsc.SendMsg(strDestList, strCallBack, strSubject, strDate, strData, nCount);
-				strMsg = "문자 발송을 완료했습니다.\n" + strMsg;
-				strMsg = strMsg.replaceAll("\n", "<br>");
-			} catch (IOException e) {
-				strMsg = "발송할 수 없습니다.";
-			}
-			smsc.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		result.put("MSG", strMsg);
-		return Responses.MapResponse.of(result);
-	}
 
 	@RequestMapping(value = "getCodeList", method = RequestMethod.GET, produces = APPLICATION_JSON)
 	public Responses.ListResponse getCodeList(common requestParams) {

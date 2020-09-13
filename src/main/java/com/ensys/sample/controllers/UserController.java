@@ -154,27 +154,6 @@ public class UserController extends BaseController {
         return Responses.MapResponse.of(result);
     }
 
-
-    @RequestMapping(value = "USER_SEARCH", method = RequestMethod.POST, produces = APPLICATION_JSON)
-    public Responses.ListResponse USER_SEARCH(@RequestBody HashMap<String, Object> param) {
-        SessionUser user = SessionUtils.getCurrentUser();
-        param.put("COMPANY_CD", user.getCdCompany());
-        param.put("GROUP_CD", user.getCdGroup());
-        param.put("USER_ID", user.getIdUser());
-        List<HashMap<String, Object>> list = userService.USER_SEARCH(param);
-        return Responses.ListResponse.of(list);
-    }
-
-    @RequestMapping(value = "USER_SAVE", method = RequestMethod.POST, produces = APPLICATION_JSON)
-    public ApiResponse USER_SAVE(@RequestBody HashMap<String, Object> param) {
-        SessionUser user = SessionUtils.getCurrentUser();
-        param.put("COMPANY_CD", user.getCdCompany());
-        param.put("GROUP_CD", user.getCdGroup());
-        param.put("USER_ID", user.getIdUser());
-        userService.USER_SAVE(param);
-        return ok();
-    }
-
     @RequestMapping(value = "getYnPwClear", method = {RequestMethod.GET}, produces = APPLICATION_JSON)
     @ResponseBody
     public Responses.MapResponse getYnPwClear() {
