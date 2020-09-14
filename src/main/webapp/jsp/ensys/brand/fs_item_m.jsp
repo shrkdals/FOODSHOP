@@ -155,6 +155,13 @@
                     		caller.gridView01.target.setValue(lastIdx - 1, 'MAKE_PT_NM', pt_cd[0].PT_NM);
                     	}
                     	caller.gridView01.target.setValue(lastIdx - 1, 'ITEM_SP', '02'); // 상품유형 택배상품
+                    }else if (SCRIPT_SESSION.cdGroup == 'WEB08'){	//	브랜드본사 일때만
+                    	var pt_cd = getLoginPartner();
+                    	if (pt_cd.length > 0){
+                    		caller.gridView01.target.setValue(lastIdx - 1, 'MAKE_PT_CD', pt_cd[0].PT_CD);
+                    		caller.gridView01.target.setValue(lastIdx - 1, 'MAKE_PT_NM', pt_cd[0].PT_NM);
+                    	}
+                    	caller.gridView01.target.setValue(lastIdx - 1, 'ITEM_SP', '06'); // 상품유형 브랜드본사상품
                     }
 
                 }
@@ -171,13 +178,14 @@
                 }
 
 
-                if(SCRIPT_SESSION.cdGroup == 'WEB08'){
-                    var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'SHOPIN_SEARCH'}).list
-                    if(list.length > 0 ){
-                        $('#MAKE_PT_CD').attr({code : list[0].PT_CD , text :list[0].PT_NM })
-                        $('#MAKE_PT_CD').val(list[0].PT_NM)
-                    }
+                if(SCRIPT_SESSION.cdGroup == 'WEB08' || SCRIPT_SESSION.cdGroup == 'WEB05'){
+                	var pt_cd = getLoginPartner();
+                	if (pt_cd.length > 0){
+                		$('#MAKE_PT_CD').val(pt_cd[0].PT_NM);
+                		$('#MAKE_PT_CD').attr({code : pt_cd[0].PT_CD , text :pt_cd[0].PT_NM });
+                	}
                 }
+                
 
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 
@@ -397,7 +405,13 @@
                                 formatter: function () {
                                     return $.changeTextValue(dl_ITEM_SP, this.value)
                                 },
-                                editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_ITEM_SP}}
+                                editor: {type: "select", config: {columnKeys: {optionValue: "value", optionText: "text"}, options: dl_ITEM_SP},
+									disabled: function(){
+										if (SCRIPT_SESSION.cdGroup == 'WEB05'){
+											return true;
+										}
+									}
+                                }
                             }
                             , {key: "ITEM_CG_CD" , label: "카테고리코드"	, width: 150     , align: "left"   , editor: false  ,sortable:true, hidden:true}
                             
