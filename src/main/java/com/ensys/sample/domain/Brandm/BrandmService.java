@@ -27,6 +27,9 @@ public class BrandmService extends BaseService {
     }
 
     public List<HashMap<String, Object>> selectBrandM(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        param.put("LOGIN_GROUP", user.getCdGroup());
+        param.put("LOGIN_ID", user.getIdUser());
         return mapper.selectBrandM(param);
     }
 

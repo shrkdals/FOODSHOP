@@ -9,7 +9,7 @@
     </select>
 
     <select id="selectBrandM" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
-        { CALL UP_FS_BRAND_M_S(#{COMPANY_CD},#{CG_CD},#{ADM_PT_CD},#{RECOMM_YN},#{NEW_YN},#{VERIFY_STAT},#{BRD_NM}) }
+        { CALL UP_FS_BRAND_M_S(#{COMPANY_CD},#{CG_CD},#{ADM_PT_CD},#{RECOMM_YN},#{NEW_YN},#{VERIFY_STAT},#{BRD_NM} ,#{LOGIN_GROUP} ,#{LOGIN_ID}) }
     </select>
 
     <select id="selectBrandMenu" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
