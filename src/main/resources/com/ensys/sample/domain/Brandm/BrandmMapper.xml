@@ -51,7 +51,7 @@
                 #{CLICK_CNT},
                 #{BRD_NOTICE},
                 #{BRD_GOOD},
-                #{IMG_DOWNLOAD_TXT},
+                #{PROMT_LINK},
                 #{USER_ID}
                 ,#{CATE_CD}
             )
@@ -77,7 +77,7 @@
                 #{CLICK_CNT},
                 #{BRD_NOTICE},
                 #{BRD_GOOD},
-                #{IMG_DOWNLOAD_TXT},
+                #{PROMT_LINK},
                 #{USER_ID}
                 ,#{CATE_CD}
             )

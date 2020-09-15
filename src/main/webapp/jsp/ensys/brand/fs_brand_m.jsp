@@ -492,8 +492,8 @@
                                 hidden: true
                             }
                             , {
-                                key: "IMG_DOWNLOAD_TXT",
-                                label: "이미지다운로드문구",
+                                key: "PROMT_LINK",
+                                label: "홍보영상링크",
                                 width: 150,
                                 align: "center",
                                 editor: {type: "text"},
@@ -1909,27 +1909,19 @@
                                     </ax:td>
                                 </ax:tr>
                                 <ax:tr>
-                                    <ax:td label='카테고리' width="300px">
+                                	<ax:td label='카테고리' width="300px">
                                         <div id="CATE_CD" name="CATE_CD" data-ax5select="CATE_CD"
                                              data-ax5select-config='{}' form-bind-text='CATE_CD'
                                              form-bind-type="selectBox"></div>
                                     </ax:td>
-                                </ax:tr>
-                                <ax:tr>
 									<ax:td label='검증상태' width="300px">
                                         <div id="VERIFY_STAT" name="VERIFY_STAT" data-ax5select="VERIFY_STAT"
                                              data-ax5select-config='{}' form-bind-text="VERIFY_STAT"
                                              form-bind-type="selectBox"></div>
                                     </ax:td>
-                                    <ax:td label='사용여부' width="300px">
-                                        <div id="USE_YN" name="USE_YN" data-ax5select="USE_YN"
-                                             data-ax5select-config='{}' form-bind-text="USE_YN"
-                                             form-bind-type="selectBox"></div>
-                                    </ax:td>
+                                    
                                 </ax:tr>
-
                                 <ax:tr>
-
                                     <ax:td label='추천여부' width="300px">
                                         <div id="RECOMM_YN" name="RECOMM_YN" data-ax5select="RECOMM_YN"
                                              data-ax5select-config='{}' form-bind-text="RECOMM_YN"
@@ -1949,11 +1941,14 @@
                                         <input type="number" class="form-control" data-ax-path="NEW_ORD" name="NEW_ORD" id="NEW_ORD" form-bind-text='NEW_ORD' form-bind-type='text' onkeyup="onlyNumber(this);"/>
                                     </ax:td>
                                 </ax:tr>
+                                
                                 <ax:tr>
-                                	<ax:td label='이미지다운로드문구' width="300px">
-                                        <input type="text" class="form-control" data-ax-path="IMG_DOWNLOAD_TXT" name="IMG_DOWNLOAD_TXT" id="IMG_DOWNLOAD_TXT" form-bind-text='IMG_DOWNLOAD_TXT' form-bind-type='text'/>
+                                    <ax:td label='사용여부' width="300px">
+                                        <div id="USE_YN" name="USE_YN" data-ax5select="USE_YN"
+                                             data-ax5select-config='{}' form-bind-text="USE_YN"
+                                             form-bind-type="selectBox"></div>
                                     </ax:td>
-                                	<ax:td label='로고이미지' width="300px">
+                                    <ax:td label='로고이미지' width="300px">
                                         <div class="input-group" id="filemodal">
                                             <input type="text" class="form-control" id="LOGO_FILE_NM"
                                                    TB_ID="FS_BRAND_M"
@@ -1987,6 +1982,11 @@
                                             <span class="input-group-addon openFile" style="cursor: pointer"><i
                                                     class="cqc-magnifier"></i></span>
                                         </div>
+                                    </ax:td>
+                                </ax:tr>
+                                <ax:tr>
+                                	<ax:td label='홍보영상링크' width="600px">
+                                        <input type="text" class="form-control" data-ax-path="PROMT_LINK" name="PROMT_LINK" id="PROMT_LINK" form-bind-text='PROMT_LINK' form-bind-type='text'/>
                                     </ax:td>
                                 </ax:tr>
                             </ax:tbl>
