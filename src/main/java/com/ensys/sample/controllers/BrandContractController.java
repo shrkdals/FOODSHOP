@@ -28,6 +28,11 @@ public class BrandContractController extends BaseController {
     public Responses.ListResponse selectD(@RequestBody HashMap<String, Object> param) {
         return Responses.ListResponse.of(service.selectD(param));
     }
+    
+    @RequestMapping(value = "selectD2", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse selectD2(@RequestBody HashMap<String, Object> param) {
+        return Responses.ListResponse.of(service.selectD2(param));
+    }
 
     @RequestMapping(value = "S_1", method = RequestMethod.POST, produces = APPLICATION_JSON)
     public Responses.ListResponse S_1(@RequestBody HashMap<String, Object> param) {

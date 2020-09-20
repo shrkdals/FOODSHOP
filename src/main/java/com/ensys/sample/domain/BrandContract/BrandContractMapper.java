@@ -9,7 +9,7 @@ public interface BrandContractMapper extends MyBatisMapper {
 
     List<HashMap<String, Object>> selectH(HashMap<String, Object> param);
     List<HashMap<String, Object>> selectD(HashMap<String, Object> param);
-
+    List<HashMap<String, Object>> selectD2(HashMap<String, Object> param);
     List<HashMap<String, Object>> S_1(HashMap<String, Object> param);
     List<HashMap<String, Object>> S_2(HashMap<String, Object> param);
 

@@ -13,6 +13,10 @@
     <jsp:attribute name="script">
         <ax:script-lang key="ax.script"/>
         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=316c9b07bf0cad06b4e37ab2f364f29f&libraries=services"></script>
+		
+    </script>
+        
+        
         <style>
             .red {
                 background: #ffe0cf !important;
@@ -45,12 +49,15 @@
                 onStateChanged: function (e) {
                     if (e.state == "changeValue") {
                         $('#ALL_PT').attr('HELP_PARAM', JSON.stringify({PT_CD : $('select[name="S_1"]').val()}))
+                        $('#FS_PT').attr('HELP_PARAM', JSON.stringify({PT_CD : $('select[name="S_1"]').val()}))
                         var S_2 = $.DATA_SEARCH("BrandContract", 'S_2',{PT_CD : $('select[name="S_1"]').val()}).list;
                         //관할구역
                         $("#S_2").ax5select("setOptions", [{value: '', text: ''}].concat(S_2), true);
                         $("#S_3").setClear()
                         $("#ALL_PT").attr({code : '' , text : ''})
                         $("#ALL_PT").val('')
+                        $("#FS_PT").attr({code : '' , text : '', x: '', y: ''})
+                        $("#FS_PT").val('')
 
                         $('#S_3').attr('HELP_PARAM', JSON.stringify({PT_CD : $('select[name="S_1"]').val() , AREA_CD : $('select[name="S_2"]').val()}))
                     }
@@ -81,6 +88,10 @@
                     };
                     if(SCRIPT_SESSION.cdGroup != 'WEB01' && nvl(param.S_1) == ''){
                         qray.alert('조회조건의 총판항목은 필수항목입니다.')
+                        return false;
+                    }
+                    if (nvl($("#DISTANCE").val()) != '' && nvl($("#FS_PT").val()) == ''){
+                    	qray.alert('반경을 입력하셨으면,<br>기준가맹점을 입력해주십시오.');
                         return false;
                     }
                     var list = $.DATA_SEARCH('BrandContract','selectH',param).list;
@@ -153,7 +164,12 @@
                     selected.CONTROL_AREA_CD = $('select[name="S_2"]').val()
                     selected.ADM_PT_CD = $('select[name="S_1"]').val()
                     selected.S_3 = $('#S_3').getCodes()
-                    var list2 = $.DATA_SEARCH('BrandContract','selectD',nvl(selected,{}));
+                   	selected.X = $("#FS_PT").attr('x');
+                    selected.Y = $("#FS_PT").attr('y');
+                    selected.DISTANCE = $("#DISTANCE").val()
+                     
+                    var list2 = $.DATA_SEARCH('BrandContract','selectD2',nvl(selected,{}));
+                    //var list2 = $.DATA_SEARCH('BrandContract','selectD',nvl(selected,{}));
                     fnObj.gridView02.target.setData(list2);
 
                 },
@@ -664,6 +680,30 @@
             $(document).ready(function () {
                 changesize();
 
+                $("#FS_PT").on('dataBind', function(e){
+					console.log(e.detail);
+					var x = '';
+					var y = '';
+					
+					if (nvl(e.detail.PT_ADDR) != ''){
+						var geocoder = new kakao.maps.services.Geocoder();
+
+		                // 주소로 좌표를 검색합니다
+		                geocoder.addressSearch(e.detail.PT_ADDR, function(result, status) {
+
+		                    // 정상적으로 검색이 완료됐으면
+		                    if (status === kakao.maps.services.Status.OK) {
+		                    	y = result[0].y;
+								x = result[0].x;
+		                    }
+
+		                    $("#FS_PT").attr('x', x);
+		                    $("#FS_PT").attr('y', y);
+		                });
+		                
+					}
+                })
+
             });
             $(window).resize(function () {
                 changesize();
@@ -818,6 +858,8 @@
                 }
 
             });
+
+            
         </script>
     </jsp:attribute>
     <jsp:body>
@@ -877,9 +919,16 @@
                             <div id="S_2" name="S_2" data-ax5select="S_2"
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
                         </ax:td>
-                        <ax:td label='시군구' width="350px">
+                        <%-- <ax:td label='시군구' width="350px">
                             <multipicker id="S_3" HELP_ACTION="HELP_AREA2" HELP_URL="multiArea" BIND-CODE="AREA_CD"
                                          BIND-TEXT="AREA_NM"/>
+                        </ax:td> --%>
+                        <ax:td label='가맹점' width="350px">
+                        	<codepicker id="FS_PT" HELP_ACTION="HELP_PARTNER_CONTRACT" HELP_URL="partner" BIND-CODE="PT_CD"
+                                    BIND-TEXT="PT_NM" READONLY/>
+                        </ax:td>
+                        <ax:td label='반경(km)' width="350px">
+                        	<input type="number" class="form-control" name="DISTANCE" id="DISTANCE"/>
                         </ax:td>
                     </ax:tr>
                 </ax:tbl>
