@@ -54,6 +54,7 @@
                 #{PROMT_LINK},
                 #{USER_ID}
                 ,#{CATE_CD}
+                ,#{CATE_NM}
             )
         }
     </update>
@@ -80,6 +81,7 @@
                 #{PROMT_LINK},
                 #{USER_ID}
                 ,#{CATE_CD}
+                ,#{CATE_NM}
             )
         }
     </update>

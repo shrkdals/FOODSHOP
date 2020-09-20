@@ -76,8 +76,9 @@
                 ITEM_CLICK: function (caller, act, data) {
                     //그리드,우측컨트롤 동기화(setFormData) 컨트롤ID, 그리드컬럼명일치시킬것
                     var selected = nvl(caller.gridView01.getData('selected')[0], {});
-                    var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'PT_CATE_SEARCH' , PARAM_STRING_1 : selected.ADM_PT_CD }).list
-                    $("#CATE_CD").ax5select({options: [{value:'' , text : ''}].concat(list)}); //분류코드
+                    $("#CATE_CD").setHelpParam(JSON.stringify( {ADM_PT_CD : selected.ADM_PT_CD} ))
+                    //var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'PT_CATE_SEARCH' , PARAM_STRING_1 : selected.ADM_PT_CD }).list
+                    //$("#CATE_CD").ax5select({options: [{value:'' , text : ''}].concat(list)}); //분류코드
                     $('.QRAY_FORM').setFormData(selected);
 
                     $("#BRD_NOTICE").val(nvl(selected.BRD_NOTICE, '').replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
@@ -252,7 +253,7 @@
                     var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'PT_CATE_SEARCH' , PARAM_STRING_1 : pt[0].PT_CD }).list
 
 
-                    $("#CATE_CD").ax5select({options: [{value:'' , text : ''}].concat(list)}); //분류코드
+                    //$("#CATE_CD").ax5select({options: [{value:'' , text : ''}].concat(list)}); //분류코드
                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
                 },
                 FILE_CLICK: function (caller, act, data) {
@@ -512,7 +513,8 @@
                                 editor: {type: "text"},
                                 hidden: true
                             }
-                            ,{key: "CATE_CD", label: "카테고리코드", width: 110, alig: "center", editor: false, sortable:true}
+                            ,{key: "CATE_CD", label: "카테고리코드", width: 110, alig: "center", editor: false, sortable:true ,hidden :true}
+                            ,{key: "CATE_NM", label: "카테고리코드", width: 110, alig: "center", editor: false, sortable:true ,hidden :true}
                         ],
 
                         body: {
@@ -1553,6 +1555,13 @@
                     fnObj.gridView01.target.setValue(itemH.__index, 'ADM_PT_NM', e.detail.PT_NM);
                 });
 
+                $("#CATE_CD").on('dataBind', function (e) {
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__index, 'CATE_CD', $("#CATE_CD").getCodes());
+                    fnObj.gridView01.target.setValue(itemH.__index, 'CATE_NM', $("#CATE_CD").getTexts());
+                });
+
+
                 $(".QRAY_FORM").find("[data-ax5select]").change(function () {
                     console.log(this.id, " : ", this.value);
                     var itemH = fnObj.gridView01.getData('selected')[0];
@@ -1929,15 +1938,15 @@
                                 </ax:tr>
                                 <ax:tr>
                                 	<ax:td label='카테고리' width="300px">
-                                        <div id="CATE_CD" name="CATE_CD" data-ax5select="CATE_CD"
-                                             data-ax5select-config='{}' form-bind-text='CATE_CD'
-                                             form-bind-type="selectBox"></div>
+                                        <multipicker id="CATE_CD" HELP_ACTION="HELP_PARTNER" HELP_URL="multiCategoryCommtion"
+                                                     BIND-CODE="CATE_CD"  BIND-TEXT="CATE_NM"
+                                                     form-bind-text='CATE_NM' form-bind-code='CATE_CD' form-bind-type="multipicker"/>
                                     </ax:td>
 									<ax:td label='검증상태' width="300px">
                                         <div id="VERIFY_STAT" name="VERIFY_STAT" data-ax5select="VERIFY_STAT"
                                              data-ax5select-config='{}' form-bind-text="VERIFY_STAT"
                                              form-bind-type="selectBox"></div>
-                                    </ax:td>\
+                                    </ax:td>
                                 </ax:tr>
 
                                 <ax:tr>

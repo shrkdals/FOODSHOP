@@ -2076,6 +2076,10 @@ $(document).ready(function () {
                 });
                 $(pickerInfo).find("#multi").ax5select("setValue", setting, true);
                 $(pickerInfo).attr('DEFALUT_VALUE',JSON.stringify(e))
+
+                myEvent = new CustomEvent("dataBind", {'detail': e});
+
+                $(pickerInfo)[0].dispatchEvent(myEvent);
             }
             modal.close();
         };
@@ -2095,6 +2099,7 @@ $(document).ready(function () {
             if(pickerInfo.getAttribute('DEFALUT_VALUE')){
                 param.DEFAULT_VALUE =  JSON.parse(pickerInfo.getAttribute('DEFALUT_VALUE'));
             }
+
             if (!disabled) {
                 $.openCommonPopup(url, "callback2", action, '', nvl(param, '') == '' ? {} : param, width, height, nvl(top,25));
             }
@@ -2111,7 +2116,7 @@ $(document).ready(function () {
                     codeArray.push(dataList[i].value)
                 }
                 codes = codeArray.join("|");
-                codes = codes + "|"
+                //codes = codes + "|"
             }
             return codes;
         }
@@ -2127,7 +2132,7 @@ $(document).ready(function () {
                     textArray.push(dataList[i].text)
                 }
                 texts = textArray.join("|");
-                texts = texts + '|'
+                //texts = texts + '|'
             }
             return texts;
         }
@@ -2726,6 +2731,22 @@ $(document).ready(function () {
                             var codeKey = $(co).attr('form-bind-code');
                             $('#'+Object.keys(d)[i]).attr({code: d[codeKey], text: d[textKey]});
                             $('#'+Object.keys(d)[i]).val(d[textKey])
+                        } else if(cot == 'multipicker'){
+                            var textKey = $(co).attr('form-bind-text');
+                            var codeKey = $(co).attr('form-bind-code');
+
+                            var tempArr = []
+
+                            var tempCode = nvl(d[codeKey],'').split('|')
+                            var tempText = nvl(d[textKey],'').split('|')
+
+                            for(var ci = 0; ci < tempCode.length; ci ++){
+                                tempArr.push({code: tempCode[ci]})
+                            }
+                            for(var tj = 0; tj < tempText.length; tj ++){
+                                tempArr[tj].text = tempText[tj]
+                            }
+                            $('#'+Object.keys(d)[i]).setPicker(tempArr)
                         }
                         else if(cot == 'decimal'){
                             var formatter = $(co).attr('decimal-formatter');
