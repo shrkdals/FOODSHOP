@@ -42,59 +42,35 @@
 
             var CONTRACT_STAT = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00013');
 
-            var S_1 = $.DATA_SEARCH("BrandContract", 'S_1',{}).list;
-
-            $('#S_1').ax5select({
-                options: [{value:'' , text:''}].concat(S_1),
-                onStateChanged: function (e) {
-                    if (e.state == "changeValue") {
-                        $('#ALL_PT').attr('HELP_PARAM', JSON.stringify({PT_CD : $('select[name="S_1"]').val()}))
-                        $('#FS_PT').attr('HELP_PARAM', JSON.stringify({PT_CD : $('select[name="S_1"]').val()}))
-                        var S_2 = $.DATA_SEARCH("BrandContract", 'S_2',{PT_CD : $('select[name="S_1"]').val()}).list;
-                        //관할구역
-                        $("#S_2").ax5select("setOptions", [{value: '', text: ''}].concat(S_2), true);
-                        $("#S_3").setClear()
-                        $("#ALL_PT").attr({code : '' , text : ''})
-                        $("#ALL_PT").val('')
-                        $("#FS_PT").attr({code : '' , text : '', x: '', y: ''})
-                        $("#FS_PT").val('')
-
-                        $('#S_3').attr('HELP_PARAM', JSON.stringify({PT_CD : $('select[name="S_1"]').val() , AREA_CD : $('select[name="S_2"]').val()}))
-                    }
-                }
-            });
-
-            $('#S_2').ax5select({
-                options: [{value:'' , text:''}],
-                onStateChanged: function (e) {
-                    if (e.state == "changeValue") {
-                        $('#S_3').attr('HELP_PARAM', JSON.stringify({PT_CD : $('select[name="S_1"]').val() , AREA_CD : $('select[name="S_2"]').val()}))
-                    }
-                }
-            });
-
             var UserCallBack
             var modal = new ax5.ui.modal();
             var selectRow2 = 0;
 
+            var PT_CD_ = '';
+            var pt_cd = getLoginPartner();
+        		PT_CD_ = pt_cd[0].PT_CD;	// 로그인한 거래처코드
+        	
+        	
             var fnObj = {}, CODE = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_SEARCH: function (caller, act, data) {
+                	
+                	
                     var param = {
-                        COMPANY_CD : SCRIPT_SESSION.cdCompany //회사코드
-                        ,S_1 :  $('select[name="S_1"]').val()
-                        ,S_2 :  $('select[name="S_2"]').val()
-                        ,S_3 :  $('#S_3').getCodes()
+                        COMPANY_CD : SCRIPT_SESSION.cdCompany, //회사코드
+                        ADM_PT_CD  : PT_CD_
                     };
-                    if(SCRIPT_SESSION.cdGroup != 'WEB01' && nvl(param.S_1) == ''){
-                        qray.alert('조회조건의 총판항목은 필수항목입니다.')
+                    if (nvl($("#FS_PT").attr('code')) == ''){
+                    	qray.alert('조회조건 중 가맹점은 필수입니다.');
                         return false;
                     }
+                    
                     if (nvl($("#DISTANCE").val()) != '' && nvl($("#FS_PT").val()) == ''){
                     	qray.alert('반경을 입력하셨으면,<br>기준가맹점을 입력해주십시오.');
                         return false;
                     }
-                    var list = $.DATA_SEARCH('BrandContract','selectH',param).list;
+                    
+                    var list = $.DATA_SEARCH('BrandContract','selectH_B',param).list;
                     fnObj.gridView01.target.setData(list);
                     if(list.length < afterIndex ){
                         afterIndex = 0
@@ -161,14 +137,13 @@
                 },
                 ITEM_CLICK: function (caller, act, data) {
                     var selected = caller.gridView01.getData('selected')[0];
-                    selected.CONTROL_AREA_CD = $('select[name="S_2"]').val()
-                    selected.ADM_PT_CD = $('select[name="S_1"]').val()
-                    selected.S_3 = $('#S_3').getCodes()
+                    selected.ADM_PT_CD = PT_CD_
+                    selected.JOIN_PT_CD = $("#FS_PT").attr('code');
                    	selected.X = $("#FS_PT").attr('x');
                     selected.Y = $("#FS_PT").attr('y');
-                    selected.DISTANCE = $("#DISTANCE").val()
+                    selected.DISTANCE = nvl($("#DISTANCE").val(), 0);
                      
-                    var list2 = $.DATA_SEARCH('BrandContract','selectD2',nvl(selected,{}));
+                    var list2 = $.DATA_SEARCH('BrandContract','selectD_B',nvl(selected,{}));
                     //var list2 = $.DATA_SEARCH('BrandContract','selectD',nvl(selected,{}));
                     fnObj.gridView02.target.setData(list2);
 
@@ -298,6 +273,7 @@
                             }
                             ,{key: "BRD_CD", label: "브랜드코드", width: 150   , align: "center" , editor: false}
                             ,{key: "BRD_NM", label: "브랜드명", width: 150, align: "center", editor: false}
+                            
                             ,{key: "ADM_PT_CD", label: "관리거래처코드", width: 150, align: "center", editor: false,hidden:true}
                             ,{key: "ADM_PT_NM", label: "관리거래처명", width: 150, align: "center", editor: false,hidden:true}
                             ,{key: "CONT_CNT", label: "가맹점수", width: 90, align: "center", editor: false}
@@ -684,16 +660,23 @@
             var _pop_height = 0;
             $(document).ready(function () {
                 changesize();
-
+                var PT_CD_ = '';
+                var pt_cd = getLoginPartner();
+            	if (pt_cd.length > 0){
+            		PT_CD_ = pt_cd[0].PT_CD
+            	}
+                $("#FS_PT").setParam({
+                    PT_CD : PT_CD_
+                })
+                
                 $("#FS_PT").on('dataBind', function(e){
 					console.log(e.detail);
+					var x = '';
+					var y = '';
 					
 					$("#ALL_PT").val(e.detail.PT_NM);
 					$("#ALL_PT").attr('code', e.detail.PT_CD);
 					$("#ALL_PT").attr('text', e.detail.PT_NM);
-					
-					var x = '';
-					var y = '';
 					
 					if (nvl(e.detail.PT_ADDR) != ''){
 						var geocoder = new kakao.maps.services.Geocoder();
@@ -921,20 +904,8 @@
             <ax:form name="searchView0">
                 <ax:tbl clazz="ax-search-tb1" minWidth="500px">
                     <ax:tr>
-                        <ax:td label='총판' width="350px">
-                            <div id="S_1" name="S_1" data-ax5select="S_1"
-                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                        </ax:td>
-                        <ax:td label='관할구역' width="350px">
-                            <div id="S_2" name="S_2" data-ax5select="S_2"
-                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                        </ax:td>
-                        <%-- <ax:td label='시군구' width="350px">
-                            <multipicker id="S_3" HELP_ACTION="HELP_AREA2" HELP_URL="multiArea" BIND-CODE="AREA_CD"
-                                         BIND-TEXT="AREA_NM"/>
-                        </ax:td> --%>
                         <ax:td label='가맹점' width="350px">
-                        	<codepicker id="FS_PT" HELP_ACTION="HELP_PARTNER_CONTRACT" HELP_URL="partner" BIND-CODE="PT_CD"
+                        	<codepicker id="FS_PT" HELP_ACTION="HELP_PARTNER_BRAND_BONSA" HELP_URL="partner" BIND-CODE="PT_CD"
                                     BIND-TEXT="PT_NM" READONLY/>
                         </ax:td>
                         <ax:td label='반경(km)' width="350px">
@@ -973,7 +944,7 @@
                     <div class="right" style="width:350px">
                         <codepicker id="ALL_PT" HELP_ACTION="HELP_PARTNER_CONTRACT" HELP_URL="partner" BIND-CODE="PT_CD"
                                     BIND-TEXT="PT_NM" READONLY
-                                    form-bind-type="codepicker" form-bind-text="PT_CONTRACT_PERSON_NM" form-bind-code="PT_CONTRACT_PERSON"/>
+                                    form-bind-type="codepicker" form-bind-text="PT_CONTRACT_PERSON_NM" form-bind-code="PT_CONTRACT_PERSON" HELP_DISABLED = "true"/>
                         <button type="button" class="btn btn-info" data-page-btn="all_btn" id="all_btn" style="width: 120px; float:right"><i
                                 class="icon_save"></i>거래처일괄등록
                         </button>

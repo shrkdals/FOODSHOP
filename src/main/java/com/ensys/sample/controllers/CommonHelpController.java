@@ -555,5 +555,12 @@ public class CommonHelpController extends BaseController {
 		return Responses.ListResponse.of(list);
 	}
 	
+	@RequestMapping(value = "HELP_PARTNER_BRAND_BONSA", method = RequestMethod.POST, produces = APPLICATION_JSON)
+	public Responses.ListResponse HELP_PARTNER_BRAND_BONSA(@RequestBody HashMap<String, Object> param) {
+		SessionUser sessionUser = SessionUtils.getCurrentUser();
+		param.put("COMPANY_CD", sessionUser.getCdCompany());
+		List<HashMap<String, Object>> list = service.HELP_PARTNER_BRAND_BONSA(param);
+		return Responses.ListResponse.of(list);
+	}
 
 }

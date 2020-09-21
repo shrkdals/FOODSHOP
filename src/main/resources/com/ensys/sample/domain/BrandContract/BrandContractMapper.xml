@@ -56,7 +56,32 @@
     ,#{LV3_CD}
     ) }
     </update>
+    
+    
+    <select id="selectH_B" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    	{ 
+    	CALL UP_FS_BRAND_CONTRACT_H_S_B
+	    	(
+		    	#{COMPANY_CD},
+		    	#{ADM_PT_CD}
+	    	)
+    	}
+    </select>
 
+	<select id="selectD_B" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    	{ 
+    	CALL UP_FS_BRAND_CONTRACT_D_S_B
+	    	(
+		    	#{COMPANY_CD},
+		    	#{BRD_CD},
+		    	#{ADM_PT_CD},
+		    	#{JOIN_PT_CD}, 
+		    	#{X}, 
+		    	#{Y}, 
+		    	#{DISTANCE}
+	    	)
+    	}
+    </select>
 </mapper>
 
 
