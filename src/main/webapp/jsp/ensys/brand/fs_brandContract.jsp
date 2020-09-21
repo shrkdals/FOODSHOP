@@ -12,7 +12,7 @@
 <ax:layout name="base">
     <jsp:attribute name="script">
         <ax:script-lang key="ax.script"/>
-        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=316c9b07bf0cad06b4e37ab2f364f29f&libraries=services"></script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2dd376155345de114f6b95e9fb8a0d0a&libraries=services"></script>
 		
     </script>
         
