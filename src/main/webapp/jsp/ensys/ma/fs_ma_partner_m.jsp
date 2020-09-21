@@ -725,16 +725,16 @@
                     },
                     callback: function (data) {
                         $("#POST_NO").val(data.zipcode);
-                        $("#PT_ADDR").val(data.zipcodeData.Address);
+                        $("#PT_ADDR").val(data.zipcodeData.address);
                         if (fnObj.gridView01.getData('selected').length > 0) {
                             var selectIdx = fnObj.gridView01.getData('selected')[0].__index;
                             fnObj.gridView01.target.setValue(selectIdx, 'POST_NO', data.zipcode);
-                            fnObj.gridView01.target.setValue(selectIdx, 'PT_ADDR', data.zipcodeData.Address);
+                            fnObj.gridView01.target.setValue(selectIdx, 'PT_ADDR', data.zipcodeData.address);
                             fnObj.gridView01.target.setValue(selectIdx, 'CD_AREA', data.zipcodeData.sigunguCode);
                             var geocoder;
                             try{
                             	geocoder = new kakao.maps.services.Geocoder();
-                                geocoder.addressSearch(data.zipcodeData.Address,kakaoCallback)
+                                geocoder.addressSearch(data.zipcodeData.address,kakaoCallback)
                             }catch(e){
                             	this.close();
                             }
