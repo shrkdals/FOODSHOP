@@ -9,7 +9,7 @@
     </select>
     
     <select id="selectD2" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_BRAND_CONTRACT_D_S2(#{COMPANY_CD} ,#{BRD_CD} ,#{CONTROL_AREA_CD} ,#{ADM_PT_CD}, #{X}, #{Y}, #{DISTANCE} ) }
+    { CALL UP_FS_BRAND_CONTRACT_D_S2(#{COMPANY_CD} ,#{BRD_CD} ,#{CONTROL_AREA_CD} ,#{ADM_PT_CD}, #{LATITUDE}, #{LONGITUDE}, #{DISTANCE} ) }
     </select>
 
     <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
@@ -76,8 +76,8 @@
 		    	#{BRD_CD},
 		    	#{ADM_PT_CD},
 		    	#{JOIN_PT_CD}, 
-		    	#{X}, 
-		    	#{Y}, 
+		    	#{LATITUDE}, 
+		    	#{LONGITUDE}, 
 		    	#{DISTANCE}
 	    	)
     	}

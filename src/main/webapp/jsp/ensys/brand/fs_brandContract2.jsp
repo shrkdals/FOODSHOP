@@ -80,6 +80,72 @@
                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
                     return false;
                 },
+				ITEM_MAP: function(caller, act, data){
+                	 
+                    
+                    var latitude = $("#FS_PT").attr('latitude');	//	위도
+                    var longitude = $("#FS_PT").attr('longitude');	//	경도
+
+                    var chkVal;
+                    if (nvl(latitude) == '' || nvl(longitude) == ''){
+                        if (fnObj.gridView02.target.list.length > 0){
+	                    	latitude = fnObj.gridView02.target.list[0].LATITUDE;
+	                    	longitude = fnObj.gridView02.target.list[0].LONGITUDE;
+	                    	chkVal = true;
+                        }
+                    }
+                    
+                	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+    			    mapOption = { 
+    			        center: new kakao.maps.LatLng(latitude, longitude), // 지도의 중심좌표
+    			        level: 6 // 지도의 확대 레벨
+    			    };
+    			
+    				var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+    				if (!chkVal){
+	    				// 마커가 표시될 위치입니다 
+	    				var markerPosition  = new kakao.maps.LatLng(latitude, longitude); 
+	
+	    				// 마커를 생성합니다
+	    				var marker = new kakao.maps.Marker({
+	    				    position: markerPosition
+	    				});
+	
+	    				// 마커가 지도 위에 표시되도록 설정합니다
+	    				marker.setMap(map);
+    				}
+    				
+    				var positions = [];
+    				for (var i = 0 ; i < fnObj.gridView02.target.list.length ; i ++){
+        				var data = fnObj.gridView02.target.list[i];
+        				
+    					positions.push({
+    						title: data.UMD_NM, 
+    						text: nvl(data.SIDO_NM) + nvl(data.SIGUNGU_NM) + nvl(data.UMD_NM),
+    				        latlng: new kakao.maps.LatLng(data.LATITUDE, data.LONGITUDE)
+        				})
+    				}
+
+                    var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+        
+    				for (var i = 0; i < positions.length; i ++) {
+    				    
+    				    // 마커 이미지의 이미지 크기 입니다
+    				    var imageSize = new kakao.maps.Size(24, 35); 
+    				    
+    				    // 마커 이미지를 생성합니다    
+    				    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+    				    
+    				    // 마커를 생성합니다
+    				    var marker = new kakao.maps.Marker({
+    				        map: map, // 마커를 표시할 지도
+    				        position: positions[i].latlng, // 마커를 표시할 위치
+    				        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+    				        image : markerImage // 마커 이미지 
+    				    });
+    				}
+
+                },
                 PAGE_SAVE: function (caller, act, data) {
 
                     var list = isChecked(caller.gridView02.getData())
@@ -137,16 +203,22 @@
                 },
                 ITEM_CLICK: function (caller, act, data) {
                     var selected = caller.gridView01.getData('selected')[0];
+                    if (nvl(selected) == '') {
+                    	ACTIONS.dispatch(ACTIONS.ITEM_MAP);
+                        return;
+                    }
+                    
                     selected.ADM_PT_CD = PT_CD_
                     selected.JOIN_PT_CD = $("#FS_PT").attr('code');
-                   	selected.X = $("#FS_PT").attr('x');
-                    selected.Y = $("#FS_PT").attr('y');
+                    selected.LATITUDE = $("#FS_PT").attr('LATITUDE');
+                    selected.LONGITUDE = $("#FS_PT").attr('LONGITUDE');
                     selected.DISTANCE = nvl($("#DISTANCE").val(), 0);
                      
                     var list2 = $.DATA_SEARCH('BrandContract','selectD_B',nvl(selected,{}));
                     //var list2 = $.DATA_SEARCH('BrandContract','selectD',nvl(selected,{}));
                     fnObj.gridView02.target.setData(list2);
-
+                    
+                    ACTIONS.dispatch(ACTIONS.ITEM_MAP);
                 },
                 ALL_PT: function (caller, act, data) {
                     var code = $('#ALL_PT').attr('code')
@@ -484,6 +556,8 @@
                                     type: "checkbox", config: {height: 17, trueValue: true, falseValue: false}
                                 }, dirty : false
                             }
+                            ,{key: "LATITUDE" , label: "위도" , width: 150     , align: "center"   , editor: false  ,sortable:true , hidden:true}
+                            ,{key: "LONGITUDE" , label: "경도" , width: 150     , align: "center"   , editor: false  ,sortable:true , hidden:true}
                             ,{key: "LV1_CD" , label: "" , width: 150     , align: "center"   , editor: false  ,sortable:true , hidden:true}
                             ,{key: "SIDO_NM" , label: "시도명" , width: 120     , align: "center"   , editor: false  ,sortable:true , hidden:false}
                             ,{key: "LV2_CD" , label: "", width: 150     , align: "center"   , editor: false  ,sortable:true , hidden:true}
@@ -671,12 +745,13 @@
                 
                 $("#FS_PT").on('dataBind', function(e){
 					console.log(e.detail);
-					var x = '';
-					var y = '';
 					
 					$("#ALL_PT").val(e.detail.PT_NM);
 					$("#ALL_PT").attr('code', e.detail.PT_CD);
 					$("#ALL_PT").attr('text', e.detail.PT_NM);
+					
+					var longitude = '';
+					var latitude = '';
 					
 					if (nvl(e.detail.PT_ADDR) != ''){
 						var geocoder = new kakao.maps.services.Geocoder();
@@ -686,17 +761,17 @@
 
 		                    // 정상적으로 검색이 완료됐으면
 		                    if (status === kakao.maps.services.Status.OK) {
-		                    	y = result[0].y;
-								x = result[0].x;
+			                    console.log(result[0]);
+			                    longitude = result[0].x;
+		                    	latitude  = result[0].y;
 		                    }
-
-		                    $("#FS_PT").attr('x', x);
-		                    $("#FS_PT").attr('y', y);
+		                    
+		                    $("#FS_PT").attr('longitude', longitude);
+		                    $("#FS_PT").attr('latitude', latitude);
 		                });
 		                
 					}
                 })
-
             });
             $(window).resize(function () {
                 changesize();
@@ -717,10 +792,12 @@
                 //데이터가 들어갈 실제높이
                 var datarealheight = $("#ax-base-root").height() - $(".ax-base-title").height() - $("#pageheader").height();
                 //타이틀을 뺀 상하단 그리드 합친높이
-                var tempgridheight = datarealheight - $("#left_title").height() - $("#bottom_left_title").height() - $("#bottom_left_amt").height();
+                var tempgridheight = datarealheight - $("#left_title").height();
 
-                $("#left_grid").css("height" ,tempgridheight / 100 * 99 - $('.ax-button-group').height()  );
-                $("#right_grid").css("height", tempgridheight / 100 * 99 - $('.ax-button-group').height() );
+                $("#left_grid").css("height" , (tempgridheight / 100 * 99) - $('.ax-button-group').height()  );
+                $("#right_grid").css("height", (tempgridheight / 100 * 60) - $('.ax-button-group').height() );
+				$("#map").css("height", (tempgridheight / 100 * 39));
+				
                 /*
                 alert($("#ax-base-root").height()); // 컨텐츠영역높이
                 ax-base-title //타이틀부분높이(class)
@@ -956,6 +1033,7 @@
                      data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
                      id = "right_grid"
                 ></div>
+	            <div id="map" style="width:100%;background-color: #BDBDBD"></div>
             </div>
 
             </div>
