@@ -118,12 +118,13 @@
     				var positions = [];
     				for (var i = 0 ; i < fnObj.gridView02.target.list.length ; i ++){
         				var data = fnObj.gridView02.target.list[i];
-        				
-    					positions.push({
-    						title: data.UMD_NM, 
-    						text: nvl(data.SIDO_NM) + nvl(data.SIGUNGU_NM) + nvl(data.UMD_NM),
-    				        latlng: new kakao.maps.LatLng(data.LATITUDE, data.LONGITUDE)
-        				})
+        				if (data.CONTRACT_STAT == '01'){
+	    					positions.push({
+	    						title: data.UMD_NM, 
+	    						text: nvl(data.SIDO_NM) + nvl(data.SIGUNGU_NM) + nvl(data.UMD_NM),
+	    				        latlng: new kakao.maps.LatLng(data.LATITUDE, data.LONGITUDE)
+	        				})
+        				}
     				}
 
                     var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
