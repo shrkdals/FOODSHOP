@@ -1,26 +1,34 @@
 package com.ensys.sample.controllers;
 
-import com.chequer.axboot.core.api.response.Responses;
-import com.chequer.axboot.core.controllers.BaseController;
-import com.chequer.axboot.core.parameter.RequestParams;
-import com.ensys.sample.domain.file.fileService;
-import com.ensys.sample.domain.user.SessionUser;
-import com.ensys.sample.utils.SessionUtils;
-import java_.io.File_;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.inject.Inject;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.URLEncoder;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.chequer.axboot.core.api.response.ApiResponse;
+import com.chequer.axboot.core.api.response.Responses;
+import com.chequer.axboot.core.controllers.BaseController;
+import com.ensys.sample.domain.file.fileService;
+import com.ensys.sample.domain.user.SessionUser;
+import com.ensys.sample.utils.SessionUtils;
 @Controller
 @RequestMapping(value = "/api/file")
 public class fileController extends BaseController {
@@ -31,6 +39,12 @@ public class fileController extends BaseController {
     @RequestMapping(value = "getFileData", method = RequestMethod.POST, produces = APPLICATION_JSON)
     public Responses.ListResponse getFileData(@RequestBody HashMap<String, Object> param) {
         return Responses.ListResponse.of(service.getFileData(param));
+    }
+    
+    @RequestMapping(value = "fileClear", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public ApiResponse fileClear(@RequestBody HashMap<String, Object> param) {
+        service.fileClear(param);
+        return ok();
     }
 
     @RequestMapping(value = "FileRead", method = RequestMethod.POST, produces = APPLICATION_JSON)       //  계정도움창
@@ -76,14 +90,23 @@ public class fileController extends BaseController {
                     FileInputStream fis = new FileInputStream(oriFile); //읽을파일
                     FileOutputStream fos = new FileOutputStream(FILE_PATH + "/" + file.get("FILE_PATH") + "/" + file.get("FILE_NAME")); //복사할파일
 
-                    int fileByte = 0;
-                    // fis.read()가 -1 이면 파일을 다 읽은것
-                    while ((fileByte = fis.read()) != -1) {
-                        fos.write(fileByte);
-                    }
+                    FileChannel fic = fis.getChannel(); 
+                    FileChannel foc = fos.getChannel();
+                    foc.transferFrom(fic, 0, fic.size());
+
+					/*
+					 * ScatteringByteChannel sbc = fis.getChannel(); GatheringByteChannel gbc =
+					 * fos.getChannel();
+					 * 
+					 * ByteBuffer bb = ByteBuffer.allocateDirect(1024);
+					 * 
+					 * while(sbc.read(bb) != -1){ bb.flip(); gbc.write(bb); bb.clear(); }
+					 */
+                    
                     //자원사용종료
                     fis.close();
                     fos.close();
+                    
                 }
             }
         } catch (Exception e) {

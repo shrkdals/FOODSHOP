@@ -1,20 +1,30 @@
 package com.ensys.sample.domain.file;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.PixelGrabber;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.inject.Inject;
+import javax.swing.ImageIcon;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ensys.sample.domain.BaseService;
 import com.ensys.sample.domain.common.commonService;
 import com.ensys.sample.domain.user.SessionUser;
 import com.ensys.sample.utils.FTPUploader;
 import com.ensys.sample.utils.SessionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class fileService extends BaseService {
@@ -29,6 +39,132 @@ public class fileService extends BaseService {
 		SessionUser user = SessionUtils.getCurrentUser();
 		param.put("CD_COMPANY", user.getCdCompany());
 		return fileMapper.getFileData(param);
+	}
+
+	public void fileClear(HashMap<String, Object> param) {
+		String strPath = (String) param.get("path");
+		File path = new File(strPath);
+		File[] fileList = path.listFiles();
+
+		for (File file : fileList) {
+			if (file.isFile()) {
+				System.out.println("fileName : " + file.getName() + " , strPath : " + strPath);
+				goThumnail2(file, new File(strPath + "/" + file.getName()));
+			}
+		}
+	}
+
+	private File multipartToFile(MultipartFile mfile) {
+		File file = null;
+		try {
+			file = new File(mfile.getOriginalFilename());
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(mfile.getBytes());
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return file;
+	}
+
+	private void goThumnail2(File f, File path) {
+		int destWidth = 0;
+		int destHeight = 0;
+		try {
+			BufferedImage original = ImageIO.read(f);
+			
+			if (original == null) return;
+			// 450px로 width 만들기 위한 나누는 수
+			int divideValue = 1;
+
+			// 이미지 width를 450으로 맞추기
+			// 이미지 크기가 사이즈와 관계 있기 때문에 width가 450px 이상일 경우에만 450으로 width를 맞추어 준다.
+
+			// 450px 보다 작은 경우에는 나누는 수를 1로 하여 원본 그대로의 이미지를 저장한다.
+			if (original.getWidth(null) > 450) {
+				divideValue = original.getWidth(null) / 450;
+			}
+
+			destWidth = original.getWidth(null) / divideValue;
+			destHeight = original.getHeight(null) / divideValue;
+
+			
+			// 이미지 사이즈 수정(width를 450px로 변경)
+			Image resize = original.getScaledInstance(original.getWidth(null) / divideValue,
+					original.getHeight(null) / divideValue, Image.SCALE_SMOOTH);
+
+			int pixels[] = new int[destWidth * destHeight];
+			PixelGrabber pg = new PixelGrabber(resize, 0, 0, destWidth, destHeight, pixels, 0, destWidth);
+			try {
+				pg.grabPixels();
+			} catch (InterruptedException e) {
+				throw new IOException(e.getMessage());
+			}
+			BufferedImage destImg = new BufferedImage(destWidth, destHeight, BufferedImage.TYPE_INT_RGB);
+			destImg.setRGB(0, 0, destWidth, destHeight, pixels, 0, destWidth);
+
+			ImageIO.write(destImg, "jpg", path);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void goThumnail(MultipartFile orgnMf, File path) {
+
+		int destWidth = 0;
+		int destHeight = 0;
+		try {
+			File f = multipartToFile(orgnMf);
+			Image original = null;
+			try {
+				String suffix = f.getName().substring(f.getName().lastIndexOf('.') + 1).toLowerCase();
+				if (suffix.equals("bmp") || suffix.equals("png") || suffix.equals("gif")) {
+					original = ImageIO.read(f);
+				} else {
+					// JPEG 포맷
+					original = new ImageIcon(f.toURL()).getImage();
+				}
+
+				// 450px로 width 만들기 위한 나누는 수
+				int divideValue = 1;
+
+				// 이미지 width를 450으로 맞추기
+
+				// 이미지 크기가 사이즈와 관계 있기 때문에 width가 450px 이상일 경우에만 450으로 width를 맞추어 준다.
+
+				// 450px 보다 작은 경우에는 나누는 수를 1로 하여 원본 그대로의 이미지를 저장한다.
+				if (original.getWidth(null) > 450) {
+					divideValue = original.getWidth(null) / 450;
+				}
+
+				destWidth = original.getWidth(null) / divideValue;
+				destHeight = original.getHeight(null) / divideValue;
+
+				// 이미지 사이즈 수정(width를 450px로 변경)
+				Image resize = original.getScaledInstance(original.getWidth(null) / divideValue,
+						original.getHeight(null) / divideValue, Image.SCALE_SMOOTH);
+
+				int pixels[] = new int[destWidth * destHeight];
+				PixelGrabber pg = new PixelGrabber(resize, 0, 0, destWidth, destHeight, pixels, 0, destWidth);
+				try {
+					pg.grabPixels();
+				} catch (InterruptedException e) {
+					throw new IOException(e.getMessage());
+				}
+				BufferedImage destImg = new BufferedImage(destWidth, destHeight, BufferedImage.TYPE_INT_RGB);
+				destImg.setRGB(0, 0, destWidth, destHeight, pixels, 0, destWidth);
+
+				ImageIO.write(destImg, "jpg", path);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// 자르기파일 업로드
@@ -90,7 +226,7 @@ public class fileService extends BaseService {
 					/* 업로드 할 파일을 만들고 파일을 복사 */
 					try {
 						file = new File("/rahan2000/" + fileName.get("FILE_PATH") + "/" + savedFileNm);
-						cropMf.get(i).transferTo(file);
+						goThumnail(cropMf.get(i), file);
 
 						ftpUploader.uploadFile("/rahan2000/" + fileName.get("FILE_PATH") + "/" + savedFileNm,
 								savedFileNm, "/upload/" + fileName.get("FILE_PATH"));

@@ -578,6 +578,38 @@
                  */
             }
 
+            $("#test").click(function(){
+                var path;
+            	var promptDialog = new ax5.ui.dialog();
+                promptDialog.setConfig({
+                    title: "XXX",
+                    theme: "danger"
+                });
+                promptDialog.prompt({
+                    title: "Confirm Title",
+                    msg: 'Confirm message'
+                }, function () {
+                    console.log(this);
+                    if (this.key == 'ok'){
+                    	path = this.input.value
+
+                    	axboot.ajax({
+                            type: "POST",
+                            url: ["commonfile", "fileClear"],
+                            data : JSON.stringify({
+        						path : path
+                            }),
+                            callback: function (res) {
+                                qray.alert("ok");
+                                return;
+                            }
+                    	});
+                    }
+                    // {key: "ok", value: [User Input Data]}
+                });
+                
+            	
+            })
         </script>
     </jsp:attribute>
     <jsp:body>
@@ -640,6 +672,7 @@
                     <div class="left">
                     </div>
                     <div class="right">
+                    	<!-- <button type="button" class="btn btn-small" id="test" style="width:80px;">테스트</button> -->
                         <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
                                 class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
                         <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">
