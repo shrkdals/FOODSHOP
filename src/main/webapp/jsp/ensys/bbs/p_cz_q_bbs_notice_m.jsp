@@ -664,7 +664,6 @@
                 </ax:tbl>
             </ax:form>
         </div>
-
        <%-- 그리드 영역 시작 --%>
         <div style="width:100%;overflow:hidden">
             <div style="width:71%;overflow:hidden;float:left;">
