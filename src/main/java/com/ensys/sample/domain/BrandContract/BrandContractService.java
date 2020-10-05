@@ -23,6 +23,21 @@ public class BrandContractService extends BaseService {
         param.put("LOGIN_ID",user.getIdUser());
         return mapper.selectH(param);
     }
+    
+    public List<HashMap<String, Object>> selectH_B(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD",user.getCdCompany());
+        param.put("LOGIN_ID",user.getIdUser());
+        return mapper.selectH_B(param);
+    }
+    
+    public List<HashMap<String, Object>> selectD_B(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD",user.getCdCompany());
+        param.put("LOGIN_ID",user.getIdUser());
+        return mapper.selectD_B(param);
+    }
+    
 
     public List<HashMap<String, Object>> selectD(HashMap<String, Object> param) {
         SessionUser user = SessionUtils.getCurrentUser();

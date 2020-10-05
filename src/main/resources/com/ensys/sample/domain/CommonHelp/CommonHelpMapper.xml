@@ -123,5 +123,10 @@
     <select id="HELP_PARTNER_AREA" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
         { CALL UP_FS_COMMONHELP_HELPPARTNER_S4(#{COMPANY_CD},#{KEYWORD} ,#{PT_CD}) }
     </select>
+    
+    <select id="HELP_PARTNER_BRAND_BONSA" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { CALL UP_FS_COMMONHELP_HELPPARTNER_S5(#{COMPANY_CD},#{KEYWORD} ,#{PT_CD}) }
+    </select>
+    
 
 </mapper>

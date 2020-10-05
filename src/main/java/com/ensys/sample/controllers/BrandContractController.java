@@ -60,5 +60,18 @@ public class BrandContractController extends BaseController {
         service.contract_cancel(param);
         return ok();
     }
+    
+    
+    ////////////////////////////////////////////
+    
+    @RequestMapping(value = "selectH_B", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse selectH_B(@RequestBody HashMap<String, Object> param) {
+        return Responses.ListResponse.of(service.selectH_B(param));
+    }
+    
+    @RequestMapping(value = "selectD_B", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse selectD_B(@RequestBody HashMap<String, Object> param) {
+        return Responses.ListResponse.of(service.selectD_B(param));
+    }
 
 }

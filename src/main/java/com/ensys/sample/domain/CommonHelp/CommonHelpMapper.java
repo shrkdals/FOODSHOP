@@ -97,5 +97,6 @@ public interface CommonHelpMapper extends MyBatisMapper {
     
     List<HashMap<String, Object>> HELP_PARTNER_AREA(HashMap<String, Object> param);
     
+    List<HashMap<String, Object>> HELP_PARTNER_BRAND_BONSA(HashMap<String, Object> param);
     
 }
