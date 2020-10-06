@@ -443,6 +443,53 @@
          fnObj.pageButtonView = axboot.viewExtend({
              initView: function () {
                  axboot.buttonClick(this, "data-page-btn", {
+                     "download": function(){
+                    	 var path, fileName;
+                    	 
+                    	 if (nvl(initData.CALL_BACK) != ''){
+                    	 	path = axboot.getfileRoot() + "\\" + initData.CALL_BACK.FILE_PATH + "\\original\\" + initData.CALL_BACK.FILE_NAME;
+                    	 	fileName = initData.CALL_BACK.FILE_NAME;
+                       	 }else{
+                    		 axboot.ajax({
+                                 type: "POST",
+                                 url: ["commonfile", "getFileData"],
+                                 async: false,
+                                 data: JSON.stringify({
+                                     CG_CD: initData.CG_CD,
+                                     TB_KEY: initData.TB_KEY,
+                                     TB_ID: initData.TB_ID
+                                 }),
+                                 callback: function (res) {
+                                     if (nvl(res.list) != '') {
+                                         if (res.list.length > 0) {
+
+                                             var data;
+                                             for (var i = 0 ; i < res.list.length; i ++){
+                                                 if (!data) {
+                                                     data = res.list[i];
+                                                 };
+
+                                                 // data의 값과 현재 값을 비교해서 data값을 가장 큰 값으로 유지
+                                                 if (data.FILE_SEQ < res.list[i].FILE_SEQ) {
+                                                     data = res.list[i];
+                                                 }
+                                                 path = axboot.getfileRoot() + "\\" + data.FILE_PATH + "\\original\\" + data.FILE_NM;
+                                                 fileName = data.ORGN_FILE_NM;
+                                             }
+                                         }
+                                     }
+                                 }
+                    		 })
+                       	 }
+
+                       	 console.log(path);
+                       		console.log(fileName);
+                       	
+                    	 var link = document.createElement('a');
+                    	 link.setAttribute("href", path);
+                         link.setAttribute("download", "_" + fileName);
+                         link.click();
+                     },
                      "close": function () {
                          parent.modal.close();
                      },
@@ -799,7 +846,7 @@
                                 </h2>
                             </div>
                             <div class="right">
-
+								<!-- <button type="button" class="btn btn-small" data-page-btn="download" style="width:80px;">다운로드</button> -->
                             </div>
                         </div>
                         <div class="img-preview"></div>

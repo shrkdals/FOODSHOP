@@ -153,10 +153,10 @@ public class fileService extends BaseService {
 				} catch (InterruptedException e) {
 					throw new IOException(e.getMessage());
 				}
-				BufferedImage destImg = new BufferedImage(destWidth, destHeight, BufferedImage.TYPE_INT_RGB);
+				BufferedImage destImg = new BufferedImage(destWidth, destHeight, BufferedImage.TYPE_INT_ARGB);
 				destImg.setRGB(0, 0, destWidth, destHeight, pixels, 0, destWidth);
 
-				ImageIO.write(destImg, "jpg", path);
+				ImageIO.write(destImg, "png", path);
 
 			} catch (Exception e) {
 				e.printStackTrace();
