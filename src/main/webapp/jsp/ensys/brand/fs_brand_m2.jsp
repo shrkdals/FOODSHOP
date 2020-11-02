@@ -80,9 +80,12 @@
                     //var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'PT_CATE_SEARCH' , PARAM_STRING_1 : selected.ADM_PT_CD }).list
                     //$("#CATE_CD").ax5select({options: [{value:'' , text : ''}].concat(list)}); //분류코드
                     $('.QRAY_FORM').setFormData(selected);
-
+                    $('.QRAY_FORM2').setFormData(selected);
+                    
                     $("#BRD_NOTICE").val(nvl(selected.BRD_NOTICE, '').replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
                     $("#BRD_GOOD").val(nvl(selected.BRD_GOOD, '').replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
+                    $("#BRD_TERMS").val(nvl(selected.BRD_TERMS, '').replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
+                    
                     fnObj.gridView02.target.setData($.DATA_SEARCH('Brandm', 'selectBrandMenu', nvl(selected, {})));
                     fnObj.gridView04.target.setData($.DATA_SEARCH('Brandm', 'selectBrandBeginItem', nvl(selected, {})));
                     fnObj.gridView05.target.setData($.DATA_SEARCH('Brandm', 'selectBrandItemCategory', nvl(selected, {})));
@@ -466,6 +469,14 @@
                                 hidden: true
                             }
                             , {
+                                key: "BTERMS00001",
+                                label: "브랜드계약약관",
+                                width: 150,
+                                align: "center",
+                                editor: {type: "text"},
+                                hidden: true
+                            }
+                            , {
                                 key: "LOGO_FILE_NM",
                                 label: "",
                                 width: 150,
@@ -490,6 +501,14 @@
                                 hidden: true
                             }
                             , {
+                                key: "TERMS_FILE_NM",
+                                label: "",
+                                width: 150,
+                                align: "center",
+                                editor: {type: "text"},
+                                hidden: true
+                            }
+                            , {
                                 key: "BRD_GOOD",
                                 label: "브랜드장점",
                                 width: 150,
@@ -500,6 +519,14 @@
                             , {
                                 key: "BRD_NOTICE",
                                 label: "브랜드공지사항",
+                                width: 150,
+                                align: "center",
+                                editor: {type: "text"},
+                                hidden: true
+                            }
+                            , {
+                                key: "BRD_TERMS",
+                                label: "브랜드 계약약관",
                                 width: 150,
                                 align: "center",
                                 editor: {type: "text"},
@@ -1157,6 +1184,14 @@
                                         height: _pop_height,
                                         url: "brandItem",
                                         action: ["commonHelp", "HELP_BRAND_ITEM"],
+                                        param: function(){
+											return {
+												DISABLED: true,
+												PT_CD:fnObj.gridView01.getData('selected')[0].ADM_PT_CD,
+												PT_NM:fnObj.gridView01.getData('selected')[0].ADM_PT_NM,
+												ITEM_SP: '06',
+											}
+                                        },
                                         callback: function (e) {
                                             var itemH = fnObj.gridView04.getData('selected')[0];
                                             var index = itemH.__index;
@@ -1352,6 +1387,14 @@
                                         height: _pop_height,
                                         url: "brandItem",
                                         action: ["commonHelp", "HELP_BRAND_ITEM"],
+                                        param: function(){
+											return {
+												DISABLED: true,
+												PT_CD:fnObj.gridView01.getData('selected')[0].ADM_PT_CD,
+												PT_NM:fnObj.gridView01.getData('selected')[0].ADM_PT_NM,
+												ITEM_SP: '06',
+											}
+                                        },
                                         callback: function (e) {
                                             var itemH = fnObj.gridView05.getData('selected')[0];
                                             var index = itemH.__index;
@@ -1561,6 +1604,17 @@
                     fnObj.gridView01.target.setValue(itemH.__index, 'CATE_NM', $("#CATE_CD").getTexts());
                 });
 
+                $(".QRAY_FORM2").find("[data-ax5select]").change(function () {
+                    console.log(this.id, " : ", this.value);
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__index, this.id, $('select[name="' + this.id + '"]').val())
+                });
+
+                $(".QRAY_FORM2").find("input").change(function () {
+                    console.log(this.id, " : ", this.value);
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    fnObj.gridView01.target.setValue(itemH.__index, this.id, $('#' + this.id).val())
+                });
 
                 $(".QRAY_FORM").find("[data-ax5select]").change(function () {
                     console.log(this.id, " : ", this.value);
@@ -1696,6 +1750,11 @@
                 fnObj.gridView01.target.setValue(fnObj.gridView01.getData('selected')[0].__index, 'BRD_GOOD', this.value.replace(/(\n|\r\n)/g, '<br>'));
             })
 
+            $("#BRD_TERMS").change(function () {
+                console.log(this.value.replace(/(\n|\r\n)/g, '<br>'));
+                fnObj.gridView01.target.setValue(fnObj.gridView01.getData('selected')[0].__index, 'BRD_TERMS', this.value.replace(/(\n|\r\n)/g, '<br>'));
+            })
+            
             function onlyNumber(input){
                 $(input).val($(input).val().replace(/[^0-9]/gi,""));
             }
@@ -1735,6 +1794,7 @@
                 $("#tab4_grid").css("height", $("#tab_area").height() - $("#tab4_button").height() - 40);
                 $("#tab5_area").css("height", $("#tab_area").height() - 40);
                 $("#tab6_area").css("height", $("#tab_area").height() - 40);
+                $("#tab7_area").css("height", $("#tab_area").height() - 40);
                 $("#right_content").css("height", (datarealheight / 100 * 99));
             }
             
@@ -2158,6 +2218,32 @@
             <div data-tab-panel="{label: '브랜드 장점', active: 'false'}" id="tabArea6">
                 <div id="tab6_area">
                     <textarea class="BrandTextArea" id="BRD_GOOD"></textarea>
+                </div>
+            </div>
+            <div data-tab-panel="{label: '계약약관', active: 'false'}" id="tabArea7">
+                <div id="tab7_area" >
+	                <div style="float: left; width:69%; height:100%;">
+	                    <textarea class="BrandTextArea" id="BRD_TERMS"></textarea>
+	                </div>
+	                <div style="float: right; width: 30%; height:100%;"">
+	                	<div class="QRAY_FORM2">
+		                	<ax:tbl>
+		                		<ax:tr>
+		                			<ax:td label='계약약관파일' width="300px">
+		                				<div class="input-group" id="filemodal">
+		                					<input type="text" class="form-control" id="TERMS_FILE_NM"
+		                                             TB_ID="FS_BRAND_M"
+		                                             CG_CD="BTERMS00001"
+		                                             FILE_PATH="brand/terms"
+		                                             data-file-input readonly="readonly" form-bind-type="text">
+		                                      <span class="input-group-addon openFile" style="cursor: pointer"><i
+		                                              class="cqc-magnifier"></i></span>
+		                                 </div>
+		                            </ax:td>
+		                        </ax:tr>
+		                    </ax:tbl>
+	                    </div>
+	                </div>
                 </div>
             </div>
                 <%--

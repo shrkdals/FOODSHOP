@@ -53,6 +53,7 @@ public class BrandmController extends BaseController {
     public Responses.ListResponse selectBrandItemCategory(@RequestBody HashMap<String, Object> param) {
         return Responses.ListResponse.of(service.selectBrandItemCategory(param));
     }
+    
     @RequestMapping(value = "save", method =  {RequestMethod.PUT}, produces = APPLICATION_JSON)
     public ApiResponse save(@RequestBody HashMap<String, Object> param) throws Exception {
         service.saveAll(param);

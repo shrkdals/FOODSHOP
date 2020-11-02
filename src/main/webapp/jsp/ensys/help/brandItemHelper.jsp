@@ -9,9 +9,27 @@
 <ax:layout name="modal">
     <jsp:attribute name="script">
         <script type="text/javascript">
+        	var param = ax5.util.param(ax5.info.urlUtil().param);
+        	var initData;
+        	if (param.modalName) {
+        	    initData = nvl(eval("parent." + param.modalName + ".modalConfig.sendData().initData"), {});  // 부모로 부터 받은 Parameter Object
+        	} else {
+        	    initData = nvl(parent.modal.modalConfig.sendData().initData, {});  // 부모로 부터 받은 Parameter Object
+        	}
+        	
             var dl_ITEM_SP = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00011');
             $("#ITEM_SP").ax5select({options: dl_ITEM_SP});
 
+            if (initData.DISABLED){
+        		$("#ITEM_SP").ax5select('setValue', initData.ITEM_SP);
+        		$("#ITEM_SP").ax5select("disable");
+        		$("#PT_CD").val(initData.PT_NM);
+        		$("#PT_CD").attr('code', initData.PT_CD);
+        		$("#PT_CD").attr('text', initData.PT_NM);
+        		$("#PT_CD").attr('readonly', 'readonly');
+        		
+            }
+            
             fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 initView: function () {
                     var _this = this;
@@ -71,8 +89,9 @@
                         $("#PT_CD").val(e[0].PT_NM);
                     }
                 }
-
-                parent.openModal("brandPartner", "HELP_BRAND_PARTNER", "userCallback", this.name, {PT_SP: '03|04|05', KEYWORD : $("#PT_CD").val()});
+				if (!initData.DISABLED){
+             	   parent.openModal("brandPartner", "HELP_BRAND_PARTNER", "userCallback", this.name, {PT_SP: '03|04|05', KEYWORD : $("#PT_CD").val()});
+                }
             }
         </script>
     </jsp:attribute>

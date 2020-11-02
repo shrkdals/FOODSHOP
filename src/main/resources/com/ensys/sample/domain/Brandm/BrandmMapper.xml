@@ -31,7 +31,7 @@
     <select id="selectBrandItemCategory" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
         { CALL UP_FS_BRAND_ITEM_CATEGORY_S(#{COMPANY_CD},#{BRD_CD}) }
     </select>
-
+    
     <update id="insert"  parameterType="java.util.HashMap" statementType="CALLABLE">
         {
         CALL UP_FS_BRAND_M_I
@@ -52,9 +52,10 @@
                 #{BRD_NOTICE},
                 #{BRD_GOOD},
                 #{PROMT_LINK},
-                #{USER_ID}
-                ,#{CATE_CD}
-                ,#{CATE_NM}
+                #{USER_ID},
+                #{CATE_CD},
+                #{CATE_NM},
+                #{BRD_TERMS}
             )
         }
     </update>
@@ -82,6 +83,7 @@
                 #{USER_ID}
                 ,#{CATE_CD}
                 ,#{CATE_NM}
+                ,#{BRD_TERMS}
             )
         }
     </update>

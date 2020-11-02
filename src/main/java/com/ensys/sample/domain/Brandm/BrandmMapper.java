@@ -21,6 +21,8 @@ public interface BrandmMapper extends MyBatisMapper {
 
     List<HashMap<String, Object>> selectBrandItemCategory(HashMap<String, Object> param);
 
+    HashMap<String, Object> selectTerms(HashMap<String, Object> param);
+    
     void insert(HashMap<String, Object> param);
     void delete(HashMap<String, Object> param);
     void update(HashMap<String, Object> param);
@@ -44,4 +46,6 @@ public interface BrandmMapper extends MyBatisMapper {
     void insertItemCategory(HashMap<String, Object> param);
     void deleteItemCategory(HashMap<String, Object> param);
     void updateItemCategory(HashMap<String, Object> param);
+    
+    void modifyTerms(HashMap<String, Object> param);
 }

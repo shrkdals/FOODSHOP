@@ -54,6 +54,10 @@ public class BrandmService extends BaseService {
     public List<HashMap<String, Object>> selectBrandItemCategory(HashMap<String, Object> param) {
         return mapper.selectBrandItemCategory(param);
     }
+    
+    public HashMap<String, Object> selectTerms(HashMap<String, Object> param){
+    	return mapper.selectTerms(param);
+    }
 
     @Transactional
     public void saveAll(HashMap<String, Object> param) throws Exception {
@@ -65,7 +69,7 @@ public class BrandmService extends BaseService {
         List<HashMap<String, Object>> brand_predic_sale_d = (List<HashMap<String, Object>>) param.get("brand_predic_sale_d");   // 브랜드수익률
         List<HashMap<String, Object>> brand_begin_item = (List<HashMap<String, Object>>) param.get("brand_begin_item");   // 브랜드초도물품
         List<HashMap<String, Object>> brand_item_category = (List<HashMap<String, Object>>) param.get("brand_item_category");   // 브랜드상품카테고리
-
+        
         if (brand_m != null && brand_m.size() > 0){             //  브랜드마스터
             for (HashMap<String, Object> item : brand_m){
                 item.put("COMPANY_CD", user.getCdCompany());
@@ -210,8 +214,11 @@ public class BrandmService extends BaseService {
         if (main != null) {
             fileservice.insertFsFile(main);
         }
-
-
+        HashMap<String, Object> terms = (HashMap<String, Object>) param.get("file_terms");
+        if (terms != null) {
+            fileservice.insertFsFile(terms);
+        }
+        
     }
 
 }
