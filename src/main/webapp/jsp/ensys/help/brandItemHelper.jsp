@@ -27,7 +27,6 @@
         		$("#PT_CD").attr('code', initData.PT_CD);
         		$("#PT_CD").attr('text', initData.PT_NM);
         		$("#PT_CD").attr('readonly', 'readonly');
-        		
             }
             
             fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
