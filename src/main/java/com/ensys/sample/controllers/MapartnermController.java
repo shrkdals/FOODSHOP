@@ -38,7 +38,10 @@ public class MapartnermController extends BaseController {
     public Responses.ListResponse select4(@RequestBody HashMap<String, Object> param) {
         return Responses.ListResponse.of(service.select4(param));
     }
-    
+    @RequestMapping(value = "selectGrid2", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse selectGrid2(@RequestBody HashMap<String, Object> param) {
+        return Responses.ListResponse.of(service.selectGrid2(param));
+    }
 
     @RequestMapping(value = "save", method =  {RequestMethod.PUT}, produces = APPLICATION_JSON)
     public ApiResponse save(@RequestBody HashMap<String, Object> param) throws Exception {

@@ -61,6 +61,11 @@
                 options: YN_OP
             });
 
+            $("#BLOCK_YN").ax5select({
+                options: YN_OP
+            });
+
+
             $("#BRD_VERIFY_YN").ax5select({
                 options: YN_OP
             });
@@ -475,6 +480,7 @@
                             ,{key: 'NO_DEPOSIT'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'CD_BANK'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'NM_BANK'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'BLOCK_YN'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
                         ],
 
                         body: {
@@ -1586,6 +1592,10 @@
                                         <span class="input-group-addon openFile" style="cursor: pointer"><i
                                                 class="cqc-magnifier"></i></span>
                                     </div>
+                                </ax:td>
+                                <ax:td label='블랙리스트 여부' width="300px">
+                                    <div id="BLOCK_YN" name="BLOCK_YN" data-ax5select="BLOCK_YN"
+                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
                                 </ax:td>
                             </ax:tr>
                             <div class="ax-button-group">
