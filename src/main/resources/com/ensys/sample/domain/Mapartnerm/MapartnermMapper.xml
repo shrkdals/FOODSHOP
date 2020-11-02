@@ -22,7 +22,7 @@
         { CALL UP_FS_PARTNER_H_I( #{USER_ID}, #{COMPANY_CD},#{PT_CD},#{PT_SP},#{PT_NM},#{BIZ_NO},#{OWNER_NM},#{SIGN_NM},#{PT_TYPE}
         ,#{PT_COND},#{TEL_NO},#{HP_NO},#{POST_NO},#{PT_ADDR},#{SYSDEF_ADDR},#{FAX_NO},#{CLOSING_TP},#{USE_YN},#{SALES_PERSON_ID}
         ,#{TAX_SP},#{BRD_VERIFY_YN},#{CONTRACT_YN},#{LAT_CD},#{LONG_CD} ,#{DELI_AMT} ,#{FREE_DELI_AMT} ,#{CD_AREA}
-        ,#{CD_BANK},#{NM_BANK},#{NO_DEPOSIT},#{NO_EMAIL}
+        ,#{CD_BANK},#{NM_BANK},#{NO_DEPOSIT},#{NO_EMAIL} ,#{BLOCK_YN}
         ) }
     </update>
 
@@ -81,7 +81,22 @@
     <select id="select4" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
         {CALL UP_FS_PARTNER_CATEGORY_S(#{COMPANY_CD},#{PT_CD})}
     </select>
-    
+
+    <select id="selectGrid2" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        SELECT
+        A.*
+        ,B.PT_NM JOIN_PT_NM
+        ,C.PT_NM MAIN_PT_NM
+        FROM FS_CONTRACT_M  A
+        LEFT JOIN FS_PARTNER_M B
+        ON A.COMPANY_CD = B.COMPANY_CD
+        AND A.JOIN_PT_CD = B.PT_CD
+        LEFT JOIN FS_PARTNER_M C
+        ON A.COMPANY_CD = C.COMPANY_CD
+        AND A.MAIN_PT_CD = C.PT_CD
+        WHERE A.COMPANY_CD = #{COMPANY_CD} AND A.JOIN_PT_CD = #{JOIN_PT_CD} AND A.PT_TP = '02'
+    </select>
+
     <update id="insert4"  parameterType="java.util.HashMap" statementType="CALLABLE">
         { CALL UP_FS_PARTNER_CATEGORY_I( #{COMPANY_CD},#{PT_CG_CD},#{PT_CD},#{CG_CD},#{USER_ID} ) }
     </update>
@@ -89,7 +104,49 @@
     <update id="delete4"  parameterType="java.util.HashMap" statementType="CALLABLE">
         { CALL UP_FS_PARTNER_CATEGORY_D( #{COMPANY_CD},#{PT_CG_CD}) }
     </update>
-    
+
+
+    <delete id="grid2Obj_delete" parameterType="java.util.HashMap" statementType="CALLABLE">
+        DELETE FROM FS_CONTRACT_M WHERE COMPANY_CD = #{COMPANY_CD} AND JOIN_PT_CD = #{JOIN_PT_CD} AND PT_TP = '02'
+    </delete>
+
+    <insert id="grid2Obj_insert" parameterType="java.util.HashMap" statementType="CALLABLE">
+        INSERT INTO FS_CONTRACT_M
+        (
+          COMPANY_CD
+        , CONTRACT_NO
+        , JOIN_PT_CD
+        , MAIN_PT_CD
+        , CONTRACT_SP
+        , CONTRACT_ST_DTE
+        , CONTRACT_ED_DTE
+        , CONTRACT_STAT
+        , PT_CONTRACT_PERSON
+        , SALES_PERSON_ID
+        , INSERT_ID
+        , INSERT_DT
+        , UPDATE_ID
+        , UPDATE_DT
+        , PT_TP
+        )VALUES(
+          #{COMPANY_CD}
+        , #{CONTRACT_NO}
+        , #{JOIN_PT_CD}
+        , #{MAIN_PT_CD}
+        , #{CONTRACT_SP}
+        , #{CONTRACT_ST_DTE}
+        , #{CONTRACT_ED_DTE}
+        , #{CONTRACT_STAT}
+        , #{PT_CONTRACT_PERSON}
+        , #{SALES_PERSON_ID}
+        , #{USER_ID}
+        , REPLACE(CONVERT(NVARCHAR(30),GETDATE(),120),'-','/')
+        , #{USER_ID}
+        , REPLACE(CONVERT(NVARCHAR(30),GETDATE(),120),'-','/')
+        , '02'
+        )
+    </insert>
+
 </mapper>
 
 

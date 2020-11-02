@@ -37,4 +37,10 @@ public interface MapartnermMapper extends MyBatisMapper {
 
     void MEMBER_JOIN_I(HashMap<String, Object> item);
     void MEMBER_JOIN_U(HashMap<String, Object> item);
+
+    void grid2Obj_delete(HashMap<String, Object> item);
+
+    void grid2Obj_insert(HashMap<String, Object> obj);
+
+    List<HashMap<String, Object>> selectGrid2(HashMap<String, Object> param);
 }

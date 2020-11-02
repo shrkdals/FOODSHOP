@@ -39,7 +39,12 @@ public class MapartnermService extends BaseService {
         param.put("COMPANY_CD",user.getCdCompany());
         return mapper.select4(param);
     }
-    
+
+    public List<HashMap<String, Object>> selectGrid2(HashMap<String, Object> param) {
+        SessionUser user = SessionUtils.getCurrentUser();
+        param.put("COMPANY_CD",user.getCdCompany());
+        return mapper.selectGrid2(param);
+    }
     
 
     //거래처 계약관리
@@ -61,6 +66,7 @@ public class MapartnermService extends BaseService {
         }
         // #### 거래처 마스터 ####
 
+        /*
         // #### 거래처 연결 수수료 ####
         for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("delete2")){
             item.put("COMPANY_CD",user.getCdCompany());
@@ -74,7 +80,22 @@ public class MapartnermService extends BaseService {
         }
         // #### 거래처 연결 수수료 ####
 
-
+        */
+        // #### 거래처 브랜드 계약 ####
+        for(HashMap<String, Object> item : (List<HashMap<String, Object>>)param.get("insert")){
+            if(item.get("TAB_GRID2_OBJ") != null){
+                mapper.grid2Obj_delete(item);
+                for(HashMap<String, Object> obj : (List<HashMap<String, Object>>)item.get("TAB_GRID2_OBJ")){
+                    obj.put("COMPANY_CD",user.getCdCompany());
+                    obj.put("USER_ID",user.getIdUser());
+                    /*List<HashMap<String, Object>> chk = mapper.selectGrid2(param);
+                    if(chk.size() > 1){
+                        new RuntimeException("중복된 계약이 존재합니다.");
+                    }*/
+                    mapper.grid2Obj_insert(obj);
+                }
+            }
+        }
 
 
     }

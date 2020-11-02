@@ -148,7 +148,7 @@
                     }
 
                     var data = {
-                         delete : caller.gridView01.getData("deleted")
+                        delete : caller.gridView01.getData("deleted")
                         ,insert : caller.gridView01.getData("modified")
                         ,delete2 : caller.gridView02.getData("deleted")
                         ,insert2 : caller.gridView02.getData("modified")
@@ -158,18 +158,18 @@
                         msg: "저장하시겠습니까?"
                     }, function () {
                         if (this.key == "ok") {
-		                    axboot.ajax({
-		                        type: "PUT",
-		                        url: ["mapartnerm", "save"],
-		                        data: JSON.stringify(data),
-		                        callback: function (res) {
-		                            qray.alert("저장 되었습니다.");
-		                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-		                            caller.gridView01.target.select(afterIndex);
-		                            caller.gridView01.target.focus(afterIndex);
-		
-		                        }
-		                    });
+                            axboot.ajax({
+                                type: "PUT",
+                                url: ["mapartnerm", "save"],
+                                data: JSON.stringify(data),
+                                callback: function (res) {
+                                    qray.alert("저장 되었습니다.");
+                                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                                    caller.gridView01.target.select(afterIndex);
+                                    caller.gridView01.target.focus(afterIndex);
+
+                                }
+                            });
                         }
                     });
                 },
@@ -182,8 +182,14 @@
                     //     $('.QRAY_FORM').setFormData(selected);
                     // }
                     $('.QRAY_FORM').setFormData(selected);
-                    var list = $.DATA_SEARCH('mapartnerm','getPartnerCommitionList',nvl(selected,{}));
-                    fnObj.gridView02.target.setData(list);
+
+                    if(selected){
+                        var list = $.DATA_SEARCH('mapartnerm','selectGrid2',{JOIN_PT_CD : nvl(selected.PT_CD ,'')});
+                        fnObj.gridView02.target.setData(list);
+                    }else{
+                        fnObj.gridView02.clear()
+                    }
+
                     if(nvl($('#CONTRACT_NO').val()) == ''){
                         Disabled()
                     }else{
@@ -369,7 +375,7 @@
                         // childrenGrid: [$(fnObj.gridView02),$(fnObj.gridView03)],
                         showRowSelector: true,
                         columns: [
-                             {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "left" , editor: {type: "text"},hidden:true}
+                            {key: "COMPANY_CD", label: "회사코드", width: 150 , align: "left" , editor: {type: "text"},hidden:true}
                             ,{key: "PT_CD", label: "거래처코드", width: 150   , align: "center" , editor: false}
                             ,{key: "PT_SP", label: "거래처유형", width: 150   , align: "center" ,
                                 formatter: function () {
@@ -436,6 +442,7 @@
                             ,{key: 'NO_DEPOSIT'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'CD_BANK'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
                             ,{key: 'NM_BANK'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
+                            ,{key: 'TAB_GRID2_OBJ'    , label: '' , width: 0 , align: "center" , editor: false  ,hidden:true}
                         ],
 
                         body: {
@@ -554,45 +561,10 @@
                         target: $('[data-ax5grid="grid-view-02"]'),
                         columns: [
                             {key: "COMPANY_CD", label: "", width: 150, align: "left", editor: {type: "text"} ,hidden:true}
-                            ,{key: "PT_CD", label: "거래처코드", width: 150, align: "center", hidden:false}
-                            ,{
-                                key: "COMT_SP", label: "수수료유형", width: 120, align: "center",
-                                formatter: function () {
-                                    return $.changeTextValue(COMT_SP, this.value)
-                                }
-                            }
-                            ,{key: "COMT_NM", label: "수수료명", width: 130, align: "center", editor: false
-                                ,picker: {
-                                    top: _pop_top,
-                                    width: 1000,
-                                    height: _pop_height,
-                                    url: "commition",
-                                    action: ["commonHelp", "HELP_COMMITION"],
-                                    param: function () {
-                                    },
-                                    callback: function (e) {
-                                        var index = fnObj.gridView02.getData('selected')[0].__index;
-                                        fnObj.gridView02.target.setValue(index, "COMT_CD", e[0].COMT_CD);
-                                        fnObj.gridView02.target.setValue(index, "COMT_NM", e[0].COMT_NM);
-                                        fnObj.gridView02.target.setValue(index, "COMT_SP", e[0].COMT_SP);
-                                    },
-                                    disabled: function () {
-                                        if(!nvl(this.item.__created__,false)){
-                                            return true;
-                                        }
-                                    }
-                                }
-                                ,styleClass: function () {
-                                    return "red";
-                                }
-                            }
-                            ,{key: "COMT_CD", label: "수수료코드", width: 150, align: "center", editor: false , hidden:true}
-                            ,{key: "ADJUST_DTE", label: "정산일자", width: 150, align: "center", editor: {type: "date"}
-                                ,formatter : function(){
-                                    return $.changeDataFormat(this.value)
-                                }
-                            }
-                            ,{key: "ADJUST_PT_NM", label: "정산 거래처", width: 150, align: "center"
+                            ,{key: "CONTRACT_NO", label: "계약번호", width: 150, align: "center", hidden:false}
+                            ,{key: "JOIN_PT_CD", label: "가맹 거래처코드", width: 150, align: "center", hidden:false}
+                            ,{key: "JOIN_PT_NM", label: "가맹 거래처명", width: 150, align: "center", hidden:false}
+                            ,{key: "MAIN_PT_CD", label: "주체 거래처코드", width: 150, align: "center", hidden:false
                                 ,picker: {
                                     top: _pop_top,
                                     width: 600,
@@ -600,19 +572,57 @@
                                     url: "partner",
                                     action: ["commonHelp", "HELP_PARTNER"],
                                     param: function () {
-
+                                        return {PT_SP : '08'}
                                     },
                                     callback: function (e) {
+                                        var list = fnObj.gridView02.getData();
                                         var index = fnObj.gridView02.getData('selected')[0].__index;
-                                        fnObj.gridView02.target.setValue(index, "ADJUST_PT_CD", e[0].PT_CD);
-                                        fnObj.gridView02.target.setValue(index, "ADJUST_PT_NM", e[0].PT_NM);
+                                        for(var i = 0; i < list.length; i++){
+                                            if(index == i ){
+                                                continue
+                                            }else if(list[i].MAIN_PT_CD ==  e[0].PT_CD){
+                                                qray.alert('중복된 주체거래처가 존재합니다.')
+                                                return;
+                                            }
+                                        }
+
+                                        fnObj.gridView02.target.setValue(index, "MAIN_PT_CD", e[0].PT_CD);
+                                        fnObj.gridView02.target.setValue(index, "MAIN_PT_NM", e[0].PT_NM);
                                     },
                                     disabled: function () {
 
                                     }
                                 }
                             }
-                            ,{key: "ADJUST_PT_CD", label: "정산 거래처코드", width: 150, align: "center" , hidden:true}
+                            ,{key: "MAIN_PT_NM", label: "주체 거래처명", width: 150, align: "center", hidden:false}
+                            ,{key: "CONTRACT_SP", label: "계약유형", width: 150, align: "center", hidden:false
+                                , formatter: function () {
+                                    return $.changeTextValue(CONTRACT_SP, this.value)
+                                }
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: CONTRACT_SP
+                                    }
+                                }
+                            }
+                            ,{key: "CONTRACT_STAT", label: "계약상태", width: 150, align: "center", hidden:false
+                                , formatter: function () {
+                                    return $.changeTextValue(CONTRACT_STAT, this.value)
+                                }
+                                , editor: {
+                                    type: "select", config: {
+                                        columnKeys: {
+                                            optionValue: "value", optionText: "text"
+                                        },
+                                        options: CONTRACT_STAT
+                                    }
+                                }
+                            }
+                            ,{key: "CONTRACT_ST_DTE", label: "계약 시작일", width: 150, align: "center", hidden:false , editor: {type: "date"}}
+                            ,{key: "CONTRACT_ED_DTE", label: "계약 종료일", width: 150, align: "center", hidden:false , editor: {type: "date"}}
                         ],
                         body: {
                             onClick: function () {
@@ -622,6 +632,10 @@
 
                                 selectRow2 = idx;
                                 this.self.select(selectRow2);
+                            }
+                            ,onDataChanged : function() {
+                                var itemH = fnObj.gridView01.getData('selected')[0]
+                                fnObj.gridView01.target.setValue(itemH.__index , 'TAB_GRID2_OBJ' , fnObj.gridView02.getData())
                             }
                         },
                         onPageChange: function (pageNumber) {
@@ -636,7 +650,23 @@
 
                     axboot.buttonClick(this, "data-grid-view-02-btn", {
                         "add": function () {
-                            ACTIONS.dispatch(ACTIONS.ITEM_ADD2);
+                            if (fnObj.gridView01.getData('selected').length == 0) {
+                                qray.alert("선택된 거래처가 없습니다.");
+                                return;
+                            }
+                            fnObj.gridView02.addRow();
+                            var itemH = fnObj.gridView01.getData('selected')[0]
+                            var lastIdx = nvl(fnObj.gridView02.target.list.length, fnObj.gridView02.lastRow());
+                            fnObj.gridView02.target.focus(lastIdx - 1);
+                            fnObj.gridView02.target.select(lastIdx - 1);
+                            fnObj.gridView02.target.setValue(lastIdx - 1, "CONTRACT_NO", GET_NO('BRD', '02'));
+                            fnObj.gridView02.target.setValue(lastIdx - 1, "JOIN_PT_CD", itemH.PT_CD);
+                            fnObj.gridView02.target.setValue(lastIdx - 1, "JOIN_PT_NM", itemH.PT_NM);
+                            fnObj.gridView02.target.setValue(lastIdx - 1, "CONTRACT_STAT", '01');
+                            fnObj.gridView02.target.setValue(lastIdx - 1, "CONTRACT_SP", '01');
+                            fnObj.gridView02.target.setValue(lastIdx - 1, "CONTRACT_ED_DTE", '99991231');
+
+
                         },
                         "delete": function () {
 
@@ -649,11 +679,14 @@
 
                             var item = fnObj.gridView02.getData('selected')[0]
 
-                            ACTIONS.dispatch(ACTIONS.ITEM_DEL2);
+                            var itemH = fnObj.gridView01.getData('selected')[0]
+                            fnObj.gridView01.target.setValue(itemH.__index , 'TAB_GRID2_OBJ' , fnObj.gridView02.getData())
+                            fnObj.gridView02.delRow("selected");
                             if (beforeIdx > 0 || beforeIdx == 0) {
                                 this.target.select(beforeIdx);
-                                selectRow2 = beforeIdx;
                             }
+                            var itemH = fnObj.gridView01.getData('selected')[0]
+                            fnObj.gridView01.target.setValue(itemH.__index , 'TAB_GRID2_OBJ' , fnObj.gridView02.getData())
 
                         }
 
@@ -674,10 +707,11 @@
                 }
             });
 
-            
+
+
             $(document).ready(function(){
-            	$(".QRAY_FORM").find("[data-ax5select]").change(function () {
-                	console.log("data-ax5select 변경", this);
+                $(".QRAY_FORM").find("[data-ax5select]").change(function () {
+                    console.log("data-ax5select 변경", this);
                     var itemH = fnObj.gridView01.getData('selected')[0];
                     fnObj.gridView01.target.setValue(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
                 });
@@ -689,7 +723,7 @@
                     // var itemH = fnObj.gridView01.getData('selected')[0]
                     // fnObj.gridView01.setData(itemH.__index , this.id, $('select[name="' +this.id+ '"]').val() )
                 });
-                
+
                 $("#SALES_PERSON_ID").on('dataBind', function (e) {
                     var itemH = fnObj.gridView01.getData('selected')[0];
                     fnObj.gridView01.target.setValue(itemH.__index , 'SALES_PERSON_ID', e.detail.ID_USER )
@@ -725,18 +759,18 @@
                     },
                     callback: function (data) {
                         $("#POST_NO").val(data.zipcode);
-                        $("#PT_ADDR").val(data.jibunAddress);
+                        $("#PT_ADDR").val(data.zipcodeData.address);
                         if (fnObj.gridView01.getData('selected').length > 0) {
                             var selectIdx = fnObj.gridView01.getData('selected')[0].__index;
                             fnObj.gridView01.target.setValue(selectIdx, 'POST_NO', data.zipcode);
-                            fnObj.gridView01.target.setValue(selectIdx, 'PT_ADDR', data.jibunAddress);
+                            fnObj.gridView01.target.setValue(selectIdx, 'PT_ADDR', data.zipcodeData.address);
                             fnObj.gridView01.target.setValue(selectIdx, 'CD_AREA', data.zipcodeData.sigunguCode);
                             var geocoder;
                             try{
-                            	geocoder = new kakao.maps.services.Geocoder();
+                                geocoder = new kakao.maps.services.Geocoder();
                                 geocoder.addressSearch(data.zipcodeData.address,kakaoCallback)
                             }catch(e){
-                            	this.close();
+                                this.close();
                             }
                         }
                         this.close();
@@ -829,7 +863,9 @@
 
                 $("#left_grid").css("height" ,(tempgridheight / 100 * 99));
                 $("#right_content").css("height" ,( (datarealheight - $("#left_title").height()) / 100 * 99));
-                $("#right_grid").css("height", (tempgridheight / 100 * 99) - $('#binder-form').height() - $('.ax-button-group').height());
+
+                $("#tab_area").css("height", (tempgridheight / 100 * 99) - 30);
+                $("#tab2_grid").css("height", $("#tab_area").height() - $("#tab2_button").height() - 40);
                 /*
                 alert($("#ax-base-root").height()); // 컨텐츠영역높이
                 ax-base-title //타이틀부분높이(class)
@@ -926,10 +962,10 @@
                     <div class="right">
 
                         <div style="float: right">
-                        <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
-                                class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
-                        <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">
-                            <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
+                            <button type="button" class="btn btn-small" data-grid-view-01-btn="add" style="width:80px;"><i
+                                    class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
+                            <button type="button" class="btn btn-small" data-grid-view-01-btn="delete" style="width:80px;">
+                                <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
                         </div>
                     </div>
                 </div>
@@ -941,27 +977,6 @@
                      id = "left_grid"
                      name="왼쪽그리드"
                 ></div>
-
-<%--                <div class="ax-button-group">--%>
-<%--                    <div class="left">--%>
-<%--                        <h2>--%>
-<%--                            <i class="icon_list"></i> 수수료 정보--%>
-<%--                        </h2>--%>
-<%--                    </div>--%>
-<%--                    <div class="right">--%>
-<%--                        <button type="button" id="add2" class="btn btn-small" data-grid-view-02-btn="add" style="width:80px;"><i--%>
-<%--                                class="icon_add"></i>--%>
-<%--                            <ax:lang id="ax.admin.add"/></button>--%>
-<%--                        <button type="button" id="del2" class="btn btn-small" data-grid-view-02-btn="delete" style="width:80px;">--%>
-<%--                            <i--%>
-<%--                                    class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-                <div data-ax5grid="grid-view-02" style="display:none;"
-                    data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
-                     id = "left_grid2"
-                     name="왼쪽그리드"
-                ></div>
             </div>
             <div style="width:50%;float:right;overflow:hidden;">
                 <div class="ax-button-group" id="right_title" name="오른쪽부분타이틀">
@@ -970,217 +985,239 @@
                             <i class="icon_list"></i> 상세정보
                         </h2>
                     </div>
-<%--                    <div class="right">--%>
-<%--                        <button type="button" class="btn btn-info" data-page-btn="newAdd" style="width: 80px;">--%>
-<%--                            신규--%>
-<%--                        </button>--%>
-<%--                        <button type="button" class="btn btn-info" data-page-btn="delete" id="delete_btn"--%>
-<%--                                style="width: 80px;">삭제--%>
-<%--                        </button>--%>
-<%--                    </div>--%>
+                        <%--                    <div class="right">--%>
+                        <%--                        <button type="button" class="btn btn-info" data-page-btn="newAdd" style="width: 80px;">--%>
+                        <%--                            신규--%>
+                        <%--                        </button>--%>
+                        <%--                        <button type="button" class="btn btn-info" data-page-btn="delete" id="delete_btn"--%>
+                        <%--                                style="width: 80px;">삭제--%>
+                        <%--                        </button>--%>
+                        <%--                    </div>--%>
                 </div>
                 <div id="right_content" style="overflow-y:auto;" name="오른쪽부분내용">
-                    <div class="QRAY_FORM">
+                    <div id="tab_area" data-ax5layout="ax1" data-config="{layout:'tab-panel'}" style="height:380px;" name="하단탭영역">
+                        <div data-tab-panel="{label: '가맹 계약', active: 'true'}" id="tabGrid1">
+                            <div class="QRAY_FORM">
 
-                    <ax:form name="binder-form">
-                        <ax:tbl clazz="ax-search-tb2" minWidth="600px">
-                            <ax:tr>
-                                <ax:td label='거래처코드' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="PT_CD" style="background: #ffe0cf;"
-                                           name="PT_CD" id="PT_CD" form-bind-text = 'PT_CD' form-bind-type ='text' readonly/>
-                                </ax:td>
-                                <ax:td label='거래처유형' width="300px">
-                                    <div id="PT_SP" name="PT_SP" data-ax5select="PT_SP"
-                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='사업자명' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="PT_NM"
-                                           name="PT_NM" id="PT_NM" form-bind-text = 'PT_NM' form-bind-type ='text'/>
-                                </ax:td>
-                                <ax:td label='간판명' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="SIGN_NM"
-                                           name="SIGN_NM" id="SIGN_NM" form-bind-text = 'SIGN_NM' form-bind-type ='text'/>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='대표자명' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="OWNER_NM" autocomplete="nope"
-                                           name="OWNER_NM" id="OWNER_NM" form-bind-text = 'OWNER_NM' form-bind-type ='text'/>
-                                </ax:td>
-                                <ax:td label='사업자번호' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="BIZ_NO"
-                                           name="BIZ_NO" id="BIZ_NO" form-bind-text = 'BIZ_NO' form-bind-type ='text' formatter="company" maxlength="12"/>
-                                </ax:td>
-                            </ax:tr>
+                                <ax:form name="binder-form">
+                                    <ax:tbl clazz="ax-search-tb2" minWidth="600px">
+                                        <ax:tr>
+                                            <ax:td label='거래처코드' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="PT_CD" style="background: #ffe0cf;"
+                                                       name="PT_CD" id="PT_CD" form-bind-text = 'PT_CD' form-bind-type ='text' readonly/>
+                                            </ax:td>
+                                            <ax:td label='거래처유형' width="300px">
+                                                <div id="PT_SP" name="PT_SP" data-ax5select="PT_SP"
+                                                     data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='사업자명' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="PT_NM"
+                                                       name="PT_NM" id="PT_NM" form-bind-text = 'PT_NM' form-bind-type ='text'/>
+                                            </ax:td>
+                                            <ax:td label='간판명' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="SIGN_NM"
+                                                       name="SIGN_NM" id="SIGN_NM" form-bind-text = 'SIGN_NM' form-bind-type ='text'/>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='대표자명' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="OWNER_NM" autocomplete="nope"
+                                                       name="OWNER_NM" id="OWNER_NM" form-bind-text = 'OWNER_NM' form-bind-type ='text'/>
+                                            </ax:td>
+                                            <ax:td label='사업자번호' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="BIZ_NO"
+                                                       name="BIZ_NO" id="BIZ_NO" form-bind-text = 'BIZ_NO' form-bind-type ='text' formatter="company" maxlength="12"/>
+                                            </ax:td>
+                                        </ax:tr>
 
-                            <ax:tr>
-                                <ax:td label='거래처업종' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="PT_TYPE"
-                                           name="PT_TYPE" id="PT_TYPE" form-bind-text = 'PT_TYPE' form-bind-type ='text'/>
-                                </ax:td>
-                                <ax:td label='거래처업태' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="PT_COND"
-                                           name="PT_COND" id="PT_COND" form-bind-text = 'PT_COND' form-bind-type ='text'/>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='전화번호' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="TEL_NO"
-                                           name="TEL_NO" id="TEL_NO" form-bind-text = 'TEL_NO' form-bind-type ='text' maxlength="13"/>
-                                </ax:td>
-                                <ax:td label='휴대폰번호' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="HP_NO"
-                                           name="HP_NO" id="HP_NO" form-bind-text = 'HP_NO' form-bind-type ='text' formatter="tel" maxlength="13"/>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='거래처 주소' width="600px">
-                                    <input type="text" class="form-control_02" data-ax-path="POST_NO" style="width: 100px;" readonly="readonly"
-                                           name="POST_NO" id="POST_NO" form-bind-text = 'POST_NO' form-bind-type ='post'/>
-                                    <input type="text" class="form-control_02" data-ax-path="PT_ADDR" style="width: 200px" readonly="readonly"
-                                           name="PT_ADDR" id="PT_ADDR" form-bind-text = 'PT_ADDR' form-bind-type ='text'/>
-                                    <input type="button" class="form-control_02" id="btn_cd_partner"
-                                            onclick="post()" value="우편번호 조회">
-                                </ax:td>
+                                        <ax:tr>
+                                            <ax:td label='거래처업종' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="PT_TYPE"
+                                                       name="PT_TYPE" id="PT_TYPE" form-bind-text = 'PT_TYPE' form-bind-type ='text'/>
+                                            </ax:td>
+                                            <ax:td label='거래처업태' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="PT_COND"
+                                                       name="PT_COND" id="PT_COND" form-bind-text = 'PT_COND' form-bind-type ='text'/>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='전화번호' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="TEL_NO"
+                                                       name="TEL_NO" id="TEL_NO" form-bind-text = 'TEL_NO' form-bind-type ='text' maxlength="13"/>
+                                            </ax:td>
+                                            <ax:td label='휴대폰번호' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="HP_NO"
+                                                       name="HP_NO" id="HP_NO" form-bind-text = 'HP_NO' form-bind-type ='text' formatter="tel" maxlength="13"/>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='거래처 주소' width="600px">
+                                                <input type="text" class="form-control_02" data-ax-path="POST_NO" style="width: 100px;" readonly="readonly"
+                                                       name="POST_NO" id="POST_NO" form-bind-text = 'POST_NO' form-bind-type ='post'/>
+                                                <input type="text" class="form-control_02" data-ax-path="PT_ADDR" style="width: 200px" readonly="readonly"
+                                                       name="PT_ADDR" id="PT_ADDR" form-bind-text = 'PT_ADDR' form-bind-type ='text'/>
+                                                <input type="button" class="form-control_02" id="btn_cd_partner"
+                                                       onclick="post()" value="우편번호 조회">
+                                            </ax:td>
 
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='상세주소' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="SYSDEF_ADDR"
-                                           name="SYSDEF_ADDR" id="SYSDEF_ADDR" form-bind-text = 'SYSDEF_ADDR' form-bind-type ='text'/>
-                                </ax:td>
-                                <ax:td label='팩스번호' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="FAX_NO"
-                                           name="FAX_NO" id="FAX_NO" form-bind-text = 'FAX_NO' form-bind-type ='text'/>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='계좌번호' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="NO_DEPOSIT"
-                                           name="NO_DEPOSIT" id="NO_DEPOSIT" form-bind-text = 'NO_DEPOSIT' form-bind-type ='text'/>
-                                </ax:td>
-                                <ax:td label='계좌은행' width="300px">
-                                    <codepicker id="CD_BANK" HELP_ACTION="HELP_BANK" HELP_URL="bank" BIND-CODE="CD_BANK"
-                                                BIND-TEXT="NM_BANK" READONLY
-                                                form-bind-type="codepicker" form-bind-text="NM_BANK" form-bind-code="CD_BANK"/>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='배송금액' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="DELI_AMT" formatter ="money"
-                                           name="DELI_AMT" id="DELI_AMT" form-bind-text = 'DELI_AMT' form-bind-type ='money' decimal-formatter="###.##"/>
-                                </ax:td>
-                                <ax:td label='무료배송금액' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="FREE_DELI_AMT" formatter ="money"
-                                           name="FREE_DELI_AMT" id="FREE_DELI_AMT" form-bind-text = 'FREE_DELI_AMT' form-bind-type ='text'/>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='휴폐업구분' width="300px">
-                                    <div id="CLOSING_TP" name="CLOSING_TP" data-ax5select="CLOSING_TP"
-                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                                </ax:td>
-                                <ax:td label='과세유형' width="300px">
-                                    <div id="TAX_SP" name="TAX_SP" data-ax5select="TAX_SP"
-                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='사용여부' width="300px">
-                                    <div id="USE_YN" name="USE_YN" data-ax5select="USE_YN"
-                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                                </ax:td>
-                                <ax:td label='브랜드검증여부' width="300px">
-                                    <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"
-                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                                </ax:td>
-<%--                                <ax:td label='영업담당자아이디' width="300px">--%>
-<%--                                    <codepicker id="SALES_PERSON_ID" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="USER_ID"--%>
-<%--                                                BIND-TEXT="USER_NM" READONLY--%>
-<%--                                                form-bind-type="codepicker" form-bind-text="SALES_PERSON_NM" form-bind-code="SALES_PERSON_ID"/>--%>
-<%--                                </ax:td>--%>
-                            </ax:tr>
-<%--                            <ax:tr>--%>
-<%--                                <ax:td label='브랜드검증여부' width="300px">--%>
-<%--                                    <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"--%>
-<%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
-<%--                                </ax:td>--%>
-<%--                                <ax:td label='계약여부' width="300px">--%>
-<%--                                    <div id="CONTRACT_YN" name="CONTRACT_YN" data-ax5select="CONTRACT_YN"--%>
-<%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
-<%--                                </ax:td>--%>
-<%--                            </ax:tr>--%>
-                            <div class="ax-button-group">
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='상세주소' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="SYSDEF_ADDR"
+                                                       name="SYSDEF_ADDR" id="SYSDEF_ADDR" form-bind-text = 'SYSDEF_ADDR' form-bind-type ='text'/>
+                                            </ax:td>
+                                            <ax:td label='팩스번호' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="FAX_NO"
+                                                       name="FAX_NO" id="FAX_NO" form-bind-text = 'FAX_NO' form-bind-type ='text'/>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='계좌번호' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="NO_DEPOSIT"
+                                                       name="NO_DEPOSIT" id="NO_DEPOSIT" form-bind-text = 'NO_DEPOSIT' form-bind-type ='text'/>
+                                            </ax:td>
+                                            <ax:td label='계좌은행' width="300px">
+                                                <codepicker id="CD_BANK" HELP_ACTION="HELP_BANK" HELP_URL="bank" BIND-CODE="CD_BANK"
+                                                            BIND-TEXT="NM_BANK" READONLY
+                                                            form-bind-type="codepicker" form-bind-text="NM_BANK" form-bind-code="CD_BANK"/>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='배송금액' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="DELI_AMT" formatter ="money"
+                                                       name="DELI_AMT" id="DELI_AMT" form-bind-text = 'DELI_AMT' form-bind-type ='money' decimal-formatter="###.##"/>
+                                            </ax:td>
+                                            <ax:td label='무료배송금액' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="FREE_DELI_AMT" formatter ="money"
+                                                       name="FREE_DELI_AMT" id="FREE_DELI_AMT" form-bind-text = 'FREE_DELI_AMT' form-bind-type ='text'/>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='휴폐업구분' width="300px">
+                                                <div id="CLOSING_TP" name="CLOSING_TP" data-ax5select="CLOSING_TP"
+                                                     data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                            </ax:td>
+                                            <ax:td label='과세유형' width="300px">
+                                                <div id="TAX_SP" name="TAX_SP" data-ax5select="TAX_SP"
+                                                     data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='사용여부' width="300px">
+                                                <div id="USE_YN" name="USE_YN" data-ax5select="USE_YN"
+                                                     data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                            </ax:td>
+                                            <ax:td label='브랜드검증여부' width="300px">
+                                                <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"
+                                                     data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                            </ax:td>
+                                            <%--                                <ax:td label='영업담당자아이디' width="300px">--%>
+                                            <%--                                    <codepicker id="SALES_PERSON_ID" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="USER_ID"--%>
+                                            <%--                                                BIND-TEXT="USER_NM" READONLY--%>
+                                            <%--                                                form-bind-type="codepicker" form-bind-text="SALES_PERSON_NM" form-bind-code="SALES_PERSON_ID"/>--%>
+                                            <%--                                </ax:td>--%>
+                                        </ax:tr>
+                                        <%--                            <ax:tr>--%>
+                                        <%--                                <ax:td label='브랜드검증여부' width="300px">--%>
+                                        <%--                                    <div id="BRD_VERIFY_YN" name="BRD_VERIFY_YN" data-ax5select="BRD_VERIFY_YN"--%>
+                                        <%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
+                                        <%--                                </ax:td>--%>
+                                        <%--                                <ax:td label='계약여부' width="300px">--%>
+                                        <%--                                    <div id="CONTRACT_YN" name="CONTRACT_YN" data-ax5select="CONTRACT_YN"--%>
+                                        <%--                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>--%>
+                                        <%--                                </ax:td>--%>
+                                        <%--                            </ax:tr>--%>
+                                        <div class="ax-button-group">
+                                            <div class="left">
+                                                <h2>
+                                                    <i class="icon_list"></i> 계약관리
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <ax:tr>
+                                            <ax:td label='계약번호' width="300px">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" data-ax-path="CONTRACT_NO"
+                                                           name="CONTRACT_NO" id="CONTRACT_NO" form-bind-text = 'CONTRACT_NO' form-bind-type ='text' style="background: #ffe0cf;" readonly/>
+                                                    <span class="input-group-addon"><i class="cqc-cog"></i> </span>
+                                                </div>
+
+                                            </ax:td>
+                                            <ax:td label='가맹 거래처코드' width="300px">
+                                                <codepicker id="JOIN_PT_CD" HELP_ACTION="HELP_PARTNER" HELP_URL="partner" BIND-CODE="PT_CD"
+                                                            BIND-TEXT="PT_NM" HELP_DISABLED="true" READONLY
+                                                            form-bind-type="codepicker" form-bind-text="JOIN_PT_NM" form-bind-code="JOIN_PT_CD"/>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='주체 거래처코드' width="300px">
+                                                <codepicker id="MAIN_PT_CD" HELP_ACTION="HELP_PARTNER" HELP_URL="partner" BIND-CODE="PT_CD"
+                                                            BIND-TEXT="PT_NM" HELP_DISABLED="true" READONLY
+                                                            form-bind-type="codepicker" form-bind-text="MAIN_PT_NM" form-bind-code="MAIN_PT_CD"/>
+                                            </ax:td>
+                                            <ax:td label='계약유형' width="300px">
+                                                <div id="CONTRACT_SP" name="CONTRACT_SP" data-ax5select="CONTRACT_SP"
+                                                     data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='계약시작일자' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="CONTRACT_ST_DTE" maxlength="10"
+                                                       name="CONTRACT_ST_DTE" id="CONTRACT_ST_DTE" form-bind-text = 'CONTRACT_ST_DTE' formatter="YYYYMMDD" form-bind-type ='YYYYMMDD' />
+                                            </ax:td>
+                                            <ax:td label='계약종료일자' width="300px">
+                                                <input type="text" class="form-control" data-ax-path="CONTRACT_ED_DTE" maxlength="10"
+                                                       name="CONTRACT_ED_DTE" id="CONTRACT_ED_DTE" form-bind-text = 'CONTRACT_ED_DTE' formatter="YYYYMMDD" form-bind-type ='YYYYMMDD' />
+                                            </ax:td>
+                                        </ax:tr>
+                                        <ax:tr>
+                                            <ax:td label='계약상태' width="300px">
+                                                <div id="CONTRACT_STAT" name="CONTRACT_STAT" data-ax5select="CONTRACT_STAT"
+                                                     data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                                            </ax:td>
+                                            <ax:td label='거래처계약담당자' width="300px">
+                                                <codepicker id="PT_CONTRACT_PERSON" HELP_ACTION="HELP_USER2" HELP_URL="user" BIND-CODE="USER_ID"
+                                                            BIND-TEXT="USER_NM" READONLY
+                                                            form-bind-type="codepicker" form-bind-text="PT_CONTRACT_PERSON_NM" form-bind-code="PT_CONTRACT_PERSON"/>
+                                            </ax:td>
+                                        </ax:tr>
+                                        <%--                            <ax:tr>--%>
+                                        <%--                                <ax:td label='영업담당자아이디' width="300px">--%>
+                                        <%--                                    <codepicker id="SALES_PERSON_ID2" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="USER_ID"--%>
+                                        <%--                                                BIND-TEXT="USER_NM" READONLY--%>
+                                        <%--                                                form-bind-type="codepicker" form-bind-text="SALES_PERSON_NM2" form-bind-code="SALES_PERSON_ID2"/>--%>
+                                        <%--                                </ax:td>--%>
+                                        <%--                            </ax:tr>--%>
+
+
+                                    </ax:tbl>
+                                </ax:form>
+
+                            </div>
+                        </div>
+
+                        <div data-tab-panel="{label: '브랜드 계약', active: 'false'}" id="tabGrid2">
+                            <div class="ax-button-group" style="height:40px;" data-fit-height-aside="grid-view-02" id="tab2_button">
                                 <div class="left">
-                                    <h2>
-                                        <i class="icon_list"></i> 계약관리
-                                    </h2>
+
+                                </div>
+                                <div class="right">
+                                    <button type="button" class="btn btn-small" data-grid-view-02-btn="add" style="width:80px;"><i
+                                            class="icon_add"></i><ax:lang id="ax.admin.add"/></button>
+                                    <button type="button" class="btn btn-small" data-grid-view-02-btn="delete" style="width:80px;">
+                                        <i class="icon_del"></i> <ax:lang id="ax.admin.delete"/></button>
                                 </div>
                             </div>
-                            <ax:tr>
-                                <ax:td label='계약번호' width="300px">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" data-ax-path="CONTRACT_NO"
-                                               name="CONTRACT_NO" id="CONTRACT_NO" form-bind-text = 'CONTRACT_NO' form-bind-type ='text' style="background: #ffe0cf;" readonly/>
-                                        <span class="input-group-addon"><i class="cqc-cog"></i> </span>
-                                    </div>
-
-                                </ax:td>
-                                <ax:td label='가맹 거래처코드' width="300px">
-                                    <codepicker id="JOIN_PT_CD" HELP_ACTION="HELP_PARTNER" HELP_URL="partner" BIND-CODE="PT_CD"
-                                                BIND-TEXT="PT_NM" HELP_DISABLED="true" READONLY
-                                                form-bind-type="codepicker" form-bind-text="JOIN_PT_NM" form-bind-code="JOIN_PT_CD"/>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='주체 거래처코드' width="300px">
-                                    <codepicker id="MAIN_PT_CD" HELP_ACTION="HELP_PARTNER" HELP_URL="partner" BIND-CODE="PT_CD"
-                                                BIND-TEXT="PT_NM" HELP_DISABLED="true" READONLY
-                                                form-bind-type="codepicker" form-bind-text="MAIN_PT_NM" form-bind-code="MAIN_PT_CD"/>
-                                </ax:td>
-                                <ax:td label='계약유형' width="300px">
-                                    <div id="CONTRACT_SP" name="CONTRACT_SP" data-ax5select="CONTRACT_SP"
-                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='계약시작일자' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="CONTRACT_ST_DTE" maxlength="10"
-                                           name="CONTRACT_ST_DTE" id="CONTRACT_ST_DTE" form-bind-text = 'CONTRACT_ST_DTE' formatter="YYYYMMDD" form-bind-type ='YYYYMMDD' />
-                                </ax:td>
-                                <ax:td label='계약종료일자' width="300px">
-                                    <input type="text" class="form-control" data-ax-path="CONTRACT_ED_DTE" maxlength="10"
-                                           name="CONTRACT_ED_DTE" id="CONTRACT_ED_DTE" form-bind-text = 'CONTRACT_ED_DTE' formatter="YYYYMMDD" form-bind-type ='YYYYMMDD' />
-                                </ax:td>
-                            </ax:tr>
-                            <ax:tr>
-                                <ax:td label='계약상태' width="300px">
-                                    <div id="CONTRACT_STAT" name="CONTRACT_STAT" data-ax5select="CONTRACT_STAT"
-                                         data-ax5select-config='{}' form-bind-type="selectBox"></div>
-                                </ax:td>
-                                <ax:td label='거래처계약담당자' width="300px">
-                                    <codepicker id="PT_CONTRACT_PERSON" HELP_ACTION="HELP_USER2" HELP_URL="user" BIND-CODE="USER_ID"
-                                                BIND-TEXT="USER_NM" READONLY
-                                                form-bind-type="codepicker" form-bind-text="PT_CONTRACT_PERSON_NM" form-bind-code="PT_CONTRACT_PERSON"/>
-                                </ax:td>
-                            </ax:tr>
-<%--                            <ax:tr>--%>
-<%--                                <ax:td label='영업담당자아이디' width="300px">--%>
-<%--                                    <codepicker id="SALES_PERSON_ID2" HELP_ACTION="HELP_USER" HELP_URL="user" BIND-CODE="USER_ID"--%>
-<%--                                                BIND-TEXT="USER_NM" READONLY--%>
-<%--                                                form-bind-type="codepicker" form-bind-text="SALES_PERSON_NM2" form-bind-code="SALES_PERSON_ID2"/>--%>
-<%--                                </ax:td>--%>
-<%--                            </ax:tr>--%>
-
-
-                        </ax:tbl>
-                    </ax:form>
+                            <div data-ax5grid="grid-view-02"
+                                 data-ax5grid-config="{  showLineNumber: true,showRowSelector: false, multipleSelect: false,lineNumberColumnWidth: 40,rowSelectorColumnWidth: 27, }"
+                                 id="tab2_grid"
+                                 name="탭1그리드"
+                            ></div>
+                        </div>
 
                     </div>
-
-
                 </div>
             </div>
         </div>
