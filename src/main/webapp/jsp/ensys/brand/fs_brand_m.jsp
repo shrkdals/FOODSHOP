@@ -526,6 +526,14 @@
                                 align: "center",
                                 editor: {type: "text"},
                                 hidden: true
+                            },
+                            {
+                                key: "TAG_SEARCH",
+                                label: "태그검색어",
+                                width: 150,
+                                align: "center",
+                                editor: {type: "text"},
+                                hidden: true
                             }
                             ,{key: "CATE_CD", label: "카테고리코드드", width: 110, alig: "center", editor: false, sortable:true}
                         ],
@@ -2032,8 +2040,11 @@
                                     </ax:td>
                                 </ax:tr>
                                 <ax:tr>
-                                	<ax:td label='홍보영상링크' width="600px">
+                                	<ax:td label='홍보영상링크' width="300px">
                                         <input type="text" class="form-control" data-ax-path="PROMT_LINK" name="PROMT_LINK" id="PROMT_LINK" form-bind-text='PROMT_LINK' form-bind-type='text'/>
+                                    </ax:td>
+                                    <ax:td label='태그검색어' width="300px">
+                                        <input type="text" class="form-control" data-ax-path="TAG_SEARCH" name="TAG_SEARCH" id="TAG_SEARCH" form-bind-text='TAG_SEARCH' form-bind-type='text'/>
                                     </ax:td>
                                 </ax:tr>
                             </ax:tbl>

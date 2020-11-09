@@ -55,7 +55,8 @@
                 #{USER_ID},
                 #{CATE_CD},
                 #{CATE_NM},
-                #{BRD_TERMS}
+                #{BRD_TERMS},
+                #{TAG_SEARCH}
             )
         }
     </update>
@@ -84,6 +85,7 @@
                 ,#{CATE_CD}
                 ,#{CATE_NM}
                 ,#{BRD_TERMS}
+                ,#{TAG_SEARCH}
             )
         }
     </update>
