@@ -76,8 +76,15 @@
     <select id="MEMBER_JOIN_U" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
         { CALL UP_FS_PARTNER_MEMBER_I(#{COMPANY_CD} ,#{PT_CD} , #{USER_ID}, #{USER_NM}, #{USER_TP}, #{PASS_WORD}, #{TEL} , #{TOK} ,#{PT_SP} ,#{PT_NM} ,#{USER_STAT},#{LOGIN_ID}) }
     </select>
-    
-    
+
+
+    <select id="checkBlock" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        SELECT *
+        FROM   FS_PARTNER_M
+        WHERE  BIZ_NO = #{BIZ_NO}
+        AND    BLOCK_YN = 'Y'
+    </select>
+
     <select id="select4" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
         {CALL UP_FS_PARTNER_CATEGORY_S(#{COMPANY_CD},#{PT_CD})}
     </select>

@@ -43,6 +43,11 @@ public class MapartnermController extends BaseController {
         return Responses.ListResponse.of(service.selectGrid2(param));
     }
 
+    @RequestMapping(value = "checkBlock", method = RequestMethod.POST, produces = APPLICATION_JSON)
+    public Responses.ListResponse checkBlock(@RequestBody HashMap<String, Object> param) {
+        return Responses.ListResponse.of(service.checkBlock(param));
+    }
+
     @RequestMapping(value = "save", method =  {RequestMethod.PUT}, produces = APPLICATION_JSON)
     public ApiResponse save(@RequestBody HashMap<String, Object> param) throws Exception {
         service.saveAll(param);

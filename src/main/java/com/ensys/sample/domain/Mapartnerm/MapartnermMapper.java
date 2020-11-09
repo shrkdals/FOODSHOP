@@ -43,4 +43,6 @@ public interface MapartnermMapper extends MyBatisMapper {
     void grid2Obj_insert(HashMap<String, Object> obj);
 
     List<HashMap<String, Object>> selectGrid2(HashMap<String, Object> param);
+
+    List<HashMap<String, Object>> checkBlock(HashMap<String, Object> param);
 }
