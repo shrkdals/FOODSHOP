@@ -1830,7 +1830,6 @@
             .BrandTextArea {
                 width: 100%;
                 resize: none;
-                overflow-y: hidden; /* prevents scroll bar flash */
                 padding: 1.1em; /* prevents text jump on Enter keypress */
                 padding-bottom: 0.2em;
                 line-height: 1.6;

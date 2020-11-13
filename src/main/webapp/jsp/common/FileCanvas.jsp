@@ -59,9 +59,10 @@
                              $("#FILE_EXT").val(initData.CALL_BACK.FILE_EXT);
                              $("#FILE_BYTE").val(initData.CALL_BACK.FILE_BYTE);
                              $("#FILE_SIZE").val(initData.CALL_BACK.FILE_SIZE);
-
-                             $(".preview").append('<img src="' + ORGN_FILE_PATH + '" class="img-responsive"/>');
-                             $(".img-preview").append('<img src="' + FILE_PATH + '" id="canvas_crop"/>');
+                             if (((initData.CALL_BACK.FILE_EXT === 'jpg') || (initData.CALL_BACK.FILE_EXT === 'gif') || (initData.CALL_BACK.FILE_EXT === 'png'))){
+	                             $(".preview").append('<img src="' + ORGN_FILE_PATH + '" class="img-responsive"/>');
+	                             $(".img-preview").append('<img src="' + FILE_PATH + '" id="canvas_crop"/>');
+                             }
                              changesize();
                          }
                      })
@@ -128,13 +129,15 @@
                                          }),
                                          callback: function (e) {
                                              qray.loading.hide();
-
+                                             
                                              $("#ORGN_FILE_NAME").val(data.ORGN_FILE_NM);
                                              $("#FILE_EXT").val(data.FILE_EXT);
                                              $("#FILE_BYTE").val(data.FILE_BYTE);
                                              $("#FILE_SIZE").val(data.FILE_SIZE);
-                                             $(".preview").append('<img src="' + ORGN_FILE_PATH + '" class="img-responsive"/>');
-                                             $(".img-preview").append('<img src="' + FILE_PATH + '" id="canvas_crop"/>');
+                                             if (((data.FILE_EXT === 'jpg') || (data.FILE_EXT === 'gif') || (data.FILE_EXT === 'png'))){
+	                                             $(".preview").append('<img src="' + ORGN_FILE_PATH + '" class="img-responsive"/>');
+	                                             $(".img-preview").append('<img src="' + FILE_PATH + '" id="canvas_crop"/>');
+                                             }
                                              changesize();
                                          }
                                      })
@@ -191,181 +194,206 @@
                  }
                  orgnFile = $("#inputImage")[0].files[0];
                  cropFile = $("#inputImage")[0].files[0];
-
                  var file_ext = validation(orgnFile.name);
+                 
                  var uuid_file_name = guid();
                  // 확장자 지정해주고 싶을 때
-                 if (!((file_ext === 'jpg') || (file_ext === 'gif') || (file_ext === 'png'))) {
-                     qray.alert('jpg, gif, png 확장자만 업로드 가능합니다.');
-                     return true;
-                 }
 
                  if (fnInputSpecialCharacterExcept(orgnFile.name)) {
                      qray.alert('파일명에 허용된 특수문자는<br> \'-\', \'_\', \'(\', \')\', \'[\', \']\', \'.\' 입니다.');
                      return false;
                  }
 
-                 var reader = new FileReader();
-                 reader.onload = function (img) {
+                 if (!((file_ext === 'jpg') || (file_ext === 'gif') || (file_ext === 'png'))){
+                	 var reader = new FileReader();
+	                 reader.onload = function (img) {
+			                 
+	                	 $(".img-responsive").remove();
+	                     $("#canvas_crop").remove();
+	                     returnValue.FILE_NAME = uuid_file_name;
+	                     returnValue.ORGN_FILE_NAME = orgnFile.name;
+	                     returnValue.FILE_EXT = file_ext;
+	                     returnValue.FILE_SIZE = orgnFile.size;
+	                     returnValue.FILE_PATH = img.target.result;
+	                     returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+	                     $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+	                     $("#FILE_EXT").val(returnValue.FILE_EXT);
+	                     $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+	                     $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+	
+	                     $("#inputImage").val('');
+	                     changesize();
+	                 }
+                     reader.readAsDataURL(orgnFile);
+                 }else  {
 
-                     document.uploadForm.sizeCheck.src = img.target.result;
-                     var ImageWidth= 0, ImageHeight = 0
-                     setTimeout(function(){
-                         if (nvl(initData.SIZE_LIMIT) != ''){
-                             ImageWidth = document.uploadForm.sizeCheck.width;
-                             ImageHeight = document.uploadForm.sizeCheck.height;
-
-                             if(ImageWidth <= wwd || ImageHeight <= hhd){
-                            	 qray.confirm({
-                                     msg: "첨부한 이미지의 가로사이즈는 "+ ImageWidth +"px 입니다."+
-                                     	 "<br>이미지의 세로사이즈는  "+ ImageHeight +"px 입니다."+
-                                         "<br>이미지의 픽셀이 1500px 이상이 아닙니다."+
-                                         "<br>그래도 진행하시겠습니까?"
-                                 }, function () {
-                                     if (this.key == "ok") {
-                                    	 if ($(".img-responsive").length > 0) {
-                                             qray.confirm({
-                                                 msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
-                                             }, function () {
-                                                 if (this.key == "ok") {
-                                                     $(".img-responsive").remove();
-                                                     $("#canvas_crop").remove();
-                                                     returnValue.FILE_NAME = uuid_file_name;
-                                                     returnValue.ORGN_FILE_NAME = orgnFile.name;
-                                                     returnValue.FILE_EXT = file_ext;
-                                                     returnValue.FILE_SIZE = orgnFile.size;
-                                                     returnValue.FILE_PATH = img.target.result;
-                                                     returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
-                                                     $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
-                                                     $("#FILE_EXT").val(returnValue.FILE_EXT);
-                                                     $("#FILE_BYTE").val(returnValue.FILE_BYTE);
-                                                     $("#FILE_SIZE").val(returnValue.FILE_SIZE);
-
-                                                     $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
-                                                     $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
-                                                     $("#inputImage").val('');
-                                                     changesize();
-                                                 }
-                                             });
-                                         }else{
-                                             $("#canvas_crop").remove();
-                                             returnValue.FILE_NAME = uuid_file_name;
-                                             returnValue.ORGN_FILE_NAME = orgnFile.name;
-                                             returnValue.FILE_EXT = file_ext;
-                                             returnValue.FILE_SIZE = orgnFile.size;
-                                             returnValue.FILE_PATH = img.target.result;
-                                             returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
-                                             $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
-                                             $("#FILE_EXT").val(returnValue.FILE_EXT);
-                                             $("#FILE_BYTE").val(returnValue.FILE_BYTE);
-                                             $("#FILE_SIZE").val(returnValue.FILE_SIZE);
-
-                                             $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
-                                             $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
-                                             $("#inputImage").val('');
-                                             changesize();
-                                         }
-                                     }else{
-                                    	 orgnFile = null;
-                                         return false;
-                                     }
-                                 })
-                                 
-                             }else{
-                            	 if ($(".img-responsive").length > 0) {
-                                     qray.confirm({
-                                         msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
-                                     }, function () {
-                                         if (this.key == "ok") {
-                                             $(".img-responsive").remove();
-                                             $("#canvas_crop").remove();
-                                             returnValue.FILE_NAME = uuid_file_name;
-                                             returnValue.ORGN_FILE_NAME = orgnFile.name;
-                                             returnValue.FILE_EXT = file_ext;
-                                             returnValue.FILE_SIZE = orgnFile.size;
-                                             returnValue.FILE_PATH = img.target.result;
-                                             returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
-                                             $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
-                                             $("#FILE_EXT").val(returnValue.FILE_EXT);
-                                             $("#FILE_BYTE").val(returnValue.FILE_BYTE);
-                                             $("#FILE_SIZE").val(returnValue.FILE_SIZE);
-
-                                             $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
-                                             $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
-                                             $("#inputImage").val('');
-                                             changesize();
-                                         }
-                                     });
-                                 }else{
-                                     $("#canvas_crop").remove();
-                                     returnValue.FILE_NAME = uuid_file_name;
-                                     returnValue.ORGN_FILE_NAME = orgnFile.name;
-                                     returnValue.FILE_EXT = file_ext;
-                                     returnValue.FILE_SIZE = orgnFile.size;
-                                     returnValue.FILE_PATH = img.target.result;
-                                     returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
-                                     $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
-                                     $("#FILE_EXT").val(returnValue.FILE_EXT);
-                                     $("#FILE_BYTE").val(returnValue.FILE_BYTE);
-                                     $("#FILE_SIZE").val(returnValue.FILE_SIZE);
-
-                                     $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
-                                     $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
-                                     $("#inputImage").val('');
-                                     changesize();
-                                 }
-                             }
-                         }else{
-
-                        	 if ($(".img-responsive").length > 0) {
-                                 qray.confirm({
-                                     msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
-                                 }, function () {
-                                     if (this.key == "ok") {
-                                         $(".img-responsive").remove();
-                                         $("#canvas_crop").remove();
-                                         returnValue.FILE_NAME = uuid_file_name;
-                                         returnValue.ORGN_FILE_NAME = orgnFile.name;
-                                         returnValue.FILE_EXT = file_ext;
-                                         returnValue.FILE_SIZE = orgnFile.size;
-                                         returnValue.FILE_PATH = img.target.result;
-                                         returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
-                                         $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
-                                         $("#FILE_EXT").val(returnValue.FILE_EXT);
-                                         $("#FILE_BYTE").val(returnValue.FILE_BYTE);
-                                         $("#FILE_SIZE").val(returnValue.FILE_SIZE);
-
-                                         $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
-                                         $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
-                                         $("#inputImage").val('');
-                                         changesize();
-                                     }
-                                 });
-                             }else{
-                                 $("#canvas_crop").remove();
-                                 returnValue.FILE_NAME = uuid_file_name;
-                                 returnValue.ORGN_FILE_NAME = orgnFile.name;
-                                 returnValue.FILE_EXT = file_ext;
-                                 returnValue.FILE_SIZE = orgnFile.size;
-                                 returnValue.FILE_PATH = img.target.result;
-                                 returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
-                                 $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
-                                 $("#FILE_EXT").val(returnValue.FILE_EXT);
-                                 $("#FILE_BYTE").val(returnValue.FILE_BYTE);
-                                 $("#FILE_SIZE").val(returnValue.FILE_SIZE);
-
-                                 $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
-                                 $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
-                                 $("#inputImage").val('');
-                                 changesize();
-                             }
-                         }
-                         
-                     }, 300);
-                 };
-                 reader.readAsDataURL(orgnFile);
+	                 var reader = new FileReader();
+	                 reader.onload = function (img) {
+	
+	                     document.uploadForm.sizeCheck.src = img.target.result;
+	                     var ImageWidth= 0, ImageHeight = 0
+	                     setTimeout(function(){
+	                         if (nvl(initData.SIZE_LIMIT) != ''){
+	                             ImageWidth = document.uploadForm.sizeCheck.width;
+	                             ImageHeight = document.uploadForm.sizeCheck.height;
+	
+	                             if(ImageWidth <= wwd || ImageHeight <= hhd){
+	                            	 qray.confirm({
+	                                     msg: "첨부한 이미지의 가로사이즈는 "+ ImageWidth +"px 입니다."+
+	                                     	 "<br>이미지의 세로사이즈는  "+ ImageHeight +"px 입니다."+
+	                                         "<br>이미지의 픽셀이 1500px 이상이 아닙니다."+
+	                                         "<br>그래도 진행하시겠습니까?"
+	                                 }, function () {
+	                                     if (this.key == "ok") {
+	                                    	 if ($(".img-responsive").length > 0) {
+	                                             qray.confirm({
+	                                                 msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
+	                                             }, function () {
+	                                                 if (this.key == "ok") {
+	                                                     $(".img-responsive").remove();
+	                                                     $("#canvas_crop").remove();
+	                                                     returnValue.FILE_NAME = uuid_file_name;
+	                                                     returnValue.ORGN_FILE_NAME = orgnFile.name;
+	                                                     returnValue.FILE_EXT = file_ext;
+	                                                     returnValue.FILE_SIZE = orgnFile.size;
+	                                                     returnValue.FILE_PATH = img.target.result;
+	                                                     returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+	                                                     $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+	                                                     $("#FILE_EXT").val(returnValue.FILE_EXT);
+	                                                     $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+	                                                     $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+	
+	                                                     $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+	                                                     $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+	                                                     $("#inputImage").val('');
+	                                                     changesize();
+	                                                 }
+	                                             });
+	                                         }else{
+	                                             $("#canvas_crop").remove();
+	                                             returnValue.FILE_NAME = uuid_file_name;
+	                                             returnValue.ORGN_FILE_NAME = orgnFile.name;
+	                                             returnValue.FILE_EXT = file_ext;
+	                                             returnValue.FILE_SIZE = orgnFile.size;
+	                                             returnValue.FILE_PATH = img.target.result;
+	                                             returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+	                                             $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+	                                             $("#FILE_EXT").val(returnValue.FILE_EXT);
+	                                             $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+	                                             $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+	
+	                                             $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+	                                             $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+	                                             $("#inputImage").val('');
+	                                             changesize();
+	                                         }
+	                                     }else{
+	                                    	 orgnFile = null;
+	                                         return false;
+	                                     }
+	                                 })
+	                                 
+	                             }else{
+	                            	 if ($(".img-responsive").length > 0) {
+	                                     qray.confirm({
+	                                         msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
+	                                     }, function () {
+	                                         if (this.key == "ok") {
+	                                             $(".img-responsive").remove();
+	                                             $("#canvas_crop").remove();
+	                                             returnValue.FILE_NAME = uuid_file_name;
+	                                             returnValue.ORGN_FILE_NAME = orgnFile.name;
+	                                             returnValue.FILE_EXT = file_ext;
+	                                             returnValue.FILE_SIZE = orgnFile.size;
+	                                             returnValue.FILE_PATH = img.target.result;
+	                                             returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+	                                             $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+	                                             $("#FILE_EXT").val(returnValue.FILE_EXT);
+	                                             $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+	                                             $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+	
+	                                             $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+	                                             $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+	                                             $("#inputImage").val('');
+	                                             changesize();
+	                                         }
+	                                     });
+	                                 }else{
+	                                     $("#canvas_crop").remove();
+	                                     returnValue.FILE_NAME = uuid_file_name;
+	                                     returnValue.ORGN_FILE_NAME = orgnFile.name;
+	                                     returnValue.FILE_EXT = file_ext;
+	                                     returnValue.FILE_SIZE = orgnFile.size;
+	                                     returnValue.FILE_PATH = img.target.result;
+	                                     returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+	                                     $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+	                                     $("#FILE_EXT").val(returnValue.FILE_EXT);
+	                                     $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+	                                     $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+	
+	                                     $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+	                                     $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+	                                     $("#inputImage").val('');
+	                                     changesize();
+	                                 }
+	                             }
+	                         }else{
+	
+	                        	 if ($(".img-responsive").length > 0) {
+	                                 qray.confirm({
+	                                     msg: "이미 업로드된 이미지가 존재합니다.<br>변경하시겠습니까?"
+	                                 }, function () {
+	                                     if (this.key == "ok") {
+	                                         $(".img-responsive").remove();
+	                                         $("#canvas_crop").remove();
+	                                         returnValue.FILE_NAME = uuid_file_name;
+	                                         returnValue.ORGN_FILE_NAME = orgnFile.name;
+	                                         returnValue.FILE_EXT = file_ext;
+	                                         returnValue.FILE_SIZE = orgnFile.size;
+	                                         returnValue.FILE_PATH = img.target.result;
+	                                         returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+	                                         $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+	                                         $("#FILE_EXT").val(returnValue.FILE_EXT);
+	                                         $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+	                                         $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+	
+	                                         $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+	                                         $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+	                                         $("#inputImage").val('');
+	                                         changesize();
+	                                     }
+	                                 });
+	                             }else{
+	                                 $("#canvas_crop").remove();
+	                                 returnValue.FILE_NAME = uuid_file_name;
+	                                 returnValue.ORGN_FILE_NAME = orgnFile.name;
+	                                 returnValue.FILE_EXT = file_ext;
+	                                 returnValue.FILE_SIZE = orgnFile.size;
+	                                 returnValue.FILE_PATH = img.target.result;
+	                                 returnValue.FILE_BYTE = ax5.util.number(orgnFile.size, {"byte": true});
+	                                 $("#ORGN_FILE_NAME").val(returnValue.ORGN_FILE_NAME);
+	                                 $("#FILE_EXT").val(returnValue.FILE_EXT);
+	                                 $("#FILE_BYTE").val(returnValue.FILE_BYTE);
+	                                 $("#FILE_SIZE").val(returnValue.FILE_SIZE);
+	
+	                                 $(".preview").append('<img src="' + returnValue.FILE_PATH + '" class="img-responsive"/>');
+	                                 $(".img-preview").append('<img id="canvas_crop" src="' + returnValue.FILE_PATH + '"></img>');
+	                                 $("#inputImage").val('');
+	                                 changesize();
+	                             }
+	                         }
+	                         
+	                     }, 300);
+	                 };
+	                 reader.readAsDataURL(orgnFile);
+                 }
              },
              CROP_SHOW: function () {	//	자르기시작 (사각형 박스를 그려준다.)
+            	 var file_ext = $("#FILE_EXT").val();
+                 if (!((file_ext === 'jpg') || (file_ext === 'gif') || (file_ext === 'png'))) {
+                     qray.alert('jpg, gif, png 확장자만 업로드 가능합니다.');
+                     return true;
+                 }
                  $("#fileRegister").css('display', 'none');
                  $("#fileCropper").css('display', 'block');
 
