@@ -11,7 +11,7 @@
     </select>
 
     <select id="select2" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
-        {CALL UP_FS_PARTNER2_H_S(#{COMPANY_CD},#{PT_NM},#{SALES_PERSON_ID},#{CONTRACT_YN} , #{TEMP1} , #{TEMP2} , #{TEMP3})}
+        {CALL UP_FS_PARTNER2_H_S(#{COMPANY_CD},#{SALES_PERSON_ID},#{CONTRACT_YN} , #{TEMP1} , #{TEMP2} , #{TEMP3}, #{CONDITION}, #{KEYWORD})}
     </select>
 
     <select id="getPartnerCommitionList" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
