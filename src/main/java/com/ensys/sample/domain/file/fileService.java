@@ -226,7 +226,8 @@ public class fileService extends BaseService {
 					/* 업로드 할 파일을 만들고 파일을 복사 */
 					try {
 						file = new File("/rahan2000/" + fileName.get("FILE_PATH") + "/" + savedFileNm);
-						goThumnail(cropMf.get(i), file);
+						cropMf.get(i).transferTo(file);
+						//goThumnail(cropMf.get(i), file);	//	썸네일
 
 						ftpUploader.uploadFile("/rahan2000/" + fileName.get("FILE_PATH") + "/" + savedFileNm,
 								savedFileNm, "/upload/" + fileName.get("FILE_PATH"));

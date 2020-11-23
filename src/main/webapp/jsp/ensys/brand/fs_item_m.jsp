@@ -61,11 +61,11 @@
                             return ;
                         }
                         if (saveData[i].SALE_SUPPLY_COST + saveData[i].SALE_SURTAX != saveData[i].SALE_COST){
-                        	qray.alert((i + 1) + '번째 줄<br>판매공급단가, 판매부가세의 합이 <br>판매단가와 다릅니다.');
+                        	qray.alert((saveData[i].__index + 1) + '번째 줄<br>판매공급단가, 판매부가세의 합이 <br>판매단가와 다릅니다.');
                             return ;
                         }
                         if (saveData[i].ITEM_SUPPLY_COST + saveData[i].ITEM_SURTAX != saveData[i].ITEM_COST){
-                        	qray.alert((i + 1) + '번째 줄<br>상품공급단가, 상품부가세의 합이 <br>상품단가와 다릅니다.');
+                        	qray.alert((saveData[i].__index + 1) + '번째 줄<br>상품공급단가, 상품부가세의 합이 <br>상품단가와 다릅니다.');
                             return ;
                         }
                     }
