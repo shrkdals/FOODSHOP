@@ -274,6 +274,34 @@
 
                     });
                 },
+                FILE_CLICK2: function(caller, act, data){
+                	modal.open({
+                        width: 900,
+                        height: _pop_height800,
+                        top: _pop_top800,
+                        iframe: {
+                            method: "get",
+                            url: "../../common/fileBrowser.jsp",
+                            param: "callBack=userCallBack"
+                        },
+                        sendData: function () {
+                            return {
+                                initData: data
+                            }
+                        },
+                        onStateChanged: function () {
+                            if (this.state === "open") {
+                                mask.open({
+                                    content: '<h1><i class="fa fa-spinner fa-spin"></i> Loading</h1>'
+                                });
+                            } else if (this.state === "close") {
+                                mask.close();
+                            }
+                        }
+                    }, function () {
+
+                    });
+                },
                 ITEM_DEL1: function (caller, act, data) {
                     fnObj.gridView01.delRow("selected");
                 },
@@ -1802,6 +1830,32 @@
                 }
                 ACTIONS.dispatch(ACTIONS.FILE_CLICK, data);
             })
+            
+            $(".openFile2").click(function () {
+                var selected = fnObj.gridView01.getData('selected')[0];
+                var target = $(this).prevAll('[data-file-input]');
+                var cg_cd = target.attr('CG_CD');
+
+                userCallBack = function (e) {
+                    e['TB_ID'] = target.attr('TB_ID');
+                    e['CG_CD'] = target.attr('CG_CD');
+                    e['TB_KEY'] = selected.BRD_CD;
+
+                    target.val(e.ORGN_FILE_NAME);
+                    fnObj.gridView01.target.setValue(selected.__index, cg_cd, e);
+                    fnObj.gridView01.target.list[selected.__index][cg_cd] = e;
+                };
+
+
+                var data = {
+                    TB_ID: target.attr('TB_ID'),
+                    CG_CD: target.attr('CG_CD'),
+                    TB_KEY: selected.BRD_CD,
+                    FILE_PATH: target.attr('FILE_PATH'),
+                    CALL_BACK: selected[target.attr('CG_CD')]
+                }
+                ACTIONS.dispatch(ACTIONS.FILE_CLICK2, data);
+            })
 
             var ParentModal = new ax5.ui.modal();
 
@@ -2033,17 +2087,25 @@
                                                    CG_CD="BDTL00001"
                                                    FILE_PATH="brand/DTL"
                                                    data-file-input readonly="readonly" form-bind-type="text">
-                                            <span class="input-group-addon openFile" style="cursor: pointer"><i
+                                            <span class="input-group-addon openFile2" style="cursor: pointer"><i
                                                     class="cqc-magnifier"></i></span>
                                         </div>
                                     </ax:td>
                                 </ax:tr>
                                 <ax:tr>
-                                	<ax:td label='홍보영상링크' width="300px">
+                                	<ax:td label='홍보영상링크1' width="300px">
                                         <input type="text" class="form-control" data-ax-path="PROMT_LINK" name="PROMT_LINK" id="PROMT_LINK" form-bind-text='PROMT_LINK' form-bind-type='text'/>
                                     </ax:td>
                                     <ax:td label='태그검색어' width="300px">
                                         <input type="text" class="form-control" data-ax-path="TAG_SEARCH" name="TAG_SEARCH" id="TAG_SEARCH" form-bind-text='TAG_SEARCH' form-bind-type='text'/>
+                                    </ax:td>
+                                </ax:tr>
+                                <ax:tr>
+                                	<ax:td label='홍보영상링크2' width="300px">
+                                        <input type="text" class="form-control" data-ax-path="PROMT_LINK2" name="PROMT_LINK2" id="PROMT_LINK2" form-bind-text='PROMT_LINK2' form-bind-type='text'/>
+                                    </ax:td>
+                                    <ax:td label='홈페이지링크' width="300px">
+                                        <input type="text" class="form-control" data-ax-path="HOME_LINK" name="HOME_LINK" id="HOME_LINK" form-bind-text='HOME_LINK' form-bind-type='text'/>
                                     </ax:td>
                                 </ax:tr>
                             </ax:tbl>

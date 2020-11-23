@@ -113,6 +113,15 @@ public class fileController extends BaseController {
             e.printStackTrace();
         }
     }
+    
+    @RequestMapping(value = "fileUpload", method = { RequestMethod.POST }, produces = APPLICATION_JSON)
+	@ResponseBody
+	public ApiResponse fileUpload(@RequestPart("files") List<MultipartFile> images,
+			@RequestPart("fileName") List<HashMap<String, Object>> fileName) throws Exception {
+		service.fileUpload(images, fileName);
+		return ok();
+		
+	}
 
     @RequestMapping(value = "cropUpload", method = {RequestMethod.POST}, produces = APPLICATION_JSON)
     @ResponseBody

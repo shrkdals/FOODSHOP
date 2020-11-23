@@ -255,72 +255,60 @@ public class fileService extends BaseService {
 	}
 
 	// 파일 업로드
-	public HashMap<String, Object> fileUpload(List<MultipartFile> mf, List<HashMap<String, Object>> fileName) {
+	public void fileUpload(List<MultipartFile> mf, List<HashMap<String, Object>> fileName) {
+		
+		String filepath = (String) fileName.get(0).get("FILE_PATH");
+		System.out.println("filepath : " + filepath);
 
-		String path0 = "D:/ERP-U";
+		String path = "";
+		for (int i = 0; i < filepath.split("/").length; i++) {
+			if (i != 0) {
+				path += "/";
+			}
+			path += filepath.split("/")[i];
 
-		if (path0 != null) {
-			File dir = new File(path0);
-
-			/* 폴더가 없을 경우 생성 */
-			if (!dir.isDirectory()) {
-				dir.mkdir();
+			File files = new File("/rahan2000/" + path);
+			if (!files.isDirectory()) {
+				files.mkdir();
 			}
 		}
-
-		String path1 = "D:/ERP-U/Upload";
-
-		if (path1 != null) {
-			File dir = new File(path1);
-
-			/* 폴더가 없을 경우 생성 */
-			if (!dir.isDirectory()) {
-				dir.mkdir();
-			}
+		File files = new File("/rahan2000/" + filepath + "/original");
+		if (!files.isDirectory()) {
+			files.mkdir();
 		}
-
-		String path = "D:/ERP-U/Upload/QRAY_TEMP";
-
-		if (path != null) {
-			File dir = new File(path);
-
-			/* 폴더가 없을 경우 생성 */
-			if (!dir.isDirectory()) {
-				dir.mkdir();
-			}
-		}
-
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("chkVal", "N");
-		resultMap.put("FILE_PATH", path);
-		resultMap.put("MSG", "성공적으로 저장되었습니다.");
 
 		File file = null;
-
 		SessionUser user = SessionUtils.getCurrentUser();
 
 		String originFileNm = null;
 		String savedFileNm = null;
 		String fileExtension = null;
+		try {
+			FTPUploader ftpUploader = new FTPUploader("rahan2002.cafe24.com", "rahan2002", "rahan123!@");
+			if (mf != null && mf.size() > 0) {
+				for (int i = 0; i < mf.size(); i++) {
+					originFileNm = mf.get(i).getOriginalFilename();
+					savedFileNm = (String) fileName.get("FILE_NAME");
+					fileExtension = exe(originFileNm).toLowerCase();
 
-		if (mf != null && mf.size() > 0) {
-			for (int i = 0; i < mf.size(); i++) {
-				originFileNm = mf.get(i).getOriginalFilename();
-				savedFileNm = (String) fileName.get(i).get("FILE_NAME");
-				fileExtension = exe(originFileNm).toLowerCase();
+					/* 업로드 할 파일을 만들고 파일을 복사 */
+					try {
+						file = new File("/rahan2000/" + fileName.get("FILE_PATH") + "/original/" + savedFileNm);
+						mf.get(i).transferTo(file);
 
-				/* 업로드 할 파일을 만들고 파일을 복사 */
-				try {
-					file = new File(path + "/" + savedFileNm + "." + fileExtension);
-					mf.get(i).transferTo(file);
-				} catch (Exception e) {
-					resultMap.put("MSG", "파일 업로드 과정 중 에러가 발생하였습니다. \n " + e);
-					resultMap.put("chkVal", "Y");
-					resultMap.put("FILE_PATH", path);
+						ftpUploader.uploadFile("/rahan2000/" + fileName.get("FILE_PATH") + "/original/" + savedFileNm,
+								savedFileNm, "/upload/" + fileName.get("FILE_PATH") + "/original/");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
+
+			ftpUploader.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return resultMap;
+		
 	}
 
 	// MA_FILEINFO IU패키지 테이블 데이터 삭제
