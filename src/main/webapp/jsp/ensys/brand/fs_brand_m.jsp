@@ -194,7 +194,15 @@
                     itemH = itemH.concat(caller.gridView05.getData("modified"));
                     itemH = itemH.concat(caller.gridView05.getData("deleted"));
 
-                    if (itemH.length == 0) {
+                    var DTL_FILE_NM_DATA;
+                    if (nvl(JSON.parse($("#DTL_FILE_NM")[0].getAttribute('gridData'))) != '' || nvl(JSON.parse($("#DTL_FILE_NM")[0].getAttribute('delete'))) != '') {
+                    	DTL_FILE_NM_DATA = {
+                            delete: JSON.parse($("#DTL_FILE_NM")[0].getAttribute('delete')),
+                            gridData: JSON.parse($("#DTL_FILE_NM")[0].getAttribute('gridData')),
+                        };
+                    }
+                    
+                    if (itemH.length == 0 && nvl(DTL_FILE_NM_DATA) == '') {
                         qray.alert('변경된 정보가 없습니다.');
                         return;
                     }
@@ -214,7 +222,7 @@
                                     brand_begin_item: [].concat(caller.gridView04.getData("modified")).concat(caller.gridView04.getData("deleted")),
                                     brand_item_category: [].concat(caller.gridView05.getData("modified")).concat(caller.gridView05.getData("deleted")),
                                     file_main: caller.gridView01.target.list[caller.gridView01.getData("selected")[0].__index]['BIMG00001'],
-                                    file_dtl: caller.gridView01.target.list[caller.gridView01.getData("selected")[0].__index]['BDTL00001'],
+                                    file_dtl: DTL_FILE_NM_DATA,
                                     file_logo: caller.gridView01.target.list[caller.gridView01.getData("selected")[0].__index]['BLOG00001'],
                                     file_terms: caller.gridView01.target.list[caller.gridView01.getData("selected")[0].__index]['BTERMS00001'],
                                 }),
@@ -550,6 +558,22 @@
                             , {
                                 key: "PROMT_LINK",
                                 label: "홍보영상링크",
+                                width: 150,
+                                align: "center",
+                                editor: {type: "text"},
+                                hidden: true
+                            },
+                            {
+                                key: "PROMT_LINK2",
+                                label: "홍보영상링크2",
+                                width: 150,
+                                align: "center",
+                                editor: {type: "text"},
+                                hidden: true
+                            },
+                            {
+                                key: "HOME_LINK",
+                                label: "홈페이지링크",
                                 width: 150,
                                 align: "center",
                                 editor: {type: "text"},
@@ -1837,23 +1861,47 @@
                 var cg_cd = target.attr('CG_CD');
 
                 userCallBack = function (e) {
-                    e['TB_ID'] = target.attr('TB_ID');
-                    e['CG_CD'] = target.attr('CG_CD');
-                    e['TB_KEY'] = selected.BRD_CD;
-
-                    target.val(e.ORGN_FILE_NAME);
-                    fnObj.gridView01.target.setValue(selected.__index, cg_cd, e);
-                    fnObj.gridView01.target.list[selected.__index][cg_cd] = e;
+                	var html = "";
+                    var chkVal;
+                    for (var i = 0; i < e.gridData.length; i++) {
+                        var list = e.gridData[i];
+                        if (i == 0) {
+                            html += list.ORGN_FILE_NM
+                        } else {
+                            chkVal = true;
+                            break;
+                        }
+                    }
+                    if (chkVal) {
+                        html += ".. 외 " + (e.gridData.length - 1) + "개";
+                    }
+                    
+                    target.val(html);
+                    target.attr('gridData', JSON.stringify(e.gridData));
+                    target.attr('delete', JSON.stringify(e.delete));
                 };
 
-
-                var data = {
-                    TB_ID: target.attr('TB_ID'),
-                    CG_CD: target.attr('CG_CD'),
-                    TB_KEY: selected.BRD_CD,
-                    FILE_PATH: target.attr('FILE_PATH'),
-                    CALL_BACK: selected[target.attr('CG_CD')]
+                var data;
+                if (nvl(target.attr('gridData')) == '' && nvl(target.attr('delete')) == ''){
+                	data = {
+                            TB_ID: target.attr('TB_ID'),
+                            CG_CD: target.attr('CG_CD'),
+                            TB_KEY: selected.BRD_CD,
+                            FILE_PATH: target.attr('FILE_PATH'),
+                        }
+                }else {
+                	data = {
+                            TB_ID: target.attr('TB_ID'),
+                            CG_CD: target.attr('CG_CD'),
+                            TB_KEY: selected.BRD_CD,
+                            FILE_PATH: target.attr('FILE_PATH'),
+                            imsiFile: {
+                                gridData: JSON.parse(target.attr('gridData')),
+                                delete: JSON.parse(target.attr('delete'))
+                            }
+                        }
                 }
+                 
                 ACTIONS.dispatch(ACTIONS.FILE_CLICK2, data);
             })
 

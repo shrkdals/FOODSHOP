@@ -175,25 +175,6 @@ public class fileController extends BaseController {
         return Responses.ListResponse.of(list);
     }
 
-    @RequestMapping(value = "save", method = {RequestMethod.POST}, produces = APPLICATION_JSON)
-    @ResponseBody
-    public Responses.MapResponse save(@RequestPart("files") List<MultipartFile> images,
-                                      @RequestPart("fileName") List<HashMap<String, Object>> fileName
-    ) {
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        try {
-            result = service.fileUpload(images, fileName);
-        } catch (Exception e) {
-            result.put("chkVal", "Y");
-            result.put("MSG", "저장 중 오류가 발생하였습니다. \n" + e);
-
-            e.printStackTrace();
-            return Responses.MapResponse.of(result);
-        }
-        return Responses.MapResponse.of(result);
-    }
-
-
     @RequestMapping(value = "downloadFile", method = {RequestMethod.POST}, produces = APPLICATION_JSON)
     @ResponseBody
     public void downloadFile(@RequestBody HashMap<String, Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -242,6 +242,26 @@ public class fileService extends BaseService {
 			e.printStackTrace();
 		}
 	}
+	
+	@Transactional
+	public void insertFsFileBrowse(HashMap<String, Object> param) {
+		SessionUser user = SessionUtils.getCurrentUser();
+
+		param.put("CD_COMPANY", user.getCdCompany());
+		param.put("ID_INSERT", user.getIdUser());
+
+		fileMapper.insertFsFileBrowse(param);
+	}
+	
+	@Transactional
+	public void deleteFsFileBrowse(HashMap<String, Object> param) {
+		SessionUser user = SessionUtils.getCurrentUser();
+
+		param.put("CD_COMPANY", user.getCdCompany());
+		param.put("ID_INSERT", user.getIdUser());
+
+		fileMapper.deleteFsFileBrowse(param);
+	}
 
 	// 파일 데이터 추가 호출
 	@Transactional
@@ -272,7 +292,7 @@ public class fileService extends BaseService {
 				files.mkdir();
 			}
 		}
-		File files = new File("/rahan2000/" + filepath + "/original");
+		File files = new File("/rahan2000/" + filepath);
 		if (!files.isDirectory()) {
 			files.mkdir();
 		}
@@ -288,16 +308,16 @@ public class fileService extends BaseService {
 			if (mf != null && mf.size() > 0) {
 				for (int i = 0; i < mf.size(); i++) {
 					originFileNm = mf.get(i).getOriginalFilename();
-					savedFileNm = (String) fileName.get("FILE_NAME");
+					savedFileNm = (String) fileName.get(i).get("FILE_NM");
 					fileExtension = exe(originFileNm).toLowerCase();
 
 					/* 업로드 할 파일을 만들고 파일을 복사 */
 					try {
-						file = new File("/rahan2000/" + fileName.get("FILE_PATH") + "/original/" + savedFileNm);
+						file = new File("/rahan2000/" + fileName.get(i).get("FILE_PATH") + "/" + savedFileNm);
 						mf.get(i).transferTo(file);
 
-						ftpUploader.uploadFile("/rahan2000/" + fileName.get("FILE_PATH") + "/original/" + savedFileNm,
-								savedFileNm, "/upload/" + fileName.get("FILE_PATH") + "/original/");
+						ftpUploader.uploadFile("/rahan2000/" + fileName.get(i).get("FILE_PATH") + "/" + savedFileNm,
+								savedFileNm, "/upload/" + fileName.get(i).get("FILE_PATH") );
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

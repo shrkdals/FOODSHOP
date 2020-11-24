@@ -198,10 +198,20 @@
                     itemH = itemH.concat(caller.gridView05.getData("modified"));
                     itemH = itemH.concat(caller.gridView05.getData("deleted"));
 
-                    if (itemH.length == 0) {
+                    var DTL_FILE_NM_DATA;
+                    if (nvl(JSON.parse($("#DTL_FILE_NM")[0].getAttribute('gridData'))) != '' || nvl(JSON.parse($("#DTL_FILE_NM")[0].getAttribute('delete'))) != '') {
+                    	DTL_FILE_NM_DATA = {
+                            delete: JSON.parse($("#DTL_FILE_NM")[0].getAttribute('delete')),
+                            gridData: JSON.parse($("#DTL_FILE_NM")[0].getAttribute('gridData')),
+                        };
+                    }
+                    
+                    if (itemH.length == 0 && nvl(DTL_FILE_NM_DATA) == '') {
                         qray.alert('변경된 정보가 없습니다.');
                         return;
                     }
+
+                   
 
                     qray.confirm({
                         msg: "저장하시겠습니까?"
@@ -218,7 +228,7 @@
                                     brand_begin_item: [].concat(caller.gridView04.getData("modified")).concat(caller.gridView04.getData("deleted")),
                                     brand_item_category: [].concat(caller.gridView05.getData("modified")).concat(caller.gridView05.getData("deleted")),
                                     file_main: caller.gridView01.target.list[caller.gridView01.getData("selected")[0].__index]['BIMG00001'],
-                                    file_dtl: caller.gridView01.target.list[caller.gridView01.getData("selected")[0].__index]['BDTL00001'],
+                                    file_dtl: DTL_FILE_NM_DATA,
                                     file_logo: caller.gridView01.target.list[caller.gridView01.getData("selected")[0].__index]['BLOG00001']
                                 }),
                                 callback: function (res) {
@@ -268,6 +278,34 @@
                         iframe: {
                             method: "get",
                             url: "../../common/FileCanvas.jsp",
+                            param: "callBack=userCallBack"
+                        },
+                        sendData: function () {
+                            return {
+                                initData: data
+                            }
+                        },
+                        onStateChanged: function () {
+                            if (this.state === "open") {
+                                mask.open({
+                                    content: '<h1><i class="fa fa-spinner fa-spin"></i> Loading</h1>'
+                                });
+                            } else if (this.state === "close") {
+                                mask.close();
+                            }
+                        }
+                    }, function () {
+
+                    });
+                },
+                FILE_CLICK2: function(caller, act, data){
+                	modal.open({
+                        width: 900,
+                        height: _pop_height800,
+                        top: _pop_top800,
+                        iframe: {
+                            method: "get",
+                            url: "../../common/fileBrowser.jsp",
                             param: "callBack=userCallBack"
                         },
                         sendData: function () {
@@ -535,6 +573,22 @@
                             , {
                                 key: "PROMT_LINK",
                                 label: "홍보영상링크",
+                                width: 150,
+                                align: "center",
+                                editor: {type: "text"},
+                                hidden: true
+                            }
+                            , {
+                                key: "PROMT_LINK2",
+                                label: "홍보영상링크2",
+                                width: 150,
+                                align: "center",
+                                editor: {type: "text"},
+                                hidden: true
+                            }
+                            , {
+                                key: "HOME_LINK",
+                                label: "홈페이지링크",
                                 width: 150,
                                 align: "center",
                                 editor: {type: "text"},
@@ -1837,6 +1891,56 @@
                 }
                 ACTIONS.dispatch(ACTIONS.FILE_CLICK, data);
             })
+            
+            $(".openFile2").click(function () {
+                var selected = fnObj.gridView01.getData('selected')[0];
+                var target = $(this).prevAll('[data-file-input]');
+                var cg_cd = target.attr('CG_CD');
+
+                userCallBack = function (e) {
+                	var html = "";
+                    var chkVal;
+                    for (var i = 0; i < e.gridData.length; i++) {
+                        var list = e.gridData[i];
+                        if (i == 0) {
+                            html += list.ORGN_FILE_NM
+                        } else {
+                            chkVal = true;
+                            break;
+                        }
+                    }
+                    if (chkVal) {
+                        html += ".. 외 " + (e.gridData.length - 1) + "개";
+                    }
+                    
+                    target.val(html);
+                    target.attr('gridData', JSON.stringify(e.gridData));
+                    target.attr('delete', JSON.stringify(e.delete));
+                };
+
+                var data;
+                if (nvl(target.attr('gridData')) == '' && nvl(target.attr('delete')) == ''){
+                	data = {
+                            TB_ID: target.attr('TB_ID'),
+                            CG_CD: target.attr('CG_CD'),
+                            TB_KEY: selected.BRD_CD,
+                            FILE_PATH: target.attr('FILE_PATH'),
+                        }
+                }else {
+                	data = {
+                            TB_ID: target.attr('TB_ID'),
+                            CG_CD: target.attr('CG_CD'),
+                            TB_KEY: selected.BRD_CD,
+                            FILE_PATH: target.attr('FILE_PATH'),
+                            imsiFile: {
+                                gridData: JSON.parse(target.attr('gridData')),
+                                delete: JSON.parse(target.attr('delete'))
+                            }
+                        }
+                }
+                 
+                ACTIONS.dispatch(ACTIONS.FILE_CLICK2, data);
+            })
 
             var ParentModal = new ax5.ui.modal();
 
@@ -2075,7 +2179,7 @@
                                                    CG_CD="BDTL00001"
                                                    FILE_PATH="brand/DTL"
                                                    data-file-input readonly="readonly" form-bind-type="text">
-                                            <span class="input-group-addon openFile" style="cursor: pointer"><i
+                                            <span class="input-group-addon openFile2" style="cursor: pointer"><i
                                                     class="cqc-magnifier"></i></span>
                                         </div>
                                     </ax:td>
@@ -2088,6 +2192,14 @@
                                         <input type="text" class="form-control" data-ax-path="TAG_SEARCH" name="TAG_SEARCH" id="TAG_SEARCH" form-bind-text='TAG_SEARCH' form-bind-type='text'/>
                                     </ax:td>
                                     
+                                </ax:tr>
+                                <ax:tr>
+                                	<ax:td label='홍보영상링크2' width="300px">
+                                        <input type="text" class="form-control" data-ax-path="PROMT_LINK2" name="PROMT_LINK2" id="PROMT_LINK2" form-bind-text='PROMT_LINK2' form-bind-type='text'/>
+                                    </ax:td>
+                                    <ax:td label='홈페이지링크' width="300px">
+                                        <input type="text" class="form-control" data-ax-path="HOME_LINK" name="HOME_LINK" id="HOME_LINK" form-bind-text='HOME_LINK' form-bind-type='text'/>
+                                    </ax:td>
                                 </ax:tr>
                             </ax:tbl>
                         </ax:form>

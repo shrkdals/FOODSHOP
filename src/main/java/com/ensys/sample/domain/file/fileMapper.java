@@ -19,8 +19,10 @@ public interface fileMapper extends MyBatisMapper {
 
     int MaFileInfoDelete(HashMap<String, Object> param);
 
+    int deleteFsFileBrowse(HashMap<String, Object> param);
 
-
+    int insertFsFileBrowse(HashMap<String, Object> param);
+    
     int insertFsFile(HashMap<String, Object> param);
 
     List<HashMap<String, Object>> getFileData(HashMap<String, Object> param);

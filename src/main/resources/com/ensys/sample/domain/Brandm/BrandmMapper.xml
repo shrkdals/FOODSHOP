@@ -56,7 +56,9 @@
                 #{CATE_CD},
                 #{CATE_NM},
                 #{BRD_TERMS},
-                #{TAG_SEARCH}
+                #{TAG_SEARCH},
+                #{PROMT_LINK2},
+                #{HOME_LINK}
             )
         }
     </update>
@@ -82,10 +84,12 @@
                 #{BRD_GOOD},
                 #{PROMT_LINK},
                 #{USER_ID}
-                ,#{CATE_CD}
-                ,#{CATE_NM}
-                ,#{BRD_TERMS}
-                ,#{TAG_SEARCH}
+                , #{CATE_CD}
+                , #{CATE_NM}
+                , #{BRD_TERMS}
+                , #{TAG_SEARCH}
+                , #{PROMT_LINK2}
+                , #{HOME_LINK}
             )
         }
     </update>

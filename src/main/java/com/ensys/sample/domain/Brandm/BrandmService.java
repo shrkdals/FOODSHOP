@@ -208,7 +208,27 @@ public class BrandmService extends BaseService {
         }
         HashMap<String, Object> dtl = (HashMap<String, Object>) param.get("file_dtl");
         if (dtl != null) {
-            fileservice.insertFsFile(dtl);
+        	List<HashMap<String, Object>> delete = (List<HashMap<String, Object>>) dtl.get("delete");
+			List<HashMap<String, Object>> gridData = (List<HashMap<String, Object>>) dtl.get("gridData");
+
+			for (HashMap<String, Object> item : delete) {
+				item.put("COMPANY_CD", user.getCdCompany());
+				item.put("INSERT_ID", user.getIdUser());
+				item.put("UPDATE_ID", user.getIdUser());
+				
+				fileservice.deleteFsFileBrowse(item);
+			}
+			
+			for (HashMap<String, Object> item : gridData) {
+				if (item.get("__created__") != null) {
+					item.put("COMPANY_CD", user.getCdCompany());
+					item.put("INSERT_ID", user.getIdUser());
+					item.put("UPDATE_ID", user.getIdUser());
+					
+					fileservice.insertFsFileBrowse(item);
+				}
+			}
+        	
         }
         HashMap<String, Object> main = (HashMap<String, Object>) param.get("file_main");
         if (main != null) {

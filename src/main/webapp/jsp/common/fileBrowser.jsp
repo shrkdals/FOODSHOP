@@ -76,11 +76,11 @@
                  caller.gridView01.target.setValue(lastIdx - 1, "TB_KEY", initData.TB_KEY);
                  caller.gridView01.target.setValue(lastIdx - 1, "TB_ID", initData.TB_ID);
                  if (caller.gridView01.getData().length == 1) {
-                     caller.gridView01.target.setValue(lastIdx - 1, "FILE_SEQ", '1');
+                     caller.gridView01.target.setValue(lastIdx - 1, "FILE_SEQ", 1);
                  } else {
                      caller.gridView01.target.setValue(lastIdx - 1, "FILE_SEQ", Number(nvl(caller.gridView01.getData()[lastIdx - 2].FILE_SEQ, 0)) + 1);
                  }
-                 fnObj.gridView01.target.setValue(lastIdx - 1, 'FILE_BYTE', data.FILE_SIZE);
+                 fnObj.gridView01.target.setValue(lastIdx - 1, 'FILE_BYTE', data.FILE_BYTE);
                  fnObj.gridView01.target.setValue(lastIdx - 1, 'FILE_EXT', data.FILE_EXT);
                  fnObj.gridView01.target.setValue(lastIdx - 1, 'FILE_NM', data.FILE_NM);
                  fnObj.gridView01.target.setValue(lastIdx - 1, 'ORGN_FILE_NM', data.ORGN_FILE_NM);
@@ -171,14 +171,20 @@
                          })
 						changesize();
                      } else {
-                         FILEPATH = axboot.getfileRoot() + "\\" + item.FILE_NM + "." +  item.FILE_EXT;
+                         FILEPATH = axboot.getfileRoot() + "\\" + item.FILE_PATH + '\\' + item.FILE_NM;
 
                          qray.loading.show("조회 중입니다");
                          axboot.call({
                              type: "POST",
                              url: ["commonfile", "FileRead"],
                              async: false,
-                             data: JSON.stringify(item),
+                             data: JSON.stringify({
+                            	 file: {
+                                     FILE_NAME: item.FILE_NM,
+                                     FILE_PATH: item.FILE_PATH,
+                                     FILE_EXT: item.FILE_EXT
+                                 }
+                             }),
                              callback: function (res) {
                                  console.log("callback");
                              }
@@ -354,6 +360,7 @@
                      var arr = [];
                      for (var i = 0; i < deleteArr.length; i++) {
                          if (!deleteArr[i].__created__) {
+                             deleteArr[i]['FILE_PATH'] = null;
                              arr.push(deleteArr[i]);
                          }
                      }
@@ -371,9 +378,8 @@
                          FILE_OBJ = {};
                          for (var j = 0; j < caller.gridView01.target.list.length; j++) {
                              if (Object.keys(files)[i] == caller.gridView01.target.list[j].FILE_SEQ) {
-                                 FILE_OBJ.FILE_NM = caller.gridView01.target.list[j].FILE_NM;
-                                 FILE_OBJ.FILE_EXT = caller.gridView01.target.list[j].FILE_EXT;
-                                 FILE_ARR.push(FILE_OBJ);
+                            	 fnObj.gridView01.target.list[j]['FILE_PATH'] = initData.FILE_PATH;
+                                 FILE_ARR.push(caller.gridView01.target.list[j]);
                              }
                          }
                          formData.append('files', files[Object.keys(files)[i]]);
@@ -394,21 +400,25 @@
                          success: function (result) {
                              for (var i = 0; i < caller.gridView01.target.list.length; i++) {
                                  caller.gridView01.target.setValue(i, 'YN_UPLOAD', 'Y');
-                                 caller.gridView01.target.setValue(i, 'FILE_PATH', "D:\\QRAY_TEMP");
                              }
 
                              files = []; //  초기화
 
+                             for (var i = 0 ; i < fnObj.gridView01.target.list.length ; i ++){
+                            	 fnObj.gridView01.target.list[i]['FILE_PATH'] = initData.FILE_PATH;
+                             }
+                             
                              var imsi = {};
                              imsi.gridData = fnObj.gridView01.target.list;
                              imsi.delete = arr;
                              
                              if (param.viewName) {
                                  parent.document.getElementsByName(param.viewName)[0].contentWindow[param.callBack](imsi);
+                                 eval("parent." + param.modalName + ".close()");
                                  return;
                              }
                              parent[param.callBack](imsi);
-                             eval("parent." + param.modalName + ".close()");
+                             parent.modal.close();
                          }
                      });
                  }
@@ -726,7 +736,8 @@
                      data.ORGN_FILE_NM = file.name;
                      data.FILE_EXT = validation(file.name);
                      data.FILE_SIZE = file.size;
-
+                     data.FILE_BYTE = file.size;
+                     
                      ACTIONS.dispatch(ACTIONS.ITEM_ADD, data);
 
                      var imgNum = Number(fnObj.gridView01.getData('selected')[0].FILE_SEQ);
@@ -742,6 +753,7 @@
                          data.ORGN_FILE_NM = file.name;
                          data.FILE_EXT = validation(file.name);
                          data.FILE_SIZE = file.size;
+                         data.FILE_BYTE = file.size;
                          data.FILE_PATH = img.target.result;
 
                          ACTIONS.dispatch(ACTIONS.ITEM_ADD, data);

@@ -60,5 +60,38 @@
             )
         }
     </update>
+    
+    <update id="insertFsFileBrowse" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_FILE_I_MULTI
+            (
+                #{CD_COMPANY},
+                #{CG_CD},
+                #{TB_KEY},
+                #{FILE_SEQ},
+                #{TB_ID},
+                #{FILE_NM},
+                #{ORGN_FILE_NM},
+                #{FILE_PATH},
+                #{FILE_EXT},
+                #{FILE_BYTE},
+                #{FILE_SIZE},
+                #{ID_INSERT}
+            )
+        }
+    </update>
+    
+    <delete id="deleteFsFileBrowse" parameterType="hashmap" statementType="CALLABLE">
+        {
+        CALL UP_FS_FILE_D
+            (
+                #{CD_COMPANY},
+                #{CG_CD},
+                #{TB_KEY},
+                #{TB_ID},
+                #{FILE_SEQ}
+            )
+        }
+    </delete>
 
 </mapper>
