@@ -80,10 +80,10 @@
             });
 
             $("#S_CONTRACT").ax5select({
-                options: YN_OP
+                options: CONTRACT_STAT
             });
             $("#CONTRACT_YN").ax5select({
-                options: YN_OP
+                options: CONTRACT_STAT
             });
 
             var fnObj = {}, CODE = {};

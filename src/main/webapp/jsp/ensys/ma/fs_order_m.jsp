@@ -48,9 +48,10 @@
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_SEARCH: function (caller, act, data) {
                     var param = {
-                        GROUP : SCRIPT_SESSION.cdGroup
-                        ,DT_START : $('#S_DT').getStartDate()
-                        ,DT_END : $('#S_DT').getEndDate()
+                          GROUP : SCRIPT_SESSION.cdGroup
+                        , DT_START : $('#S_DT').getStartDate()
+                        , DT_END : $('#S_DT').getEndDate()
+                        , KEYWORD :   $('#KEYWORD').val()
                     };
                     var list = $.DATA_SEARCH('order','selectH',param).list;
                     fnObj.gridView01.target.setData(list);
@@ -1039,6 +1040,12 @@
                     <ax:tr>
                         <ax:td label='주문일자' width="450px">
                             <datepicker id="S_DT"></datepicker>
+                        </ax:td>
+                        <ax:td label='검색어' width="350px">
+                            <div class="input-group" style="width:100%">
+                                <input type="text" class="form-control" name="KEYWORD" id="KEYWORD"
+                                       style="width:100%"/>
+                            </div>
                         </ax:td>
                     </ax:tr>
                 </ax:tbl>
