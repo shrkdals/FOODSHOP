@@ -110,6 +110,19 @@
                             }
                         }
                     });
+                },
+                PDF_1 : function (caller, act, data) {
+                    // var cklist = isChecked(fnObj.gridView01.getData())
+                    // var ORDER_CD = []
+                    // cklist.forEach(function(item, index){
+                    //     ORDER_CD.push(item.ORDER_CD)
+                    // })
+                    var itemH = fnObj.gridView01.getData('selected')[0];
+                    if (nvl(itemH) == ''){
+						qray.alert('선택된 데이터가 없습니다.');
+						return;
+                    }
+                    $.openCustomPopup("PDF_1",'UserCallBack', '', { ORDER_CD : itemH.ORDER_CD }, '', 1400, 700,50);
                 }
             });
             // fnObj 기본 함수 스타트와 리사이즈
@@ -118,6 +131,10 @@
                 this.searchView.initView();
                 this.gridView01.initView();
                 this.gridView02.initView();
+
+                if(SCRIPT_SESSION.cdGroup !='WEB08'){
+                    $('#pdf1').css('display','none')
+                }
                 
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             };
@@ -129,6 +146,9 @@
             fnObj.pageButtonView = axboot.viewExtend({
                 initView: function () {
                     axboot.buttonClick(this, "data-page-btn", {
+                    	"pdf1": function () {
+                            ACTIONS.dispatch(ACTIONS.PDF_1);
+                        },
                         "DEL_OK": function(){
 							ACTIONS.dispatch(ACTIONS.DEL_OK)
                         },
@@ -714,6 +734,9 @@
                 <button type="button" class="btn btn-info" data-page-btn="search" style="width: 80px;"><i
                         class="icon_search"></i><ax:lang
                         id="ax.admin.sample.modal.button.search"/></button>
+                <button type="button" class="btn btn-info" data-page-btn="pdf1" id="pdf1" style="width: 150px;"><i
+                        class="icon_save"></i>거래명세서 출력
+                </button>
             </div>
         </div>
 
