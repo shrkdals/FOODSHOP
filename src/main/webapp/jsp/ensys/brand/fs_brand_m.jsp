@@ -83,7 +83,7 @@
                     fnObj.gridView02.target.setData($.DATA_SEARCH('Brandm', 'selectBrandMenu', nvl(selected, {})));
                     fnObj.gridView04.target.setData($.DATA_SEARCH('Brandm', 'selectBrandBeginItem', nvl(selected, {})));
                     fnObj.gridView05.target.setData($.DATA_SEARCH('Brandm', 'selectBrandItemCategory', nvl(selected, {})));
-                    
+                    $("#DTL_FILE_NM").attr({gridData: null, delete: null})
                     var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'PT_CATE_SEARCH' , PARAM_STRING_1 : selected.ADM_PT_CD }).list
                     $("#CATE_CD").ax5select({options: list}); //분류코드
 

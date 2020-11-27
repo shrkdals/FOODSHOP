@@ -85,7 +85,7 @@
                     $("#BRD_NOTICE").val(nvl(selected.BRD_NOTICE, '').replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
                     $("#BRD_GOOD").val(nvl(selected.BRD_GOOD, '').replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
                     $("#BRD_TERMS").val(nvl(selected.BRD_TERMS, '').replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
-                    
+                    $("#DTL_FILE_NM").attr({gridData: null, delete: null})
                     fnObj.gridView02.target.setData($.DATA_SEARCH('Brandm', 'selectBrandMenu', nvl(selected, {})));
                     fnObj.gridView04.target.setData($.DATA_SEARCH('Brandm', 'selectBrandBeginItem', nvl(selected, {})));
                     fnObj.gridView05.target.setData($.DATA_SEARCH('Brandm', 'selectBrandItemCategory', nvl(selected, {})));
