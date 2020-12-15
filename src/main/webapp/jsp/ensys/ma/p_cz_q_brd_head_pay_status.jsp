@@ -94,8 +94,8 @@
                         target: $('[data-ax5grid="grid-view-01"]'),
                         showRowSelector: true,
                         columns: [
-                             {key: "PT_CD", 		label: "거래처코드", 	width: 150 , align: "center"},
-                             {key: "PT_NM", 		label: "거래처명", 		width: 130 , align: "left"},
+                             {key: "PT_CD", 		label: "거래처코드", 	width: 150 , align: "center", sortable: true,},
+                             {key: "PT_NM", 		label: "거래처명", 		width: 130 , align: "left", sortable: true,},
                              {key: "BIZ_NO", 		label: "사업자번호",	width: 120 , align: "left",
 								formatter:function(){
 									if (nvl(this.item.BIZ_NO) == ''){
@@ -103,19 +103,19 @@
 									}else{
 										return this.item.BIZ_NO.replace(/(\d{3})(\d{2})(\d{4})/, '$1-$2-$3')
 									}
-								}
+								}, sortable: true,
                              },
-                             {key: "OWNER_NM", 		label: "대표자명", 		width: 100 , align: "left"},
-                             {key: "HP_NO", 		label: "휴대폰번호", 	width: 120 , align: "left"},
+                             {key: "OWNER_NM", 		label: "대표자명", 		width: 100 , align: "left", sortable: true,},
+                             {key: "HP_NO", 		label: "휴대폰번호", 	width: 120 , align: "left", sortable: true,},
                              {key: "CD_BANK", 		label: "계좌은행", 		width: 120 , align: "center", hidden:true},
-                             {key: "NM_BANK", 		label: "계좌은행", 		width: 120 , align: "left"},
-                             {key: "NO_DEPOSIT", 	label: "계좌번호", 		width: 120 , align: "left"},
-                             {key: "CONTRACT_CNT", 	label: "가맹계약건수", 	width: 100 , align: "center"},
-                             {key: "TOT_AMT", 		label: "총금액", 		width: 120 , align: "right", formatter:"money"},
-                             {key: "PAY_AMT", 		label: "지급금액", 		width: 120 , align: "right", formatter:"money"},
-                             {key: "JAN_AMT", 		label: "잔액", 			width: 120 , align: "right", formatter:"money"},
+                             {key: "NM_BANK", 		label: "계좌은행", 		width: 120 , align: "left", sortable: true,},
+                             {key: "NO_DEPOSIT", 	label: "계좌번호", 		width: 120 , align: "left", sortable: true,},
+                             {key: "CONTRACT_CNT", 	label: "가맹계약건수", 	width: 100 , align: "center", sortable: true,},
+                             {key: "TOT_AMT", 		label: "총금액", 		width: 120 , align: "right", formatter:"money", sortable: true,},
+                             {key: "PAY_AMT", 		label: "지급금액", 		width: 120 , align: "right", formatter:"money", sortable: true,},
+                             {key: "JAN_AMT", 		label: "잔액", 			width: 120 , align: "right", formatter:"money", sortable: true,},
                         ],
-                        body: {
+                        body: { 
                             onDataChanged: function () {
 
                             },
@@ -172,18 +172,18 @@
                          frozenColumnIndex: 0,
                          target: $('[data-ax5grid="grid-view-02"]'),
                          columns: [
-                        	 {key: "PT_CD", 			label: "가맹점거래처코드", 	width: 150 , align: "center"},
-                        	 {key: "PT_NM", 			label: "가맹점명", 			width: 120, align: "left"},
-                        	 {key: "BUY_YN", 			label: "구매여부", 			width: 80 , align: "center"},
+                        	 {key: "PT_CD", 			label: "가맹점거래처코드", 	width: 150 , align: "center", sortable: true,},
+                        	 {key: "PT_NM", 			label: "가맹점명", 			width: 120, align: "left", sortable: true,},
+                        	 {key: "BUY_YN", 			label: "구매여부", 			width: 80 , align: "center", sortable: true,},
                         	 {key: "ORDER_CD", 			label: "주문코드", 			width: 150 , align: "center", hidden:true},
-                        	 {key: "ORDER_DTE", 		label: "주문일자", 			width: 120 , align: "left"},
-                        	 {key: "ORDER_AMT", 		label: "주문금액", 			width: 120 , align: "right", formatter:"money"},
-                        	 {key: "PAYM_AMT", 			label: "결제금액", 			width: 120 , align: "right", formatter:"money"},
-                        	 {key: "BUYER_NM", 			label: "구매자명", 			width: 100 , align: "left"},
-                        	 {key: "BUYER_HP", 			label: "구매자휴대폰", 		width: 120 , align: "left"},
-                        	 {key: "BUYER_POST_NO", 	label: "우편번호", 			width: 100 , align: "left"},
-                        	 {key: "BUYER_ADDR", 		label: "주소", 				width: 150 , align: "left"},
-                        	 {key: "BUYER_SYSDEF_ADDR", label: "상세주소", 			width: 150 , align: "left"},
+                        	 {key: "ORDER_DTE", 		label: "주문일자", 			width: 120 , align: "left", sortable: true,},
+                        	 {key: "ORDER_AMT", 		label: "주문금액", 			width: 120 , align: "right", formatter:"money", sortable: true,},
+                        	 {key: "PAYM_AMT", 			label: "결제금액", 			width: 120 , align: "right", formatter:"money", sortable: true,},
+                        	 {key: "BUYER_NM", 			label: "구매자명", 			width: 100 , align: "left", sortable: true,},
+                        	 {key: "BUYER_HP", 			label: "구매자휴대폰", 		width: 120 , align: "left", sortable: true,},
+                        	 {key: "BUYER_POST_NO", 	label: "우편번호", 			width: 100 , align: "left", sortable: true,},
+                        	 {key: "BUYER_ADDR", 		label: "주소", 				width: 150 , align: "left", sortable: true,},
+                        	 {key: "BUYER_SYSDEF_ADDR", label: "상세주소", 			width: 150 , align: "left", sortable: true,},
                          ], 
                          body: {
                              onClick: function () {
