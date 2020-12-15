@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.BrdHeadPayStatus.BrdHeadPayStatusMapper">
+
+    <select id="select" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { 
+        CALL UP_FS_BRD_HEAD_PAY_STATUS_S
+	        (
+	        		#{COMPANY_CD}
+	        	, 	#{KEYWORD}
+	        ) 
+        }
+    </select>
+    
+    <select id="selectDtl" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
+        { 
+        CALL UP_FS_BRD_HEAD_PAY_STATUS_D_S
+	        (
+	        		#{COMPANY_CD}
+	        	, 	#{PT_CD}
+	        ) 
+        }
+    </select>
+    
+</mapper>

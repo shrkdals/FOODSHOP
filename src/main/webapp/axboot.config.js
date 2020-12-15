@@ -54,7 +54,7 @@
             "dmreject": "/api/v1/Dmreject",
             "dmrejecthistory": "/api/v1/Dmrejecthistory",
             "dmreference": "/api/v1/Dmreference",
-
+            "BrdHeadPayStatus": "/api/BrdHeadPayStatus",
             "sysusermenu": "/api/v1/Sysusermenu",
             "sysuserauth": "/api/v1/Sysuserauth",
             "macode": "/api/v1/Macode",
