@@ -48,7 +48,12 @@ public class OrderService extends BaseService {
 		if (items != null && items.size() > 0) {
 			items.get(0).put("COMPANY_CD", user.getCdCompany());
 			items.get(0).put("ORDER_SEQ", param.get("ORDER_SEQ_ARR"));
-			mapper.adjust(items.get(0));
+			if(param.get("PAGE_NAME") != null && param.get("PAGE_NAME").toString().equals("FS_PT_ORDER_M")){
+				mapper.adjust2(items.get(0));
+			}else{
+				mapper.adjust(items.get(0));
+			}
+
 		}
 
 	}

@@ -89,7 +89,7 @@
                     axboot.ajax({
                         type: "POST",
                         url: ["order", "success"],
-                        data: JSON.stringify({list : list , TYPE: '2', ORDER_SEQ_ARR : order_seq_arr.join('|')}),
+                        data: JSON.stringify({list : list , TYPE: '2', ORDER_SEQ_ARR : order_seq_arr.join('|') , PAGE_NAME : 'FS_PT_ORDER_M'}),
                         callback: function (res) {
                             qray.alert("일괄배송완료처리가 되었습니다.");
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
