@@ -32,6 +32,8 @@
             }
             initData.P_KEYWORD = $("#KEYWORD").val();
 
+            var dl_PT_SP = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00002');
+            $("#PT_SP").ax5select({options: dl_PT_SP});
             var fnObj = {};
             var ACTIONS = axboot.actionExtend(fnObj, {
                 PAGE_CLOSE: function (caller, act, data) {
@@ -45,8 +47,7 @@
                         temp = temp.concat(initData.initData.DEFAULT_VALUE);
                         initData.initData.DEFAULT_VALUE = null
                     }
-
-                    var data = $.DATA_SEARCH("commonHelp", "HELP_USER_NOTICE", initData, fnObj.gridView01).list;
+                    var data = $.DATA_SEARCH("commonHelp", "HELP_USER_NOTICE", $.extend(initData, fnObj.searchView.getData().data), fnObj.gridView01).list;
 
                     var chkArr = [];
                     var temp2 = [];
@@ -142,9 +143,11 @@
                         var columnName = components[i].getAttribute("name");
                         if (columnName != null) {
                             if (columnName.substring(0, 2) == 'P_') {       //  조회조건 중 ID값들에 'P_' 가 붙은 것이 있다면
-                                columns[columnName] = components[i].value
+                                columns[columnName] 		= components[i].value
+                                columns["P_" + columnName] 	= components[i].value
                             } else {                                        //  조회조건 중 ID값들에 'P_' 가 안붙은 것이 있다면
-                                columns["P_" + columnName] = components[i].value
+                                columns["P_" + columnName] 	= components[i].value
+                                columns[columnName] 		= components[i].value
                             }
                             console.log(JSON.stringify(columns));
                         }
@@ -174,12 +177,14 @@
                             },
                             {key: "USER_ID", label: "아이디", width: 100, align: "center", editor: false, sortable: true},
                             {key: "USER_NM", label: "이름", width: 100, align: "center", editor: false, sortable: true},
-                            {key: "USER_TP", label: "사용자유형", width: 100, align: "center", editor: false
+                            {key: "HP_NO", label: "전화번호", width: 100, align: "left", sortable: true,editor: false},
+                            {key: "PT_SP_NM", label: "거래처유형", width: 100, align: "left", editor: false, sortable: true},
+                            {key: "PT_SP", 		label: "거래처유형코드", width: 100, align: "center", editor: false, sortable: true, hidden:true},
+                            {key: "USER_TP", label: "사용자유형", width: 100, align: "left", editor: false
                                 ,formatter: function () {
                                     return $.changeTextValue(USER_SP, this.value)
                                 }, sortable: true
                             },
-                            {key: "HP_NO", label: "전화번호", width: 100, align: "left", sortable: true,editor: false},
                             // 혹시몰라서 유지
                             {key: "ID_USER", label: "사원아이디", width: 150, align: "center", sortable: true,editor: false, hidden: true},
                             {key: "NO_EMP", label: "사원번호", width: 150, align: "center", sortable: true,editor: false, hidden: true},
@@ -264,6 +269,10 @@
                     <ax:tr>
                         <ax:td label='검색어' width="400px">
                             <input type="text" class="form-control" name="KEYWORD" id="KEYWORD"/>
+                        </ax:td>
+                        <ax:td label='거래처유형' width="400px">
+                            <div id="PT_SP" name="PT_SP" data-ax5select="PT_SP"
+                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
                         </ax:td>
                     </ax:tr>
                 </ax:tbl>
