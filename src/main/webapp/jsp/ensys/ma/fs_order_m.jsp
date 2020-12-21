@@ -368,9 +368,9 @@
                         },
                         "excel": function () {
                             var item = fnObj.gridView01.getData('selected')[0];
-                        	var list = $.DATA_SEARCH("order", "excel",{TYPE:'01' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : item.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser })
+                        	var list = $.DATA_SEARCH("order", "excel",{TYPE:'01' , COMPANY_CD : SCRIPT_SESSION.cdCompany , ORDER_CD : item.ORDER_CD , TEMP1 : SCRIPT_SESSION.idUser, TEMP2: $('#S_DT').getStartDate(), TEMP3: $('#S_DT').getEndDate()  })
                             fnObj.gridView03.setData(list)
-                            fnObj.gridView03.target.exportExcel('[본사용]주문내역'+$('#S_DT').getStartDate()+'_'+$('#tradeDateT').getEndDate()+'.xls')
+                            fnObj.gridView03.target.exportExcel('[본사용] '+item.JOIN_PT_NM+' 주문내역'+$('#S_DT').getStartDate()+'_'+$('#S_DT').getEndDate()+'.xls')
                         
                             /* var cklist = isChecked(fnObj.gridView01.getData())
                             if (cklist != null){
