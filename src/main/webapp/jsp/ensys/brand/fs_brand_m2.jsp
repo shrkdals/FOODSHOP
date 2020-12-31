@@ -254,16 +254,18 @@
 
 
                     var pt = getLoginPartner();
+                    
                     afterIndex = lastIdx - 1;
                     caller.gridView01.target.setValue(lastIdx - 1, "BRD_CD", GET_NO('BRD', '01'));
                     caller.gridView01.target.setValue(lastIdx - 1, "CG_CD", 'CT00002');
-                    caller.gridView01.target.setValue(lastIdx - 1, "ADM_PT_CD", pt[0].PT_CD);
-                    caller.gridView01.target.setValue(lastIdx - 1, "ADM_PT_NM", pt[0].PT_NM);
+                    if (pt != null && pt.length > 0 ){
+                    	caller.gridView01.target.setValue(lastIdx - 1, "ADM_PT_CD", pt[0].PT_CD);
+                    	caller.gridView01.target.setValue(lastIdx - 1, "ADM_PT_NM", pt[0].PT_NM);
+                    }
                     caller.gridView01.target.setValue(lastIdx - 1, "CG_CD", 'CUMM00006');
                     caller.gridView01.target.setValue(lastIdx - 1, "CG_NM", '본사별샵인샵브랜드');
-                    $('#ADM_PT_CD').attr('HELP_DISABLED' , 'true')
 
-                    var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'PT_CATE_SEARCH' , PARAM_STRING_1 : pt[0].PT_CD }).list
+                    //var list = $.DATA_SEARCH('commonHelp', 'COMMON_PRC' , {PRC_TYPE : 'PT_CATE_SEARCH' , PARAM_STRING_1 : pt[0].PT_CD }).list
 
 
                     //$("#CATE_CD").ax5select({options: [{value:'' , text : ''}].concat(list)}); //분류코드
@@ -340,6 +342,9 @@
                 this.gridView04.initView();
                 this.gridView05.initView();
 
+
+                $("#ADM_PT_CD").attr('HELP_DISABLED', 'true');
+                
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 changesize();
             };
@@ -2104,7 +2109,7 @@
                                         <codepicker id="ADM_PT_CD" HELP_ACTION="HELP_PARTNER" HELP_URL="partner"
                                                     BIND-CODE="PT_CD" BIND-TEXT="PT_NM" READONLY
                                                     form-bind-type="codepicker" form-bind-text="ADM_PT_NM"
-                                                    form-bind-code="ADM_PT_CD"/>
+                                                    form-bind-code="ADM_PT_CD" HELP_DISABLED="TRUE"/>
                                     </ax:td>
                                 </ax:tr>
                                 <ax:tr>
