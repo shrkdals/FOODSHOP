@@ -62,6 +62,7 @@
                         type: "POST",
                         url: ["brandContractStatus", "selectDtl"],
                         data: JSON.stringify({
+                        	MAIN_PT_CD : selected.MAIN_PT_CD,
                         	JOIN_PT_CD : selected.JOIN_PT_CD
                         }),
                         callback: function (res) {

@@ -52,7 +52,7 @@
                         data: JSON.stringify({
                             COMPANY_CD: SCRIPT_SESSION.cdCompany //회사코드
                             , CG_CD: $('select[name="S_BRCODE"]').val() //분류코드
-                            , ADM_PT_CD: $('#S_PARTNER').getCodes() //관리거래처
+                            , ADM_PT_CD: $('#S_PARTNER').val() //관리거래처
                             , RECOMM_YN: $('select[name="S_RECOMMENDYN"]').val() //추천여부
                             , NEW_YN: $('select[name="S_NEWYN"]').val() //신규여부
                             , VERIFY_STAT: $('select[name="S_VERIFY"]').val() //검증상태
@@ -344,7 +344,11 @@
 
 
                 $("#ADM_PT_CD").attr('HELP_DISABLED', 'true');
-                
+                var pt = getLoginPartner();
+                /* if (pt != null && pt.length > 0){
+                	$("#S_PARTNER").val(pt[0].PT_NM);
+                	$("#S_PARTNER").attr([{code: pt[0].PT_CD, text: pt[0].PT_NM}]);
+                } */
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 changesize();
             };
@@ -2005,9 +2009,7 @@
                                  data-ax5select-config='{}' form-bind-type="selectBox"></div>
                         </ax:td>
                         <ax:td label='관리거래처' width="350px">
-                            <multipicker id="S_PARTNER" HELP_ACTION="HELP_PARTNER" HELP_URL="multiPartner"
-                                         BIND-CODE="PT_CD"
-                                         BIND-TEXT="PT_NM"/>
+                            <input type="text" readonly id="S_PARTNER" name="S_PARTNER" class="form-control"/>
                         </ax:td>
                         <ax:td label="브랜드명" width="350px">
                             <div class="input-group" style="width:100%">

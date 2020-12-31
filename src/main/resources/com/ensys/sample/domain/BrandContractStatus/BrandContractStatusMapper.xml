@@ -9,7 +9,7 @@
     </select>
 
     <select id="selectDtl" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_BRAND_CONTRACT_STATUS_D_S(#{COMPANY_CD} ,#{JOIN_PT_CD}) }
+    { CALL UP_FS_BRAND_CONTRACT_STATUS_D_S(#{COMPANY_CD} , #{MAIN_PT_CD},#{JOIN_PT_CD} ,#{LOGIN_ID}) }
     </select>
 
     <select id="S_1" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
