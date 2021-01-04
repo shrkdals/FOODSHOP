@@ -78,7 +78,7 @@
                     var saveDataD = [].concat(caller.gridView02.getData("modified"));
                     for (var i = 0 ; i < saveDataD.length ; i++){
                         if (nvl(saveDataD[i].BANNER_NM) == ''){
-                        	qray.alert('외부링크그리드에 배너명을 입력해주십시오.');
+                        	qray.alert('내부링크그리드에 배너명을 입력해주십시오.');
                             return ;
                         }
                     }
@@ -138,7 +138,7 @@
 						return;
                     }
                     if (selected.URL_YN != 'Y'){
-                    	qray.alert('외부링크여부가 체크되어있지않습니다.');
+                    	qray.alert('내부링크여부가 체크되어있지않습니다.');
 						return;
                     }
                 	caller.gridView02.addRow();
@@ -367,7 +367,7 @@
                             {key: "BANNER_CD", label: "배너코드", width: 150 , align: "center" , editor: false, sortable: true,},
                             {key: "BANNER_NM", label: "배너명", width: 150 , editor: {type: "text"}, align: "left",sortable: true,},
                             {key: "URL_LINK", label: "링크주소", width: "*" , editor: {type: "text"}, align: "left",sortable: true,},
-                            {key: "URL_YN", label: "외부링크여부", width: 100 , align: "center", sortable: true,
+                            {key: "URL_YN", label: "내부링크여부", width: 100 , align: "center", sortable: true,
                                 editor: {
                                     type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'},
                                 },
@@ -877,7 +877,7 @@
                 <div class="ax-button-group" data-fit-height-aside="grid-view-02" id="left_title2" name="왼쪽그리드타이틀">
                     <div class="left">
                         <h2>
-                            <i class="icon_list"></i> 외부링크 리스트
+                            <i class="icon_list"></i> 내부링크 리스트
                         </h2>
                     </div>
                     <div class="right">
