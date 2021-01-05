@@ -857,7 +857,7 @@ $.extend({
     ,
     changeDataFormat: function (value, type) {
         if (nvl(value, '') != '' && typeof value != "boolean") {
-            
+            value = value + "";
             if (value.indexOf('-') > -1 || value.indexOf(':') > -1) {
                 return value;
             }
