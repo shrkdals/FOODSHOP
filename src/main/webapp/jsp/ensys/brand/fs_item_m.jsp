@@ -53,24 +53,31 @@
                     });
                 },
                 PAGE_SAVE: function (caller, act, data) {
-                    var saveData = [].concat(caller.gridView01.getData("modified"));
+                    var saveData = [].concat(caller.gridView01.getData("deleted"));
+                    saveData = saveData.concat(caller.gridView01.getData("modified"));
 
-                    for (var i = 0 ; i < saveData.length ; i ++){
-                        if (nvl(saveData[i].ITEM_NM) == ''){
-                            qray.alert('상품명을 입력해주십시오.');
-                            return ;
-                        }
-                        if (saveData[i].SALE_SUPPLY_COST + saveData[i].SALE_SURTAX != saveData[i].SALE_COST){
-                        	qray.alert((saveData[i].__index + 1) + '번째 줄<br>판매공급단가, 판매부가세의 합이 <br>판매단가와 다릅니다.');
-                            return ;
-                        }
-                        if (saveData[i].ITEM_SUPPLY_COST + saveData[i].ITEM_SURTAX != saveData[i].ITEM_COST){
-                        	qray.alert((saveData[i].__index + 1) + '번째 줄<br>상품공급단가, 상품부가세의 합이 <br>상품단가와 다릅니다.');
-                            return ;
-                        }
+                    if (saveData.length == 0){
+                    	qray.alert('변경된 데이터가 없습니다.');
+                        return ;
                     }
-
-                    saveData = saveData.concat(caller.gridView01.getData("deleted"));
+                    
+                    for (var i = 0 ; i < saveData.length ; i ++){
+                        if (nvl(saveData[i].__deleted__) == ''){
+                        	if (nvl(saveData[i].ITEM_NM) == ''){
+                                qray.alert('상품명을 입력해주십시오.');
+                                return ;
+                            }
+                            if (saveData[i].SALE_SUPPLY_COST + saveData[i].SALE_SURTAX != saveData[i].SALE_COST){
+                            	qray.alert((saveData[i].__index + 1) + '번째 줄<br>판매공급단가, 판매부가세의 합이 <br>판매단가와 다릅니다.');
+                                return ;
+                            }
+                            if (saveData[i].ITEM_SUPPLY_COST + saveData[i].ITEM_SURTAX != saveData[i].ITEM_COST){
+                            	qray.alert((saveData[i].__index + 1) + '번째 줄<br>상품공급단가, 상품부가세의 합이 <br>상품단가와 다릅니다.');
+                                return ;
+                            }
+                        }
+                        
+                    }
 
                     qray.confirm({
                         msg: "저장하시겠습니까?"
@@ -643,6 +650,7 @@
                                         e['TB_KEY'] = selected.ITEM_CD;
 
                                         fnObj.gridView01.target.setValue(selected.__index, 'FILE_NAME', e.ORGN_FILE_NAME);
+                                        fnObj.gridView01.target.setValue(selected.__index, 'FILE', e);
                                         fnObj.gridView01.target.list[selected.__index]['FILE'] = e;
                                     };
 
