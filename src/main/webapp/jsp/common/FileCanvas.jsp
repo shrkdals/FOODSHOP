@@ -14,6 +14,10 @@
      <script>
          var wwd = 1500;  //제한할이미지가로사이즈
          var hhd = 1500;  //제한할이미지세로사이즈
+         var mb =  1024 * 1024;
+         var maxSize  = 3;
+
+	 	
          var param = ax5.util.param(ax5.info.urlUtil().param);
          var cropper, orgnFile, cropFile;
          var returnValue = new Object();
@@ -192,6 +196,15 @@
                      qray.alert('파일을 선택해주십시오.');
                      return false;
                  }
+
+         	
+                 var size = $("#inputImage")[0].files[0].size;
+                 if(size > maxSize * mb)
+                 {
+                     qray.alert("첨부파일 사이즈는 "+maxSize+"MB 이내로 등록 가능합니다.    ");
+                     return;
+                 }
+                 
                  orgnFile = $("#inputImage")[0].files[0];
                  cropFile = $("#inputImage")[0].files[0];
                  var file_ext = validation(orgnFile.name);

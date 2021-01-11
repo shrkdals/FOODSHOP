@@ -581,7 +581,7 @@
                             }
                             , {
                                 key: "PROMT_LINK",
-                                label: "홍보영상링크",
+                                label: "고객리뷰보기",
                                 width: 150,
                                 align: "center",
                                 editor: {type: "text"},
@@ -589,7 +589,7 @@
                             }
                             , {
                                 key: "PROMT_LINK2",
-                                label: "홍보영상링크2",
+                                label: "홍보영상링크",
                                 width: 150,
                                 align: "center",
                                 editor: {type: "text"},
@@ -2192,7 +2192,7 @@
                                     </ax:td>
                                 </ax:tr>
                                 <ax:tr>
-                                	<ax:td label='홍보영상링크' width="300px">
+                                	<ax:td label='고객리뷰보기' width="300px">
                                         <input type="text" class="form-control" data-ax-path="PROMT_LINK" name="PROMT_LINK" id="PROMT_LINK" form-bind-text='PROMT_LINK' form-bind-type='text'/>
                                     </ax:td>
                                     <ax:td label='태그검색어' width="300px">
@@ -2201,7 +2201,7 @@
                                     
                                 </ax:tr>
                                 <ax:tr>
-                                	<ax:td label='홍보영상링크2' width="300px">
+                                	<ax:td label='홍보영상링크' width="300px">
                                         <input type="text" class="form-control" data-ax-path="PROMT_LINK2" name="PROMT_LINK2" id="PROMT_LINK2" form-bind-text='PROMT_LINK2' form-bind-type='text'/>
                                     </ax:td>
                                     <ax:td label='홈페이지링크' width="300px">
