@@ -1,9 +1,10 @@
 package com.ensys.sample.domain.file;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -73,8 +74,9 @@ public class fileService extends BaseService {
 		int destHeight = 0;
 		try {
 			BufferedImage original = ImageIO.read(f);
-			
-			if (original == null) return;
+
+			if (original == null)
+				return;
 			// 450px로 width 만들기 위한 나누는 수
 			int divideValue = 1;
 
@@ -89,7 +91,6 @@ public class fileService extends BaseService {
 			destWidth = original.getWidth(null) / divideValue;
 			destHeight = original.getHeight(null) / divideValue;
 
-			
 			// 이미지 사이즈 수정(width를 450px로 변경)
 			Image resize = original.getScaledInstance(original.getWidth(null) / divideValue,
 					original.getHeight(null) / divideValue, Image.SCALE_SMOOTH);
@@ -226,11 +227,14 @@ public class fileService extends BaseService {
 					/* 업로드 할 파일을 만들고 파일을 복사 */
 					try {
 						file = new File("/rahan2000/" + fileName.get("FILE_PATH") + "/" + savedFileNm);
-						cropMf.get(i).transferTo(file);
-						//goThumnail(cropMf.get(i), file);	//	썸네일
-
-						ftpUploader.uploadFile("/rahan2000/" + fileName.get("FILE_PATH") + "/" + savedFileNm,
-								savedFileNm, "/upload/" + fileName.get("FILE_PATH"));
+						
+						try {
+							goThumnail(cropMf.get(i), file); // 썸네일
+						} catch(Exception e) {
+							cropMf.get(i).transferTo(file);
+						}
+						
+						ftpUploader.uploadFile("/rahan2000/" + fileName.get("FILE_PATH") + "/" + savedFileNm, savedFileNm, "/upload/" + fileName.get("FILE_PATH"));
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -242,7 +246,23 @@ public class fileService extends BaseService {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public void showImage(MultipartFile orgnMf, File path) throws Exception {
+
+		File file = multipartToFile(orgnMf);
+
+		int thumbnail_width = 125;
+		int thumbnail_height = 125;
+
+		BufferedImage buffer_original_image = ImageIO.read(file);
+		BufferedImage buffer_thumbnail_image = new BufferedImage(thumbnail_width, thumbnail_height, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D graphic = buffer_thumbnail_image.createGraphics();
+		graphic.drawImage(buffer_original_image, 0, 0, thumbnail_width, thumbnail_height, null);
+
+		ImageIO.write(buffer_thumbnail_image, "png", path);
+
+	}
+
 	@Transactional
 	public void insertFsFileBrowse(HashMap<String, Object> param) {
 		SessionUser user = SessionUtils.getCurrentUser();
@@ -252,7 +272,7 @@ public class fileService extends BaseService {
 
 		fileMapper.insertFsFileBrowse(param);
 	}
-	
+
 	@Transactional
 	public void deleteFsFileBrowse(HashMap<String, Object> param) {
 		SessionUser user = SessionUtils.getCurrentUser();
@@ -276,7 +296,7 @@ public class fileService extends BaseService {
 
 	// 파일 업로드
 	public void fileUpload(List<MultipartFile> mf, List<HashMap<String, Object>> fileName) {
-		
+
 		String filepath = (String) fileName.get(0).get("FILE_PATH");
 		System.out.println("filepath : " + filepath);
 
@@ -317,7 +337,7 @@ public class fileService extends BaseService {
 						mf.get(i).transferTo(file);
 
 						ftpUploader.uploadFile("/rahan2000/" + fileName.get(i).get("FILE_PATH") + "/" + savedFileNm,
-								savedFileNm, "/upload/" + fileName.get(i).get("FILE_PATH") );
+								savedFileNm, "/upload/" + fileName.get(i).get("FILE_PATH"));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -328,7 +348,7 @@ public class fileService extends BaseService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	// MA_FILEINFO IU패키지 테이블 데이터 삭제
