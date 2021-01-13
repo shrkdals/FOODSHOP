@@ -172,8 +172,6 @@ public class fileService extends BaseService {
 	public void cropUpload(List<MultipartFile> orgnMf, List<MultipartFile> cropMf, HashMap<String, Object> fileName) {
 
 		String filepath = (String) fileName.get("FILE_PATH");
-		System.out.println("filepath : " + filepath);
-
 		String path = "";
 		for (int i = 0; i < filepath.split("/").length; i++) {
 			if (i != 0) {
@@ -230,7 +228,9 @@ public class fileService extends BaseService {
 						
 						try {
 							goThumnail(cropMf.get(i), file); // 썸네일
+							System.out.println("### 썸네일 성공!!!");
 						} catch(Exception e) {
+							System.out.println("### 썸네일 취하다가 실패...");
 							cropMf.get(i).transferTo(file);
 						}
 						

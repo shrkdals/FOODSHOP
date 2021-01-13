@@ -17,7 +17,6 @@ public class FTPUploader {
 
     //param( host server ip, username, password )
     public FTPUploader(String host, String user, String pwd) throws Exception {
-        System.out.println("FTP 로그인시작");
         ftp = new FTPClient();
         ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
         int reply;
@@ -37,8 +36,6 @@ public class FTPUploader {
     public void uploadFile(String localFileFullName, String fileName, String hostDir)
             throws Exception {
 
-        System.out.println("FTP 전송받는 서버 디렉토리 확인");
-        System.out.println("FTP 전송받는 서버 최종 디렉토리 : " + hostDir);
         String path = "";
         for (int i = 0 ; i < hostDir.split("/").length; i++){
             if (i != 0){
@@ -47,21 +44,16 @@ public class FTPUploader {
             path += hostDir.split("/")[i];
 
             if (ftp.changeWorkingDirectory(path)){
-                System.out.println("경로 있어요." + path);
                 ftp.changeWorkingDirectory("/");
             }else{
-                System.out.println("경로 만들었어요." + path);
                 ftp.makeDirectory(path);
             }
         }
-        System.out.println("FTP 전송받는 서버 디렉토리 확인완료");
-        System.out.println("FTP 파일전송시작!!");
         System.out.println("파일 전송하는 경로 : " + localFileFullName);
         System.out.println("파일 전송되는 경로 : " + hostDir + "/" + fileName);
 
         try (InputStream input = new FileInputStream(new File(localFileFullName))) {
             this.ftp.storeFile(hostDir + "/" + fileName, input);
-            //storeFile() 메소드가 전송하는 메소드
         }
         System.out.println("FTP 파일전송완료!!");
     }
@@ -80,7 +72,6 @@ public class FTPUploader {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Start");
         FTPUploader ftpUploader = new FTPUploader("rahan2002.cafe24.com", "rahan2002", "rahan123!@");
         ftpUploader.uploadFile("/rahan2002/", "hello.txt", "/home/jdk/");
         ftpUploader.disconnect();
