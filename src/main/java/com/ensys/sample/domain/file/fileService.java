@@ -77,21 +77,21 @@ public class fileService extends BaseService {
 
 			if (original == null)
 				return;
-			// 450px로 width 만들기 위한 나누는 수
+			// 300px로 width 만들기 위한 나누는 수
 			int divideValue = 1;
 
-			// 이미지 width를 450으로 맞추기
-			// 이미지 크기가 사이즈와 관계 있기 때문에 width가 450px 이상일 경우에만 450으로 width를 맞추어 준다.
+			// 이미지 width를 300으로 맞추기
+			// 이미지 크기가 사이즈와 관계 있기 때문에 width가 300px 이상일 경우에만 300으로 width를 맞추어 준다.
 
-			// 450px 보다 작은 경우에는 나누는 수를 1로 하여 원본 그대로의 이미지를 저장한다.
-			if (original.getWidth(null) > 450) {
-				divideValue = original.getWidth(null) / 450;
+			// 300px 보다 작은 경우에는 나누는 수를 1로 하여 원본 그대로의 이미지를 저장한다.
+			if (original.getWidth(null) > 300) {
+				divideValue = original.getWidth(null) / 300;
 			}
 
 			destWidth = original.getWidth(null) / divideValue;
 			destHeight = original.getHeight(null) / divideValue;
 
-			// 이미지 사이즈 수정(width를 450px로 변경)
+			// 이미지 사이즈 수정(width를 300px로 변경)
 			Image resize = original.getScaledInstance(original.getWidth(null) / divideValue,
 					original.getHeight(null) / divideValue, Image.SCALE_SMOOTH);
 
@@ -128,22 +128,22 @@ public class fileService extends BaseService {
 					original = new ImageIcon(f.toURL()).getImage();
 				}
 
-				// 450px로 width 만들기 위한 나누는 수
+				// 300px로 width 만들기 위한 나누는 수
 				int divideValue = 1;
 
-				// 이미지 width를 450으로 맞추기
+				// 이미지 width를 300으로 맞추기
 
-				// 이미지 크기가 사이즈와 관계 있기 때문에 width가 450px 이상일 경우에만 450으로 width를 맞추어 준다.
+				// 이미지 크기가 사이즈와 관계 있기 때문에 width가 300px 이상일 경우에만 300으로 width를 맞추어 준다.
 
-				// 450px 보다 작은 경우에는 나누는 수를 1로 하여 원본 그대로의 이미지를 저장한다.
-				if (original.getWidth(null) > 450) {
-					divideValue = original.getWidth(null) / 450;
+				// 300px 보다 작은 경우에는 나누는 수를 1로 하여 원본 그대로의 이미지를 저장한다.
+				if (original.getWidth(null) > 300) {
+					divideValue = original.getWidth(null) / 300;
 				}
 
 				destWidth = original.getWidth(null) / divideValue;
 				destHeight = original.getHeight(null) / divideValue;
 
-				// 이미지 사이즈 수정(width를 450px로 변경)
+				// 이미지 사이즈 수정(width를 300px로 변경)
 				Image resize = original.getScaledInstance(original.getWidth(null) / divideValue,
 						original.getHeight(null) / divideValue, Image.SCALE_SMOOTH);
 
