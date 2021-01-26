@@ -45,4 +45,6 @@ public interface MapartnermMapper extends MyBatisMapper {
     List<HashMap<String, Object>> selectGrid2(HashMap<String, Object> param);
 
     List<HashMap<String, Object>> checkBlock(HashMap<String, Object> param);
+
+
 }

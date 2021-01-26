@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ensys.sample.domain.KakaoCert.KakaoFsMapper">
+
+    <insert id="saveReceiptID" parameterType="hashmap">
+        INSERT INTO FS_KAKAO_CERT
+        (
+          COMPANY_CD
+        , CONTRACT_NO
+        , RECEIPT_ID
+        , TX_ID
+        , RECEIVER_NAME
+        , RECEIVER_HP
+        , RECEIVER_BIRTH
+        , TITLE
+        , CONTENT
+        , REG_DT
+        , VIEW_DT
+        , COMPLETE_DT
+        , VERIFY_DT
+        , VERIFY_STATE
+        , INSERT_DTS
+        )
+        VALUES(
+          #{COMPANY_CD}
+        , #{CONTRACT_NO}
+        , #{RECEIPT_ID}
+        , #{TX_ID}
+        , #{RECEIVER_NAME}
+        , #{RECEIVER_HP}
+        , #{RECEIVER_BIRTH}
+        , #{TITLE}
+        , #{CONTENT}
+        , #{INSERT_DTS}
+        , #{VIEW_DT}
+        , #{COMPLETE_DT}
+        , #{VERIFY_DT}
+        , '0'
+        , #{INSERT_DTS}
+        )
+    </insert>
+
+    <update id="contractUpdate" parameterType="hashmap">
+        UPDATE FS_CONTRACT_M
+        SET    RECEIPT_ID   = #{RECEIPT_ID}
+        WHERE COMPANY_CD    = #{COMPANY_CD}
+        AND   CONTRACT_NO   = #{CONTRACT_NO}
+    </update>
+
+    <update id="stateUpdate" parameterType="hashmap">
+        UPDATE FS_KAKAO_CERT
+        SET    VERIFY_STATE = #{VERIFY_STATE}
+            ,  VERIFY_DT    = #{VERIFY_DT}
+            ,  VIEW_DT      = #{VIEW_DT}
+            ,  COMPLETE_DT  = #{COMPLETE_DT}
+        WHERE COMPANY_CD    = #{COMPANY_CD}
+        AND   CONTRACT_NO   = #{CONTRACT_NO}
+    </update>
+
+    <update id="signDataUpdate" parameterType="hashmap">
+        UPDATE FS_KAKAO_CERT
+        SET    SIGN_DATA    = #{SIGN_DATA}
+        WHERE COMPANY_CD    = #{COMPANY_CD}
+        AND   CONTRACT_NO   = #{CONTRACT_NO}
+    </update>
+
+</mapper>
+
+

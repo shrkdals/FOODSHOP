@@ -9,6 +9,8 @@ import com.chequer.axboot.core.db.monitor.SqlMonitoringService;
 import com.chequer.axboot.core.domain.log.AXBootErrorLogService;
 import com.chequer.axboot.core.model.extract.service.jdbc.JdbcMetadataService;
 import com.chequer.axboot.core.mybatis.MyBatisMapper;
+import com.kakaocert.api.KakaocertService;
+import com.kakaocert.api.KakaocertServiceImp;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -30,6 +32,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true, mode = AdviceMode.PROXY)
@@ -41,6 +44,25 @@ public class CoreApplicationContext {
     @Primary
     public DataSource dataSource(@Named(value = "axBootContextConfig") AXBootContextConfig axBootContextConfig) throws Exception {
         return AXBootDataSourceFactory.create(axBootContextConfig.getDataSourceConfig());
+    }
+
+    @Bean
+    public static Properties addKakaoInfoBean(){
+        Properties kakaoProperties = new Properties();
+        kakaoProperties.setProperty("LinkID","COOKSUN_KC");
+        kakaoProperties.setProperty("SecretKey","yY07CX8qxEQogYqG7tJKoI29ZFmAUQVpPUzY3JujgE8=");
+        kakaoProperties.setProperty("ClientCode","020120000015");
+        kakaoProperties.setProperty("IsIPRestrictOnOff","true");
+        return kakaoProperties;
+    }
+
+    @Bean
+    public KakaocertService addKakaoService() {
+        KakaocertServiceImp kakaocertServiceImp = new KakaocertServiceImp();
+        kakaocertServiceImp.setLinkID("COOKSUN_KC");
+        kakaocertServiceImp.setSecretKey("yY07CX8qxEQogYqG7tJKoI29ZFmAUQVpPUzY3JujgE8=");
+
+        return kakaocertServiceImp;
     }
 
     @Bean

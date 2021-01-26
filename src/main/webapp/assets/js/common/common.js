@@ -994,7 +994,7 @@ $.extend({
                 url: "/jsp/ensys/help/" + name + "Helper.jsp",
                 param: "callBack=" + CallBack + "&ACTION=" + ACTION
             },
-            closeToEsc: false,
+            closeToEsc: true,
             sendData: function () {
                 return {
                     "initData": initData,

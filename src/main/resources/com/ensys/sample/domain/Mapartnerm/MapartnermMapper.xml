@@ -11,7 +11,7 @@
     </select>
 
     <select id="select2" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
-        {CALL UP_FS_PARTNER2_H_S(#{COMPANY_CD},#{SALES_PERSON_ID},#{CONTRACT_YN} , #{TEMP1} , #{TEMP2} , #{TEMP3}, #{CONDITION}, #{KEYWORD})}
+        {CALL UP_FS_PARTNER2_H_S(#{COMPANY_CD},#{SALES_PERSON_ID},#{CONTRACT_YN} , #{TEMP1} , #{TEMP2} , #{TEMP3}, #{CONDITION}, #{KEYWORD} ,#{CUST_SP} ,#{NO_EMAIL} , #{SIGN_STATE})}
     </select>
 
     <select id="getPartnerCommitionList" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
@@ -74,7 +74,7 @@
 
 
     <select id="MEMBER_JOIN_U" resultType="hashmap" parameterType="hashmap" statementType="CALLABLE">
-        { CALL UP_FS_PARTNER_MEMBER_I(#{COMPANY_CD} ,#{PT_CD} , #{USER_ID}, #{USER_NM}, #{USER_TP}, #{PASS_WORD}, #{TEL} , #{TOK} ,#{PT_SP} ,#{PT_NM} ,#{USER_STAT},#{LOGIN_ID}) }
+        { CALL UP_FS_PARTNER_MEMBER_U(#{COMPANY_CD} ,#{PT_CD} , #{USER_ID}, #{USER_NM}, #{USER_TP}, #{PASS_WORD}, #{TEL} , #{TOK} ,#{PT_SP} ,#{PT_NM} ,#{USER_STAT},#{LOGIN_ID}) }
     </select>
 
 

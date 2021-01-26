@@ -93,6 +93,8 @@
             , "DeliverPartner" : "/api/DeliverPartner"
             , "calcSummary" : "/api/CalcSummary"
             ,"BrandContract" : "/api/BrandContract"
+
+            ,"kakaoCert" : "/api/kakaoCert"
         };
 
         axboot.def["MODAL"] = {
