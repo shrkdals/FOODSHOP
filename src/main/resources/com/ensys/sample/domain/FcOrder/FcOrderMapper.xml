@@ -5,7 +5,7 @@
 <mapper namespace="com.ensys.sample.domain.FcOrder.FcOrderMapper">
 
     <select id="selectH" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
-    { CALL UP_FS_FC_ORDER_H_S(#{COMPANY_CD} , #{KEYWORD} ,#{GROUP} ,#{LOGIN_ID} , #{DT_START}, #{DT_END}) }
+    { CALL UP_FS_FC_ORDER_H_S(#{COMPANY_CD} ,#{ORDER_STAT}, #{KEYWORD} ,#{GROUP} ,#{LOGIN_ID} , #{DT_START}, #{DT_END}) }
     </select>
     <select id="selectD" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
     { CALL UP_FS_FC_ORDER_D_S(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ) }

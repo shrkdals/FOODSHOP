@@ -33,7 +33,7 @@
             var PAYM_METHOD = $.SELECT_COMMON_CODE(SCRIPT_SESSION.cdCompany, 'MA00024');
 
             var YN_OP = [{value:'' , text:''},{value:'Y' , text:'Y'},{value:'N' , text:'N'}];
-
+            $("#ORDER_STAT").ax5select({options: ORDER_STAT});
 
 
 
@@ -51,7 +51,8 @@
                           GROUP : SCRIPT_SESSION.cdGroup
                         , DT_START : $('#S_DT').getStartDate()
                         , DT_END : $('#S_DT').getEndDate()
-                        , KEYWORD :   $('#KEYWORD').val()
+                        , ORDER_STAT: $('select[name="ORDER_STAT"]').val()
+                        , KEYWORD: $("#KEYWORD").val()
                     };
                     var list = $.DATA_SEARCH('order','selectH',param).list;
                     fnObj.gridView01.target.setData(list);
@@ -1041,10 +1042,13 @@
                         <ax:td label='주문일자' width="450px">
                             <datepicker id="S_DT"></datepicker>
                         </ax:td>
-                        <ax:td label='검색어' width="350px">
+                        <ax:td label="주문상태" width="450px">
+                        	<div id="ORDER_STAT" name="ORDER_STAT" data-ax5select="ORDER_STAT"
+                                 data-ax5select-config='{}' form-bind-type="selectBox"></div>
+                        </ax:td>
+                        <ax:td label='가맹점거래처명' width="450px">
                             <div class="input-group" style="width:100%">
-                                <input type="text" class="form-control" name="KEYWORD" id="KEYWORD"
-                                       style="width:100%"/>
+                                <input type="text" class="form-control" name="KEYWORD" id="KEYWORD" style="width:100%"/>
                             </div>
                         </ax:td>
                     </ax:tr>
