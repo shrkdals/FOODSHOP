@@ -22,7 +22,7 @@
         { CALL UP_FS_PARTNER_H_I( #{USER_ID}, #{COMPANY_CD},#{PT_CD},#{PT_SP},#{PT_NM},#{BIZ_NO},#{OWNER_NM},#{SIGN_NM},#{PT_TYPE}
         ,#{PT_COND},#{TEL_NO},#{HP_NO},#{POST_NO},#{PT_ADDR},#{SYSDEF_ADDR},#{FAX_NO},#{CLOSING_TP},#{USE_YN},#{SALES_PERSON_ID}
         ,#{TAX_SP},#{BRD_VERIFY_YN},#{CONTRACT_YN},#{LAT_CD},#{LONG_CD} ,#{DELI_AMT} ,#{FREE_DELI_AMT} ,#{CD_AREA}
-        ,#{CD_BANK},#{NM_BANK},#{NO_DEPOSIT},#{NO_EMAIL} ,#{BLOCK_YN}
+        ,#{CD_BANK},#{NM_BANK},#{NO_DEPOSIT},#{NO_EMAIL} ,#{BLOCK_YN},#{CUST_SP}
         ) }
     </update>
 
