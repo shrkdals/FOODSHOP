@@ -7,7 +7,7 @@
     <artifactId>ensys</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
-    <name>ENSYS Admin</name>
+    <name>FS</name>
     <description>ENSYS AdminSample</description>
 
     <repositories>
@@ -42,6 +42,13 @@
     </parent>
 
     <dependencies>
+
+        <dependency>
+            <groupId>kr.co.linkhub</groupId>
+            <artifactId>kakaocert-sdk</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.chequer.axboot</groupId>
             <artifactId>ax-boot-core</artifactId>
@@ -136,6 +143,12 @@
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports-fonts</artifactId>
             <version>6.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>kr.co.linkhub</groupId>
+            <artifactId>kakaocert-sdk</artifactId>
+            <version>2.0.0</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
