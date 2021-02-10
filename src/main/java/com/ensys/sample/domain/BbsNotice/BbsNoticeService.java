@@ -19,8 +19,9 @@ public class BbsNoticeService extends BaseService {
 	@Inject
 	private BbsNoticeMapper BbsNoticeMapper;
 
+	
 	@Inject
-	private fileService fileService;
+    private fileService fileservice;
 
 	public List<HashMap<String, Object>> select(HashMap<String, Object> param) {
 		SessionUser user = SessionUtils.getCurrentUser();
@@ -51,10 +52,20 @@ public class BbsNoticeService extends BaseService {
 				} else if (item.get("__created__") != null) {
 					if ((boolean) item.get("__created__")) {
 						BbsNoticeMapper.write(item);
+						
+						if (item.get("FILE") != null){
+                            HashMap<String, Object> file = (HashMap<String, Object>) item.get("FILE");
+                            fileservice.insertFsFile(file);
+                        }
 					}
 				} else if (item.get("__modified__") != null && item.get("__created__") == null) {
 					if ((boolean) item.get("__modified__")) {
 						BbsNoticeMapper.updateWrite(item);
+						
+						if (item.get("FILE") != null){
+                            HashMap<String, Object> file = (HashMap<String, Object>) item.get("FILE");
+                            fileservice.insertFsFile(file);
+                        }
 					}
 				}
 			}

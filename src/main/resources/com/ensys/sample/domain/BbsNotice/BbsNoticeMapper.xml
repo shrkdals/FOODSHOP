@@ -19,13 +19,13 @@
 	<update id="write" parameterType="hashmap"
 		statementType="CALLABLE">
 		{CALL UP_FS_BBS_I(#{COMPANY_CD}, #{BOARD_TYPE}, #{BOARD_SP}, #{SEQ},
-		#{TITLE}, #{CONTENTS}, #{HIT}, #{ID_USER} )}
+		#{TITLE}, #{CONTENTS}, #{HIT}, #{ID_USER}, #{SHOW_YN}, #{LINK_URL} )}
 	</update>
 
 	<update id="updateWrite" parameterType="hashmap"
 		statementType="CALLABLE">
 		{CALL UP_FS_BBS_U(#{COMPANY_CD}, #{BOARD_TYPE}, #{BOARD_SP}, #{SEQ},
-		#{TITLE}, #{CONTENTS}, #{HIT}, #{ID_USER} )}
+		#{TITLE}, #{CONTENTS}, #{HIT}, #{ID_USER}, #{SHOW_YN}, #{LINK_URL} )}
 	</update>
 
 	<update id="deleteWrite" parameterType="hashmap"

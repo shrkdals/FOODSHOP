@@ -336,45 +336,15 @@
                             },
                             {key: "TITLE", label: "제목", width: 220, align: "left" ,sortable: true, editor: {type:"textarea"}},
                             {key: "CONTENTS", label: "내용", width: "*" , align: "left" ,sortable: true, editor: {type:"textarea"}},
+                            {key: "FILE_NAME", label: "파일", width: 120 , align: "left" , editor: false, sortable: true,},
+                            {key: "FILE", label: "이미지파일", width: 150 , align: "center" , editor: false, sortable: true, hidden:true},
+                            {key: "LINK_URL", label: "링크URL", width: 200 , align: "left" , editor: {type: "text"}},
+                            {key: "SHOW_YN", label: "노출여부", width: 100 , align: "center", sortable: true,
+                                editor: {
+                                    type: "checkbox", config: {height: 17, trueValue: 'Y', falseValue: 'N'}
+                                },
+                            },
                             {key: "HP_NO", label: "전화번호", width: "*" , align: "left" ,sortable: true, hidden:true, },
-                           /*  {key: "ID_USER", label: "알림대상자", width: 120 , align: "left" ,sortable: true,
-                            	picker: {
-                                    top: _pop_top,
-                                    width: 600,
-                                    height: _pop_height,
-                                    url: "multiUserNotice",
-                                    action: ["commonHelp", "HELP_USER_NOTICE"],
-                                  	param: function () {
-                                      	return {
-                                      		PT_SP : '06'
-                                        }
-                                  	},
-                                  	disabled: function () {
-										if (this.item.BOARD_SP != '02'){
-											qray.alert('게시판유형이 알림인 데이터만<br>알림대상자를 넣을 수 있습니다.');
-											return true;
-										}else{
-											return false;
-										}
-                                  	},
-                                    callback: function (e) {
-                                        if (e.length > 0){
-											if (e.length  == 1){
-												fnObj.gridView01.target.setValue(this.dindex, 'ID_USER', e[0].ID_USER);
-											}else{
-												fnObj.gridView01.target.setValue(this.dindex, 'ID_USER', e[0].ID_USER + " 외 " + (e.length - 1));
-												var hp_no = [];
-												for (var i = 0 ; i < e.length ; i ++){
-													hp_no.push(e[i].HP_NO);
-												}
-												fnObj.gridView01.target.list[this.dindex]['HP_NO'] = hp_no;
-											}
-                                        }
-                                        
-                                        modal.close();
-                                    }
-                            	}
-                            }, */
                             {key: "USER_NM", label: "처리자", width: 120 , align: "left" ,sortable: true, hidden:true},
                             {key: "INSERT_ID", label: "처리자아이디", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
                             {key: "INSERT_DT", label: "처리일자", width: 150 , align: "center" , editor: {type: "text"},hidden:true},
@@ -383,7 +353,21 @@
                         ],
                         body: {
                             onDataChanged: function () {
-
+                            	var idx = this.dindex;
+                                var data = this.item;
+                                var column = this.key;
+                                
+                            	if (column == 'SHOW_YN'){
+                                    if (this.value == 'Y'){
+	                                    for (var i = 0 ; i < this.list.length ; i ++){
+											if (this.list[i].__index != idx){
+												if (this.list[i].SHOW_YN == this.value){
+													this.self.setValue(this.list[i].__index, this.key, 'N', true);
+												}
+											}
+	                                    }
+                                    }
+                                }
                             },
                             //444
                             onClick: function () {
@@ -396,6 +380,57 @@
                                 this.self.select(this.dindex);
                                 ACTIONS.dispatch(ACTIONS.ITEM_CLICK);
                             },
+                            onDBLClick: function () {
+                                var column = this.column.key;
+                                if (column == 'FILE_NAME'){
+                                    var selected = fnObj.gridView01.getData('selected')[0];
+
+                                    userCallBack = function (e) {
+                                        e['TB_ID'] = 'FS_BBS';
+                                        e['CG_CD'] = 'BBS00001';
+                                        e['TB_KEY'] = selected.SEQ;
+
+                                        fnObj.gridView01.target.setValue(selected.__index, 'FILE_NAME', e.ORGN_FILE_NAME);
+                                        fnObj.gridView01.target.list[selected.__index]['FILE'] = e;
+                                    };
+
+
+                                    var data = {
+                                        TB_ID: 'FS_BBS',
+                                        CG_CD: 'BBS00001',
+                                        TB_KEY: selected['SEQ'],
+                                        FILE_PATH: 'bbs',
+                                        CALL_BACK: selected['FILE']
+                                    }
+
+                                    modal.open({
+                                        width: 1100,
+                                        height: _pop_height800,
+                                        top: _pop_top800,
+                                        iframe: {
+                                            method: "get",
+                                            url: "../../common/FileCanvas.jsp",
+                                            param: "callBack=userCallBack"
+                                        },
+                                        sendData: function () {
+                                            return {
+                                                initData: data
+                                            }
+                                        },
+                                        onStateChanged: function () {
+                                            if (this.state === "open") {
+                                                mask.open({
+                                                    content: '<h1><i class="fa fa-spinner fa-spin"></i> Loading</h1>'
+                                                });
+                                            } else if (this.state === "close") {
+                                                mask.close();
+                                            }
+                                        }
+                                    }, function () {
+
+                                    });
+                                }
+                            }
                         },
                         onPageChange: function (pageNumber) {
                             _this.setPageData({pageNumber: pageNumber});
