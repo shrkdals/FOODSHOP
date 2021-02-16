@@ -110,6 +110,10 @@
                     itemH = itemH.concat(caller.gridView01.getData("deleted"));
 
                     for(var i = 0; i < itemH.length; i++){
+                        if(nvl(itemH[i].__deleted__ , false) == false && nvl(itemH[i].CONTRACT_NO) == ''){
+                            qray.alert('계약 번호는 필수입니다.')
+                            return
+                        }
                         if(nvl(itemH[i].CONTRACT_NO) != ''){
                             if(nvl(itemH[i].CONTRACT_SP) == ''){
                                 qray.alert('계약유형은 필수입니다.')
@@ -139,8 +143,6 @@
                         }
                     }
 
-                    itemH = itemH.concat(caller.gridView02.getData("modified"));
-                    itemH = itemH.concat(caller.gridView02.getData("deleted"));
 
                     if(itemH.length == 0){
                         qray.alert('변경된 정보가 없습니다.');
@@ -150,8 +152,6 @@
                     var data = {
                         delete : caller.gridView01.getData("deleted")
                         ,insert : caller.gridView01.getData("modified")
-                        ,delete2 : caller.gridView02.getData("deleted")
-                        ,insert2 : caller.gridView02.getData("modified")
                     };
 
                     qray.confirm({
