@@ -99,8 +99,12 @@ public class OrderService extends BaseService {
 	public List<HashMap<String, Object>> pdf(HashMap<String, Object> param) {
 		if (param.get("TYPE").equals("01")) {
 			return mapper.pdf1(param);
-		} else {
+		} else if (param.get("TYPE").equals("04")) {
 			return mapper.pdf2(param);
+		} else if (param.get("TYPE").equals("05")) {
+			return mapper.pdf_pt(param);
+		} else{
+			return mapper.pdf1(param);
 		}
 	}
 

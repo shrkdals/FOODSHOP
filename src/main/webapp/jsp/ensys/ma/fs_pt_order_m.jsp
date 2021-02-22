@@ -125,7 +125,7 @@
 						qray.alert('선택된 데이터가 없습니다.');
 						return;
                     }
-                    $.openCustomPopup("PDF_2",'UserCallBack', '', { ORDER_CD : itemH.ORDER_CD }, '', 1400, 700,50);
+                    $.openCustomPopup("PDF_pt",'UserCallBack', '', { ORDER_CD : itemH.ORDER_CD }, '', 1400, 700,50);
                 }
             });
             // fnObj 기본 함수 스타트와 리사이즈
