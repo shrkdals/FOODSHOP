@@ -27,6 +27,10 @@
     { CALL UP_FS_ORDER_PDF2(#{COMPANY_CD},#{ORDER_CD},#{TEMP1},#{TEMP2},#{TEMP3},#{TEMP4}) }
     </select>
 
+    <select id="pdf_pt" resultType="java.util.HashMap" parameterType="java.util.HashMap" statementType="CALLABLE">
+    { CALL UP_FS_ORDER_PDF_PT(#{COMPANY_CD},#{ORDER_CD},#{TEMP1},#{TEMP2},#{TEMP3},#{TEMP4}) }
+    </select>
+
     <update id="success" parameterType="java.util.HashMap" statementType="CALLABLE">
         { CALL UP_FS_ORDER_U(#{COMPANY_CD},#{JOIN_PT_CD} ,#{ORDER_CD} ,#{LOGIN_ID}) }
     </update>
