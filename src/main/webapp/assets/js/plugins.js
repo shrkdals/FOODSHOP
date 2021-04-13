@@ -36,7 +36,7 @@
 
 // Pass this if window is not defined yet
 }(typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
-
+    parentKey: "pid"
 // Support: Firefox 18+
 // Can't be in strict mode, several libs including ASP.NET trace
 // the stack via arguments.caller.callee and Firefox dies if
@@ -26169,6 +26169,40 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                         selfHash: "__hs__",
                         children: "__children__",
                         depth: "__depth__"
+                    }
+                    ,contextMenu : {
+                        iconWidth: 20,
+                        acceleratorWidth: 100,
+                        itemClickAndClose: false,
+                        icons: {
+                            'arrow': '<i class="fa fa-caret-right"></i>'
+                        },
+                        items: [
+                            {
+                                label: "엑셀다운로드",
+                                act_tp: "excelDown",
+                                icon: '<i class="fa fa-arrow-up" aria-hidden="true"></i>'
+                            },
+                            /*{divide: true},*/
+                        ],
+
+                        popupFilter: function (item, param) {
+                            console.log("popupFilter-------");
+                            console.log(item, param);
+
+                            return true;
+                        },
+
+
+                        onClick: function (item, param) {
+                            console.log("contextMenu onClick--------------");
+                            console.log(item, param);
+
+                            if (item.act_tp == 'excelDown') {
+                                self.exportExcel(new Date().getTime() + '.xls');
+                            }
+                            self.contextMenu.close()
+                        }
                     }
                 }
             };
